@@ -1,0 +1,12 @@
+.home-wrapper {
+    background: $black url("/img/deer.jpg") center bottom no-repeat fixed;
+    background-size: cover;
+}
+
+.home-inner {
+    background-color: rgba($black,.9);
+}
+
+.home-content {
+    min-height: calc(100vh - 64px);
+}

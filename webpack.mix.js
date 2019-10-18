@@ -11,5 +11,9 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.browserSync('aviddeer.test')
+
 mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+    .js('resources/js/auth.js', 'public/js')
+    .js('resources/js/guest.js', 'public/js')
+   .sass('resources/sass/app.scss', 'public/css');
