@@ -6,11 +6,12 @@
                     active-class="active"
                     v-for="(item, key) in items"
                     :to="item.to"
-                    class="nav-link"
+                    class="nav-link pr-0"
                     :key="key"
                     :exact="!!item.exact">
                     <icon :name="item.icon"/>
                     <span class="my-auto">{{ item.label }}</span>
+                    <icon class="right-arrow ml-auto mr-0" name="ios-arrow-forward"/>
                 </router-link>
             </div>
         </div>
@@ -28,7 +29,7 @@
       return {
         items: [
           {
-            icon : 'home',
+            icon : 'ios-analytics',
             to   : '/data',
             exact: true,
             label: 'Dashboard',

@@ -1,6 +1,6 @@
 <template>
     <span
-        v-tooltip="tooltip ? user.name : false"
+        v-tooltip="tooltip ? user.name : ''"
         :class="['avatar', 'd-inline-flex', 'align-items-center', 'justify-content-center', 'font-weight-bold', {small, translucent}]">
         {{ letters }}
     </span>
@@ -66,14 +66,16 @@
 
         a > & {
             transition: background .25s linear;
+        }
 
-            &:hover {
-                background: rgba(0, 0, 0, .5);
-            }
+        a:hover > &,
+        a:active > &,
+        a:focus > & {
+            background: rgba(0, 0, 0, .5);
         }
 
         &.avatar-navbar {
-            margin-top: -6px;
+            margin-top: -5px;
         }
     }
 </style>

@@ -32,6 +32,7 @@ const router = new VueRouter({
 Vue.directive('tooltip', function (el, binding) {
     const modifiers = Object.keys(binding.modifiers)
     let placement   = null
+
     if (modifiers.length > 0) {
         placement = modifiers[0]
     }

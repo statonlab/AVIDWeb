@@ -7322,7 +7322,8 @@ button.bg-dark:focus {
 
 .justify-content-center,
 .overlay,
-.btn-circle {
+.btn-circle,
+.btn.btn-block {
   justify-content: center !important;
 }
 
@@ -10884,13 +10885,15 @@ a.text-dark:focus {
   background-color: #fff;
   overflow-y: auto;
   border-right: 1px solid #dee2e6;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .sidebar .nav-link {
   color: #495057;
   cursor: pointer;
-  border-radius: 0;
   transition: background-color 0.2s linear, color 0.2s linear;
+  margin-bottom: 1px;
 }
 
 .sidebar .nav-link:hover {
@@ -10903,13 +10906,22 @@ a.text-dark:focus {
   font-size: 1.2rem;
 }
 
+.sidebar .nav-link .right-arrow {
+  display: none;
+}
+
 .sidebar .nav-link.active {
   background-color: rgba(46, 176, 122, 0.1);
 }
 
 .sidebar .nav-link.active,
 .sidebar .nav-link.active .icon {
-  color: #23885e;
+  color: #1e7350;
+}
+
+.sidebar .nav-link.active .right-arrow {
+  display: inline-block;
+  width: auto;
 }
 
 .w-sidebar {
@@ -10999,6 +11011,7 @@ a.text-dark:focus {
   background-color: rgba(0, 0, 0, 0.2);
   color: #fff;
   border: 0 transparent solid;
+  height: calc(1.5em + 1.3rem);
 }
 
 .navbar-form-control::-webkit-input-placeholder {

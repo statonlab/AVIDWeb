@@ -7,7 +7,7 @@
 
             <div class="home-content d-flex align-items-center">
                 <div class="container">
-                    <div class="row align-content-stretch">
+                    <div class="row align-content-stretch py-4">
                         <div class="col-lg-8 d-flex flex-column justify-content-center">
                             <div class="pr-lg-5 mb-4 mb-lg-0">
                                 <h3 class="text-uppercase text-white">Welcome to AVID</h3>
@@ -99,9 +99,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-5">
                         <div class="col-12">
-                            <div class="d-flex justify-content-center align-items-center mt-4">
+                            <div class="d-flex justify-content-center align-items-center mt-5">
                                 <a href="#how-to-volunteer">
                                     <i class="icon ion-ios-arrow-down text-white" style="font-size: 2rem"></i>
                                 </a>
