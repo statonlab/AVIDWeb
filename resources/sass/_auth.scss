@@ -1,0 +1,46 @@
+.auth-left {
+    @include media-breakpoint-down(md) {
+        margin: 0 ($grid-gutter-width /2);
+        width: auto;
+        border-bottom-left-radius: $border-radius;
+        border-top-left-radius: 0!important;
+        border-bottom-right-radius: $border-radius;
+    }
+}
+
+.auth-logo {
+    width: 75px;
+    height: 75px;
+    @extend .shadow-sm;
+    @extend .d-flex;
+    border-radius: 50%;
+    background-color: $primary;
+}
+
+.auth-bg-eclipse {
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-bottom-left-radius: $border-radius;
+    z-index: -1;
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
+}
+
+.auth-eclipse {
+    height: 150px;
+    width: 150px;
+    left: 0;
+    bottom: 0;
+    margin-left: -75px;
+    margin-bottom: -75px;
+    background-color: rgba(0, 0, 0, .2);
+    border-radius: 50%;
+}
+
+.zIndex-5 {
+    z-index: 5;
+}
