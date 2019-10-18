@@ -17,9 +17,23 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+
+    <script>
+      window.avid = {
+        user: null,
+        csrf: '{{ csrf_token() }}',
+      }
+
+      @if(auth()->check())
+        window.avid.user = {!!  json_encode(auth()->user()->only(['id', 'name', 'avatar']))  !!}
+        @endif
+    </script>
 </head>
 <body>
 <div id="app">
+    <!-- render app using vue -->
+    <app/>
 </div>
 </body>
 </html>

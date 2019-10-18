@@ -14,3 +14,10 @@
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
+
+Route::group([
+    'middleware' => ['auth'],
+    'prefix' => '/data',
+], function () {
+    Route::get('/', 'HomeController@data');
+});

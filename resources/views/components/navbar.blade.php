@@ -44,7 +44,7 @@
                 </li>
             </ul>
             @auth()
-                <a href="#" class="btn btn-outline-light ml-1">Dashboard</a>
+                <a href="/data" class="btn btn-outline-light ml-1">Dashboard</a>
             @endauth()
             @guest()
                 <a href="/register" class="btn btn-outline-light ml-1">Register</a>
