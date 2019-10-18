@@ -1,4 +1,57 @@
 .btn {
     text-transform: uppercase;
-    //font-weight: $font-weight-bold;
+    @extend .d-inline-flex;
+    @extend .align-items-center;
+
+    .icon {
+        width: 17px;
+        font-size: 1.1rem;
+        line-height: 1.5;
+
+        + span {
+            margin-left: .5rem;
+        }
+    }
+
+    &.btn-sm {
+        letter-spacing: .05rem;
+
+        .icon {
+            width: 14px;
+            font-size: .9rem;
+        }
+    }
+
+    &.shadow,
+    &.shadow-sm,
+    &.shadow-lg {
+        transition: box-shadow .2s linear;
+
+        &:active {
+            box-shadow: $btn-active-box-shadow !important;
+        }
+    }
+}
+.btn-circle {
+    @extend .d-flex;
+    @extend .align-items-center;
+    @extend .justify-content-center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.btn-toggle {
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border-color: transparent;
+    text-align: center;
+
+    .icon {
+        font-size: 1.3rem !important;
+        margin: 0 auto;
+    }
 }
