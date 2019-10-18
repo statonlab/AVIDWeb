@@ -19817,6 +19817,12 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // Include jQuery and Bootstrap's JS files
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+$(document).ready(function () {
+  $(document).on('click', '#logout-btn', function () {
+    $('#logout-form').submit();
+  });
+});
+
 /***/ }),
 
 /***/ 2:
