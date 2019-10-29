@@ -8,13 +8,15 @@ import './bootstrap'
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Dashboard from './components/Dashboard'
+import Dashboard from './screens/Dashboard'
+import Sites from './screens/Sites'
 import App from './components/App'
 
 Vue.use(VueRouter)
 
 const routes = [
     {path: '/data', component: Dashboard},
+    {path: '/data/sites', component: Sites},
 ]
 
 const router = new VueRouter({
@@ -32,6 +34,7 @@ const router = new VueRouter({
 Vue.directive('tooltip', function (el, binding) {
     const modifiers = Object.keys(binding.modifiers)
     let placement   = null
+
     if (modifiers.length > 0) {
         placement = modifiers[0]
     }

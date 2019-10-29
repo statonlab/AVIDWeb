@@ -3,10 +3,14 @@
     @extend .d-inline-flex;
     @extend .align-items-center;
 
+    &.btn-block {
+        @extend .justify-content-center;
+    }
+
     .icon {
         width: 17px;
         font-size: 1.1rem;
-        line-height: 1.5;
+        line-height: 1;
 
         + span {
             margin-left: .5rem;
@@ -32,6 +36,7 @@
         }
     }
 }
+
 .btn-circle {
     @extend .d-flex;
     @extend .align-items-center;

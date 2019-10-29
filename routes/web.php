@@ -20,4 +20,5 @@ Route::group([
     'prefix' => '/data',
 ], function () {
     Route::get('/', 'HomeController@data');
+    Route::get('/sites', 'HomeController@data');
 });

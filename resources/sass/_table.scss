@@ -1,0 +1,15 @@
+.table > thead > tr > th {
+    color: $gray-600;
+}
+
+.table-middle {
+    > thead,
+    > tbody {
+        > tr {
+            > th,
+            > td {
+                vertical-align: middle;
+            }
+        }
+    }
+}

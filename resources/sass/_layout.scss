@@ -3,7 +3,17 @@
 }
 
 .logo {
-    width: $sidebar-width;
+    @include media-breakpoint-up(lg) {
+        width: $sidebar-width;
+    }
+}
+
+.navbar-nav {
+    .nav-item, .nav-link {
+        @extend .d-flex;
+        @extend .align-items-center;
+        @extend .justify-content-center;
+    }
 }
 
 .main-content,
@@ -45,13 +55,15 @@
     background-color: $white;
     overflow-y: auto;
     border-right: 1px solid $border-color;
+    padding-left: .5rem;
+    padding-right: .5rem;
 
     .nav-link {
         color: $gray-700;
         cursor: pointer;
-        border-radius: 0;
         @extend .d-flex;
         transition: background-color .2s linear, color .2s linear;
+        margin-bottom: 1px;
 
         &:hover {
             background-color: $gray-200;
@@ -66,12 +78,21 @@
             font-size: 1.2rem;
         }
 
+        .right-arrow {
+            display: none;
+        }
+
         &.active {
             background-color: rgba($primary, .1);
 
             &,
             .icon {
-                color: darken($primary, 10%);
+                color: darken($primary, 15%);
+            }
+
+            .right-arrow {
+                display: inline-block;
+                width: auto;
             }
         }
     }
@@ -182,6 +203,7 @@
     background-color: rgba(0, 0, 0, .2);
     color: $white;
     border: 0 transparent solid;
+    height: calc(#{$input-line-height * 1em} + #{$input-padding-y * 2});
 
     &::placeholder {
         color: rgba(255, 255, 255, .7);
@@ -202,5 +224,5 @@
 }
 
 .no-width {
-    width: auto!important;
+    width: auto !important;
 }
