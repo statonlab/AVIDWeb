@@ -7,7 +7,15 @@
             <sidebar/>
             <div class="main-content">
                 <!-- main content -->
+                <div class="py-4">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
                 <router-view></router-view>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

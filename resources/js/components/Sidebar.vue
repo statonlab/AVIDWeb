@@ -36,7 +36,7 @@
           },
           {
             icon : 'ios-archive',
-            to   : '/data/data',
+            to   : '/data/sites',
             label: 'My Data',
           },
         ],

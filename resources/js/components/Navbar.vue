@@ -1,9 +1,6 @@
 <template>
     <nav class="navbar navbar-expand navbar-dark bg-primary fixed-top pl-0 shadow">
         <div class="logo pl-2">
-            <!--            <button class="btn btn-circle mr-2 btn-toggle btn-primary border-0">-->
-            <!--                <icon name="menu"/>-->
-            <!--            </button>-->
             <button class="btn btn-primary btn-sm rounded-circle btn-toggle float-left border-0"
                     @click.prevent="$emit('toggle')">
                 <icon name="menu" class="no-width"/>
@@ -17,7 +14,7 @@
                     <div class="input-group">
                         <input type="search"
                                class="form-control navbar-form-control"
-                               placeholder="Search">
+                               placeholder="Search users and entries">
                     </div>
                 </form>
                 <div class="dropdown-menu search-dropdown">
@@ -26,12 +23,12 @@
             </div>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
-                    <a href="#" class="nav-link mr-1 text-decoration-none" data-toggle="dropdown">
+                    <a href="#" class="nav-link mr-1 text-decoration-none p-0" data-toggle="dropdown">
                         <avatar :user="user" small translucent :tooltip="false" class="float-left avatar-navbar mr-1"/>
                         <span>
                             {{ user.name }}
                         </span>
-                        <icon name="ios-arrow-down"/>
+                        <icon name="ios-arrow-down ml-2"/>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown">
                         <router-link to="/data" class="dropdown-item">

@@ -3,7 +3,17 @@
 }
 
 .logo {
-    width: $sidebar-width;
+    @include media-breakpoint-up(lg) {
+        width: $sidebar-width;
+    }
+}
+
+.navbar-nav {
+    .nav-item, .nav-link {
+        @extend .d-flex;
+        @extend .align-items-center;
+        @extend .justify-content-center;
+    }
 }
 
 .main-content,

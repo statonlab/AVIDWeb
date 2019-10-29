@@ -1,11 +1,14 @@
 // Variables
-@import 'variables';
+@import "variables";
+
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 
 // Components
-@import 'auth';
-@import 'button';
-@import 'form';
-@import 'home';
+@import "auth";
+@import "button";
+@import "form";
+@import "home";
 @import "layout";
+@import "card";
+@import "table";

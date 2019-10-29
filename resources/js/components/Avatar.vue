@@ -75,7 +75,7 @@
         }
 
         &.avatar-navbar {
-            margin-top: -5px;
+            // margin-top: -5px;
         }
     }
 </style>
