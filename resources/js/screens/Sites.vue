@@ -35,16 +35,21 @@
                 </table>
             </div>
         </div>
+
+        <site-form
+
+        />
     </div>
 </template>
 
 <script>
   import Icon from '../components/Icon'
+  import SiteForm from '../forms/SiteForm'
 
   export default {
     name: 'Sites',
 
-    components: {Icon},
+    components: {SiteForm, Icon},
 
     data() {
       return {
