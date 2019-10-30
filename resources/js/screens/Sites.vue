@@ -6,7 +6,9 @@
                     <input type="search" class="form-control" placeholder="Search...">
                 </div>
                 <div class="ml-auto">
-                    <button class="btn btn-primary">New Site</button>
+                    <button class="btn btn-primary" @click.prevent="showSiteForm = true">
+                        New Site
+                    </button>
                 </div>
             </div>
             <div class="card-body p-0">
@@ -37,7 +39,8 @@
         </div>
 
         <site-form
-
+            v-if="showSiteForm"
+            @close="showSiteForm = false"
         />
     </div>
 </template>
@@ -53,7 +56,8 @@
 
     data() {
       return {
-        sites: [
+        showSiteForm: false,
+        sites       : [
           {
             name         : 'Gasline Harvest inside slash',
             plots_count  : 80,

@@ -1,5 +1,5 @@
 .form-control {
-    border: 2px solid $border-color;
+    border: $input-border;
 }
 
 label {
@@ -36,4 +36,9 @@ label {
         border-width: 0;
         font-weight: $font-weight-bold;
     }
+}
+
+.form-control.disabled {
+    background-color: $gray-200;
+    cursor: not-allowed;
 }

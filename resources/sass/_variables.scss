@@ -73,6 +73,8 @@ $dropdown-box-shadow: 0 .5rem 1rem rgba($black, .175);
 
 $navbar-dark-color: $white;
 
+$border-color: $gray-300;
+
 // Sidebar
 // =================================
 $sidebar-width: 270px;
@@ -81,4 +83,4 @@ $card-border-width: 0;
 $card-cap-bg: transparent;
 
 $input-group-addon-bg: $white;
-
+$input-border: 2px solid $border-color;
