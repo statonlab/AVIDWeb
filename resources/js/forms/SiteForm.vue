@@ -1,5 +1,5 @@
 <template>
-    <modal @close="$emit('close')">
+    <modal @close="$emit('close')" medium>
         <form action="" @submit.prevent>
             <modal-card>
                 <modal-header>
@@ -9,38 +9,53 @@
                     <close @click="$emit('close')"/>
                 </modal-header>
                 <modal-body>
-                    <div class="form-group mb-0">
+                    <div class="form-group">
                         <label for="name">
                             Site Name
                             <required/>
                         </label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Site Name" autofocus>
+                        <input type="text"
+                               autocomplete="site-name"
+                               class="form-control"
+                               id="name"
+                               name="name"
+                               placeholder="Site Name"
+                               autofocus>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="state">State
+                                <label>
+                                    State
                                     <required/>
                                 </label>
-                                <select class="custom-select" id="state" name="state">
-                                    <option selected>Choose...</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
+                                <dropdown
+                                    autocomplete
+                                    :loading="loadingStates"
+                                    @input="selectState($event)"
+                                    :options="states"
+                                    placeholder="Select a state"
+                                    @search="stateSearch = $event"
+                                />
                             </div>
+
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="county">County
+                                <label>
+                                    County
                                     <required/>
                                 </label>
-                                <select class="custom-select" id="county" name="county">
-                                    <option selected>Choose...</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
+                                <dropdown
+                                    autocomplete
+                                    :loading="loadingCounties"
+                                    @search="countySearch = $event"
+                                    placeholder="Select a County"
+                                    v-model="form.county_id"
+                                    :options="counties"
+                                    :disabled="form.state_id === null"
+                                    ref="county"
+                                />
                             </div>
                         </div>
                     </div>
@@ -97,7 +112,9 @@
                     <button class="btn btn-primary" type="submit">
                         Save
                     </button>
-                    <button class="btn btn-light ml-auto" type="button">
+                    <button class="btn btn-light ml-auto"
+                            type="button"
+                            @click.prevent="$emit('close')">
                         Close
                     </button>
                 </modal-footer>
@@ -116,11 +133,15 @@
   import Close from '../components/Modal/Close'
   import Form from './Form'
   import Required from '../components/Required'
+  import Autocomplete from '../components/Autocomplete'
+  import Dropdown from '../components/Dropdown'
 
   export default {
     name: 'SiteForm',
 
     components: {
+      Dropdown,
+      Autocomplete,
       Required,
       Close,
       ModalFooter,
@@ -133,8 +154,106 @@
 
     data() {
       return {
-        form: new Form({}),
+        states         : [],
+        stateSearch    : '',
+        counties       : [],
+        countySearch   : '',
+        form           : new Form({
+          state_id : null,
+          county_id: null,
+          name     : '',
+        }),
+        stateRequest   : null,
+        countyRequest  : null,
+        loadingStates  : false,
+        loadingCounties: false,
       }
+    },
+
+    mounted() {
+      this.loadStates()
+    },
+
+    watch: {
+      stateSearch() {
+        this.loadStates()
+      },
+
+      countySearch() {
+        this.loadCounties()
+      },
+    },
+
+    methods: {
+      async loadStates() {
+        this.loadingStates = true
+        if (this.stateRequest !== null) {
+          this.stateRequest()
+        }
+
+        try {
+          const {data} = await axios.get('/web/states', {
+            params     : {
+              search: this.stateSearch,
+            },
+            cancelToken: new axios.CancelToken(c => this.stateRequest = c),
+          })
+
+          this.states        = data.data.map(s => {
+            return {
+              label : `${s.name} (${s.code})`,
+              value : s.id,
+              search: s.name,
+            }
+          })
+          this.loadingStates = false
+        } catch (e) {
+          if (!axios.isCancel(e)) {
+            this.loadingStates = false
+            console.error(e)
+          }
+        }
+
+        this.stateRequest = null
+      },
+
+      async loadCounties() {
+        this.loadingCounties = true
+        if (this.countyRequest !== null) {
+          this.countyRequest()
+        }
+
+        try {
+          const {data} = await axios.get('/web/counties', {
+            params     : {
+              state_id: this.form.state_id,
+              search  : this.countySearch,
+            },
+            cancelToken: new axios.CancelToken(c => this.countyRequest = c),
+          })
+
+          this.counties        = data.data.map(c => {
+            return {
+              label: c.name,
+              value: c.id,
+            }
+          })
+          this.loadingCounties = false
+        } catch (e) {
+          if (!axios.isCancel(e)) {
+            this.loadingCounties = false
+            console.error(e)
+          }
+        }
+
+        this.countyRequest = null
+      },
+
+      selectState(value) {
+        this.form.state_id = value
+        this.loadCounties()
+        this.$refs.county.clear()
+      },
     },
   }
 </script>

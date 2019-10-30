@@ -66,3 +66,37 @@
         box-shadow: 0 0 0 3px rgba($primary, .3);
     }
 }
+
+.btn-select {
+    @extend .form-control;
+}
+
+.btn-placeholder-effect {
+    color: $input-placeholder-color;
+}
+
+.autocomplete .dropdown-menu {
+    max-height: 40vh;
+    overflow: auto;
+
+    .dropdown-item {
+        white-space: normal;
+    }
+
+    .form-control {
+        border-width: 1px;
+    }
+}
+
+.dropdown.show {
+    .btn-select {
+        border-color: $primary;
+        .icon {
+            color: $primary;
+        }
+    }
+}
+
+.text-case-normal {
+    text-transform: none;
+}

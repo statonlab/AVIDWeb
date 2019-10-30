@@ -22,3 +22,21 @@ Route::group([
     Route::get('/', 'HomeController@data');
     Route::get('/sites', 'HomeController@data');
 });
+
+Route::group([
+    'middleware' => ['auth'],
+    'prefix' => '/web',
+], function () {
+    // State Controller
+    Route::get('/states', 'StateController@index');
+
+    // County Controller
+    Route::get('/counties', 'CountyController@index');
+
+    // Site Controller
+    Route::get('/sites', 'SiteController@index');
+    Route::post('/sites', 'SiteController@create');
+    Route::get('/sites/{site}', 'SiteController@show');
+    Route::put('/sites/{site}', 'SiteController@update');
+    Route::delete('/sites/{site}', 'SiteController@destroy');
+});

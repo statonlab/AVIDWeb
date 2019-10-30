@@ -12,14 +12,29 @@ class SiteController extends Controller
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function index(Request $request)
     {
         $this->validate($request, [
-            'search' => 'nullable|max:255'
+            'search' => 'nullable|max:255',
         ]);
 
+        /** @var \App\User $user */
+        $user = $request->user();
 
+        $sites = $user->sites();
+
+        if (! empty($request->search)) {
+            $term = $request->search;
+            $sites->where(function ($query) use ($term) {
+                $query->where('name', 'like', "%$term%");
+            });
+        }
+
+        $sites = $sites->paginate(20);
+
+        return $this->success($sites);
     }
 
     /**
@@ -27,10 +42,22 @@ class SiteController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function store(Request $request)
+    public function create(Request $request)
     {
-        //
+        $this->authorize('create', $request);
+
+        $this->validate($request, [
+            'name' => 'required|max:255',
+        ]);
+
+        $site = Site::create([
+            'name' => $request->name,
+        ]);
+
+        return $this->created($site);
     }
 
     /**
@@ -38,10 +65,13 @@ class SiteController extends Controller
      *
      * @param \App\Site $site
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Site $site)
     {
-        //
+        $this->authorize('view', $site);
+
+        return $this->success($site);
     }
 
     /**
@@ -50,10 +80,22 @@ class SiteController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \App\Site $site
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, Site $site)
     {
-        //
+        $this->authorize('update', $site);
+
+        $this->validate($request, [
+            'name' => 'required|max:255',
+        ]);
+
+        $site->update([
+            'name' => $request->name,
+        ]);
+
+        return $this->created($site);
     }
 
     /**
@@ -61,9 +103,14 @@ class SiteController extends Controller
      *
      * @param \App\Site $site
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Site $site)
     {
-        //
+        $this->authorize('delete', $site);
+
+        $site->delete();
+
+        return $this->created('Site deleted successfully');
     }
 }

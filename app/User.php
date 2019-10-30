@@ -49,6 +49,13 @@ class User extends Authenticatable
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function sites() {
+        return $this->hasMany(Site::class);
+    }
+
+    /**
      * @return bool
      */
     public function isAdmin()
@@ -62,5 +69,16 @@ class User extends Authenticatable
     public function isScientist()
     {
         return $this->role->name === 'Scientist';
+    }
+
+    /**
+     * Whether the user owns a certain resource
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return bool
+     */
+    public function owns($model)
+    {
+        return $this->id === ($model->user_id ?? null);
     }
 }
