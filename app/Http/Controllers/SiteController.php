@@ -16,10 +16,10 @@ class SiteController extends Controller
     public function index(Request $request)
     {
         $this->validate($request, [
-            'search' => 'nullable'
+            'search' => 'nullable|max:255'
         ]);
 
-        
+
     }
 
     /**

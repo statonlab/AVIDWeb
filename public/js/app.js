@@ -22254,6 +22254,200 @@ var render = function() {
                       autofocus: ""
                     }
                   })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-md-6" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "label",
+                        { attrs: { for: "state" } },
+                        [
+                          _vm._v("State\n                                "),
+                          _c("required")
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          staticClass: "custom-select",
+                          attrs: { id: "state", name: "state" }
+                        },
+                        [
+                          _c("option", { attrs: { selected: "" } }, [
+                            _vm._v("Choose...")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "1" } }, [
+                            _vm._v("One")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "2" } }, [
+                            _vm._v("Two")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "3" } }, [
+                            _vm._v("Three")
+                          ])
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-6" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "label",
+                        { attrs: { for: "county" } },
+                        [
+                          _vm._v("County\n                                "),
+                          _c("required")
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          staticClass: "custom-select",
+                          attrs: { id: "county", name: "county" }
+                        },
+                        [
+                          _c("option", { attrs: { selected: "" } }, [
+                            _vm._v("Choose...")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "1" } }, [
+                            _vm._v("One")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "2" } }, [
+                            _vm._v("Two")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "3" } }, [
+                            _vm._v("Three")
+                          ])
+                        ]
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "city" } }, [
+                    _vm._v("City/Town")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "city",
+                      id: "city",
+                      placeholder: "Type a city name"
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "owner" } }, [
+                    _vm._v("Owner's Name")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "owner",
+                      id: "owner",
+                      placeholder: "Type a name"
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "address" } }, [
+                    _vm._v("Owner's Address")
+                  ]),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "address",
+                      id: "address",
+                      placeholder: "Type an address"
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    { attrs: { for: "basal-area" } },
+                    [
+                      _vm._v(
+                        "\n                        Approximate Basal Area\n                        "
+                      ),
+                      _c("required")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group is-appended" }, [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        name: "basal_area",
+                        id: "basal-area",
+                        placeholder: "Type a number"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "input-group-append" }, [
+                      _c("span", { staticClass: "input-group-text" }, [
+                        _vm._v("ft"),
+                        _c("sup", [_vm._v("2")]),
+                        _vm._v("/ac")
+                      ])
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    { attrs: { for: "diameter" } },
+                    [
+                      _vm._v(
+                        "\n                        Average Overstory Tree Diameter\n                        "
+                      ),
+                      _c("required")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group is-appended" }, [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        name: "diameter",
+                        id: "diameter",
+                        placeholder: "Type a number"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "input-group-append" }, [
+                      _c("span", { staticClass: "input-group-text" }, [
+                        _vm._v("in")
+                      ])
+                    ])
+                  ])
                 ])
               ]),
               _vm._v(" "),
@@ -39051,6 +39245,21 @@ function () {
     key: "get",
     value: function get() {
       return this.user;
+    }
+  }, {
+    key: "is",
+    value: function is(user) {
+      return user.id === this.user.id;
+    }
+  }, {
+    key: "isAdmin",
+    value: function isAdmin() {
+      return this.user.role.name === 'Admin';
+    }
+  }, {
+    key: "isScientist",
+    value: function isScientist() {
+      return this.user.role.name === 'scientist';
     }
   }]);
 
