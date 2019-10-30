@@ -33,6 +33,7 @@
                                 <dropdown
                                     autocomplete
                                     :loading="loadingStates"
+                                    v-model="form.state_id"
                                     @input="selectState($event)"
                                     :options="states"
                                     placeholder="Select a state"
@@ -269,7 +270,6 @@
       },
 
       selectState(value) {
-        this.form.state_id = value
         this.loadCounties()
         this.$refs.county.clear()
       },

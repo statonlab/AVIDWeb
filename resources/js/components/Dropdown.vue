@@ -5,7 +5,6 @@
                 data-flip="false"
                 ref="btn"
                 @click="focus()"
-                @keyup.enter="focus()"
                 @keyup.down="focus()"
                 :class="['btn', 'btn-select', 'd-flex', {'btn-placeholder-effect': value === null}]">
             <span class="text-case-normal">
