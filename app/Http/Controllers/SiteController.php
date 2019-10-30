@@ -23,7 +23,10 @@ class SiteController extends Controller
         /** @var \App\User $user */
         $user = $request->user();
 
-        $sites = $user->sites();
+        $sites = $user->sites()->with([
+            'state',
+            'county',
+        ]);
 
         if (! empty($request->search)) {
             $term = $request->search;
@@ -47,14 +50,29 @@ class SiteController extends Controller
      */
     public function create(Request $request)
     {
-        $this->authorize('create', $request);
+        $this->authorize('create', Site::class);
 
         $this->validate($request, [
             'name' => 'required|max:255',
+            'state_id' => 'required|exists:states,id',
+            'county_id' => 'required|exists:counties,id',
+            'basal_area' => 'nullable|numeric',
+            'diameter' => 'nullable|numeric',
+            'city' => 'nullable|max:255',
+            'owner_name' => 'nullable|max:255',
+            'owner_address' => 'nullable',
         ]);
 
         $site = Site::create([
+            'user_id' => $request->user()->id,
             'name' => $request->name,
+            'state_id' => $request->state_id,
+            'county_id' => $request->county_id,
+            'basal_area' => $request->basal_area,
+            'diameter' => $request->diamater,
+            'city' => $request->city,
+            'owner_name' => $request->owner_name,
+            'owner_address' => $request->owner_address,
         ]);
 
         return $this->created($site);
@@ -89,10 +107,24 @@ class SiteController extends Controller
 
         $this->validate($request, [
             'name' => 'required|max:255',
+            'state_id' => 'required|exists:states,id',
+            'county_id' => 'required|exists:counties,id',
+            'basal_area' => 'nullable|numeric',
+            'diameter' => 'nullable|numeric',
+            'city' => 'nullable|max:255',
+            'owner_name' => 'nullable|max:255',
+            'owner_address' => 'nullable',
         ]);
 
         $site->update([
             'name' => $request->name,
+            'state_id' => $request->state_id,
+            'county_id' => $request->county_id,
+            'basal_area' => $request->basal_area,
+            'diameter' => $request->diamater,
+            'city' => $request->city,
+            'owner_name' => $request->owner_name,
+            'owner_address' => $request->owner_address,
         ]);
 
         return $this->created($site);

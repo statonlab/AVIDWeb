@@ -1,6 +1,6 @@
 <template>
     <modal @close="$emit('close')" medium>
-        <form action="" @submit.prevent>
+        <form action="" @submit.prevent="submit()">
             <modal-card>
                 <modal-header>
                     <modal-title>
@@ -19,6 +19,7 @@
                                class="form-control"
                                id="name"
                                name="name"
+                               v-model="form.name"
                                placeholder="Site Name"
                                autofocus>
                     </div>
@@ -61,17 +62,28 @@
                     </div>
                     <div class="form-group">
                         <label for="city">City/Town</label>
-                        <input type="text" class="form-control" name="city" id="city" placeholder="Type a city name">
+                        <input type="text"
+                               class="form-control"
+                               v-model="form.city"
+                               name="city"
+                               id="city"
+                               placeholder="Type a city name">
                     </div>
                     <div class="form-group">
                         <label for="owner">Owner's Name</label>
-                        <input type="text" class="form-control" name="owner" id="owner" placeholder="Type a name">
+                        <input type="text"
+                               class="form-control"
+                               v-model="form.owner_name"
+                               name="owner"
+                               id="owner"
+                               placeholder="Type a name">
                     </div>
                     <div class="form-group">
                         <label for="address">Owner's Address</label>
                         <textarea type="text"
                                   class="form-control"
                                   name="address"
+                                  v-model="form.owner_address"
                                   id="address"
                                   placeholder="Type an address"></textarea>
                     </div>
@@ -84,6 +96,7 @@
                             <input type="text"
                                    class="form-control"
                                    name="basal_area"
+                                   v-model="form.basal_area"
                                    id="basal-area"
                                    placeholder="Type a number">
                             <div class="input-group-append">
@@ -98,6 +111,7 @@
                         </label>
                         <div class="input-group is-appended">
                             <input type="text"
+                                   v-model="form.diameter"
                                    class="form-control"
                                    name="diameter"
                                    id="diameter"
@@ -159,9 +173,14 @@
         counties       : [],
         countySearch   : '',
         form           : new Form({
-          state_id : null,
-          county_id: null,
-          name     : '',
+          state_id     : null,
+          county_id    : null,
+          city         : '',
+          name         : '',
+          diameter     : '',
+          basal_area   : '',
+          owner_name   : '',
+          owner_address: '',
         }),
         stateRequest   : null,
         countyRequest  : null,
@@ -253,6 +272,15 @@
         this.form.state_id = value
         this.loadCounties()
         this.$refs.county.clear()
+      },
+
+      async submit() {
+        try {
+          const {data} = await this.form.post(`/web/sites`)
+          this.$emit('create', data)
+        } catch (e) {
+          console.error(e)
+        }
       },
     },
   }

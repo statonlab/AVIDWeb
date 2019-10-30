@@ -21,4 +21,14 @@ class Site extends Model
         'basal_area',
         'diameter',
     ];
+
+    public function county()
+    {
+        return $this->belongsTo(County::class);
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
 }
