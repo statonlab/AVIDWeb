@@ -12,7 +12,13 @@
                 </div>
             </div>
             <div class="card-body p-0">
-                <table class="table mb-0 table-middle">
+                <p class="mb-0 p-4" v-if="loading">
+                    <inline-spinner class="text-primary"/>
+                </p>
+                <p class="mb-0 p-4 text-muted" v-if="!loading && sites.length === 0">
+                    No results found. Use the "New Site" button above to create a new one.
+                </p>
+                <table class="table mb-0 table-middle" v-if="!loading && sites.length > 0">
                     <thead>
                     <tr>
                         <th style="width: 100%">Name</th>
@@ -27,7 +33,7 @@
                                 <strong>{{ site.name }}</strong>
                             </a>
                             <div class="text-muted">
-                                {{ site.address }}
+                                {{ site.county.name }}, {{ site.state.code }}
                             </div>
                         </td>
                         <td class="text-right">{{ site.plots_count }}</td>
@@ -48,24 +54,41 @@
 <script>
   import Icon from '../components/Icon'
   import SiteForm from '../forms/SiteForm'
+  import InlineSpinner from '../components/InlineSpinner'
 
   export default {
     name: 'Sites',
 
-    components: {SiteForm, Icon},
+    components: {InlineSpinner, SiteForm, Icon},
 
     data() {
       return {
         showSiteForm: false,
-        sites       : [
-          {
-            name         : 'Gasline Harvest inside slash',
-            plots_count  : 80,
-            entries_count: 190,
-            address      : 'New Field, NY',
-          },
-        ],
+        sites       : [],
+        loading     : false,
+        page        : 1,
+        lastPage    : 1,
+        total       : 0,
       }
+    },
+
+    mounted() {
+      this.loading = true
+      this.loadSites()
+    },
+
+    methods: {
+      async loadSites() {
+        try {
+          const {data}  = await axios.get('/web/sites')
+          this.total    = data.total
+          this.sites    = data.data
+          this.lastPage = data.last_page
+        } catch (e) {
+          console.error(e)
+        }
+        this.loading = false
+      },
     },
   }
 </script>

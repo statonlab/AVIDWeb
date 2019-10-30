@@ -2142,6 +2142,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2920,6 +2923,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2954,7 +2971,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       form: new _Form__WEBPACK_IMPORTED_MODULE_8__["default"]({
         state_id: null,
         county_id: null,
-        name: ''
+        city: '',
+        name: '',
+        diameter: '',
+        basal_area: '',
+        owner_name: '',
+        owner_address: ''
       }),
       stateRequest: null,
       countyRequest: null,
@@ -3116,7 +3138,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.form.state_id = value;
       this.loadCounties();
       this.$refs.county.clear();
-    }
+    },
+    submit: function () {
+      var _submit = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var _ref3, data;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                _context3.next = 3;
+                return this.form.post("/web/sites");
+
+              case 3:
+                _ref3 = _context3.sent;
+                data = _ref3.data;
+                this.$emit('create', data);
+                _context3.next = 11;
+                break;
+
+              case 8:
+                _context3.prev = 8;
+                _context3.t0 = _context3["catch"](0);
+                console.error(_context3.t0);
+
+              case 11:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this, [[0, 8]]);
+      }));
+
+      function submit() {
+        return _submit.apply(this, arguments);
+      }
+
+      return submit;
+    }()
   }
 });
 
@@ -3164,8 +3226,17 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_Icon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Icon */ "./resources/js/components/Icon.vue");
-/* harmony import */ var _forms_SiteForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../forms/SiteForm */ "./resources/js/forms/SiteForm.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Icon */ "./resources/js/components/Icon.vue");
+/* harmony import */ var _forms_SiteForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../forms/SiteForm */ "./resources/js/forms/SiteForm.vue");
+/* harmony import */ var _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/InlineSpinner */ "./resources/js/components/InlineSpinner.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -3213,24 +3284,82 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Sites',
   components: {
-    SiteForm: _forms_SiteForm__WEBPACK_IMPORTED_MODULE_1__["default"],
-    Icon: _components_Icon__WEBPACK_IMPORTED_MODULE_0__["default"]
+    InlineSpinner: _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_3__["default"],
+    SiteForm: _forms_SiteForm__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Icon: _components_Icon__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
       showSiteForm: false,
-      sites: [{
-        name: 'Gasline Harvest inside slash',
-        plots_count: 80,
-        entries_count: 190,
-        address: 'New Field, NY'
-      }]
+      sites: [],
+      loading: false,
+      page: 1,
+      lastPage: 1,
+      total: 0
     };
+  },
+  mounted: function mounted() {
+    this.loading = true;
+    this.loadSites();
+  },
+  methods: {
+    loadSites: function () {
+      var _loadSites = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _ref, data;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return axios.get('/web/sites');
+
+              case 3:
+                _ref = _context.sent;
+                data = _ref.data;
+                this.total = data.total;
+                this.sites = data.data;
+                this.lastPage = data.last_page;
+                _context.next = 13;
+                break;
+
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](0);
+                console.error(_context.t0);
+
+              case 13:
+                this.loading = false;
+
+              case 14:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[0, 10]]);
+      }));
+
+      function loadSites() {
+        return _loadSites.apply(this, arguments);
+      }
+
+      return loadSites;
+    }()
   }
 });
 
@@ -23241,7 +23370,30 @@ var render = function() {
         on: {
           click: function($event) {
             return _vm.focus()
-          }
+          },
+          keyup: [
+            function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+              ) {
+                return null
+              }
+              return _vm.focus()
+            },
+            function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "down", 40, $event.key, [
+                  "Down",
+                  "ArrowDown"
+                ])
+              ) {
+                return null
+              }
+              return _vm.focus()
+            }
+          ]
         }
       },
       [
@@ -23272,6 +23424,15 @@ var render = function() {
                 on: {
                   keyup: function($event) {
                     return _vm.$emit("search", $event.target.value)
+                  },
+                  keydown: function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    _vm.options.length > 0 && _vm.select(_vm.options[0], 0)
                   }
                 }
               })
@@ -23928,6 +24089,7 @@ var render = function() {
           on: {
             submit: function($event) {
               $event.preventDefault()
+              return _vm.submit()
             }
           }
         },
@@ -23970,6 +24132,14 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.name,
+                        expression: "form.name"
+                      }
+                    ],
                     staticClass: "form-control",
                     attrs: {
                       type: "text",
@@ -23978,6 +24148,15 @@ var render = function() {
                       name: "name",
                       placeholder: "Site Name",
                       autofocus: ""
+                    },
+                    domProps: { value: _vm.form.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "name", $event.target.value)
+                      }
                     }
                   })
                 ]),
@@ -24070,12 +24249,29 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.city,
+                        expression: "form.city"
+                      }
+                    ],
                     staticClass: "form-control",
                     attrs: {
                       type: "text",
                       name: "city",
                       id: "city",
                       placeholder: "Type a city name"
+                    },
+                    domProps: { value: _vm.form.city },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "city", $event.target.value)
+                      }
                     }
                   })
                 ]),
@@ -24086,12 +24282,29 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.owner_name,
+                        expression: "form.owner_name"
+                      }
+                    ],
                     staticClass: "form-control",
                     attrs: {
                       type: "text",
                       name: "owner",
                       id: "owner",
                       placeholder: "Type a name"
+                    },
+                    domProps: { value: _vm.form.owner_name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "owner_name", $event.target.value)
+                      }
                     }
                   })
                 ]),
@@ -24102,12 +24315,29 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.owner_address,
+                        expression: "form.owner_address"
+                      }
+                    ],
                     staticClass: "form-control",
                     attrs: {
                       type: "text",
                       name: "address",
                       id: "address",
                       placeholder: "Type an address"
+                    },
+                    domProps: { value: _vm.form.owner_address },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "owner_address", $event.target.value)
+                      }
                     }
                   })
                 ]),
@@ -24127,12 +24357,29 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "input-group is-appended" }, [
                     _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.basal_area,
+                          expression: "form.basal_area"
+                        }
+                      ],
                       staticClass: "form-control",
                       attrs: {
                         type: "text",
                         name: "basal_area",
                         id: "basal-area",
                         placeholder: "Type a number"
+                      },
+                      domProps: { value: _vm.form.basal_area },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.form, "basal_area", $event.target.value)
+                        }
                       }
                     }),
                     _vm._v(" "),
@@ -24161,12 +24408,29 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "input-group is-appended" }, [
                     _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.diameter,
+                          expression: "form.diameter"
+                        }
+                      ],
                       staticClass: "form-control",
                       attrs: {
                         type: "text",
                         name: "diameter",
                         id: "diameter",
                         placeholder: "Type a number"
+                      },
+                      domProps: { value: _vm.form.diameter },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.form, "diameter", $event.target.value)
+                        }
                       }
                     }),
                     _vm._v(" "),
@@ -24315,39 +24579,60 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body p-0" }, [
-          _c("table", { staticClass: "table mb-0 table-middle" }, [
-            _vm._m(1),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.sites, function(site) {
-                return _c("tr", [
-                  _c("td", [
-                    _c("a", { attrs: { href: "#" } }, [
-                      _c("strong", [_vm._v(_vm._s(site.name))])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "text-muted" }, [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(site.address) +
-                          "\n                        "
-                      )
+          _vm.loading
+            ? _c(
+                "p",
+                { staticClass: "mb-0 p-4" },
+                [_c("inline-spinner", { staticClass: "text-primary" })],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.loading && _vm.sites.length === 0
+            ? _c("p", { staticClass: "mb-0 p-4 text-muted" }, [
+                _vm._v(
+                  '\n                No results found. Use the "New Site" button above to create a new one.\n            '
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.loading && _vm.sites.length > 0
+            ? _c("table", { staticClass: "table mb-0 table-middle" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.sites, function(site) {
+                    return _c("tr", [
+                      _c("td", [
+                        _c("a", { attrs: { href: "#" } }, [
+                          _c("strong", [_vm._v(_vm._s(site.name))])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "text-muted" }, [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(site.county.name) +
+                              ", " +
+                              _vm._s(site.state.code) +
+                              "\n                        "
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "text-right" }, [
+                        _vm._v(_vm._s(site.plots_count))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "text-right" }, [
+                        _vm._v(_vm._s(site.entries_count))
+                      ])
                     ])
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "text-right" }, [
-                    _vm._v(_vm._s(site.plots_count))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "text-right" }, [
-                    _vm._v(_vm._s(site.entries_count))
-                  ])
-                ])
-              }),
-              0
-            )
-          ])
+                  }),
+                  0
+                )
+              ])
+            : _vm._e()
         ])
       ]),
       _vm._v(" "),

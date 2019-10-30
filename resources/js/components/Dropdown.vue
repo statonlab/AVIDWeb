@@ -5,6 +5,8 @@
                 data-flip="false"
                 ref="btn"
                 @click="focus()"
+                @keyup.enter="focus()"
+                @keyup.down="focus()"
                 :class="['btn', 'btn-select', 'd-flex', {'btn-placeholder-effect': value === null}]">
             <span class="text-case-normal">
                 {{ selected }}
@@ -18,7 +20,8 @@
                        class="form-control form-control-sm"
                        placeholder="Search..."
                        ref="search"
-                       @keyup="$emit('search', $event.target.value)">
+                       @keyup="$emit('search', $event.target.value)"
+                       @keydown.enter="options.length > 0 && select(options[0], 0)">
             </div>
             <a href="#"
                v-for="(option, index) in options"
