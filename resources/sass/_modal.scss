@@ -1,0 +1,13 @@
+.modal-title {
+    font-size: 1rem;
+    font-weight: $font-weight-bold;
+}
+
+.modal-body {
+    overflow-y: auto;
+    max-height: calc(100vh - 179px)
+}
+
+.modal-md {
+    max-width: 650px;
+}
