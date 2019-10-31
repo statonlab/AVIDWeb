@@ -71,6 +71,10 @@
     @extend .form-control;
 }
 
+.btn-select-active {
+    color: $black;
+}
+
 .btn-placeholder-effect {
     color: $input-placeholder-color;
 }

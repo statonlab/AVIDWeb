@@ -2144,6 +2144,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2248,6 +2251,18 @@ __webpack_require__.r(__webpack_exports__);
     clear: function clear() {
       this.$emit('input', null);
       this.index = null;
+    },
+    down: function down() {
+      var first = $(this.$refs.menu).find('.dropdown-item').first();
+
+      if (first.length) {
+        first.focus();
+      }
+    },
+    up: function up(index) {
+      if (this.autocomplete && index === 0) {
+        this.focus();
+      }
     }
   }
 });
@@ -23359,7 +23374,10 @@ var render = function() {
           "btn",
           "btn-select",
           "d-flex",
-          { "btn-placeholder-effect": _vm.value === null }
+          {
+            "btn-placeholder-effect": _vm.value === null,
+            "btn-select-active": _vm.value !== null
+          }
         ],
         attrs: {
           "data-toggle": "dropdown",
@@ -23401,27 +23419,45 @@ var render = function() {
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "dropdown-menu w-100" },
+      { ref: "menu", staticClass: "dropdown-menu w-100" },
       [
         _vm.autocomplete
           ? _c("div", { staticClass: "pb-2 px-3" }, [
               _c("input", {
                 ref: "search",
                 staticClass: "form-control form-control-sm",
-                attrs: { type: "search", placeholder: "Search..." },
+                attrs: {
+                  type: "search",
+                  placeholder: "Search...",
+                  title: "Search"
+                },
                 on: {
                   keyup: function($event) {
                     return _vm.$emit("search", $event.target.value)
                   },
-                  keydown: function($event) {
-                    if (
-                      !$event.type.indexOf("key") &&
-                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                    ) {
-                      return null
+                  keydown: [
+                    function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "down", 40, $event.key, [
+                          "Down",
+                          "ArrowDown"
+                        ])
+                      ) {
+                        return null
+                      }
+                      return _vm.down()
+                    },
+                    function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      _vm.options.length > 0 && _vm.select(_vm.options[0], 0)
                     }
-                    _vm.options.length > 0 && _vm.select(_vm.options[0], 0)
-                  }
+                  ]
                 }
               })
             ])
@@ -23434,6 +23470,18 @@ var render = function() {
               class: ["dropdown-item", { active: option.value === _vm.value }],
               attrs: { href: "#" },
               on: {
+                keydown: function($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "up", 38, $event.key, [
+                      "Up",
+                      "ArrowUp"
+                    ])
+                  ) {
+                    return null
+                  }
+                  return _vm.up(index)
+                },
                 click: function($event) {
                   $event.preventDefault()
                   return _vm.select(option, index)
