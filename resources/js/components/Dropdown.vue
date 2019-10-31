@@ -6,23 +6,26 @@
                 ref="btn"
                 @click="focus()"
                 @keyup.down="focus()"
-                :class="['btn', 'btn-select', 'd-flex', {'btn-placeholder-effect': value === null}]">
+                :class="['btn', 'btn-select', 'd-flex', {'btn-placeholder-effect': value === null, 'btn-select-active': value !== null}]">
             <span class="text-case-normal">
                 {{ selected }}
             </span>
             <inline-spinner v-if="loading" class="ml-auto text-primary"/>
             <icon name="ios-arrow-down" class="ml-auto" v-else/>
         </button>
-        <div class="dropdown-menu w-100">
+        <div class="dropdown-menu w-100" ref="menu">
             <div class="pb-2 px-3" v-if="autocomplete">
                 <input type="search"
                        class="form-control form-control-sm"
                        placeholder="Search..."
                        ref="search"
+                       title="Search"
                        @keyup="$emit('search', $event.target.value)"
+                       @keydown.down="down()"
                        @keydown.enter="options.length > 0 && select(options[0], 0)">
             </div>
             <a href="#"
+               @keydown.up="up(index)"
                v-for="(option, index) in options"
                :class="['dropdown-item', {'active': option.value === value}]"
                @click.prevent="select(option, index)">
@@ -116,6 +119,20 @@
       clear() {
         this.$emit('input', null)
         this.index = null
+      },
+
+      down() {
+        const first = $(this.$refs.menu).find('.dropdown-item').first()
+
+        if (first.length) {
+          first.focus()
+        }
+      },
+
+      up(index) {
+        if(this.autocomplete && index === 0) {
+          this.focus()
+        }
       },
     },
   }
