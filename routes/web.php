@@ -42,7 +42,7 @@ Route::group([
     Route::delete('/sites/{site}', 'SiteController@destroy');
 
     // Plot Controller
-    Route::get('/plots', 'PlotController@index');
+    Route::get('/sites/{site}/plots', 'PlotController@index');
     Route::post('/plots', 'PlotController@create');
     Route::get('/plots/{plot}', 'PlotController@show');
     Route::put('/plots/{plot}', 'PlotController@update');

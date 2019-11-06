@@ -75,6 +75,8 @@ class SiteController extends Controller
             'owner_address' => $request->owner_address,
         ]);
 
+        $site->load(['county', 'state']);
+
         return $this->created($site);
     }
 
@@ -88,6 +90,8 @@ class SiteController extends Controller
     public function show(Site $site)
     {
         $this->authorize('view', $site);
+
+        $site->load(['county', 'state']);
 
         return $this->success($site);
     }

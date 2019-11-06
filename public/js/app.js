@@ -3240,7 +3240,73 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/InlineSpinner */ "./resources/js/components/InlineSpinner.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/InlineSpinner */ "./resources/js/components/InlineSpinner.vue");
+/* harmony import */ var _components_Icon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Icon */ "./resources/js/components/Icon.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3252,10 +3318,145 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Plots',
   components: {
-    InlineSpinner: _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_0__["default"]
+    Icon: _components_Icon__WEBPACK_IMPORTED_MODULE_2__["default"],
+    InlineSpinner: _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      plots: [],
+      page: 1,
+      lastPage: 1,
+      total: 0,
+      loading: false,
+      search: '',
+      request: null,
+      site: null,
+      plot: null
+    };
+  },
+  mounted: function mounted() {
+    this.loading = true;
+    this.loadPlots();
+    this.loadSite();
+  },
+  watch: {
+    search: function search() {
+      this.loadPlots();
+    },
+    page: function page() {
+      this.loading = true;
+      this.loadPlots();
+    }
+  },
+  methods: {
+    loadSite: function () {
+      var _loadSite = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var id, _ref, data;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                id = this.$route.params.id;
+                _context.prev = 1;
+                _context.next = 4;
+                return axios.get("/web/sites/".concat(id));
+
+              case 4:
+                _ref = _context.sent;
+                data = _ref.data;
+                this.site = data;
+                _context.next = 11;
+                break;
+
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context["catch"](1);
+
+              case 11:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[1, 9]]);
+      }));
+
+      function loadSite() {
+        return _loadSite.apply(this, arguments);
+      }
+
+      return loadSite;
+    }(),
+    loadPlots: function () {
+      var _loadPlots = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var _this = this;
+
+        var id, _ref2, data;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (this.request !== null) {
+                  this.request();
+                }
+
+                _context2.prev = 1;
+                id = this.$route.params.id;
+                _context2.next = 5;
+                return axios.get("/web/sites/".concat(id, "/plots"), {
+                  params: {
+                    page: this.page,
+                    search: this.search
+                  },
+                  cancelToken: new axios.CancelToken(function (c) {
+                    return _this.request = c;
+                  })
+                });
+
+              case 5:
+                _ref2 = _context2.sent;
+                data = _ref2.data;
+                this.total = data.total;
+                this.plots = data.data;
+                this.page = data.current_page;
+                this.lastPage = data.last_page;
+                this.loading = false;
+                this.request = null;
+                _context2.next = 18;
+                break;
+
+              case 15:
+                _context2.prev = 15;
+                _context2.t0 = _context2["catch"](1);
+
+                if (!axios.isCancel(_context2.t0)) {
+                  this.loading = false;
+                  this.request = null;
+                }
+
+              case 18:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[1, 15]]);
+      }));
+
+      function loadPlots() {
+        return _loadPlots.apply(this, arguments);
+      }
+
+      return loadPlots;
+    }()
   }
 });
 
@@ -24628,17 +24829,142 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "card mb-3" }, [
-      _c(
-        "div",
-        { staticClass: "card-body" },
-        [_c("inline-spinner", { staticClass: "text-primary" })],
-        1
-      )
+    _vm.site
+      ? _c("div", [
+          _c("h1", { staticClass: "page-title mb-0" }, [
+            _vm._v("\n            " + _vm._s(_vm.site.name) + "\n        ")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "mb-3 text-muted" }, [
+            _vm._v(
+              _vm._s(_vm.site.county.name) + ", " + _vm._s(_vm.site.state.name)
+            )
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-lg-3 col-md-4" }, [
+        _c("div", { staticClass: "card mb-3" }, [
+          _c("div", { staticClass: "card-header d-flex align-items-center" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "ml-auto" }, [
+              _c(
+                "button",
+                { staticClass: "btn btn-sm btn-primary" },
+                [
+                  _c("icon", { attrs: { name: "add" } }),
+                  _vm._v(" "),
+                  _c("span", [_vm._v("Plot")])
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "card-body pt-0" },
+            [
+              _vm.loading
+                ? _c("inline-spinner", { staticClass: "text-primary" })
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.loading && _vm.plots.length === 0
+                ? _c("div", { staticClass: "text-muted" }, [
+                    _vm._v(
+                      "\n                        No plots found. Use the button above to create a new one.\n                    "
+                    )
+                  ])
+                : _vm._e()
+            ],
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-lg-9 col-md-8" }, [
+        _vm.plot
+          ? _c("div", { staticClass: "card" }, [
+              _c(
+                "div",
+                { staticClass: "card-header d-flex align-items-center" },
+                [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "ml-auto" }, [
+                    _c(
+                      "button",
+                      { staticClass: "btn btn-sm btn-primary" },
+                      [
+                        _c("icon", { attrs: { name: "add" } }),
+                        _vm._v(" "),
+                        _c("span", [_vm._v("Plant")])
+                      ],
+                      1
+                    )
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-body" })
+            ])
+          : _c("div", { staticClass: "card" }, [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "card-body d-flex flex-column justify-content-center align-items-center text-muted"
+                },
+                [
+                  !_vm.loading && _vm.plots.length === 0
+                    ? _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            "Get started by creating a new plot using the button below."
+                          )
+                        ])
+                      ])
+                    : _c("div", [
+                        _c("p", { staticClass: "mb-0" }, [
+                          _vm._v(
+                            "Select a plot from the left sidebar or use the button below to create a new one."
+                          )
+                        ])
+                      ]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    { staticClass: "btn btn-primary" },
+                    [
+                      _c("icon", { attrs: { name: "add" } }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Plot")])
+                    ],
+                    1
+                  )
+                ]
+              )
+            ])
+      ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("strong", [_vm._v("Plots")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("strong", [_vm._v("Plot #1")])])
+  }
+]
 render._withStripped = true
 
 
