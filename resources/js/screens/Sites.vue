@@ -29,9 +29,9 @@
                     <tbody>
                     <tr v-for="site in sites">
                         <td>
-                            <a href="#">
+                            <router-link :to="`/app/sites/${site.id}`">
                                 <strong>{{ site.name }}</strong>
-                            </a>
+                            </router-link>
                             <div class="text-muted">
                                 {{ site.county.name }}, {{ site.state.code }}
                             </div>

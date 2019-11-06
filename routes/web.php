@@ -17,10 +17,11 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::group([
     'middleware' => ['auth'],
-    'prefix' => '/data',
+    'prefix' => '/app',
 ], function () {
     Route::get('/', 'HomeController@data');
     Route::get('/sites', 'HomeController@data');
+    Route::get('/sites/{id}', 'HomeController@data');
 });
 
 Route::group([

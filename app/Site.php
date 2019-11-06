@@ -31,4 +31,9 @@ class Site extends Model
     {
         return $this->belongsTo(State::class);
     }
+
+    public function plots()
+    {
+        return $this->hasMany(Plot::class);
+    }
 }

@@ -11,12 +11,14 @@ import VueRouter from 'vue-router'
 import Dashboard from './screens/Dashboard'
 import Sites from './screens/Sites'
 import App from './components/App'
+import Plots from './screens/Plots'
 
 Vue.use(VueRouter)
 
 const routes = [
-    {path: '/data', component: Dashboard},
-    {path: '/data/sites', component: Sites},
+    {path: '/app', component: Dashboard},
+    {path: '/app/sites', component: Sites},
+    {path: '/app/sites/:id', component: Plots},
 ]
 
 const router = new VueRouter({
