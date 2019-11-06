@@ -69,6 +69,13 @@
 
 .btn-select {
     @extend .form-control;
+
+    &[disabled] {
+        cursor: not-allowed;
+        &:hover {
+            color: $gray-600;
+        }
+    }
 }
 
 .btn-select-active {

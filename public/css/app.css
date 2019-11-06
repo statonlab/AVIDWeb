@@ -10882,6 +10882,14 @@ a.text-dark:focus {
   box-shadow: 0 0 0 3px rgba(46, 176, 122, 0.3);
 }
 
+.btn-select[disabled] {
+  cursor: not-allowed;
+}
+
+.btn-select[disabled]:hover {
+  color: #6c757d;
+}
+
 .btn-select-active {
   color: #000;
 }

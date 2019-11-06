@@ -30,13 +30,13 @@
         items: [
           {
             icon : 'ios-analytics',
-            to   : '/data',
+            to   : '/app',
             exact: true,
             label: 'Dashboard',
           },
           {
             icon : 'ios-archive',
-            to   : '/data/sites',
+            to   : '/app/sites',
             label: 'My Data',
           },
         ],

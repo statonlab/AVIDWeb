@@ -22,7 +22,7 @@
                                     <div class="card-body">
                                         <p class="text-center font-weight-bold">Hello {{auth()->user()->name}}</p>
                                         <p>Use the button to below to access your dashboard</p>
-                                        <a href="/data" class="btn btn-block btn-primary">Go to Dashboard</a>
+                                        <a href="/app" class="btn btn-block btn-primary">Go to Dashboard</a>
                                     </div>
                                 @endauth()
                                 @guest()

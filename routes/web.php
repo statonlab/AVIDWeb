@@ -17,10 +17,11 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::group([
     'middleware' => ['auth'],
-    'prefix' => '/data',
+    'prefix' => '/app',
 ], function () {
     Route::get('/', 'HomeController@data');
     Route::get('/sites', 'HomeController@data');
+    Route::get('/sites/{id}', 'HomeController@data');
 });
 
 Route::group([
@@ -39,4 +40,11 @@ Route::group([
     Route::get('/sites/{site}', 'SiteController@show');
     Route::put('/sites/{site}', 'SiteController@update');
     Route::delete('/sites/{site}', 'SiteController@destroy');
+
+    // Plot Controller
+    Route::get('/sites/{site}/plots', 'PlotController@index');
+    Route::post('/plots', 'PlotController@create');
+    Route::get('/plots/{plot}', 'PlotController@show');
+    Route::put('/plots/{plot}', 'PlotController@update');
+    Route::delete('/plots/{plot}', 'PlotController@destroy');
 });

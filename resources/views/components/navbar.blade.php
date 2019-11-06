@@ -22,29 +22,30 @@
                 <li class="nav-item">
                     <a class="nav-link font-weight-bold" href="#">About Us</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle font-weight-bold"
-                       href="#"
-                       id="navbarDropdown"
-                       role="button"
-                       data-toggle="dropdown"
-                       aria-haspopup="true"
-                       aria-expanded="false">
-                        Account
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" id="logout-btn">Logout</a>
-                        <form action="/logout" method="post" id="logout-form">
-                            @csrf
-                        </form>
-                    </div>
-                </li>
+                @auth()
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle font-weight-bold"
+                           href="#"
+                           id="navbarDropdown"
+                           role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true"
+                           aria-expanded="false">
+                            Account
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/app/data">My Data</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" id="logout-btn">Logout</a>
+                            <form action="/logout" method="post" id="logout-form">
+                                @csrf
+                            </form>
+                        </div>
+                    </li>
+                @endauth()
             </ul>
             @auth()
-                <a href="/data" class="btn btn-outline-light ml-1">Dashboard</a>
+                <a href="/app" class="btn btn-outline-light ml-1">Dashboard</a>
             @endauth()
             @guest()
                 <a href="/register" class="btn btn-outline-light ml-1">Register</a>
