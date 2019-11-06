@@ -9,21 +9,6 @@ use Illuminate\Validation\Rule;
 
 class PlotController extends Controller
 {
-    protected $seasons = ['0', '1-2', '>=3'];
-
-    protected $percentages = [
-        '0-9%',
-        '10-19%',
-        '20-29%',
-        '30-39%',
-        '40-49%',
-        '50-59%',
-        '60-69%',
-        '70-79%',
-        '80-89%',
-        '90-100%',
-    ];
-
     /**
      * Display a listing of the resource.
      *
@@ -170,16 +155,31 @@ class PlotController extends Controller
      */
     public function validationRules(bool $is_update = false)
     {
+        $seasons = ['0', '1-2', '>=3'];
+
+        $percentages = [
+            '0-9%',
+            '10-19%',
+            '20-29%',
+            '30-39%',
+            '40-49%',
+            '50-59%',
+            '60-69%',
+            '70-79%',
+            '80-89%',
+            '90-100%',
+        ];
+
         $rules = [
             'number' => 'required|integer',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
             'basal_area' => 'nullable|numeric',
             'is_protected' => 'nullable|boolean',
-            'protection_seasons' => ['nullable', Rule::in($this->seasons)],
-            'canopy' => ['nullable', Rule::in($this->percentages)],
-            'subcanopy' => ['nullable', Rule::in($this->percentages)],
-            'ground_cover' => ['nullable', Rule::in($this->percentages)],
+            'protection_seasons' => ['nullable', Rule::in($seasons)],
+            'canopy' => ['nullable', Rule::in($percentages)],
+            'subcanopy' => ['nullable', Rule::in($percentages)],
+            'ground_cover' => ['nullable', Rule::in($percentages)],
         ];
 
         if (! $is_update) {
