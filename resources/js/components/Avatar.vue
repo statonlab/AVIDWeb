@@ -46,7 +46,7 @@
         height: 50px;
         line-height: 50px;
         background: darken($primary, 5%);
-        background: linear-gradient(lighten($primary, 5%), darken($primary, 5%));
+        background: linear-gradient($gray-500, $gray-600);
         color: #fff;
         border-radius: 50%;
         font-size: 1.2rem;
