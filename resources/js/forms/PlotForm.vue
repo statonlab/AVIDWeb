@@ -201,7 +201,10 @@
                     </div>
                 </modal-body>
                 <modal-footer class="d-flex">
-                    <button class="btn btn-primary" type="submit">Save</button>
+                    <button class="btn btn-primary" type="submit" :disabled="loading">
+                        <inline-spinner v-if="loading"/>
+                        Save
+                    </button>
                     <button class="btn btn-light ml-auto" type="button" @click.prevent="$emit('close')">Close</button>
                 </modal-footer>
             </modal-card>
@@ -221,11 +224,13 @@
   import Required from '../components/Required'
   import Icon from '../components/Icon'
   import Options from '../helpers/Options'
+  import InlineSpinner from '../components/InlineSpinner'
 
   export default {
     name: 'PlotForm',
 
     components: {
+      InlineSpinner,
       Icon,
       Required,
       Close,

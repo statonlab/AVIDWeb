@@ -24,7 +24,7 @@ class PlotController extends Controller
             'user' => function ($query) {
                 $query->select(['users.id', 'users.name']);
             },
-        ])->paginate(25);
+        ])->orderBy('number', 'asc')->get();
 
         return $this->success($plots);
     }
