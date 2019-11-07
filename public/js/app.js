@@ -2806,6 +2806,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Modal_Close__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/Modal/Close */ "./resources/js/components/Modal/Close.vue");
 /* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Form */ "./resources/js/forms/Form.js");
 /* harmony import */ var _components_Required__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/Required */ "./resources/js/components/Required.vue");
+/* harmony import */ var _components_Icon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/Icon */ "./resources/js/components/Icon.vue");
+/* harmony import */ var _helpers_Options__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../helpers/Options */ "./resources/js/helpers/Options.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2845,6 +2847,186 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
@@ -2857,6 +3039,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'PlotForm',
   components: {
+    Icon: _components_Icon__WEBPACK_IMPORTED_MODULE_10__["default"],
     Required: _components_Required__WEBPACK_IMPORTED_MODULE_9__["default"],
     Close: _components_Modal_Close__WEBPACK_IMPORTED_MODULE_7__["default"],
     ModalTitle: _components_Modal_ModalTitle__WEBPACK_IMPORTED_MODULE_6__["default"],
@@ -2881,8 +3064,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loading: false,
       form: new _Form__WEBPACK_IMPORTED_MODULE_8__["default"]({
         site_id: this.site.id,
-        number: ''
-      })
+        number: '',
+        latitude: '',
+        longitude: '',
+        basal_area: '',
+        ground_cover: '',
+        subcanopy: '',
+        canopy: '',
+        is_protected: '',
+        protection_seasons: ''
+      }),
+      options: _helpers_Options__WEBPACK_IMPORTED_MODULE_11__["default"]
     };
   },
   mounted: function mounted() {
@@ -2916,12 +3108,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 4:
                 _ref = _context.sent;
                 data = _ref.data;
+                this.$notify({
+                  type: 'success',
+                  text: 'Plot created successfully'
+                });
                 this.$emit('create', data);
-                _context.next = 12;
+                _context.next = 13;
                 break;
 
-              case 9:
-                _context.prev = 9;
+              case 10:
+                _context.prev = 10;
                 _context.t0 = _context["catch"](1);
 
                 if (!_context.t0.response || _context.t0.response.status !== 422) {
@@ -2932,15 +3128,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   console.error(_context.t0);
                 }
 
-              case 12:
+              case 13:
                 this.loading = false;
 
-              case 13:
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[1, 9]]);
+        }, _callee, this, [[1, 10]]);
       }));
 
       function create() {
@@ -2967,12 +3163,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 4:
                 _ref2 = _context2.sent;
                 data = _ref2.data;
+                this.$notify({
+                  type: 'success',
+                  text: 'Plot updated successfully'
+                });
                 this.$emit('update', data);
-                _context2.next = 12;
+                _context2.next = 13;
                 break;
 
-              case 9:
-                _context2.prev = 9;
+              case 10:
+                _context2.prev = 10;
                 _context2.t0 = _context2["catch"](1);
 
                 if (!_context2.t0.response || _context2.t0.response.status !== 422) {
@@ -2983,15 +3183,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   console.error(_context2.t0);
                 }
 
-              case 12:
+              case 13:
                 this.loading = false;
 
-              case 13:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[1, 9]]);
+        }, _callee2, this, [[1, 10]]);
       }));
 
       function update() {
@@ -3746,6 +3946,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3767,7 +3977,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       search: '',
       request: null,
       site: null,
-      plot: null
+      selectedPlot: null
     };
   },
   mounted: function mounted() {
@@ -3863,11 +4073,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.lastPage = data.last_page;
                 this.loading = false;
                 this.request = null;
-                _context2.next = 18;
+
+                if (this.selectedPlot === null && this.plots.length > 0) {
+                  this.selectedPlot = this.plots[0];
+                }
+
+                _context2.next = 19;
                 break;
 
-              case 15:
-                _context2.prev = 15;
+              case 16:
+                _context2.prev = 16;
                 _context2.t0 = _context2["catch"](1);
 
                 if (!axios.isCancel(_context2.t0)) {
@@ -3875,12 +4090,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   this.request = null;
                 }
 
-              case 18:
+              case 19:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[1, 15]]);
+        }, _callee2, this, [[1, 16]]);
       }));
 
       function loadPlots() {
@@ -3888,7 +4103,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return loadPlots;
-    }()
+    }(),
+    plotCreated: function plotCreated() {
+      this.showPlotForm = false;
+      this.loadPlots();
+    }
   }
 });
 
@@ -24879,6 +25098,7 @@ var render = function() {
   return _c(
     "modal",
     {
+      attrs: { medium: "" },
       on: {
         close: function($event) {
           return _vm.$emit("close")
@@ -24906,7 +25126,11 @@ var render = function() {
               _c(
                 "modal-header",
                 [
-                  _c("modal-title", [_vm._v("New Plot")]),
+                  !_vm.plot
+                    ? _c("modal-title", [_vm._v("New Plot")])
+                    : _c("modal-title", [
+                        _vm._v('Edit "Plot ' + _vm._s(_vm.plot.number) + '"')
+                      ]),
                   _vm._v(" "),
                   _c("close", {
                     on: {
@@ -24946,7 +25170,12 @@ var render = function() {
                       "form-control",
                       { "is-invalid": _vm.form.errors.has("number") }
                     ],
-                    attrs: { type: "text", name: "number", id: "number" },
+                    attrs: {
+                      type: "text",
+                      name: "number",
+                      id: "number",
+                      placeholder: "E,g. 36"
+                    },
                     domProps: { value: _vm.form.number },
                     on: {
                       input: function($event) {
@@ -24963,6 +25192,606 @@ var render = function() {
                         _vm._v(
                           "\n                        " +
                             _vm._s(_vm.form.errors.first("number")) +
+                            "\n                    "
+                        )
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex align-items-center mb-1" }, [
+                  _c("div", [
+                    _c("p", { staticClass: "mb-0" }, [
+                      _c("strong", [_vm._v("GPS Location")])
+                    ]),
+                    _vm._v(" "),
+                    _c("small", { staticClass: "mb-0 text-muted" }, [
+                      _vm._v(
+                        "You may use the map to visually select the location"
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "ml-auto" }, [
+                    _c(
+                      "button",
+                      { staticClass: "btn btn-outline-primary btn-sm" },
+                      [
+                        _c("icon", { attrs: { name: "map" } }),
+                        _vm._v(" "),
+                        _c("span", [_vm._v("Use Map")])
+                      ],
+                      1
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-6" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "label",
+                        { attrs: { for: "latitude" } },
+                        [
+                          _vm._v(
+                            "\n                                Latitude\n                                "
+                          ),
+                          _c("required")
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.latitude,
+                            expression: "form.latitude"
+                          }
+                        ],
+                        class: [
+                          "form-control",
+                          { "is-invalid": _vm.form.errors.has("latitude") }
+                        ],
+                        attrs: {
+                          type: "text",
+                          name: "latitude",
+                          id: "latitude",
+                          placeholder: "E,g. -36.898723"
+                        },
+                        domProps: { value: _vm.form.latitude },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.form, "latitude", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.form.errors.has("latitude")
+                        ? _c(
+                            "small",
+                            { staticClass: "form-text text-danger" },
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(_vm.form.errors.first("latitude")) +
+                                  "\n                            "
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-6" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "label",
+                        { attrs: { for: "longitude" } },
+                        [
+                          _vm._v(
+                            "\n                                Longitude\n                                "
+                          ),
+                          _c("required")
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.longitude,
+                            expression: "form.longitude"
+                          }
+                        ],
+                        class: [
+                          "form-control",
+                          { "is-invalid": _vm.form.errors.has("longitude") }
+                        ],
+                        attrs: {
+                          type: "text",
+                          name: "longitude",
+                          id: "longitude",
+                          placeholder: "E,g. -36.898723"
+                        },
+                        domProps: { value: _vm.form.longitude },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.form, "longitude", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.form.errors.has("longitude")
+                        ? _c(
+                            "small",
+                            { staticClass: "form-text text-danger" },
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(_vm.form.errors.first("longitude")) +
+                                  "\n                            "
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    { attrs: { for: "basal_area" } },
+                    [
+                      _vm._v(
+                        "\n                        Basal Area\n                        "
+                      ),
+                      _c("required")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.basal_area,
+                          expression: "form.basal_area"
+                        }
+                      ],
+                      class: [
+                        "form-control",
+                        { "is-invalid": _vm.form.errors.has("basal_area") }
+                      ],
+                      attrs: {
+                        type: "text",
+                        name: "basal_area",
+                        id: "basal_area",
+                        placeholder: "E,g. 36"
+                      },
+                      domProps: { value: _vm.form.basal_area },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.form, "basal_area", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "input-group-append" }, [
+                      _c("span", { staticClass: "input-group-text" }, [
+                        _vm._v("\n                                ft"),
+                        _c("sup", [_vm._v("2")]),
+                        _vm._v("/ac\n                            ")
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.form.errors.has("basal_area")
+                    ? _c("small", { staticClass: "form-text text-danger" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.form.errors.first("basal_area")) +
+                            "\n                    "
+                        )
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "ground_cover" } }, [
+                    _vm._v(
+                      "\n                        Ground and Shrub Cover\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.ground_cover,
+                            expression: "form.ground_cover"
+                          }
+                        ],
+                        class: [
+                          "form-control",
+                          { "is-invalid": _vm.form.errors.has("ground_cover") }
+                        ],
+                        attrs: {
+                          type: "text",
+                          name: "ground_cover",
+                          id: "ground_cover"
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.form,
+                              "ground_cover",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "" } }, [
+                          _vm._v("Select an Option")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.options.percentages, function(option) {
+                          return _c("option", { domProps: { value: option } }, [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(option) +
+                                "\n                            "
+                            )
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm.form.errors.has("ground_cover")
+                    ? _c("small", { staticClass: "form-text text-danger" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.form.errors.first("ground_cover")) +
+                            "\n                    "
+                        )
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "subcanopy" } }, [
+                    _vm._v(
+                      "\n                        Subcanopy\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.subcanopy,
+                            expression: "form.subcanopy"
+                          }
+                        ],
+                        class: [
+                          "form-control",
+                          { "is-invalid": _vm.form.errors.has("subcanopy") }
+                        ],
+                        attrs: {
+                          type: "text",
+                          name: "subcanopy",
+                          id: "subcanopy"
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.form,
+                              "subcanopy",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "" } }, [
+                          _vm._v("Select an Option")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.options.percentages, function(option) {
+                          return _c("option", { domProps: { value: option } }, [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(option) +
+                                "\n                            "
+                            )
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm.form.errors.has("subcanopy")
+                    ? _c("small", { staticClass: "form-text text-danger" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.form.errors.first("subcanopy")) +
+                            "\n                    "
+                        )
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "canopy" } }, [
+                    _vm._v(
+                      "\n                        Canopy\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.canopy,
+                            expression: "form.canopy"
+                          }
+                        ],
+                        class: [
+                          "form-control",
+                          { "is-invalid": _vm.form.errors.has("canopy") }
+                        ],
+                        attrs: { type: "text", name: "canopy", id: "canopy" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.form,
+                              "canopy",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "" } }, [
+                          _vm._v("Select an Option")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.options.percentages, function(option) {
+                          return _c("option", { domProps: { value: option } }, [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(option) +
+                                "\n                            "
+                            )
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm.form.errors.has("canopy")
+                    ? _c("small", { staticClass: "form-text text-danger" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.form.errors.first("canopy")) +
+                            "\n                    "
+                        )
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "is_protected" } }, [
+                    _vm._v(
+                      "\n                        Is plot enclosed or protected from deer?\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.is_protected,
+                            expression: "form.is_protected"
+                          }
+                        ],
+                        class: [
+                          "form-control",
+                          { "is-invalid": _vm.form.errors.has("is_protected") }
+                        ],
+                        attrs: {
+                          type: "text",
+                          name: "is_protected",
+                          id: "is_protected"
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.form,
+                              "is_protected",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "" } }, [
+                          _vm._v("Select an Option")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "1" } }, [
+                          _vm._v("Yes")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "0" } }, [_vm._v("No")])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm.form.errors.has("is_protected")
+                    ? _c("small", { staticClass: "form-text text-danger" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.form.errors.first("is_protected")) +
+                            "\n                    "
+                        )
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "protection_seasons" } }, [
+                    _vm._v(
+                      "\n                        If yes, for how many growing seasons?\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.protection_seasons,
+                            expression: "form.protection_seasons"
+                          }
+                        ],
+                        class: [
+                          "form-control",
+                          {
+                            "is-invalid": _vm.form.errors.has(
+                              "protection_seasons"
+                            )
+                          }
+                        ],
+                        attrs: {
+                          type: "text",
+                          name: "protection_seasons",
+                          id: "protection_seasons"
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.form,
+                              "protection_seasons",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "" } }, [
+                          _vm._v("Select an Option")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.options.seasons, function(option) {
+                          return _c("option", { domProps: { value: option } }, [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(option) +
+                                "\n                            "
+                            )
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm.form.errors.has("protection_seasons")
+                    ? _c("small", { staticClass: "form-text text-danger" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(
+                              _vm.form.errors.first("protection_seasons")
+                            ) +
                             "\n                    "
                         )
                       ])
@@ -25785,6 +26614,49 @@ var render = function() {
                         "\n                        No plots found. Use the button above to create a new one.\n                    "
                       )
                     ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.plots.length > 0
+                  ? _c(
+                      "div",
+                      { staticClass: "nav nav-pills flex-column" },
+                      _vm._l(_vm.plots, function(plot) {
+                        return _c(
+                          "a",
+                          {
+                            class: [
+                              "nav-link",
+                              "align-items-center",
+                              "pr-0",
+                              {
+                                active:
+                                  _vm.selectedPlot &&
+                                  _vm.selectedPlot.id === plot.id
+                              }
+                            ],
+                            attrs: { href: "#" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                _vm.selectedPlot = plot
+                              }
+                            }
+                          },
+                          [
+                            _c("span", [
+                              _vm._v("Plot #" + _vm._s(plot.number))
+                            ]),
+                            _vm._v(" "),
+                            _c("icon", {
+                              staticClass: "right-arrow ml-auto",
+                              attrs: { name: "ios-arrow-forward" }
+                            })
+                          ],
+                          1
+                        )
+                      }),
+                      0
+                    )
                   : _vm._e()
               ],
               1
@@ -25793,13 +26665,17 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-lg-9 col-md-8" }, [
-          _vm.plot
+          _vm.selectedPlot
             ? _c("div", { staticClass: "card" }, [
                 _c(
                   "div",
                   { staticClass: "card-header d-flex align-items-center" },
                   [
-                    _vm._m(1),
+                    _c("div", [
+                      _c("strong", [
+                        _vm._v("Plot #" + _vm._s(_vm.selectedPlot.number))
+                      ])
+                    ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "ml-auto" }, [
                       _c(
@@ -25872,6 +26748,9 @@ var render = function() {
             on: {
               close: function($event) {
                 _vm.showPlotForm = false
+              },
+              create: function($event) {
+                return _vm.plotCreated($event)
               }
             }
           })
@@ -25886,12 +26765,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [_c("strong", [_vm._v("Plots")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [_c("strong", [_vm._v("Plot #1")])])
   }
 ]
 render._withStripped = true
@@ -44181,6 +45054,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SiteForm_vue_vue_type_template_id_a27969ae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/helpers/Options.js":
+/*!*****************************************!*\
+  !*** ./resources/js/helpers/Options.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  seasons: ['0', '1-2', '>=3'],
+  percentages: ['0-9%', '10-19%', '20-29%', '30-39%', '40-49%', '50-59%', '60-69%', '70-79%', '80-89%', '90-100%']
+});
 
 /***/ }),
 

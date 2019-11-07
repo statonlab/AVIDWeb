@@ -7067,8 +7067,9 @@ button.bg-dark:focus {
 }
 
 .d-flex,
-.overlay,
+.nav-pills .nav-link,
 .sidebar .nav-link,
+.overlay,
 .navbar-nav .nav-item,
 .navbar-nav .nav-link,
 .btn-circle,
@@ -8333,6 +8334,7 @@ button.bg-dark:focus {
 }
 
 .mr-3,
+.nav-pills .nav-link .icon,
 .sidebar .nav-link .icon,
 .mx-3 {
   margin-right: 1rem !important;
@@ -11046,41 +11048,6 @@ label {
   padding-right: 0.5rem;
 }
 
-.sidebar .nav-link {
-  color: #495057;
-  cursor: pointer;
-  transition: background-color 0.2s linear, color 0.2s linear;
-  margin-bottom: 1px;
-}
-
-.sidebar .nav-link:hover {
-  background-color: #e9ecef;
-}
-
-.sidebar .nav-link .icon {
-  color: #6c757d;
-  width: 24px;
-  font-size: 1.2rem;
-}
-
-.sidebar .nav-link .right-arrow {
-  display: none;
-}
-
-.sidebar .nav-link.active {
-  background-color: rgba(46, 176, 122, 0.1);
-}
-
-.sidebar .nav-link.active,
-.sidebar .nav-link.active .icon {
-  color: #1e7350;
-}
-
-.sidebar .nav-link.active .right-arrow {
-  display: inline-block;
-  width: auto;
-}
-
 .w-sidebar {
   width: 270px;
 }
@@ -11267,5 +11234,48 @@ label {
 .dropdown-item.active {
   background-color: rgba(46, 176, 122, 0.1);
   color: #1e7350;
+}
+
+.nav-pills .nav-link,
+.sidebar .nav-link {
+  color: #495057;
+  cursor: pointer;
+  transition: background-color 0.2s linear, color 0.2s linear;
+  margin-bottom: 1px;
+}
+
+.nav-pills .nav-link:hover,
+.sidebar .nav-link:hover {
+  background-color: #e9ecef;
+}
+
+.nav-pills .nav-link .icon,
+.sidebar .nav-link .icon {
+  color: #6c757d;
+  width: 24px;
+  font-size: 1.2rem;
+}
+
+.nav-pills .nav-link .right-arrow,
+.sidebar .nav-link .right-arrow {
+  visibility: hidden;
+}
+
+.nav-pills .nav-link.active,
+.sidebar .nav-link.active {
+  background-color: rgba(46, 176, 122, 0.1);
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .nav-link.active .icon,
+.sidebar .nav-link.active,
+.sidebar .nav-link.active .icon {
+  color: #1e7350;
+}
+
+.nav-pills .nav-link.active .right-arrow,
+.sidebar .nav-link.active .right-arrow {
+  visibility: visible;
+  width: auto;
 }
 
