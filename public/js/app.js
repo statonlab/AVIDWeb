@@ -2808,6 +2808,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Required__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/Required */ "./resources/js/components/Required.vue");
 /* harmony import */ var _components_Icon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/Icon */ "./resources/js/components/Icon.vue");
 /* harmony import */ var _helpers_Options__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../helpers/Options */ "./resources/js/helpers/Options.js");
+/* harmony import */ var _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../components/InlineSpinner */ "./resources/js/components/InlineSpinner.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -3025,6 +3026,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+
 
 
 
@@ -3039,6 +3044,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'PlotForm',
   components: {
+    InlineSpinner: _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_12__["default"],
     Icon: _components_Icon__WEBPACK_IMPORTED_MODULE_10__["default"],
     Required: _components_Required__WEBPACK_IMPORTED_MODULE_9__["default"],
     Close: _components_Modal_Close__WEBPACK_IMPORTED_MODULE_7__["default"],
@@ -3992,6 +3998,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     page: function page() {
       this.loading = true;
       this.loadPlots();
+    },
+    selectedPlot: function selectedPlot() {
+      var id = this.$route.params.id;
+      this.$router.replace({
+        path: "/app/sites/".concat(id),
+        query: {
+          plot: this.selectedPlot.id
+        }
+      })["catch"](function (e) {});
     }
   },
   methods: {
@@ -4067,22 +4082,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 5:
                 _ref2 = _context2.sent;
                 data = _ref2.data;
-                this.total = data.total;
-                this.plots = data.data;
-                this.page = data.current_page;
-                this.lastPage = data.last_page;
+                this.plots = data;
                 this.loading = false;
                 this.request = null;
 
                 if (this.selectedPlot === null && this.plots.length > 0) {
-                  this.selectedPlot = this.plots[0];
+                  this.setFromHistory();
                 }
 
-                _context2.next = 19;
+                _context2.next = 16;
                 break;
 
-              case 16:
-                _context2.prev = 16;
+              case 13:
+                _context2.prev = 13;
                 _context2.t0 = _context2["catch"](1);
 
                 if (!axios.isCancel(_context2.t0)) {
@@ -4090,12 +4102,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   this.request = null;
                 }
 
-              case 19:
+              case 16:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[1, 16]]);
+        }, _callee2, this, [[1, 13]]);
       }));
 
       function loadPlots() {
@@ -4107,6 +4119,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     plotCreated: function plotCreated() {
       this.showPlotForm = false;
       this.loadPlots();
+    },
+    setFromHistory: function setFromHistory() {
+      var plot_id = this.$route.query.plot;
+
+      if (plot_id) {
+        plot_id = parseInt(plot_id);
+        var plots = this.plots.filter(function (p) {
+          return p.id === plot_id;
+        });
+
+        if (plots.length > 0) {
+          this.selectedPlot = plots[0];
+          return;
+        }
+      }
+
+      this.selectedPlot = this.plots[0];
     }
   }
 });
@@ -25802,8 +25831,15 @@ var render = function() {
               _c("modal-footer", { staticClass: "d-flex" }, [
                 _c(
                   "button",
-                  { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-                  [_vm._v("Save")]
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "submit", disabled: _vm.loading }
+                  },
+                  [
+                    _vm.loading ? _c("inline-spinner") : _vm._e(),
+                    _vm._v("\n                    Save\n                ")
+                  ],
+                  1
                 ),
                 _vm._v(" "),
                 _c(

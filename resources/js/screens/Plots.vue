@@ -121,6 +121,17 @@
         this.loading = true
         this.loadPlots()
       },
+
+      selectedPlot() {
+        const id = this.$route.params.id
+        this.$router.replace({
+          path : `/app/sites/${id}`,
+          query: {
+            plot: this.selectedPlot.id,
+          },
+        }).catch(e => {
+        })
+      },
     },
 
     methods: {
@@ -139,23 +150,20 @@
           this.request()
         }
         try {
-          const id      = this.$route.params.id
-          const {data}  = await axios.get(`/web/sites/${id}/plots`, {
+          const id     = this.$route.params.id
+          const {data} = await axios.get(`/web/sites/${id}/plots`, {
             params     : {
               page  : this.page,
               search: this.search,
             },
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
-          this.total    = data.total
-          this.plots    = data.data
-          this.page     = data.current_page
-          this.lastPage = data.last_page
-          this.loading  = false
-          this.request  = null
+          this.plots   = data
+          this.loading = false
+          this.request = null
 
           if (this.selectedPlot === null && this.plots.length > 0) {
-            this.selectedPlot = this.plots[0]
+            this.setFromHistory()
           }
         } catch (e) {
           if (!axios.isCancel(e)) {
@@ -168,6 +176,20 @@
       plotCreated() {
         this.showPlotForm = false
         this.loadPlots()
+      },
+
+      setFromHistory() {
+        let plot_id = this.$route.query.plot
+        if (plot_id) {
+          plot_id     = parseInt(plot_id)
+          const plots = this.plots.filter(p => p.id === plot_id)
+          if (plots.length > 0) {
+            this.selectedPlot = plots[0]
+            return
+          }
+        }
+
+        this.selectedPlot = this.plots[0]
       },
     },
   }
