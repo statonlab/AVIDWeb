@@ -18,6 +18,8 @@
                 </div>
             </div>
         </div>
+
+        <notifications class="notifications"/>
     </div>
 </template>
 

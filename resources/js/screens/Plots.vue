@@ -15,7 +15,7 @@
                             <strong>Plots</strong>
                         </div>
                         <div class="ml-auto">
-                            <button class="btn btn-sm btn-primary">
+                            <button class="btn btn-sm btn-primary" @click.prevent="showPlotForm = true">
                                 <icon name="add"/>
                                 <span>Plot</span>
                             </button>
@@ -54,28 +54,36 @@
                         <div v-else>
                             <p class="mb-0">Select a plot from the left sidebar or use the button below to create a new one.</p>
                         </div>
-                        <button class="btn btn-primary">
+                        <button class="btn btn-outline-primary" @click.prevent="showPlotForm = true">
                             <icon name="add"/>
-                            <span>Plot</span>
+                            <span>New Plot</span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <plot-form
+            @close="showPlotForm = false"
+            v-if="site && showPlotForm"
+            :site="site"
+        />
     </div>
 </template>
 
 <script>
   import InlineSpinner from '../components/InlineSpinner'
   import Icon from '../components/Icon'
+  import PlotForm from '../forms/PlotForm'
 
   export default {
     name: 'Plots',
 
-    components: {Icon, InlineSpinner},
+    components: {PlotForm, Icon, InlineSpinner},
 
     data() {
       return {
+        showPlotForm: false,
         plots   : [],
         page    : 1,
         lastPage: 1,
