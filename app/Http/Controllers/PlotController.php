@@ -51,6 +51,17 @@ class PlotController extends Controller
         /** @var \App\User $user */
         $user = $request->user();
 
+        $exists = Plot::where([
+            'site_id' => $site->id,
+            'number' => $request->number,
+        ])->exists();
+
+        if ($exists) {
+            return $this->error('Already exists', [
+                'number' => ['This plot number already exists'],
+            ]);
+        }
+
         $plot = Plot::create([
             'user_id' => $user->id,
             'site_id' => $site->id,
@@ -58,7 +69,7 @@ class PlotController extends Controller
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'basal_area' => $request->basal_area,
-            'is_protected' => $request->is_protected ? 1 : 0,
+            'is_protected' => $request->is_protected == '1' ? 1 : 0,
             'protection_seasons' => $request->protection_seasons,
             'canopy' => $request->canopy,
             'subcanopy' => $request->subcanopy,
@@ -110,12 +121,25 @@ class PlotController extends Controller
 
         $this->validate($request, $this->validationRules(true));
 
+        if ($plot->number != $request->number) {
+            $exists = Plot::where([
+                'site_id' => $plot->id,
+                'number' => $request->number,
+            ])->exists();
+
+            if ($exists) {
+                return $this->error('Already exists', [
+                    'number' => ['This plot number already exists'],
+                ]);
+            }
+        }
+
         $plot->update([
             'number' => $request->number,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'basal_area' => $request->basal_area,
-            'is_protected' => $request->is_protected ? 1 : 0,
+            'is_protected' => $request->is_protected == '1' ? 1 : 0,
             'protection_seasons' => $request->protection_seasons,
             'canopy' => $request->canopy,
             'subcanopy' => $request->subcanopy,

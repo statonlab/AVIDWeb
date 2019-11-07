@@ -12,7 +12,11 @@ import Dashboard from './screens/Dashboard'
 import Sites from './screens/Sites'
 import App from './components/App'
 import Plots from './screens/Plots'
+import VueNotification from 'vue-notification'
+import Alert from './plugins/Alert/Alert'
 
+Vue.use(Alert)
+Vue.use(VueNotification)
 Vue.use(VueRouter)
 
 const routes = [

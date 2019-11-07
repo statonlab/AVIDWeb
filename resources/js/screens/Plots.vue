@@ -15,7 +15,7 @@
                             <strong>Plots</strong>
                         </div>
                         <div class="ml-auto">
-                            <button class="btn btn-sm btn-primary">
+                            <button class="btn btn-sm btn-primary" @click.prevent="showPlotForm = true">
                                 <icon name="add"/>
                                 <span>Plot</span>
                             </button>
@@ -26,14 +26,23 @@
                         <div class="text-muted" v-if="!loading && plots.length === 0">
                             No plots found. Use the button above to create a new one.
                         </div>
+                        <div class="nav nav-pills flex-column" v-if="plots.length > 0">
+                            <a href="#"
+                               v-for="plot in plots"
+                               :class="['nav-link', 'align-items-center', 'pr-0', {'active': selectedPlot && selectedPlot.id === plot.id}]"
+                               @click.prevent="selectedPlot = plot">
+                                <span>Plot #{{ plot.number }}</span>
+                                <icon name="ios-arrow-forward" class="right-arrow ml-auto"/>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-9 col-md-8">
-                <div class="card" v-if="plot">
+                <div class="card" v-if="selectedPlot">
                     <div class="card-header d-flex align-items-center">
                         <div>
-                            <strong>Plot #1</strong>
+                            <strong>Plot #{{ selectedPlot.number }}</strong>
                         </div>
                         <div class="ml-auto">
                             <button class="btn btn-sm btn-primary">
@@ -54,37 +63,46 @@
                         <div v-else>
                             <p class="mb-0">Select a plot from the left sidebar or use the button below to create a new one.</p>
                         </div>
-                        <button class="btn btn-primary">
+                        <button class="btn btn-outline-primary" @click.prevent="showPlotForm = true">
                             <icon name="add"/>
-                            <span>Plot</span>
+                            <span>New Plot</span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <plot-form
+            @close="showPlotForm = false"
+            v-if="site && showPlotForm"
+            :site="site"
+            @create="plotCreated($event)"
+        />
     </div>
 </template>
 
 <script>
   import InlineSpinner from '../components/InlineSpinner'
   import Icon from '../components/Icon'
+  import PlotForm from '../forms/PlotForm'
 
   export default {
     name: 'Plots',
 
-    components: {Icon, InlineSpinner},
+    components: {PlotForm, Icon, InlineSpinner},
 
     data() {
       return {
-        plots   : [],
-        page    : 1,
-        lastPage: 1,
-        total   : 0,
-        loading : false,
-        search  : '',
-        request : null,
-        site    : null,
-        plot    : null,
+        showPlotForm: false,
+        plots       : [],
+        page        : 1,
+        lastPage    : 1,
+        total       : 0,
+        loading     : false,
+        search      : '',
+        request     : null,
+        site        : null,
+        selectedPlot: null,
       }
     },
 
@@ -135,12 +153,21 @@
           this.lastPage = data.last_page
           this.loading  = false
           this.request  = null
+
+          if (this.selectedPlot === null && this.plots.length > 0) {
+            this.selectedPlot = this.plots[0]
+          }
         } catch (e) {
           if (!axios.isCancel(e)) {
             this.loading = false
             this.request = null
           }
         }
+      },
+
+      plotCreated() {
+        this.showPlotForm = false
+        this.loadPlots()
       },
     },
   }

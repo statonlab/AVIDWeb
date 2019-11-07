@@ -11,13 +11,15 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                <router-view></router-view>
+                                <router-view></router-view>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <notifications class="notifications"/>
     </div>
 </template>
 
