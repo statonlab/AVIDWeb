@@ -38,3 +38,32 @@
         }
     }
 }
+
+.nav-custom-tabs {
+    border-bottom: 2px solid $border-color;
+
+    .nav-link {
+        font-weight: $font-weight-bold;
+        font-size: .8rem;
+        letter-spacing: .085rem;
+        text-transform: uppercase;
+        color: $gray-600;
+        border-bottom: 2px solid transparent;
+        padding: 1rem 1.25rem;
+        @extend .d-flex;
+        @extend .align-items-center;
+
+        .icon {
+            font-size: 1rem;
+            line-height: 1.2rem;
+            margin-right: .5rem;
+        }
+
+        &.active {
+            color: $primary;
+            border-bottom-color: $primary;
+            margin-bottom: -2px;
+        }
+    }
+}
+

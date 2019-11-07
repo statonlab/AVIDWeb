@@ -31,7 +31,7 @@
                         <icon name="ios-arrow-down ml-2"/>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown">
-                        <router-link to="/app" class="dropdown-item">
+                        <router-link to="/app/profile" class="dropdown-item">
                             Profile
                         </router-link>
                     </div>

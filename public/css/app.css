@@ -7067,6 +7067,7 @@ button.bg-dark:focus {
 }
 
 .d-flex,
+.nav-custom-tabs .nav-link,
 .nav-pills .nav-link,
 .sidebar .nav-link,
 .overlay,
@@ -7397,6 +7398,7 @@ button.bg-dark:focus {
 }
 
 .align-items-center,
+.nav-custom-tabs .nav-link,
 .card-header,
 .overlay,
 .navbar-nav .nav-item,
@@ -11277,5 +11279,31 @@ label {
 .sidebar .nav-link.active .right-arrow {
   visibility: visible;
   width: auto;
+}
+
+.nav-custom-tabs {
+  border-bottom: 2px solid #dee2e6;
+}
+
+.nav-custom-tabs .nav-link {
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.085rem;
+  text-transform: uppercase;
+  color: #6c757d;
+  border-bottom: 2px solid transparent;
+  padding: 1rem 1.25rem;
+}
+
+.nav-custom-tabs .nav-link .icon {
+  font-size: 1rem;
+  line-height: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.nav-custom-tabs .nav-link.active {
+  color: #2EB07A;
+  border-bottom-color: #2EB07A;
+  margin-bottom: -2px;
 }
 

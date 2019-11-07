@@ -22,12 +22,17 @@ Route::group([
     Route::get('/', 'HomeController@data');
     Route::get('/sites', 'HomeController@data');
     Route::get('/sites/{id}', 'HomeController@data');
+    Route::get('/profile', 'HomeController@data');
+
 });
 
 Route::group([
     'middleware' => ['auth'],
     'prefix' => '/web',
 ], function () {
+    // Profile Controller
+    Route::get('/profile', 'ProfileController@index');
+
     // State Controller
     Route::get('/states', 'StateController@index');
 

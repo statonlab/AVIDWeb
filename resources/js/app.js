@@ -13,6 +13,7 @@ import Sites from './screens/Sites'
 import App from './components/App'
 import Plots from './screens/Plots'
 import VueNotification from 'vue-notification'
+import Profile from './screens/Profile'
 import Alert from './plugins/Alert/Alert'
 
 Vue.use(Alert)
@@ -23,6 +24,7 @@ const routes = [
     {path: '/app', component: Dashboard},
     {path: '/app/sites', component: Sites},
     {path: '/app/sites/:id', component: Plots},
+    {path: '/app/profile', component: Profile}
 ]
 
 const router = new VueRouter({
