@@ -11,7 +11,8 @@ class County extends Model
         'name',
     ];
 
-    public function state() {
+    public function state()
+    {
         return $this->belongsTo(State::class);
     }
 }

@@ -30,12 +30,20 @@
                             <small class="mb-0 text-muted">You may use the map to visually select the location</small>
                         </div>
                         <div class="ml-auto">
-                            <button class="btn btn-outline-primary btn-sm">
+                            <button class="btn btn-outline-primary btn-sm"
+                                    type="button"
+                                    @click.prevent="showMap = !showMap">
                                 <icon name="map"/>
-                                <span>Use Map</span>
+                                <span>{{ showMap ? 'Hide' : 'Use'}} Map</span>
                             </button>
                         </div>
                     </div>
+
+                    <clickable-map class="map-mini mb-3"
+                                   v-if="showMap"
+                                   @input="setGpsFromMap($event)"
+                                   :value="{latitude: form.latitude, longitude: form.longitude}"/>
+
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
@@ -225,11 +233,13 @@
   import Icon from '../components/Icon'
   import Options from '../helpers/Options'
   import InlineSpinner from '../components/InlineSpinner'
+  import ClickableMap from '../components/ClickableMap'
 
   export default {
     name: 'PlotForm',
 
     components: {
+      ClickableMap,
       InlineSpinner,
       Icon,
       Required,
@@ -253,8 +263,8 @@
         form   : new Form({
           site_id           : this.site.id,
           number            : '',
-          latitude          : '',
-          longitude         : '',
+          latitude          : 42.6588992,
+          longitude         : -80.2590355,
           basal_area        : '',
           ground_cover      : '',
           subcanopy         : '',
@@ -263,6 +273,7 @@
           protection_seasons: '',
         }),
         options: Options,
+        showMap: false,
       }
     },
 
@@ -321,6 +332,11 @@
           }
         }
         this.loading = false
+      },
+
+      setGpsFromMap(pos) {
+        this.form.latitude  = pos.latitude
+        this.form.longitude = pos.longitude
       },
     },
   }

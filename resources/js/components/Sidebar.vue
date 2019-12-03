@@ -39,6 +39,12 @@
             to   : '/app/sites',
             label: 'My Data',
           },
+
+          {
+            icon : 'cog',
+            to   : '/app/profile',
+            label: 'Settings',
+          },
         ],
       }
     },

@@ -44,7 +44,16 @@
                         <div>
                             <strong>Plot #{{ selectedPlot.number }}</strong>
                         </div>
-                        <div class="ml-auto">
+                        <div class="ml-auto d-flex">
+                            <div class="dropdown mr-1">
+                                <button class="btn btn-link btn-sm" data-toggle="dropdown">
+                                    Actions
+                                    <icon name="ios-arrow-down" class="ml-1"/>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="#" class="dropdown-item">Plot</a>
+                                </div>
+                            </div>
                             <button class="btn btn-sm btn-primary">
                                 <icon name="add"/>
                                 <span>Plant</span>
@@ -52,7 +61,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-
+                        {{ selectedPlot }}
                     </div>
                 </div>
                 <div class="card" v-else>

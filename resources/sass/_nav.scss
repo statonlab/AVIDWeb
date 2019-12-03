@@ -1,4 +1,5 @@
-.nav-pills, .sidebar {
+.nav-pills,
+.sidebar {
     .nav-link {
         color: $gray-700;
         cursor: pointer;
@@ -11,7 +12,7 @@
         }
 
         .icon {
-            color: $gray-600;
+            color: $gray-500;
             width: 24px;
             //height: 24px;
             //line-height: 24px;
@@ -50,10 +51,12 @@
         color: $gray-600;
         border-bottom: 2px solid transparent;
         padding: 1rem 1.25rem;
+        margin-bottom: -2px;
+
         @extend .d-flex;
         @extend .align-items-center;
 
-        .icon {
+        > .icon {
             font-size: 1rem;
             line-height: 1.2rem;
             margin-right: .5rem;
@@ -62,7 +65,6 @@
         &.active {
             color: $primary;
             border-bottom-color: $primary;
-            margin-bottom: -2px;
         }
     }
 }
