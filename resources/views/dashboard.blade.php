@@ -23,6 +23,9 @@
       window.avid = {
         user: null,
         csrf: '{{ csrf_token() }}',
+        keys: {
+          maps: '{{ config('services.maps.key') }}'
+        }
       }
 
       @if(auth()->check())

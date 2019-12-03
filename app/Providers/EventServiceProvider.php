@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\PlotCreated;
+use App\Events\PlotUpdated;
+use App\Listeners\AttachAddressToPlotListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +21,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        PlotCreated::class => [
+            AttachAddressToPlotListener::class,
+        ],
+        PlotUpdated::class => [
+            AttachAddressToPlotListener::class,
+        ],
     ];
 
     /**
@@ -28,7 +37,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
         //
     }
 }
