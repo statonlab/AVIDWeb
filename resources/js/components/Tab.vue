@@ -33,7 +33,7 @@
 
     computed: {
       href() {
-        return '#' + this.name.toLowerCase().replace(/ /g, '-')
+        return '#' + this.name.toLowerCase().replace(/ /g, '-').replace(/#/g, '')
       }
     }
   }
