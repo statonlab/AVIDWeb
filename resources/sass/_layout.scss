@@ -132,6 +132,10 @@
     white-space: nowrap;
 }
 
+.small-cell {
+    width: 1px;
+}
+
 .ellipsis {
     @extend .no-wrap;
     @extend .overflow-hidden;

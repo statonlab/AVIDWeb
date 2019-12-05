@@ -122,3 +122,12 @@
         color: darken($primary, 10%);
     }
 }
+
+[data-toggle="collapse"] {
+    > .icon {
+        transition: transform .25s linear;
+    }
+    &[aria-expanded="false"] >.icon {
+        transform: rotate(90deg);
+    }
+}

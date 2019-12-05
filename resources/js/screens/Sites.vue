@@ -52,45 +52,45 @@
 </template>
 
 <script>
-  import Icon from '../components/Icon'
-  import SiteForm from '../forms/SiteForm'
-  import InlineSpinner from '../components/InlineSpinner'
+    import Icon from '../components/Icon'
+    import SiteForm from '../forms/SiteForm'
+    import InlineSpinner from '../components/InlineSpinner'
 
-  export default {
-    name: 'Sites',
+    export default {
+        name: 'Sites',
 
-    components: {InlineSpinner, SiteForm, Icon},
+        components: {InlineSpinner, SiteForm, Icon},
 
-    data() {
-      return {
-        showSiteForm: false,
-        sites       : [],
-        loading     : false,
-        page        : 1,
-        lastPage    : 1,
-        total       : 0,
-      }
-    },
+        data() {
+            return {
+                showSiteForm: false,
+                sites       : [],
+                loading     : false,
+                page        : 1,
+                lastPage    : 1,
+                total       : 0,
+            }
+        },
 
-    mounted() {
-      this.loading = true
-      this.loadSites()
-    },
+        mounted() {
+            this.loading = true
+            this.loadSites()
+        },
 
-    methods: {
-      async loadSites() {
-        try {
-          const {data}  = await axios.get('/web/sites')
-          this.total    = data.total
-          this.sites    = data.data
-          this.lastPage = data.last_page
-        } catch (e) {
-          console.error(e)
-        }
-        this.loading = false
-      },
-    },
-  }
+        methods: {
+            async loadSites() {
+                try {
+                    const {data}  = await axios.get('/web/sites')
+                    this.total    = data.total
+                    this.sites    = data.data
+                    this.lastPage = data.last_page
+                } catch (e) {
+                    console.error(e)
+                }
+                this.loading = false
+            },
+        },
+    }
 </script>
 
 <style scoped>
