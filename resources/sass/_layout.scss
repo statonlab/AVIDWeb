@@ -204,3 +204,15 @@
 .map-mini {
     min-height: 300px;
 }
+
+.on-hover {
+    .show-on-hover {
+        visibility: hidden;
+    }
+
+    &:hover {
+        .show-on-hover {
+            visibility: visible;
+        }
+    }
+}

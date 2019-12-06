@@ -18,16 +18,17 @@
                 <p class="mb-0 p-4 text-muted" v-if="!loading && sites.length === 0">
                     No results found. Use the "New Site" button above to create a new one.
                 </p>
-                <table class="table mb-0 table-middle" v-if="!loading && sites.length > 0">
+                <table class="table mb-0 table-middle table-hover" v-if="!loading && sites.length > 0">
                     <thead>
                     <tr>
                         <th style="width: 100%">Name</th>
                         <th>Plots</th>
-                        <th>Entries</th>
+                        <th>Plants</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="site in sites">
+                    <tr v-for="site in sites" class="on-hover">
                         <td>
                             <router-link :to="`/app/sites/${site.id}`">
                                 <strong>{{ site.name }}</strong>
@@ -37,7 +38,15 @@
                             </div>
                         </td>
                         <td class="text-right">{{ site.plots_count }}</td>
-                        <td class="text-right">{{ site.entries_count }}</td>
+                        <td class="text-right">{{ site.plants_count }}</td>
+                        <td class="text-right no-wrap">
+                            <button class="show-on-hover btn btn-link btn-sm mr-1" v-tooltip="'Edit Site'">
+                                <icon name="create"/>
+                            </button>
+                            <button class="show-on-hover btn btn-link btn-sm" v-tooltip="'Delete Site'">
+                                <icon name="trash"/>
+                            </button>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

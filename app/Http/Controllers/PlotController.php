@@ -179,7 +179,7 @@ class PlotController extends Controller
      */
     public function validationRules(bool $is_update = false)
     {
-        $seasons = ['0', '1-2', '>=3'];
+        $seasons = ['0', '1 to 2', 'Greater than or equal to 3'];
 
         $percentages = [
             '0-9%',

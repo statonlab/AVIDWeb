@@ -15,6 +15,10 @@ $enable-responsive-font-sizes: false;
 $enable-validation-icons: true;
 $enable-deprecation-messages: true;
 
+$border-radius: .25rem;
+$border-radius-lg: .3rem;
+$border-radius-sm: .2rem;
+
 // Color system
 $white: #fff;
 $gray-100: #f8f9fa;
@@ -68,9 +72,10 @@ $btn-font-weight: $font-weight-bold;
 $btn-box-shadow: none;
 $btn-padding-y-sm: .2rem;
 
-$dropdown-border-width: 0;
+$dropdown-border-color: $gray-300;
 $dropdown-box-shadow: 0 .5rem 1rem rgba($black, .175);
-
+$dropdown-border-radius: $border-radius-sm;
+$dropdown-item-padding-y: .5rem;
 
 $navbar-dark-color: $white;
 
@@ -85,3 +90,5 @@ $card-cap-bg: transparent;
 
 $input-group-addon-bg: $white;
 $input-border: 2px solid $border-color;
+
+$table-hover-bg: $gray-100;

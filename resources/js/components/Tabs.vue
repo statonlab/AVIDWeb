@@ -8,6 +8,8 @@
                 <icon v-if="tab.icon" :name="tab.icon"/>
                 <span>{{ tab.name }}</span>
             </a>
+
+            <slot name="right"></slot>
         </div>
 
         <slot></slot>
@@ -15,54 +17,56 @@
 </template>
 
 <script>
-  import Icon from './Icon'
+    import Icon from './Icon'
 
-  export default {
-    name: 'Tabs',
+    export default {
+        name: 'Tabs',
 
-    components: {Icon},
+        components: {Icon},
 
-    props: {
-      history: {
-        required: false,
-        type    : Boolean,
-        default : true,
-      },
-    },
+        props: {
+            history: {
+                required: false,
+                type    : Boolean,
+                default : true,
+            },
+        },
 
-    data() {
-      return {
-        tabs: [],
-      }
-    },
+        data() {
+            return {
+                tabs: [],
+            }
+        },
 
-    mounted() {
-      this.tabs = this.$children.map(child => {
-        return child
-      })
+        mounted() {
+            this.tabs = this.$children.filter(child => {
+                return child.$options._componentTag === 'tab'
+            }).map(child => {
+                return child
+            })
 
-      if (this.history) {
-        this.tabs.forEach(tab => {
-          if (this.$route.hash === tab.href) {
-            this.selectTab(tab)
-          }
-        })
-      }
-    },
+            if (this.history) {
+                this.tabs.forEach(tab => {
+                    if (this.$route.hash === tab.href) {
+                        this.selectTab(tab)
+                    }
+                })
+            }
+        },
 
-    methods: {
-      selectTab(e, selectedTab) {
-        if (e && !this.history) {
-          e.preventDefault()
-        }
+        methods: {
+            selectTab(e, selectedTab) {
+                if (e && !this.history) {
+                    e.preventDefault()
+                }
 
-        this.tabs.forEach(tab => {
-          if (!tab || !selectedTab) {
-            return
-          }
-          tab.isActive = tab.name === selectedTab.name
-        })
-      },
-    },
-  }
+                this.tabs.forEach(tab => {
+                    if (!tab || !selectedTab) {
+                        return
+                    }
+                    tab.isActive = tab.name === selectedTab.name
+                })
+            },
+        },
+    }
 </script>
