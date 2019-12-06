@@ -10,7 +10,15 @@
         name: 'PlotMap',
 
         props: {
-            plot: {required: true, type: Object}
+            plot: {required: true, type: Object},
+        },
+
+        watch: {
+            'plot.latitude': {
+                handler() {
+                    this.setCenter()
+                },
+            },
         },
 
         mounted() {
@@ -26,6 +34,14 @@
                     position: pos,
                 })
             })
+        },
+
+        methods: {
+            setCenter() {
+                const pos = new google.maps.LatLng(this.plot.latitude, this.plot.longitude)
+                this.map.setCenter(pos)
+                this.marker.setPosition(pos)
+            },
         },
     }
 </script>

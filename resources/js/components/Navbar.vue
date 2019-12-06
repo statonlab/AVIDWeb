@@ -25,10 +25,6 @@
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link mr-1 text-decoration-none p-0" data-toggle="dropdown">
                         <avatar :user="user" small translucent :tooltip="false" class="float-left avatar-navbar mr-1"/>
-                        <span>
-                            {{ user.name }}
-                        </span>
-                        <icon name="ios-arrow-down ml-2"/>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown">
                         <router-link to="/app/profile" class="dropdown-item">

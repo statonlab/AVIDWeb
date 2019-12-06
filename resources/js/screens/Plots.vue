@@ -81,7 +81,17 @@
                         <div class="text-muted" v-if="!loading && plots.length === 0">
                             No plots found. Use the button above to create a new one.
                         </div>
-                        <div class="nav nav-pills flex-column" v-if="plots.length > 0">
+
+                        <dropdown
+                            autocomplete
+                            v-if="plots.length > 0"
+                            :options="plotOptions"
+                            :value="selectedPlotID"
+                            @input="selectPlot($event)"
+                            @search="plotSearch = $event"
+                        />
+
+                        <div class="nav nav-pills flex-column" v-if="false">
                             <a href="#"
                                v-for="plot in plots"
                                :class="['nav-link', 'align-items-center', 'pr-0', {'active': selectedPlot && selectedPlot.id === plot.id}]"
@@ -92,26 +102,116 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <strong>Filters</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Collection Date</label>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary" data-toggle="dropdown">Dropdown</button>
+                                <div class="dropdown-menu p-0 border-0" @click.stop>
+                                    <v-calendar color="green"
+                                                mode="range"
+                                                :value="[{start: new Date(), end: new Date()}]"
+                                                is-inline/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-9 col-md-8">
-                <div class="card" v-if="selectedPlot">
+                <div class="card mb-3" v-if="selectedPlot">
                     <tabs v-if="selectedPlot">
                         <tab :name="`Plot #${selectedPlot.number}`" icon="ios-leaf" selected>
-                            <div class="card-body">
-                                <pre>{{ selectedPlot }}</pre>
+                            <div class="card-body pb-0">
+                                <div class="row">
+                                    <div class="col-md-4 mb-4" v-if="selectedPlot.basal_area !== null">
+                                        <div class="text-muted"><strong>Basal Area</strong></div>
+                                        <b>{{ selectedPlot.basal_area}} ft<sup>2</sup>/ac</b>
+                                    </div>
+                                    <div class="col-md-4 mb-4" v-if="selectedPlot.is_protected !== null">
+                                        <div class="text-muted"><strong>Enclosed/Protected Plot</strong></div>
+                                        <b>{{ selectedPlot.is_protected }}</b>
+                                    </div>
+                                    <div class="col-md-4 mb-4" v-if="selectedPlot.protection_seasons !== null">
+                                        <div class="text-muted"><strong>Protection Seasons</strong></div>
+                                        <b>{{ selectedPlot.protection_seasons }}</b>
+                                    </div>
+                                    <div class="col-md-4 mb-4" v-if="selectedPlot.ground_cover !== null">
+                                        <div class="text-muted"><strong>Ground and Shrub Cover</strong></div>
+                                        <b>{{ selectedPlot.ground_cover }}</b>
+                                    </div>
+                                    <div class="col-md-4 mb-4" v-if="selectedPlot.canopy !== null">
+                                        <div class="text-muted"><strong>Canopy</strong></div>
+                                        <b>{{ selectedPlot.canopy }}</b>
+                                    </div>
+                                    <div class="col-md-4 mb-4" v-if="selectedPlot.subcanopy !== null">
+                                        <div class="text-muted"><strong>Subcanopy</strong></div>
+                                        <b>{{ selectedPlot.subcanopy }}</b>
+                                    </div>
+                                </div>
                             </div>
+
+                            <table class="table mb-0">
+                                <thead>
+                                <tr>
+                                    <th>Tag #</th>
+                                    <th>Plant Type</th>
+                                    <th>Quadrant</th>
+                                    <th>Species</th>
+                                    <th>Date</th>
+                                    <th>Stems</th>
+                                    <th>Flowers</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Tag #9</td>
+                                    <td>Wildflower</td>
+                                    <td>Northeast</td>
+                                    <td>Ash</td>
+                                    <td>19 Oct 2019</td>
+                                    <td>3 Stems</td>
+                                    <td>4 Flowers</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </tab>
                         <tab :name="`Map`" icon="map">
                             <div class="card-body">
-                               <plot-map :plot="selectedPlot"/>
+                                <plot-map :plot="selectedPlot"/>
                             </div>
                         </tab>
                         <tab :name="`New Plant`" icon="add">
                             <plant-form :plot="selectedPlot"/>
                         </tab>
+
+                        <div class="dropdown ml-auto" slot="right">
+                            <a href="#" class="nav-link" data-toggle="dropdown">
+                                <span>Options</span>
+                                <icon name="ios-arrow-down" class="ml-2 mr-0"/>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="#" class="dropdown-item">
+                                    <icon name="create"/>
+                                    <span>Edit Plot</span>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item">
+                                    <icon name="trash"/>
+                                    <span>Delete Plot</span>
+                                </a>
+                            </div>
+                        </div>
                     </tabs>
                 </div>
-                <div class="card" v-else>
+
+                <div class="card" v-if="!selectedPlot">
                     <div class="card-body d-flex flex-column justify-content-center align-items-center text-muted">
                         <div v-if="!loading && plots.length === 0">
                             <p>Get started by creating a new plot using the button below.</p>
@@ -145,24 +245,28 @@
     import Tabs from '../components/Tabs'
     import PlantForm from '../forms/PlantForm'
     import PlotMap from '../components/PlotMap'
+    import Dropdown from '../components/Dropdown'
 
     export default {
         name: 'Plots',
 
-        components: {PlotMap, PlantForm, Tabs, Tab, PlotForm, Icon, InlineSpinner},
+        components: {Dropdown, PlotMap, PlantForm, Tabs, Tab, PlotForm, Icon, InlineSpinner},
 
         data() {
             return {
-                showPlotForm: false,
-                plots       : [],
-                page        : 1,
-                lastPage    : 1,
-                total       : 0,
-                loading     : false,
-                search      : '',
-                request     : null,
-                site        : null,
-                selectedPlot: null,
+                plotSearch    : '',
+                showPlotForm  : false,
+                plots         : [],
+                plotOptions   : [],
+                selectedPlotID: null,
+                page          : 1,
+                lastPage      : 1,
+                total         : 0,
+                loading       : false,
+                search        : '',
+                request       : null,
+                site          : null,
+                selectedPlot  : null,
             }
         },
 
@@ -182,6 +286,16 @@
                 this.loadPlots()
             },
 
+            plotSearch(terms) {
+                terms = terms.toLowerCase().trim()
+                if (terms.length === 0) {
+                    this.toOptions(this.plots)
+                    return
+                }
+                const plots = this.plots.filter(p => `plot #${p.number}`.indexOf(terms) > -1)
+                this.toOptions(plots)
+            },
+
             selectedPlot() {
                 const id = this.$route.params.id
                 this.$router.replace({
@@ -189,7 +303,7 @@
                     query: {
                         plot: this.selectedPlot.id,
                     },
-                    hash: this.$route.hash
+                    hash : this.$route.hash,
                 }).catch(e => {
                 })
             },
@@ -234,6 +348,7 @@
                     this.plots   = data
                     this.loading = false
                     this.request = null
+                    this.toOptions(data)
 
                     if (this.selectedPlot === null && this.plots.length > 0) {
                         this.setFromHistory()
@@ -244,6 +359,10 @@
                         this.request = null
                     }
                 }
+            },
+
+            toOptions(plots) {
+                this.plotOptions = plots.map(p => ({label: `Plot #${p.number}`, value: p.id}))
             },
 
             plotCreated() {
@@ -257,12 +376,29 @@
                     plot_id     = parseInt(plot_id)
                     const plots = this.plots.filter(p => p.id === plot_id)
                     if (plots.length > 0) {
-                        this.selectedPlot = plots[0]
+                        this.selectedPlot   = plots[0]
+                        this.selectedPlotID = plots[0].id
                         return
                     }
                 }
 
-                this.selectedPlot = this.plots[0]
+                this.selectedPlotID = this.plots[0].id
+                this.selectedPlot   = this.plots[0]
+            },
+
+            selectPlot(id) {
+                this.selectedPlotID = id
+
+                let plot = null
+
+                const plots = this.plots.filter(p => {
+                    return p.id === id
+                })
+                if (plots.length > 0) {
+                    plot = plots[0]
+                }
+
+                this.selectedPlot = plot
             },
         },
     }

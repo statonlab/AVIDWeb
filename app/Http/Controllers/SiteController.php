@@ -26,7 +26,7 @@ class SiteController extends Controller
         $sites = $user->sites()->with([
             'state',
             'county',
-        ]);
+        ])->withCount(['plants', 'plots']);
 
         if (! empty($request->search)) {
             $term = $request->search;
@@ -76,6 +76,7 @@ class SiteController extends Controller
         ]);
 
         $site->load(['county', 'state']);
+        $site->loadCount(['plants', 'plots']);
 
         return $this->created($site);
     }
@@ -92,6 +93,7 @@ class SiteController extends Controller
         $this->authorize('view', $site);
 
         $site->load(['county', 'state']);
+        $site->loadCount(['plants', 'plots']);
 
         return $this->success($site);
     }
@@ -130,6 +132,9 @@ class SiteController extends Controller
             'owner_name' => $request->owner_name,
             'owner_address' => $request->owner_address,
         ]);
+
+        $site->load(['county', 'state']);
+        $site->loadCount(['plants', 'plots']);
 
         return $this->created($site);
     }

@@ -15,10 +15,12 @@ import Plots from './screens/Plots'
 import VueNotification from 'vue-notification'
 import Profile from './screens/Profile'
 import Alert from './plugins/Alert/Alert'
+import VCalendar from 'v-calendar'
 
 Vue.use(Alert)
 Vue.use(VueNotification)
 Vue.use(VueRouter)
+Vue.use(VCalendar)
 
 const routes = [
     {path: '/app', component: Dashboard},

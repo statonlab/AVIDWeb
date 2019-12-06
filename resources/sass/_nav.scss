@@ -67,5 +67,10 @@
             border-bottom-color: $primary;
         }
     }
+
+    .show > .nav-link {
+        color: darken($primary, 5%);
+        border-bottom-color: $primary;
+    }
 }
 

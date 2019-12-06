@@ -22,18 +22,35 @@ class Site extends Model
         'diameter',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function county()
     {
         return $this->belongsTo(County::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function state()
     {
         return $this->belongsTo(State::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function plots()
     {
         return $this->hasMany(Plot::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function plants()
+    {
+        return $this->hasManyThrough(Plant::class, Plot::class);
     }
 }
