@@ -31,7 +31,7 @@
       @if(auth()->check())
         window.avid.user = {!!  json_encode(auth()->user()->only(['id', 'name', 'avatar']))  !!}
         window.avid.user.role = {!!  json_encode(auth()->user()->role->only(['id', 'name']))  !!}
-        @endif
+      @endif
     </script>
 </head>
 <body>
