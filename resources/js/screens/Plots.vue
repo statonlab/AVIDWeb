@@ -83,12 +83,12 @@
                         </div>
 
                         <dropdown
-                            autocomplete
-                            v-if="plots.length > 0"
-                            :options="plotOptions"
-                            :value="selectedPlotID"
-                            @input="selectPlot($event)"
-                            @search="plotSearch = $event"
+                                autocomplete
+                                v-if="plots.length > 0"
+                                :options="plotOptions"
+                                :value="selectedPlotID"
+                                @input="selectPlot($event)"
+                                @search="plotSearch = $event"
                         />
 
                         <div class="nav nav-pills flex-column" v-if="false">
@@ -107,18 +107,18 @@
                     <div class="card-header">
                         <strong>Filters</strong>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body pt-0">
+                        <div class="form-group">
+                            <label for="plant-search">Search</label>
+                            <input id="plant-search" type="search" class="form-control" placeholder="Type to search...">
+                        </div>
                         <div class="form-group">
                             <label>Collection Date</label>
-                            <div class="dropdown">
-                                <button class="btn btn-secondary" data-toggle="dropdown">Dropdown</button>
-                                <div class="dropdown-menu p-0 border-0" @click.stop>
-                                    <v-calendar color="green"
-                                                mode="range"
-                                                :value="[{start: new Date(), end: new Date()}]"
-                                                is-inline/>
-                                </div>
-                            </div>
+                            <dropdown
+                                    placeholder="Any Date"
+                                    :options="[{label: 'Any Date', value: null}]"
+                                    :value="null"
+                            />
                         </div>
                     </div>
                 </div>
@@ -229,179 +229,179 @@
         </div>
 
         <plot-form
-            @close="showPlotForm = false"
-            v-if="site && showPlotForm"
-            :site="site"
-            @create="plotCreated($event)"
+                @close="showPlotForm = false"
+                v-if="site && showPlotForm"
+                :site="site"
+                @create="plotCreated($event)"
         />
     </div>
 </template>
 
 <script>
-    import InlineSpinner from '../components/InlineSpinner'
-    import Icon from '../components/Icon'
-    import PlotForm from '../forms/PlotForm'
-    import Tab from '../components/Tab'
-    import Tabs from '../components/Tabs'
-    import PlantForm from '../forms/PlantForm'
-    import PlotMap from '../components/PlotMap'
-    import Dropdown from '../components/Dropdown'
+  import InlineSpinner from '../components/InlineSpinner'
+  import Icon from '../components/Icon'
+  import PlotForm from '../forms/PlotForm'
+  import Tab from '../components/Tab'
+  import Tabs from '../components/Tabs'
+  import PlantForm from '../forms/PlantForm'
+  import PlotMap from '../components/PlotMap'
+  import Dropdown from '../components/Dropdown'
 
-    export default {
-        name: 'Plots',
+  export default {
+    name: 'Plots',
 
-        components: {Dropdown, PlotMap, PlantForm, Tabs, Tab, PlotForm, Icon, InlineSpinner},
+    components: {Dropdown, PlotMap, PlantForm, Tabs, Tab, PlotForm, Icon, InlineSpinner},
 
-        data() {
-            return {
-                plotSearch    : '',
-                showPlotForm  : false,
-                plots         : [],
-                plotOptions   : [],
-                selectedPlotID: null,
-                page          : 1,
-                lastPage      : 1,
-                total         : 0,
-                loading       : false,
-                search        : '',
-                request       : null,
-                site          : null,
-                selectedPlot  : null,
-            }
-        },
+    data() {
+      return {
+        plotSearch    : '',
+        showPlotForm  : false,
+        plots         : [],
+        plotOptions   : [],
+        selectedPlotID: null,
+        page          : 1,
+        lastPage      : 1,
+        total         : 0,
+        loading       : false,
+        search        : '',
+        request       : null,
+        site          : null,
+        selectedPlot  : null,
+      }
+    },
 
-        mounted() {
-            this.loading = true
-            this.loadPlots()
-            this.loadSite()
-        },
+    mounted() {
+      this.loading = true
+      this.loadPlots()
+      this.loadSite()
+    },
 
-        watch: {
-            search() {
-                this.loadPlots()
+    watch: {
+      search() {
+        this.loadPlots()
+      },
+
+      page() {
+        this.loading = true
+        this.loadPlots()
+      },
+
+      plotSearch(terms) {
+        terms = terms.toLowerCase().trim()
+        if (terms.length === 0) {
+          this.toOptions(this.plots)
+          return
+        }
+        const plots = this.plots.filter(p => `plot #${p.number}`.indexOf(terms) > -1)
+        this.toOptions(plots)
+      },
+
+      selectedPlot() {
+        const id = this.$route.params.id
+        this.$router.replace({
+          path : `/app/sites/${id}`,
+          query: {
+            plot: this.selectedPlot.id,
+          },
+          hash : this.$route.hash,
+        }).catch(e => {
+        })
+      },
+    },
+
+    methods: {
+      optional(value, field) {
+        if (value) {
+          return value
+        }
+
+        if (typeof field !== 'undefined') {
+          return `${field} is not provided`
+        }
+
+        return 'Not provided'
+      },
+
+      async loadSite() {
+        const id = this.$route.params.id
+        try {
+          const {data} = await axios.get(`/web/sites/${id}`)
+          this.site    = data
+        } catch (e) {
+
+        }
+      },
+
+      async loadPlots() {
+        if (this.request !== null) {
+          this.request()
+        }
+        try {
+          const id     = this.$route.params.id
+          const {data} = await axios.get(`/web/sites/${id}/plots`, {
+            params     : {
+              page  : this.page,
+              search: this.search,
             },
+            cancelToken: new axios.CancelToken(c => this.request = c),
+          })
+          this.plots   = data
+          this.loading = false
+          this.request = null
+          this.toOptions(data)
 
-            page() {
-                this.loading = true
-                this.loadPlots()
-            },
+          if (this.selectedPlot === null && this.plots.length > 0) {
+            this.setFromHistory()
+          }
+        } catch (e) {
+          if (!axios.isCancel(e)) {
+            this.loading = false
+            this.request = null
+          }
+        }
+      },
 
-            plotSearch(terms) {
-                terms = terms.toLowerCase().trim()
-                if (terms.length === 0) {
-                    this.toOptions(this.plots)
-                    return
-                }
-                const plots = this.plots.filter(p => `plot #${p.number}`.indexOf(terms) > -1)
-                this.toOptions(plots)
-            },
+      toOptions(plots) {
+        this.plotOptions = plots.map(p => ({label: `Plot #${p.number}`, value: p.id}))
+      },
 
-            selectedPlot() {
-                const id = this.$route.params.id
-                this.$router.replace({
-                    path : `/app/sites/${id}`,
-                    query: {
-                        plot: this.selectedPlot.id,
-                    },
-                    hash : this.$route.hash,
-                }).catch(e => {
-                })
-            },
-        },
+      plotCreated() {
+        this.showPlotForm = false
+        this.loadPlots()
+      },
 
-        methods: {
-            optional(value, field) {
-                if (value) {
-                    return value
-                }
+      setFromHistory() {
+        let plot_id = this.$route.query.plot
+        if (plot_id) {
+          plot_id     = parseInt(plot_id)
+          const plots = this.plots.filter(p => p.id === plot_id)
+          if (plots.length > 0) {
+            this.selectedPlot   = plots[0]
+            this.selectedPlotID = plots[0].id
+            return
+          }
+        }
 
-                if (typeof field !== 'undefined') {
-                    return `${field} is not provided`
-                }
+        this.selectedPlotID = this.plots[0].id
+        this.selectedPlot   = this.plots[0]
+      },
 
-                return 'Not provided'
-            },
+      selectPlot(id) {
+        this.selectedPlotID = id
 
-            async loadSite() {
-                const id = this.$route.params.id
-                try {
-                    const {data} = await axios.get(`/web/sites/${id}`)
-                    this.site    = data
-                } catch (e) {
+        let plot = null
 
-                }
-            },
+        const plots = this.plots.filter(p => {
+          return p.id === id
+        })
+        if (plots.length > 0) {
+          plot = plots[0]
+        }
 
-            async loadPlots() {
-                if (this.request !== null) {
-                    this.request()
-                }
-                try {
-                    const id     = this.$route.params.id
-                    const {data} = await axios.get(`/web/sites/${id}/plots`, {
-                        params     : {
-                            page  : this.page,
-                            search: this.search,
-                        },
-                        cancelToken: new axios.CancelToken(c => this.request = c),
-                    })
-                    this.plots   = data
-                    this.loading = false
-                    this.request = null
-                    this.toOptions(data)
-
-                    if (this.selectedPlot === null && this.plots.length > 0) {
-                        this.setFromHistory()
-                    }
-                } catch (e) {
-                    if (!axios.isCancel(e)) {
-                        this.loading = false
-                        this.request = null
-                    }
-                }
-            },
-
-            toOptions(plots) {
-                this.plotOptions = plots.map(p => ({label: `Plot #${p.number}`, value: p.id}))
-            },
-
-            plotCreated() {
-                this.showPlotForm = false
-                this.loadPlots()
-            },
-
-            setFromHistory() {
-                let plot_id = this.$route.query.plot
-                if (plot_id) {
-                    plot_id     = parseInt(plot_id)
-                    const plots = this.plots.filter(p => p.id === plot_id)
-                    if (plots.length > 0) {
-                        this.selectedPlot   = plots[0]
-                        this.selectedPlotID = plots[0].id
-                        return
-                    }
-                }
-
-                this.selectedPlotID = this.plots[0].id
-                this.selectedPlot   = this.plots[0]
-            },
-
-            selectPlot(id) {
-                this.selectedPlotID = id
-
-                let plot = null
-
-                const plots = this.plots.filter(p => {
-                    return p.id === id
-                })
-                if (plots.length > 0) {
-                    plot = plots[0]
-                }
-
-                this.selectedPlot = plot
-            },
-        },
-    }
+        this.selectedPlot = plot
+      },
+    },
+  }
 </script>
 
 <style scoped>

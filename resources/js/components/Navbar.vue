@@ -28,7 +28,8 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown">
                         <router-link to="/app/profile" class="dropdown-item">
-                            Profile
+                            <icon name="person"/>
+                            <span>Profile</span>
                         </router-link>
                     </div>
                 </li>
@@ -52,7 +53,9 @@
 
   export default {
     name      : 'Navbar',
+
     components: {Avatar, Icon},
+
     data() {
       return {
         csrf: document.head.querySelector('meta[name="csrf-token"]').content,

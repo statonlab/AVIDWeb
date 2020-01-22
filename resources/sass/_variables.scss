@@ -72,8 +72,12 @@ $btn-font-weight: $font-weight-bold;
 $btn-box-shadow: none;
 $btn-padding-y-sm: .2rem;
 
+$box-shadow-sm: 0 .125rem .25rem rgba($black, .15);
+$box-shadow: 0 .5rem 1rem rgba($black, .15);
+$box-shadow-lg: 0 1rem 3rem rgba($black, .175);
+
 $dropdown-border-color: $gray-300;
-$dropdown-box-shadow: 0 .5rem 1rem rgba($black, .175);
+$dropdown-box-shadow: 0 .5rem 1rem rgba($black, .3);
 $dropdown-border-radius: $border-radius-sm;
 $dropdown-item-padding-y: .5rem;
 
@@ -92,3 +96,4 @@ $input-group-addon-bg: $white;
 $input-border: 2px solid $border-color;
 
 $table-hover-bg: $gray-100;
+

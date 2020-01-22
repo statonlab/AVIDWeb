@@ -7,7 +7,8 @@
                 </div>
                 <div class="ml-auto">
                     <button class="btn btn-primary" @click.prevent="showSiteForm = true">
-                        New Site
+                        <icon name="add"/>
+                        <span>Site</span>
                     </button>
                 </div>
             </div>
