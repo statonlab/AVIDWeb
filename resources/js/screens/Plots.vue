@@ -332,7 +332,7 @@
         }
       },
 
-      async loadPlots() {
+      async loadPlots(plot) {
         if (this.request !== null) {
           this.request()
         }
@@ -353,6 +353,10 @@
           if (this.selectedPlot === null && this.plots.length > 0) {
             this.setFromHistory()
           }
+
+          if (plot) {
+            this.selectPlot(plot.id)
+          }
         } catch (e) {
           if (!axios.isCancel(e)) {
             this.loading = false
@@ -365,9 +369,9 @@
         this.plotOptions = plots.map(p => ({label: `Plot #${p.number}`, value: p.id}))
       },
 
-      plotCreated() {
+      plotCreated(plot) {
         this.showPlotForm = false
-        this.loadPlots()
+        this.loadPlots(plot)
       },
 
       setFromHistory() {

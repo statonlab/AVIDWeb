@@ -84,7 +84,6 @@
                     <div class="form-group">
                         <label for="basal_area">
                             Basal Area
-                            <required/>
                         </label>
                         <div class="input-group">
                             <input type="text"

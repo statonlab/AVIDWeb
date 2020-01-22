@@ -22,6 +22,9 @@
                                v-model="form.name"
                                placeholder="Site Name"
                                autofocus>
+                        <span class="form-text text-danger" v-if="form.errors.has('name')">
+                            {{ form.errors.first('name') }}
+                        </span>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -31,14 +34,17 @@
                                     <required/>
                                 </label>
                                 <dropdown
-                                    autocomplete
-                                    :loading="loadingStates"
-                                    v-model="form.state_id"
-                                    @input="selectState($event)"
-                                    :options="states"
-                                    placeholder="Select a state"
-                                    @search="stateSearch = $event"
+                                        autocomplete
+                                        :loading="loadingStates"
+                                        v-model="form.state_id"
+                                        @input="selectState($event)"
+                                        :options="states"
+                                        placeholder="Select a state"
+                                        @search="stateSearch = $event"
                                 />
+                                <span class="form-text text-danger" v-if="form.errors.has('state')">
+                                    {{ form.errors.first('state') }}
+                                </span>
                             </div>
 
                         </div>
@@ -49,15 +55,18 @@
                                     <required/>
                                 </label>
                                 <dropdown
-                                    autocomplete
-                                    :loading="loadingCounties"
-                                    @search="countySearch = $event"
-                                    placeholder="Select a County"
-                                    v-model="form.county_id"
-                                    :options="counties"
-                                    :disabled="form.state_id === null"
-                                    ref="county"
+                                        autocomplete
+                                        :loading="loadingCounties"
+                                        @search="countySearch = $event"
+                                        placeholder="Select a County"
+                                        v-model="form.county_id"
+                                        :options="counties"
+                                        :disabled="form.state_id === null"
+                                        ref="county"
                                 />
+                                <span class="form-text text-danger" v-if="form.errors.has('county')">
+                                    {{ form.errors.first('county') }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -69,6 +78,9 @@
                                name="city"
                                id="city"
                                placeholder="Type a city name">
+                        <span class="form-text text-danger" v-if="form.errors.has('city')">
+                            {{ form.errors.first('city') }}
+                        </span>
                     </div>
                     <div class="form-group">
                         <label for="owner">Owner's Name</label>
@@ -78,6 +90,9 @@
                                name="owner"
                                id="owner"
                                placeholder="Type a name">
+                        <span class="form-text text-danger" v-if="form.errors.has('owner_name')">
+                            {{ form.errors.first('owner_name') }}
+                        </span>
                     </div>
                     <div class="form-group">
                         <label for="address">Owner's Address</label>
@@ -87,6 +102,9 @@
                                   v-model="form.owner_address"
                                   id="address"
                                   placeholder="Type an address"></textarea>
+                        <span class="form-text text-danger" v-if="form.errors.has('owner_address')">
+                            {{ form.errors.first('owner_address') }}
+                        </span>
                     </div>
                     <div class="form-group">
                         <label for="basal-area">
@@ -104,6 +122,9 @@
                                 <span class="input-group-text">ft<sup>2</sup>/ac</span>
                             </div>
                         </div>
+                        <span class="form-text text-danger" v-if="form.errors.has('basal_area')">
+                            {{ form.errors.first('basal_area') }}
+                        </span>
                     </div>
                     <div class="form-group">
                         <label for="diameter">
@@ -121,11 +142,15 @@
                                 <span class="input-group-text">in</span>
                             </div>
                         </div>
+                        <span class="form-text text-danger" v-if="form.errors.has('diameter')">
+                            {{ form.errors.first('diameter') }}
+                        </span>
                     </div>
                 </modal-body>
                 <modal-footer class="d-flex">
-                    <button class="btn btn-primary" type="submit">
-                        Save
+                    <button class="btn btn-primary" type="submit" :disabled="loading">
+                        <inline-spinner v-if="loading"/>
+                        <span>Save</span>
                     </button>
                     <button class="btn btn-light ml-auto"
                             type="button"
@@ -150,11 +175,13 @@
   import Required from '../components/Required'
   import Autocomplete from '../components/Autocomplete'
   import Dropdown from '../components/Dropdown'
+  import InlineSpinner from '../components/InlineSpinner'
 
   export default {
     name: 'SiteForm',
 
     components: {
+      InlineSpinner,
       Dropdown,
       Autocomplete,
       Required,
@@ -169,6 +196,7 @@
 
     data() {
       return {
+        loading        : false,
         states         : [],
         stateSearch    : '',
         counties       : [],
