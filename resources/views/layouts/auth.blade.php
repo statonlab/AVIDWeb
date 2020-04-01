@@ -22,5 +22,6 @@
 <main class="pb-4 pt-5">
     @yield('content')
 </main>
+<script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
 </body>
 </html>

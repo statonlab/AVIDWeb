@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
         <div v-if="site" class="mb-3 d-flex">
             <div>
                 <h1 class="page-title mb-0">
@@ -33,7 +33,7 @@
                             data-toggle="collapse"
                             data-target="#site-info-card"
                             aria-expanded="true">
-                        <icon name="ios-arrow-down"/>
+                        <icon name="arrow-down"/>
                     </button>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                                :class="['nav-link', 'align-items-center', 'pr-0', {'active': selectedPlot && selectedPlot.id === plot.id}]"
                                @click.prevent="selectedPlot = plot">
                                 <span>Plot #{{ plot.number }}</span>
-                                <icon name="ios-arrow-forward" class="right-arrow ml-auto"/>
+                                <icon name="arrow-forward" class="right-arrow ml-auto"/>
                             </a>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
             <div class="col-lg-9 col-md-8">
                 <div class="card mb-3" v-if="selectedPlot">
                     <tabs v-if="selectedPlot">
-                        <tab :name="`Plot #${selectedPlot.number}`" icon="ios-leaf" selected>
+                        <tab :name="`Plot #${selectedPlot.number}`" icon="leaf" selected>
                             <div class="card-body pb-0">
                                 <div class="row">
                                     <div class="col-md-4 mb-4" v-if="selectedPlot.basal_area !== null">
@@ -194,7 +194,7 @@
                         <div class="dropdown ml-auto" slot="right">
                             <a href="#" class="nav-link" data-toggle="dropdown">
                                 <span>Options</span>
-                                <icon name="ios-arrow-down" class="ml-2 mr-0"/>
+                                <icon name="arrow-down" class="ml-2 mr-0"/>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a href="#" class="dropdown-item">

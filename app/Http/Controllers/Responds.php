@@ -53,7 +53,7 @@ trait Responds
      * @param string $message
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function deleted(string $message = '')
+    protected function deleted(string $message = 'Resource Deleted')
     {
         return JsonResponse::create($message, 201);
     }

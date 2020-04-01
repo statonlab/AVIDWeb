@@ -15,6 +15,9 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
+/**
+ * Views for authenticated users.
+ */
 Route::group([
     'middleware' => ['auth'],
     'prefix' => '/app',
@@ -23,9 +26,11 @@ Route::group([
     Route::get('/sites', 'HomeController@data');
     Route::get('/sites/{id}', 'HomeController@data');
     Route::get('/profile', 'HomeController@data');
-
 });
 
+/**
+ * Web API routes for authenticated users.
+ */
 Route::group([
     'middleware' => ['auth'],
     'prefix' => '/web',
@@ -52,4 +57,27 @@ Route::group([
     Route::get('/plots/{plot}', 'PlotController@show');
     Route::put('/plots/{plot}', 'PlotController@update');
     Route::delete('/plots/{plot}', 'PlotController@destroy');
+});
+
+/**
+ * Views for admin users only!
+ */
+Route::group([
+    'middleware' => ['auth', 'admin'],
+    'prefix' => '/app',
+], function () {
+    Route::get('/species', 'HomeController@data');
+});
+
+/**
+ * Web API routes for admin users only!
+ */
+Route::group([
+    'middleware' => ['auth', 'admin'],
+    'prefix' => '/web',
+], function () {
+    Route::get('/species', 'SpeciesController@index');
+    Route::post('/species', 'SpeciesController@create');
+    Route::put('/species/{species}', 'SpeciesController@update');
+    Route::delete('/species/{species}', 'SpeciesController@delete');
 });
