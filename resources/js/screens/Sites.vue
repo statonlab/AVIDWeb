@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
         <div class="card mb-3">
             <div class="card-header d-flex p-2">
                 <div class="flex-grow-1">

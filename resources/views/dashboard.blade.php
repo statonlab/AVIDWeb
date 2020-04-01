@@ -17,7 +17,6 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
 
     <script>
       window.avid = {
@@ -33,6 +32,8 @@
         window.avid.user.role = {!!  json_encode(auth()->user()->role->only(['id', 'name']))  !!}
       @endif
     </script>
+    <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
 </head>
 <body>
 <div id="app">

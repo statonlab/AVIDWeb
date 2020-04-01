@@ -216,3 +216,13 @@
         }
     }
 }
+
+.hover-visible-container {
+    .hover-visible {
+        visibility: hidden;
+    }
+
+    &:hover .hover-visible {
+        visibility: visible;
+    }
+}

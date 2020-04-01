@@ -4,6 +4,7 @@
         color: $gray-700;
         cursor: pointer;
         @extend .d-flex;
+        @extend .align-items-center;
         transition: background-color .2s linear, color .2s linear;
         margin-bottom: 1px;
 
@@ -14,9 +15,7 @@
         .icon {
             color: $gray-500;
             width: 24px;
-            //height: 24px;
-            //line-height: 24px;
-            @extend .mr-3;
+            @extend .mr-2;
             font-size: 1.2rem;
         }
 
