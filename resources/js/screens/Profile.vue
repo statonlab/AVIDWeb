@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
         <inline-spinner v-if="loading"/>
         <div class="row" v-if="!loading && user">
             <div class="col-xl-3 col-lg-4">
@@ -32,7 +32,7 @@
                                 <button class="btn btn-primary">Save</button>
                             </div>
                         </tab>
-                        <tab name="Password" icon="lock">
+                        <tab name="Password" icon="lock-closed">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>Current Password</label>

@@ -1,5 +1,5 @@
 <template>
-    <i :class="`icon ion-${id}`"></i>
+    <ion-icon class="icon" :name="name"></ion-icon>
 </template>
 
 <script>
@@ -7,34 +7,7 @@
     name: 'Icon',
 
     props: {
-      name: {required: true}
+      name: {required: true},
     },
-
-    watch: {
-      name(name) {
-        this.make(name)
-      }
-    },
-
-    data() {
-      return {
-        id: ''
-      }
-    },
-
-    mounted() {
-      this.make(this.name)
-    },
-
-    methods: {
-      make(name) {
-        if (name.indexOf('ios-') === 0 || name.indexOf('md-') === 0 || name.indexOf('logo-') === 0) {
-          this.id = name
-          return
-        }
-
-        this.id = `md-${name}`
-      }
-    }
   }
 </script>

@@ -1,11 +1,11 @@
 <template>
     <nav class="navbar navbar-expand navbar-dark bg-primary fixed-top pl-0 shadow">
-        <div class="logo pl-2">
+        <div class="logo pl-3">
             <button class="btn btn-primary btn-sm rounded-circle btn-toggle float-left border-0"
                     @click.prevent="$emit('toggle')">
-                <icon name="menu" class="no-width"/>
+                <icon name="menu" class="text-lg"/>
             </button>
-            <a class="navbar-brand ml-3" href="#">AVID</a>
+            <a class="navbar-brand ml-2" href="#">AVID</a>
         </div>
 
         <div class="d-flex flex-grow-1">
@@ -36,8 +36,8 @@
                 <li class="nav-item">
                     <form class="" action="/logout" method="post">
                         <input type="hidden" name="_token" :value="csrf">
-                        <button class="nav-item btn btn-primary border-0" v-tooltip="'Sign Out'" type="submit">
-                            <icon name="log-out"/>
+                        <button class="nav-link bg-transparent border-0" v-tooltip="'Sign Out'" type="submit">
+                            <icon name="log-out-outline"/>
                         </button>
                     </form>
                 </li>

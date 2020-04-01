@@ -2,28 +2,23 @@
     text-transform: uppercase;
     @extend .d-inline-flex;
     @extend .align-items-center;
+    font-size: .85rem;
+    letter-spacing: .025rem;
 
     &.btn-block {
         @extend .justify-content-center;
     }
 
     .icon {
-        width: 17px;
-        font-size: 1.1rem;
-        line-height: 1;
-
+        font-size: 1rem;
         + span {
             margin-left: .5rem;
         }
     }
 
     &.btn-sm {
+        font-size: .65rem;
         letter-spacing: .05rem;
-
-        .icon {
-            width: 14px;
-            font-size: .9rem;
-        }
     }
 
     &.shadow,
@@ -129,5 +124,14 @@
     }
     &[aria-expanded="false"] >.icon {
         transform: rotate(90deg);
+    }
+}
+
+.btn-link-dark {
+    color: $gray-600;
+
+    &:hover {
+        color: $gray-700;
+        background-color: rgba($border-color, .3);
     }
 }

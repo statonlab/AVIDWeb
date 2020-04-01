@@ -15,6 +15,7 @@ import Plots from './screens/Plots'
 import VueNotification from 'vue-notification'
 import Profile from './screens/Profile'
 import Alert from './plugins/Alert/Alert'
+import Species from './screens/Species'
 
 Vue.use(Alert)
 Vue.use(VueNotification)
@@ -24,6 +25,7 @@ const routes = [
     {path: '/app', component: Dashboard},
     {path: '/app/sites', component: Sites},
     {path: '/app/sites/:id', component: Plots},
+    {path: '/app/species', component: Species},
     {path: '/app/profile', component: Profile}
 ]
 
@@ -55,7 +57,8 @@ Vue.directive('tooltip', function (el, binding) {
     }
 })
 
-const app = new Vue({
+Vue.config.ignoredElements = ['ion-icon']
+new Vue({
     router,
     components: {App},
 }).$mount('#app')
