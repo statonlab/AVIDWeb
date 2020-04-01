@@ -17,7 +17,7 @@ class Site extends Model
         'city',
         'address',
         'owner_name',
-        'owner_address',
+        'owner_contact',
         'basal_area',
         'diameter',
     ];
