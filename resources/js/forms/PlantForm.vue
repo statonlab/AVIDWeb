@@ -8,23 +8,7 @@
                 </select>
             </div>
 
-            <div v-if="form.plant === 'Canada Mayflower'" class="row">
-                <div class="form-group col-6">
-                    <label for="date">Date<required/></label>
-                    <select name="date" id="date" v-model="form.date" class="form-control">
-                        <option value="Date">Date</option>
-                    </select>
-                </div>
-                <div class="form-group col-6">
-                    <label for="stems">Number of Stems<required/></label>
-                    <input id="stems" type="text" class="form-control" placeholder="Number of Stems">
-                </div>
-                <div class="form-group col-6">
-                    <label for="flowers">Number of Flowers<required/></label>
-                    <input id="flowers" type="text" class="form-control" placeholder="Number of Flowers">
-                </div>
-            </div>
-            <div v-else class="row">
+            <div class="row">
                 <div class="form-group col-6">
                     <label for="tag-num">Tag Number<required/></label>
                     <input type="text" id="tag-num" class="form-control" v-model="form.tag" placeholder="Tag #">
@@ -72,7 +56,6 @@
                 plants: [
                     'Spring Wildflower',
                     'Woody Seedlings',
-                    'Canada Mayflower',
                 ],
 
                 form: new Form({
@@ -81,10 +64,6 @@
                     tag            : '',
                     species        : '',
                     quadrant       : '',
-                    // Canada Mayflower
-                    numberOfStems  : '',
-                    numberOfFlowers: '',
-                    date           : null,
                 }),
             }
         },
