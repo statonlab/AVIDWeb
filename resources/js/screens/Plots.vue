@@ -45,7 +45,7 @@
                         <td>
                             {{ optional(site.owner, 'Owner name') }}
                             <div class="text-muted">
-                                {{ optional(site.owner_address, 'Owner address') }}
+                                {{ optional(site.owner_contact, 'Owner contact info') }}
                             </div>
                         </td>
                     </tr>

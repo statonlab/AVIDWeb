@@ -60,7 +60,7 @@ class SiteController extends Controller
             'diameter' => 'nullable|numeric',
             'city' => 'nullable|max:255',
             'owner_name' => 'nullable|max:255',
-            'owner_address' => 'nullable',
+            'owner_contact' => 'nullable',
         ]);
 
         $site = Site::create([
@@ -72,7 +72,7 @@ class SiteController extends Controller
             'diameter' => $request->diamater,
             'city' => $request->city,
             'owner_name' => $request->owner_name,
-            'owner_address' => $request->owner_address,
+            'owner_contact' => $request->owner_contact,
         ]);
 
         $site->load(['county', 'state']);
@@ -119,7 +119,7 @@ class SiteController extends Controller
             'diameter' => 'nullable|numeric',
             'city' => 'nullable|max:255',
             'owner_name' => 'nullable|max:255',
-            'owner_address' => 'nullable',
+            'owner_contact' => 'nullable',
         ]);
 
         $site->update([
@@ -130,7 +130,7 @@ class SiteController extends Controller
             'diameter' => $request->diamater,
             'city' => $request->city,
             'owner_name' => $request->owner_name,
-            'owner_address' => $request->owner_address,
+            'owner_contact' => $request->owner_contact,
         ]);
 
         $site->load(['county', 'state']);

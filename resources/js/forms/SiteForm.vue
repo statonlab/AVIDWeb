@@ -95,15 +95,15 @@
                         </span>
                     </div>
                     <div class="form-group">
-                        <label for="address">Owner's Address</label>
+                        <label for="contact">Contact Info</label>
                         <textarea type="text"
                                   class="form-control"
-                                  name="address"
-                                  v-model="form.owner_address"
-                                  id="address"
-                                  placeholder="Type an address"></textarea>
-                        <span class="form-text text-danger" v-if="form.errors.has('owner_address')">
-                            {{ form.errors.first('owner_address') }}
+                                  name="contact"
+                                  v-model="form.owner_contact"
+                                  id="contact"
+                                  placeholder="Type contact info"></textarea>
+                        <span class="form-text text-danger" v-if="form.errors.has('owner_contact')">
+                            {{ form.errors.first('owner_contact') }}
                         </span>
                     </div>
                     <div class="form-group">
@@ -209,7 +209,7 @@
           diameter     : '',
           basal_area   : '',
           owner_name   : '',
-          owner_address: '',
+          owner_contact: '',
         }),
         stateRequest   : null,
         countyRequest  : null,
