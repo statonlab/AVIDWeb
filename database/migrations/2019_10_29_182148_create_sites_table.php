@@ -20,7 +20,7 @@ class CreateSitesTable extends Migration
             $table->unsignedBigInteger('county_id')->nullable();
             $table->string('name')->index();
             $table->string('owner_name')->index()->nullable();
-            $table->text('owner_contact')->nullable();
+            $table->text('owner_address')->nullable();
             $table->string('city')->index()->nullable();
             $table->float('basal_area')->nullable();
             $table->float('diameter')->nullable();
