@@ -83,4 +83,5 @@ Route::group([
     Route::delete('/species/{species}', 'SpeciesController@delete');
 
     Route::get('/users', 'UserController@index');
+    Route::get('/user/{user}', 'UserController@show');
 });
