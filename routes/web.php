@@ -67,6 +67,7 @@ Route::group([
     'prefix' => '/app',
 ], function () {
     Route::get('/species', 'HomeController@data');
+    Route::get('/users', 'HomeController@data');
 });
 
 /**
@@ -80,4 +81,6 @@ Route::group([
     Route::post('/species', 'SpeciesController@create');
     Route::put('/species/{species}', 'SpeciesController@update');
     Route::delete('/species/{species}', 'SpeciesController@delete');
+
+    Route::get('/users', 'UserController@index');
 });
