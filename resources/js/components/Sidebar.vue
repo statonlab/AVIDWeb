@@ -46,7 +46,7 @@
             label: 'Species',
           },
           {
-            icon : 'cog',
+            icon : 'people',
             to   : '/app/users',
             label: 'Users',
           },
