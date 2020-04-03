@@ -23,7 +23,7 @@
                                     <input type="text" class="form-control" v-model="form.name">
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group mb-0">
                                     <label>Email Address</label>
                                     <input type="text" class="form-control" v-model="form.email">
                                 </div>
@@ -44,7 +44,7 @@
                                     <input type="text" class="form-control">
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group mb-0">
                                     <label>Repeat Password</label>
                                     <input type="text" class="form-control">
                                 </div>

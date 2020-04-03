@@ -4,6 +4,15 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
+                <div class="mb-4 ml-n3">
+                    <a href="/" class="btn btn-link">
+                        <ion-icon class="icon" name="arrow-back"></ion-icon>
+                        <span>
+                            Home
+                        </span>
+                    </a>
+                </div>
+
                 <div class="card shadow border-0">
                     <div class="row align-items-stretch flex-lg-row flex-column-reverse">
                         <div class="col-lg-4 bg-primary rounded-left align-items-center d-flex zIndex-5 auth-left">
@@ -27,7 +36,7 @@
                         </div>
                         <div class="col-lg-8">
                             <div class="card-body py-5">
-                                <p class=" font-weight-bold text-center">
+                                <p class="font-weight-bold text-center">
                                     Register
                                 </p>
                                 <form method="POST" action="{{ route('register') }}">

@@ -6,7 +6,7 @@
                 Page {{ page }} of {{ lastPage }}
             </div>
         </div>
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header d-flex p-2">
                 <div class="flex-grow-1">
                     <input type="search" class="form-control" placeholder="Search..." v-model="search" title="Search">

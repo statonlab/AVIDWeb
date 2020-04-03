@@ -4,6 +4,14 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
+                <div class="mb-4 ml-n3">
+                    <a href="/" class="btn btn-link">
+                        <ion-icon class="icon" name="arrow-back"></ion-icon>
+                        <span>
+                            Home
+                        </span>
+                    </a>
+                </div>
                 <div class="card shadow border-0">
                     <div class="row align-items-stretch flex-lg-row flex-column-reverse">
                         <div class="col-lg-4 bg-primary rounded-left align-items-center d-flex zIndex-5 auth-left">
@@ -17,8 +25,8 @@
                                 </p>
                                 <div class="d-flex">
                                     <a
-                                        href="/register"
-                                        class="btn btn-outline-light btn-block">
+                                            href="/register"
+                                            class="btn btn-outline-light btn-block">
                                         Create Account
                                     </a>
                                 </div>
@@ -56,7 +64,15 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="password">{{ __('Password') }}</label>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <label for="password" class="mb-0">{{ __('Password') }}</label>
+
+                                            @if (Route::has('password.request'))
+                                                <a class="btn btn-link text-case-normal mb-1" tabindex="-1" href="{{ route('password.request') }}">
+                                                    {{ __('Forgot Your Password?') }}
+                                                </a>
+                                            @endif
+                                        </div>
 
                                         <input id="password"
                                                type="password"
@@ -90,12 +106,6 @@
                                         <button type="submit" class="btn btn-primary">
                                             {{ __('Login') }}
                                         </button>
-
-                                        @if (Route::has('password.request'))
-                                            <a class="btn btn-link" href="{{ route('password.request') }}">
-                                                {{ __('Forgot Your Password?') }}
-                                            </a>
-                                        @endif
                                     </div>
                                 </form>
                             </div>

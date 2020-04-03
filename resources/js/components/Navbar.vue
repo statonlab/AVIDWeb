@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand navbar-dark bg-primary fixed-top pl-0 shadow">
+    <nav class="navbar navbar-expand navbar-dark bg-primary fixed-top pl-0 shadow-sm">
         <div class="logo pl-3">
             <button class="btn btn-primary btn-sm rounded-circle btn-toggle float-left border-0"
                     @click.prevent="$emit('toggle')">
