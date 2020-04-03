@@ -47,6 +47,11 @@
           },
           {
             icon : 'cog',
+            to   : '/app/users',
+            label: 'Users',
+          },
+          {
+            icon : 'cog',
             to   : '/app/profile',
             label: 'Settings',
           },
