@@ -11,7 +11,7 @@
                 {{ selected }}
             </span>
             <inline-spinner v-if="loading" class="ml-auto text-primary"/>
-            <icon name="caret-down" class="ml-auto" v-else/>
+            <icon name="caret-down" class="ml-auto btn-dropdown-icon" v-else/>
         </button>
         <div class="dropdown-menu w-100" ref="menu">
             <div class="pb-2 px-3" v-if="autocomplete">

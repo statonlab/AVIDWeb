@@ -30,7 +30,7 @@
                             <small class="mb-0 text-muted">You may use the map to visually select the location</small>
                         </div>
                         <div class="ml-auto">
-                            <button class="btn btn-outline-primary btn-sm"
+                            <button class="btn btn-outline-primary"
                                     type="button"
                                     @click.prevent="showMap = !showMap">
                                 <icon name="map"/>

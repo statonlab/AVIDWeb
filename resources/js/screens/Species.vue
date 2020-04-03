@@ -40,11 +40,11 @@
                             <td>{{item.species}}</td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">
-                                    <button class="btn btn-link-dark" @click.prevent="edit(item)" v-tooltip="'Edit'">
+                                    <button class="btn btn-link" @click.prevent="edit(item)" v-tooltip="'Edit'">
                                         <icon name="create"/>
                                     </button>
 
-                                    <button class="btn btn-link-dark"
+                                    <button class="btn btn-link"
                                             @click.prevent="destroy(item)"
                                             v-tooltip="'Delete'">
                                         <icon name="trash"/>

@@ -103,7 +103,7 @@
                         <div class="col-12">
                             <div class="d-flex justify-content-center align-items-center mt-5">
                                 <a href="#how-to-volunteer">
-                                    <i class="icon ion-ios-arrow-down text-white" style="font-size: 2rem"></i>
+                                    <ion-icon class="icon text-white" name="arrow-down" style="font-size: 2rem"></ion-icon>
                                 </a>
                             </div>
                         </div>
