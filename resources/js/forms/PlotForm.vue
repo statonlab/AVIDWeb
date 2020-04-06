@@ -260,7 +260,6 @@
       return {
         loading: false,
         form   : new Form({
-          site_id           : this.site.id,
           number            : '',
           latitude          : 42.6588992,
           longitude         : -80.2590355,
@@ -294,7 +293,7 @@
       async create() {
         this.loading = true
         try {
-          const {data} = await this.form.post('/web/plots')
+          const {data} = await this.form.post(`/web/sites/${this.site.id}/plots`)
           this.$notify({
             type: 'success',
             text: 'Plot created successfully',

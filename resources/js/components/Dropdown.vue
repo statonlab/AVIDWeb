@@ -6,7 +6,7 @@
                 ref="btn"
                 @click="focus()"
                 @keyup.down="focus()"
-                :class="['btn', 'btn-select', 'd-flex', {'btn-placeholder-effect': value === null, 'btn-select-active': value !== null}]">
+                :class="['btn', 'btn-select', 'd-flex', {'btn-placeholder-effect': value === null, 'btn-select-active': value !== null, 'border-danger': error}]">
             <span class="text-case-normal">
                 {{ selected }}
             </span>
@@ -58,6 +58,7 @@
       disabled    : {required: false, type: Boolean, default: false},
       autocomplete: {required: false, type: Boolean, default: false},
       loading     : {required: false, type: Boolean, default: false},
+      error       : {required: false, type: Boolean, default: false},
     },
 
     data() {
@@ -130,7 +131,7 @@
       },
 
       up(index) {
-        if(this.autocomplete && index === 0) {
+        if (this.autocomplete && index === 0) {
           this.focus()
         }
       },

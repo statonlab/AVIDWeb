@@ -6,7 +6,6 @@
     @extend .align-items-center;
     input[type="search"] {
         height: auto;
-        @extend .py-2;
         border-width: 1px;
         border-color: $gray-200;
         background-color: $gray-200;

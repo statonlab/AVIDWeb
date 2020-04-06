@@ -6,7 +6,7 @@ $enable-caret: true;
 $enable-rounded: true;
 $enable-shadows: true;
 $enable-gradients: false;
-$enable-transitions: true;
+$enable-transitions: false;
 $enable-prefers-reduced-motion-media-query: true;
 $enable-grid-classes: true;
 $enable-pointer-cursor-for-buttons: true;
@@ -62,22 +62,19 @@ $font-weight-bold: 600;
 
 $input-btn-focus-box-shadow: none;
 $input-focus-border-color: $primary;
-$input-padding-y: .65rem;
 $input-box-shadow: none;
 
-//$btn-padding-y: .5rem;
-//$btn-padding-x: 1rem;
-$input-btn-font-size: .9rem;
+$input-btn-font-size: .85rem;
 $btn-font-weight: $font-weight-bold;
 $btn-box-shadow: none;
-$btn-padding-y-sm: .2rem;
+//$btn-padding-y-sm: .2rem;
 
-$box-shadow-sm: 0 .125rem .25rem rgba($black, .15);
-$box-shadow: 0 .5rem 1rem rgba($black, .15);
-$box-shadow-lg: 0 1rem 3rem rgba($black, .175);
+//$box-shadow-sm: 0 .125rem .25rem rgba($black, .15);
+//$box-shadow: 0 .5rem 1rem rgba($black, .15);
+//$box-shadow-lg: 0 1rem 3rem rgba($black, .175);
 
 $dropdown-border-color: $gray-300;
-$dropdown-box-shadow: 0 .5rem 1rem rgba($black, .3);
+//$dropdown-box-shadow: 0 .5rem 1rem rgba($black, .3);
 $dropdown-border-radius: $border-radius-sm;
 $dropdown-item-padding-y: .5rem;
 
