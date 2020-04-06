@@ -8,7 +8,7 @@ trait Responds
 {
     /**
      * @param $data
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     protected function success($data)
     {
@@ -19,7 +19,7 @@ trait Responds
      * @param $message
      * @param array $errors
      * @param int $status
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     protected function error($message, array $errors, $status = 422)
     {
@@ -33,7 +33,7 @@ trait Responds
      * Not found 404.
      *
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     protected function notFound($message = 'Not Found')
     {
@@ -42,7 +42,7 @@ trait Responds
 
     /**
      * @param string|array $data
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     protected function created($data)
     {
@@ -51,7 +51,7 @@ trait Responds
 
     /**
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     protected function deleted(string $message = 'Resource Deleted')
     {
@@ -62,7 +62,7 @@ trait Responds
      * Unauthorized request.
      *
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     protected function unauthorized($message = 'Unauthorized')
     {
@@ -73,7 +73,7 @@ trait Responds
      * Bad request message.
      *
      * @param string $message
-     * @return JsonResponse
+     * @return JsonResponse|\Illuminate\Http\Response
      */
     protected function badRequest($message = 'Bad Request')
     {
@@ -84,7 +84,7 @@ trait Responds
      * Internal server error.
      *
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     protected function serverError($message = '')
     {

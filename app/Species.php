@@ -11,4 +11,12 @@ class Species extends Model
         'species',
         'name',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function plants()
+    {
+        return $this->hasMany(Plant::class);
+    }
 }
