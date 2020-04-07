@@ -33,7 +33,7 @@ class PlantController extends Controller
         $plants = $plot->plants()->with([
             'species',
             'type',
-        ]);
+        ])->orderBy('tag', 'asc');
 
         if (! empty($request->search)) {
             $term = $request->search;

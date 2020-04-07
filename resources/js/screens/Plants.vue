@@ -121,7 +121,7 @@
                 :plot="plot"
                 @close="showForm = false"
                 v-if="showForm"
-                @create="created(plant)"
+                @create="created($event)"
         />
     </div>
 </template>
