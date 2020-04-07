@@ -18,6 +18,7 @@ import Alert from './plugins/Alert/Alert'
 import Species from './screens/Species'
 import Users from './screens/Users'
 import Plants from './screens/Plants'
+import Measurements from './components/Measurements'
 
 Vue.use(Alert)
 Vue.use(VueNotification)
@@ -28,6 +29,7 @@ const routes = [
     {path: '/app/sites', component: Sites},
     {path: '/app/sites/:id', component: Plots},
     {path: '/app/plots/:id', component: Plants},
+    {path: '/app/plants/:id', component: Measurements},
     {path: '/app/species', component: Species},
     {path: '/app/profile', component: Profile},
     {path: '/app/users', component: Users}

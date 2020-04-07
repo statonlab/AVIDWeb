@@ -44,7 +44,7 @@ class Plant extends Model
      */
     public function type()
     {
-        return $this->belongsTo(PlantType::class);
+        return $this->belongsTo(PlantType::class, 'plant_type_id', 'id');
     }
 
     /**
