@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Plant extends Model
 {
+    use SoftDeletes;
+
     /**
      * @var array
      */
@@ -31,7 +34,8 @@ class Plant extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function species() {
+    public function species()
+    {
         return $this->belongsTo(Species::class);
     }
 
@@ -41,5 +45,13 @@ class Plant extends Model
     public function type()
     {
         return $this->belongsTo(PlantType::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function measurements()
+    {
+        return $this->hasMany(Measurement::class);
     }
 }
