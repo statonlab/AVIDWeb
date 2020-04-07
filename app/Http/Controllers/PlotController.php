@@ -100,6 +100,8 @@ class PlotController extends Controller
             'user' => function ($query) {
                 $query->select(['users.id', 'users.name']);
             },
+            'site' => function ($query) {
+            },
         ]);
         $plot->loadCount(['plants']);
 

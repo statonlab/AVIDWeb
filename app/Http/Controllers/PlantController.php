@@ -72,10 +72,12 @@ class PlantController extends Controller
             'quadrant' => "required|in:$quadrants",
         ]);
 
-        $exists = Plant::where('tag', $request->tag)->where('plot_id', $plot->id)->exists();
-        if($exists) {
+        $exists = Plant::where('tag', $request->tag)
+            ->where('plot_id', $plot->id)
+            ->exists();
+        if ($exists) {
             return $this->error('Plant already exists', [
-                'tag' => ['Tag already exists in this plot. Please use a unique tag.']
+                'tag' => ['Tag already exists in this plot. Please use a unique tag.'],
             ]);
         }
 
@@ -107,7 +109,15 @@ class PlantController extends Controller
     {
         $this->authorize('view', $plant);
 
-        $plant->load(['type', 'species', 'plot']);
+        $plant->load([
+            'type' => function ($query) {
+            },
+            'species' => function ($query) {
+            },
+            'plot' => function ($query) {
+                $query->with(['site']);
+            },
+        ]);
 
         return $this->success($plant);
     }
@@ -133,11 +143,13 @@ class PlantController extends Controller
             'quadrant' => "required|in:$quadrants",
         ]);
 
-        if($request->tag != $plant->tag) {
-            $exists = Plant::where('tag', $request->tag)->where('plot_id', $plant->plot->id)->exists();
-            if($exists) {
+        if ($request->tag != $plant->tag) {
+            $exists = Plant::where('tag', $request->tag)
+                ->where('plot_id', $plant->plot->id)
+                ->exists();
+            if ($exists) {
                 return $this->error('Plant already exists', [
-                    'tag' => ['Tag already exists in this plot. Please use a unique tag.']
+                    'tag' => ['Tag already exists in this plot. Please use a unique tag.'],
                 ]);
             }
         }

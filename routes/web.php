@@ -26,6 +26,7 @@ Route::group([
     Route::get('/sites', 'HomeController@data');
     Route::get('/sites/{id}', 'HomeController@data');
     Route::get('/plots/{id}', 'HomeController@data');
+    Route::get('/plants/{id}', 'HomeController@data');
     Route::get('/profile', 'HomeController@data');
 });
 
@@ -65,6 +66,13 @@ Route::group([
     Route::get('/plants/{plant}', 'PlantController@show');
     Route::put('/plants/{plant}', 'PlantController@update');
     Route::delete('/plants/{plant}', 'PlantController@destroy');
+
+    // Measurements
+    Route::get('/plants/{plant}/measurements', 'MeasurementController@index');
+    Route::post('/plants/{plant}/measurements', 'MeasurementController@create');
+    Route::get('/measurements/{measurement}', 'MeasurementController@show');
+    Route::put('/measurements/{measurement}', 'MeasurementController@update');
+    Route::delete('/measurements/{measurement}', 'MeasurementController@destroy');
 
     // Plant Types
     Route::get('/plant-types', 'PlantTypeController@index');

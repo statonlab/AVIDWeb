@@ -15,6 +15,9 @@
                         <h1 class="page-title mb-0">
                             Plot #{{ plot.number }}
                         </h1>
+                        <p class="mb-0 text-muted">
+                            {{ plot.site.name }}
+                        </p>
                     </div>
                 </div>
                 <div class="ml-auto">
@@ -56,7 +59,7 @@
                                 <tbody>
                                 <tr v-for="plant in plants">
                                     <td>
-                                        <router-link to="#">Plant #{{ plant.tag }}</router-link>
+                                        <router-link :to="`/app/plants/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
                                     </td>
                                     <td>{{ plant.species.name }}</td>
                                     <td>{{ plant.quadrant }}</td>
@@ -70,12 +73,6 @@
                     <pager :page="page" :last-page="lastPage" @change="goTo($event)"/>
                 </div>
                 <div class="col-lg-4">
-                    <div class="card mb-3 overflow-hidden" v-if="plot.latitude && plot.longitude">
-                        <div class="card-body p-2 position-relative overflow-hidden">
-                            <plot-map :plot="plot" style="height: 300px;"/>
-                        </div>
-                    </div>
-
                     <div class="card mb-3">
                         <div class="card-body pb-1">
                             <div class="card-title font-weight-bold">Plot Information</div>
@@ -104,6 +101,12 @@
                                 <dd v-if="plot.subcanopy !== null">{{plot.subcanopy}}</dd>
                                 <dd v-else>Not Provided</dd>
                             </dl>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3 overflow-hidden" v-if="plot.latitude && plot.longitude">
+                        <div class="card-body p-2 position-relative overflow-hidden">
+                            <plot-map :plot="plot" style="height: 300px;"/>
                         </div>
                     </div>
                 </div>

@@ -14,6 +14,7 @@ class MeasurementController extends Controller
      *
      * @param Plant $plant
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Plant $plant)
     {
@@ -50,6 +51,7 @@ class MeasurementController extends Controller
      *
      * @param \App\Measurement $measurement
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Measurement $measurement)
     {
@@ -66,6 +68,8 @@ class MeasurementController extends Controller
      * @param Plant $plant
      * @param Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function create(Plant $plant, Request $request)
     {
@@ -105,6 +109,8 @@ class MeasurementController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \App\Measurement $measurement
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, Measurement $measurement)
     {
@@ -139,6 +145,7 @@ class MeasurementController extends Controller
      *
      * @param \App\Measurement $measurement
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Measurement $measurement)
     {

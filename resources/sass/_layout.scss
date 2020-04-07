@@ -1,3 +1,7 @@
+html,body {
+    color: #2D3748;
+}
+
 .main-container {
     overflow: hidden;
 }
@@ -6,6 +10,10 @@
     @include media-breakpoint-up(lg) {
         width: $sidebar-width;
     }
+}
+
+dd {
+    @extend .text-muted;
 }
 
 .navbar-nav {
