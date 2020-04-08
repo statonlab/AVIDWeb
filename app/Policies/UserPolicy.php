@@ -41,6 +41,6 @@ class UserPolicy
      */
     public function viewSites(User $user, User $model)
     {
-        return $user->isAdmin() || $user->isScientist();
+        return $user->id === $model->id || $user->isAdmin() || $user->isScientist();
     }
 }
