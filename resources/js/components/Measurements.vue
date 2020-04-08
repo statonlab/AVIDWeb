@@ -26,10 +26,14 @@
                     <div class="card">
                         <div class="card-header d-flex p-2">
                             <div class="flex-grow-1">
-                                <input type="search" name="search" class="form-control" title="Search..." placeholder="Search...">
+                                <input type="search"
+                                       name="search"
+                                       class="form-control"
+                                       title="Search..."
+                                       placeholder="Search...">
                             </div>
                             <div class="ml-auto flex-shrink-0 pl-1">
-                                <button class="btn btn-primary">
+                                <button class="btn btn-primary" @click.prevent="showForm = true">
                                     <icon name="add"/>
                                     <span>Add Measurement</span>
                                 </button>
@@ -97,23 +101,30 @@
         <div class="card p-4" v-if="!loading && !plant">
             Plant not found. Please try refreshing the page or contact us.
         </div>
+
+        <measurement-form
+                v-if="showForm"
+                @close="showForm = false"
+                :plant="plant"/>
     </div>
 </template>
 
 <script>
   import InlineSpinner from './InlineSpinner'
   import Icon from './Icon'
+  import MeasurementForm from '../forms/MeasurementForm'
 
   export default {
     name: 'Measurements',
 
-    components: {Icon, InlineSpinner},
+    components: {MeasurementForm, Icon, InlineSpinner},
 
     data() {
       return {
         loading            : true,
         loadingMeasurements: true,
         plant              : null,
+        showForm           : false,
         measurements       : [],
         total              : 0,
         page               : 1,
