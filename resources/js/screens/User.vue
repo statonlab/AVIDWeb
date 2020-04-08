@@ -119,7 +119,7 @@
       async loadSites() {
         try {
           const id     = this.$route.params.id
-          const {data} = await axios.get(`/web/sites/user/${id}`, {
+          const {data} = await axios.get(`/web/user/${id}/sites`, {
             params: {
               search: this.search,
               page  : this.page,

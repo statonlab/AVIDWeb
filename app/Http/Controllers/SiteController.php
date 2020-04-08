@@ -17,12 +17,16 @@ class SiteController extends Controller
      */
     public function index(Request $request, ?User $user = null)
     {
+        if ($user !== null) {
+            $this->authorize('viewSites', $user);
+        } else {
+            /** @var \App\User $user */
+            $user = $request->user();
+        }
+
         $this->validate($request, [
             'search' => 'nullable|max:255',
         ]);
-
-        /** @var \App\User $user */
-        $user = $user !== null ? $user : $request->user();
 
         $sites = $user->sites()->with([
             'state',

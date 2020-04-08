@@ -57,6 +57,8 @@ Route::group([
     Route::get('/plots/{plot}', 'PlotController@show');
     Route::put('/plots/{plot}', 'PlotController@update');
     Route::delete('/plots/{plot}', 'PlotController@destroy');
+
+    Route::get('/user/{user}/sites', 'SiteController@index');
 });
 
 /**
@@ -85,6 +87,4 @@ Route::group([
 
     Route::get('/users', 'UserController@index');
     Route::get('/users/{user}', 'UserController@show');
-
-    Route::get('/sites/user/{user}', 'SiteController@index');
 });
