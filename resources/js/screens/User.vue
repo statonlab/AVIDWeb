@@ -2,20 +2,26 @@
     <div class="container">
         <inline-spinner v-if="loading"/>
         <div class="row" v-if="!loading && user">
-            <div class="col-xl-3 col-lg-4">
-                <div class="card">
+            <div class="col-xl-4 col-md-5">
+                <div class="card mb-4">
                     <div class="card-body d-flex align-items-center">
-                        <avatar :user="user" :tooltip="false"/>
+                        <avatar class="flex-shrink-0" :user="user" :tooltip="false"/>
                         <div class="ml-3">
                             <strong>{{ user.name }}</strong>
-                            <p class="mb-0 text-muted">{{ user.member_since }}</p>
+                            <p class="mb-0 text-muted">{{ `Member since ${user.member_since}` }}</p>
+                            <a :href="`mailto:${user.email}`">
+                                {{ user.email }}
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-9 col-lg-8">
+            <div class="col-xl-8 col-md-7">
                 <div class="d-flex">
                     <h1 class="page-title mb-3">Sites</h1>
+                    <div class="ml-auto text-muted">
+                        Page {{ page }} of {{ lastPage }}
+                    </div>
                 </div>
                 <div class="card">
                     <div class="card-header d-flex p-2">
