@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Site;
+use App\User;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
@@ -14,14 +15,18 @@ class SiteController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function index(Request $request)
+    public function index(Request $request, ?User $user = null)
     {
+        if ($user !== null) {
+            $this->authorize('viewSites', $user);
+        } else {
+            /** @var \App\User $user */
+            $user = $request->user();
+        }
+
         $this->validate($request, [
             'search' => 'nullable|max:255',
         ]);
-
-        /** @var \App\User $user */
-        $user = $request->user();
 
         $sites = $user->sites()->with([
             'state',

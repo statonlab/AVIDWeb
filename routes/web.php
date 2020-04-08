@@ -48,6 +48,7 @@ Route::group([
 
     // Site Controller
     Route::get('/sites', 'SiteController@index');
+    Route::get('/user/{user}/sites', 'SiteController@index');
     Route::post('/sites', 'SiteController@create');
     Route::get('/sites/{site}', 'SiteController@show');
     Route::put('/sites/{site}', 'SiteController@update');
@@ -90,6 +91,7 @@ Route::group([
 ], function () {
     Route::get('/species', 'HomeController@data');
     Route::get('/users', 'HomeController@data');
+    Route::get('/users/{user}', 'HomeController@data');
 });
 
 /**
@@ -104,4 +106,5 @@ Route::group([
     Route::delete('/species/{species}', 'SpeciesController@delete');
 
     Route::get('/users', 'UserController@index');
+    Route::get('/users/{user}', 'UserController@show');
 });

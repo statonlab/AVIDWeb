@@ -19,4 +19,28 @@ class UserPolicy
     {
         return $user->isAdmin();
     }
+
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param \App\User $user
+     * @param \App\User $model
+     * @return mixed
+     */
+    public function view(User $user, User $model)
+    {
+        return $user->id === $model->id || $user->isAdmin();
+    }
+
+    /**
+     * Determine whether the user can view the sites of another user.
+     *
+     * @param \App\User $user
+     * @param \App\User $model
+     * @return mixed
+     */
+    public function viewSites(User $user, User $model)
+    {
+        return $user->id === $model->id || $user->isAdmin() || $user->isScientist();
+    }
 }

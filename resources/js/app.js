@@ -17,6 +17,7 @@ import Profile from './screens/Profile'
 import Alert from './plugins/Alert/Alert'
 import Species from './screens/Species'
 import Users from './screens/Users'
+import User from './screens/User'
 import Plants from './screens/Plants'
 import Measurements from './components/Measurements'
 
@@ -32,7 +33,8 @@ const routes = [
     {path: '/app/plants/:id', component: Measurements},
     {path: '/app/species', component: Species},
     {path: '/app/profile', component: Profile},
-    {path: '/app/users', component: Users}
+    {path: '/app/users', component: Users},
+    {path: '/app/users/:id', component: User}
 ]
 
 const router = new VueRouter({
