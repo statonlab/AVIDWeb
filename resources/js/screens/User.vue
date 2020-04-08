@@ -54,6 +54,9 @@
                         </tbody>
                     </table>
                 </div>
+                <pager @change="goTo($event)"
+                       :last-page="lastPage"
+                       :page="page"/>
             </div>
         </div>
     </div>
@@ -62,25 +65,25 @@
 <script>
   import Avatar from '../components/Avatar'
   import InlineSpinner from '../components/InlineSpinner'
-  import Tabs from '../components/Tabs'
-  import Tab from '../components/Tab'
+  import Pager from '../components/Pager'
 
   export default {
     name: 'User',
 
-    components: {InlineSpinner, Avatar},
+    components: {InlineSpinner, Avatar, Pager},
 
     data() {
       return {
         user        : null,
         sites       : [],
-        loading     : false,
+        loading     : true,
         search      : '',
+        page        : 1,
+        lastPage    : 1,
       }
     },
 
     mounted() {
-      this.loading = true
       this.loadUser()
       this.loadSites()
       this.loading = false
@@ -94,7 +97,6 @@
 
     methods: {
       async loadUser() {
-        this.loading = true
         try {
           const id     = this.$route.params.id
           const {data} = await axios.get(`/web/users/${id}`)
@@ -106,19 +108,20 @@
             type: 'error',
           })
         }
-        this.loading = false
       },
 
       async loadSites() {
-        this.loading = true
         try {
           const id     = this.$route.params.id
           const {data} = await axios.get(`/web/sites/user/${id}`, {
             params: {
               search: this.search,
+              page  : this.page,
             }
           })
           this.sites    = data.data
+          this.page     = data.current_page
+          this.lastPage = data.last_page
         } catch (e) {
           console.error(e)
           this.$notify({
@@ -126,8 +129,14 @@
             type: 'error',
           })
         }
+      },
+
+      goTo(page) {
+        this.loading = true
+        this.page    = page
+        this.loadSites()
         this.loading = false
-      }
+      },
     },
   }
 </script>
