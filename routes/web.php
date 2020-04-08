@@ -68,6 +68,7 @@ Route::group([
 ], function () {
     Route::get('/species', 'HomeController@data');
     Route::get('/users', 'HomeController@data');
+    Route::get('/users/{user}', 'HomeController@data');
 });
 
 /**
@@ -83,5 +84,7 @@ Route::group([
     Route::delete('/species/{species}', 'SpeciesController@delete');
 
     Route::get('/users', 'UserController@index');
-    Route::get('/user/{user}', 'UserController@show');
+    Route::get('/users/{user}', 'UserController@show');
+
+    Route::get('/sites/user/{user}', 'SiteController@index');
 });

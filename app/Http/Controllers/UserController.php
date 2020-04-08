@@ -41,19 +41,11 @@ class UserController extends Controller
         return $this->success($users);
     }
 
-    public function show(User $user)
+    public function show(User $user, Request $request)
     {
         $this->authorize('view', $user);
 
-        $user->load([
-            'organizations',
-            'roles' => function ($query) use ($user) {
-                $query->where('roles.organization_id', $user->organization_id);
-            },
-        ]);
-        $user->loadCount('observations');
         $user->member_since = $user->created_at->diffForHumans();
-        $user->is_leader = $user->isLeader();
 
         return $this->success($user);
     }
