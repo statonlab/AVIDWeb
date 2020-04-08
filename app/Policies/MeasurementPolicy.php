@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Species;
+use App\Measurement;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class SpeciesPolicy
+class MeasurementPolicy
 {
     use HandlesAuthorization;
 
@@ -18,19 +18,19 @@ class SpeciesPolicy
      */
     public function viewAny(User $user)
     {
-        return true;
+        return $user->isAdmin() || $user->isScientist();
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param \App\User $user
-     * @param \App\Species $species
+     * @param \App\Measurement $measurement
      * @return mixed
      */
-    public function view(?User $user, Species $species)
+    public function view(User $user, Measurement $measurement)
     {
-        return true;
+        return $user->id === $measurement->user_id || $user->isAdmin() || $user->isScientist();
     }
 
     /**
@@ -41,54 +41,54 @@ class SpeciesPolicy
      */
     public function create(User $user)
     {
-        return $user->isAdmin();
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param \App\User $user
-     * @param \App\Species $species
+     * @param \App\Measurement $measurement
      * @return mixed
      */
-    public function update(User $user, Species $species)
+    public function update(User $user, Measurement $measurement)
     {
-        return $user->isAdmin();
+        return $user->id === $measurement->user_id || $user->isAdmin() || $user->isScientist();
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param \App\User $user
-     * @param \App\Species $species
+     * @param \App\Measurement $measurement
      * @return mixed
      */
-    public function delete(User $user, Species $species)
+    public function delete(User $user, Measurement $measurement)
     {
-        return $user->isAdmin();
+        return $user->id === $measurement->user_id || $user->isAdmin() || $user->isScientist();
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param \App\User $user
-     * @param \App\Species $species
+     * @param \App\Measurement $measurement
      * @return mixed
      */
-    public function restore(User $user, Species $species)
+    public function restore(User $user, Measurement $measurement)
     {
-        return $user->isAdmin();
+        return $user->id === $measurement->user_id || $user->isAdmin() || $user->isScientist();
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param \App\User $user
-     * @param \App\Species $species
+     * @param \App\Measurement $measurement
      * @return mixed
      */
-    public function forceDelete(User $user, Species $species)
+    public function forceDelete(User $user, Measurement $measurement)
     {
-        return $user->isAdmin();
+        return $user->id === $measurement->user_id || $user->isAdmin() || $user->isScientist();
     }
 }

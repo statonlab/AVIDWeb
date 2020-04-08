@@ -24,7 +24,7 @@ class PlotController extends Controller
             'user' => function ($query) {
                 $query->select(['users.id', 'users.name']);
             },
-        ])->orderBy('number', 'asc')->get();
+        ])->withCount(['plants'])->orderBy('number', 'asc')->get();
 
         return $this->success($plots);
     }
@@ -37,16 +37,14 @@ class PlotController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function create(Request $request)
+    public function create(Site $site, Request $request)
     {
         // Is the user allowed create a plot?
         $this->authorize('create', Plot::class);
+        // Is the user allowed to add plots to this site?
+        $this->authorize('update', $site);
 
         $this->validate($request, $this->validationRules());
-
-        // Is the user allowed to add plots to this site?
-        $site = Site::find($request->site_id);
-        $this->authorize('view', $site);
 
         /** @var \App\User $user */
         $user = $request->user();
@@ -82,6 +80,8 @@ class PlotController extends Controller
             },
         ]);
 
+        $plot->loadCount(['plants']);
+
         return $this->created($plot);
     }
 
@@ -100,7 +100,10 @@ class PlotController extends Controller
             'user' => function ($query) {
                 $query->select(['users.id', 'users.name']);
             },
+            'site' => function ($query) {
+            },
         ]);
+        $plot->loadCount(['plants']);
 
         return $this->success($plot);
     }
@@ -123,7 +126,7 @@ class PlotController extends Controller
 
         if ($plot->number != $request->number) {
             $exists = Plot::where([
-                'site_id' => $plot->id,
+                'site_id' => $plot->site_id,
                 'number' => $request->number,
             ])->exists();
 
@@ -151,6 +154,7 @@ class PlotController extends Controller
                 $query->select(['users.id', 'users.name']);
             },
         ]);
+        $plot->loadCount(['plants']);
 
         return $this->created($plot);
     }
@@ -194,7 +198,7 @@ class PlotController extends Controller
             '90-100%',
         ];
 
-        $rules = [
+        return [
             'number' => 'required|integer',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
@@ -205,11 +209,5 @@ class PlotController extends Controller
             'subcanopy' => ['nullable', Rule::in($percentages)],
             'ground_cover' => ['nullable', Rule::in($percentages)],
         ];
-
-        if (! $is_update) {
-            $rules['site_id'] = 'required|exists:sites,id';
-        }
-
-        return $rules;
     }
 }

@@ -1,13 +1,20 @@
 <template>
     <div class="container">
         <div v-if="site" class="mb-3 d-flex">
-            <div>
-                <h1 class="page-title mb-0">
-                    {{ site.name }}
-                </h1>
-                <p class="mb-0 text-muted">
-                    {{ site.city ? `${site.city}, ` : ''}}{{ site.county.name }}, {{ site.state.name }}
-                </p>
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <router-link :to="`/app/sites`" class="btn btn-link-dark px-1 ml-n1">
+                        <icon name="arrow-back"/>
+                    </router-link>
+                </div>
+                <div class="ml-1">
+                    <h1 class="page-title mb-0">
+                        {{ site.name }}
+                    </h1>
+                    <p class="mb-0 text-muted">
+                        {{ site.city ? `${site.city}, ` : ''}}{{ site.county.name }}, {{ site.state.name }}
+                    </p>
+                </div>
             </div>
             <div class="ml-auto">
                 <button class="btn btn-link">
@@ -38,14 +45,14 @@
 
                 <div class="card mb-3 table-responsive mb-0" v-if="!loading && plots.length > 0">
                     <div class="card-header d-flex align-items-center p-2">
-                        <div>
+                        <div class="flex-grow-1">
                             <input type="search"
                                    class="form-control form-control-search"
                                    title="Search"
                                    placeholder="Search Plots"
                                    v-model="search">
                         </div>
-                        <div class="ml-auto">
+                        <div class="ml-auto flex-shrink-0 pl-1">
                             <button class="btn btn-primary" @click.prevent="showPlotForm = true">
                                 <icon name="add"/>
                                 <span>New Plot</span>
@@ -63,10 +70,10 @@
                         <tbody>
                         <tr v-for="plot in plots" class="hover-visible-container">
                             <td>
-                                <a href="#">Plot #{{ plot.number }}</a>
+                                <router-link :to="`/app/plots/${plot.id}`">Plot #{{ plot.number }}</router-link>
                             </td>
                             <td>
-                                33
+                                {{ plot.plants_count }} {{plot.plants_count === 0 || plot.plants_count > 1 ? 'Plants' : 'Plant'}}
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">

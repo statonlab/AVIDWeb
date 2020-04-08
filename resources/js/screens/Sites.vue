@@ -1,18 +1,20 @@
 <template>
     <div class="container">
+        <h1 class="page-title mb-3">Sites</h1>
+
         <div class="card mb-3">
             <div class="card-header d-flex p-2">
                 <div class="flex-grow-1">
                     <input type="search" class="form-control" placeholder="Search...">
                 </div>
-                <div class="ml-auto">
+                <div class="ml-auto flex-shrink-0 pl-1">
                     <button class="btn btn-primary" @click.prevent="showSiteForm = true">
                         <icon name="add"/>
-                        <span>Site</span>
+                        <span>New Site</span>
                     </button>
                 </div>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body p-0 table-responsive">
                 <p class="mb-0 p-4" v-if="loading">
                     <inline-spinner class="text-primary"/>
                 </p>
@@ -22,9 +24,9 @@
                 <table class="table mb-0 table-middle table-hover" v-if="!loading && sites.length > 0">
                     <thead>
                     <tr>
-                        <th style="width: 100%">Name</th>
-                        <th>Plots</th>
-                        <th>Plants</th>
+                        <th>Name</th>
+                        <th class="text-right">Plots</th>
+                        <th class="text-right">Plants</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -38,8 +40,8 @@
                                 {{ site.county.name }}, {{ site.state.code }}
                             </div>
                         </td>
-                        <td class="text-right">{{ site.plots_count }}</td>
-                        <td class="text-right">{{ site.plants_count }}</td>
+                        <td class="text-right">{{ site.plots_count }} Plots</td>
+                        <td class="text-right">{{ site.plants_count }} Plants</td>
                         <td class="text-right no-wrap">
                             <button class="show-on-hover btn btn-link btn-sm mr-1" v-tooltip="'Edit Site'">
                                 <icon name="create"/>
