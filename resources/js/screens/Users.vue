@@ -36,7 +36,9 @@
                                 <avatar :user="user" :tooltip="false"/>
                             </td>
                             <td>
-                                <div>{{ user.name }}</div>
+                                <router-link :to="`/app/users/${user.id}`">
+                                    <div>{{ user.name }}</div>
+                                </router-link>
                             </td>
                             <td>
                                 <a :href="`mailto:${user.email}`">

@@ -40,4 +40,13 @@ class UserController extends Controller
 
         return $this->success($users);
     }
+
+    public function show(User $user, Request $request)
+    {
+        $this->authorize('view', $user);
+
+        $user->member_since = $user->created_at->diffForHumans();
+
+        return $this->success($user);
+    }
 }
