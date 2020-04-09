@@ -74,7 +74,7 @@ class SiteController extends Controller
             'state_id' => $request->state_id,
             'county_id' => $request->county_id,
             'basal_area' => $request->basal_area,
-            'diameter' => $request->diamater,
+            'diameter' => $request->diameter,
             'city' => $request->city,
             'owner_name' => $request->owner_name,
             'owner_contact' => $request->owner_contact,
@@ -127,16 +127,16 @@ class SiteController extends Controller
             'owner_contact' => 'nullable',
         ]);
 
-        $site->update([
+        $site->fill([
             'name' => $request->name,
             'state_id' => $request->state_id,
             'county_id' => $request->county_id,
             'basal_area' => $request->basal_area,
-            'diameter' => $request->diamater,
+            'diameter' => $request->diameter,
             'city' => $request->city,
             'owner_name' => $request->owner_name,
             'owner_contact' => $request->owner_contact,
-        ]);
+        ])->save();
 
         $site->load(['county', 'state']);
         $site->loadCount(['plants', 'plots']);

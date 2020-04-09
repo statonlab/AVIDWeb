@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <inline-spinner v-if="loading"/>
         <div class="row" v-if="!loading && user">
             <div class="col-xl-4 col-md-5">

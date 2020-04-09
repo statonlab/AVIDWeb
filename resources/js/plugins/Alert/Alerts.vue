@@ -1,7 +1,7 @@
 <template>
     <transition name="fade">
-        <div class="modal show bg-transparent-dark" tabindex="-1" role="dialog" style="display: block" v-show="show">
-            <div class="modal-backdrop">
+        <div class="modal show" tabindex="-1" role="dialog" style="display: block" v-show="show">
+            <div class="modal-backdrop bg-transparent-dark">
                 <div :class="['modal-dialog', {'alert-max-width': type === 'alert'}]" role="document" ref="modal">
                     <simple-alert
                         v-if="type === 'alert'"
@@ -77,5 +77,9 @@
 <style scoped>
     .alert-max-width {
         max-width: 350px;
+    }
+
+    .bg-transparent-dark {
+        background-color: rgba(0, 0, 0, .7);
     }
 </style>

@@ -21,7 +21,7 @@ class MeasurementController extends Controller
         $this->authorize('view', $plant);
 
         $measurements = $this->with($plant->measurements())
-            ->orderBy('date', 'asc')
+            ->orderBy('date', 'desc')
             ->paginate(20);
 
         return $this->success($measurements);

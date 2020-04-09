@@ -48,6 +48,12 @@ class SpeciesController extends Controller
         ]);
 
         $name = "$request->genus $request->species";
+        if (Species::where('name', $name)->exists()) {
+            return $this->error('Genus species must be unique', [
+                'species' => ["$name already exists."],
+            ]);
+        }
+
         $species = Species::create([
             'genus' => $request->genus,
             'species' => $request->species,
@@ -74,11 +80,19 @@ class SpeciesController extends Controller
         ]);
 
         $name = "$request->genus $request->species";
-        $species->update([
+        if ($name !== $species->name) {
+            if (Species::where('name', $name)->exists()) {
+                return $this->error('Genus species must be unique', [
+                    'species' => ["$name already exists."],
+                ]);
+            }
+        }
+
+        $species->fill([
             'genus' => $request->genus,
             'species' => $request->species,
             'name' => $name,
-        ]);
+        ])->save();
 
         return $this->created($species);
     }

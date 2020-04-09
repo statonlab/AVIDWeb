@@ -12,11 +12,11 @@ class PlantTypeSeeder extends Seeder
     public function run()
     {
         \App\PlantType::firstOrCreate([
-            'name' => 'Spring Wildflowers',
+            'name' => 'Spring Wildflower',
         ]);
 
         \App\PlantType::firstOrCreate([
-            'name' => 'Woody Seedlings',
+            'name' => 'Woody Seedling',
         ]);
     }
 }

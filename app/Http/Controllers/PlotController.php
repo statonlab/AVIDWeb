@@ -24,7 +24,7 @@ class PlotController extends Controller
             'user' => function ($query) {
                 $query->select(['users.id', 'users.name']);
             },
-        ])->withCount(['plants'])->orderBy('number', 'asc')->get();
+        ])->withCount(['plants'])->orderBy('number', 'asc')->paginate(20);
 
         return $this->success($plots);
     }
@@ -119,8 +119,7 @@ class PlotController extends Controller
      */
     public function update(Request $request, Plot $plot)
     {
-        // Is the user allowed create a plot?
-        $this->authorize('update', Plot::class);
+        $this->authorize('update', $plot);
 
         $this->validate($request, $this->validationRules(true));
 
@@ -137,7 +136,7 @@ class PlotController extends Controller
             }
         }
 
-        $plot->update([
+        $plot->fill([
             'number' => $request->number,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
@@ -147,11 +146,13 @@ class PlotController extends Controller
             'canopy' => $request->canopy,
             'subcanopy' => $request->subcanopy,
             'ground_cover' => $request->ground_cover,
-        ]);
+        ])->save();
 
         $plot->load([
             'user' => function ($query) {
                 $query->select(['users.id', 'users.name']);
+            },
+            'site' => function ($query) {
             },
         ]);
         $plot->loadCount(['plants']);

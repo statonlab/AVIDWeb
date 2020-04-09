@@ -48,6 +48,7 @@
                             </label>
                             <select name="is_alive"
                                     id="alive"
+                                    v-model="form.is_alive"
                                     :class="{'is-invalid': form.errors.has('is_located')}"
                                     class="form-control">
                                 <option value="">Select One</option>
@@ -138,8 +139,8 @@
       if (this.measurement) {
         this.form.setDefault({
           ...this.measurement,
-          is_alive: this.measurement.is_alive ? '1' : '0',
           is_located: this.measurement.is_located ? '1' : '0',
+          is_alive: this.measurement.is_alive === null ? '' : (this.measurement.is_alive ? '1' : '0'),
           date: this.measurement.date ? moment(this.measurement.date).format('YYYY-MM-DD') : null,
         })
         this.date = this.measurement.date ? moment(this.measurement.date).toDate() : null
@@ -152,7 +153,7 @@
         date  : null,
         form  : new Form({
           is_located: '0',
-          is_alive  : '1',
+          is_alive  : '',
           date      : null,
           height    : '',
         }),

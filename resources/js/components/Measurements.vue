@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <div class="d-flex align-items-center justify-content-center" v-if="loading">
             <inline-spinner class="text-primary"/>
         </div>
@@ -13,11 +13,11 @@
                     </div>
                     <div class="ml-1">
                         <h1 class="page-title">Plant #{{ plant.tag }}</h1>
-                        <p class="mb-0 text-muted">{{ plant.species.name }}</p>
+                        <p class="mb-0 text-muted">{{ plant.type.name }} ({{ plant.species.name }})</p>
                     </div>
                 </div>
                 <div class="ml-auto">
-                    <button class="btn btn-link">
+                    <button class="btn btn-link" @click.prevent="editingPlant = true">
                         <icon name="create"/>
                         <span>Edit Plant</span>
                     </button>
@@ -28,12 +28,8 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-header d-flex p-2">
-                            <div class="flex-grow-1">
-                                <input type="search"
-                                       name="search"
-                                       class="form-control"
-                                       title="Search..."
-                                       placeholder="Search...">
+                            <div class="flex-grow-1 pl-1">
+                                <strong>Measurements</strong>
                             </div>
                             <div class="ml-auto flex-shrink-0 pl-1">
                                 <button class="btn btn-primary" @click.prevent="add">
@@ -61,20 +57,36 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="measurement in measurements" class="hover-visible-container">
+                                <tr v-for="measurement in measurements"
+                                    :class="{'hover-visible-container': deleting !== measurement.id}">
                                     <td>{{ moment(measurement.date).format('MMM Do, YYYY') }}</td>
-                                    <td>{{ measurement.is_alive ? 'Yes' : 'No'}}</td>
                                     <td>{{ measurement.is_located ? 'Yes' : 'No'}}</td>
-                                    <td>{{ measurement.height }} in.</td>
+                                    <td>
+                                        <span v-if="measurement.is_alive !== null">
+                                            {{ measurement.is_alive ? 'Yes' : 'No'}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span v-if="measurement.height !== null">
+                                            {{ measurement.height }} in.
+                                        </span>
+                                    </td>
                                     <td>
                                         <div class="d-flex justify-content-end hover-visible">
                                             <button type="button"
                                                     class="btn btn-link btn-sm"
+                                                    v-tooltip="'Edit'"
                                                     @click.prevent="edit(measurement)">
                                                 <icon name="create"/>
                                             </button>
-                                            <button type="button" class="btn btn-link btn-sm">
-                                                <icon name="trash"/>
+                                            <button type="button"
+                                                    class="btn btn-sm"
+                                                    v-tooltip="'Delete'"
+                                                    @click.prevent="destroy(measurement)"
+                                                    :class="deleting !== measurement.id ? 'btn-link' : 'btn-danger'"
+                                                    :disabled="deleting === measurement.id">
+                                                <icon name="trash" v-if="measurement.id !== deleting"/>
+                                                <inline-spinner v-else/>
                                             </button>
                                         </div>
                                     </td>
@@ -123,6 +135,13 @@
                 @update="updated($event)"
                 @create="created($event)"
                 :plant="plant"/>
+
+        <plant-form
+                v-if="editingPlant"
+                :plant="plant"
+                @close="editingPlant = false"
+                @update="plantUpdated($event)"
+        />
     </div>
 </template>
 
@@ -131,16 +150,18 @@
   import Icon from './Icon'
   import MeasurementForm from '../forms/MeasurementForm'
   import moment from 'moment'
+  import PlantForm from '../forms/PlantForm'
 
   export default {
     name: 'Measurements',
 
-    components: {MeasurementForm, Icon, InlineSpinner},
+    components: {PlantForm, MeasurementForm, Icon, InlineSpinner},
 
     data() {
       return {
         moment,
         loading            : true,
+        editingPlant       : false,
         loadingMeasurements: true,
         plant              : null,
         showForm           : false,
@@ -149,6 +170,7 @@
         page               : 1,
         lastPage           : 1,
         measurement        : null,
+        deleting           : false,
       }
     },
 
@@ -175,7 +197,6 @@
       },
 
       async loadMeasurements() {
-        this.loadingMeasurements = true
         try {
           const {id}   = this.$route.params
           const {data} = await axios.get(`/web/plants/${id}/measurements`, {
@@ -220,6 +241,35 @@
       created(measurement) {
         this.closeForm()
         this.loadMeasurements()
+      },
+
+      destroy(measurement) {
+        if (this.deleting !== null) {
+          return
+        }
+
+        this.$confirm({
+          title    : 'Are you sure you want to delete measurement collected on ' + moment(measurement.date).format('MMM Do, YYYY') + '?',
+          text     : 'This action is permanent.',
+          onConfirm: async () => {
+            this.deleting = measurement.id
+            try {
+              await axios.delete(`/web/measurements/${measurement.id}`)
+              this.loadMeasurements()
+            } catch (e) {
+              console.error(e)
+              this.$notify({
+                text: 'Unable to delete measurement. Please try refreshing the page.',
+              })
+            }
+            this.deleting = null
+          },
+        })
+      },
+
+      plantUpdated(plant) {
+        this.plant        = plant
+        this.editingPlant = false
       },
     },
   }

@@ -252,7 +252,7 @@
     },
 
     props: {
-      site: {required: true},
+      site: {required: false},
       plot: {required: false, type: Object, default: null},
     },
 
@@ -314,7 +314,7 @@
       async update() {
         this.loading = true
         try {
-          const {data} = await this.form.put('/web/plots')
+          const {data} = await this.form.put(`/web/plots/${this.plot.id}`)
           this.$notify({
             type: 'success',
             text: 'Plot updated successfully',

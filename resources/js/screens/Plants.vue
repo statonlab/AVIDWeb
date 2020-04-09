@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <div class="d-flex align-items-center justify-content-center" v-if="loading">
             <inline-spinner class="text-primary"/>
         </div>
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="ml-auto">
-                    <button class="btn btn-link">
+                    <button class="btn btn-link" @click.prevent="editingPlot = true">
                         <icon name="create"/>
                         <span>Edit Plot</span>
                     </button>
@@ -33,7 +33,11 @@
                     <div class="card mb-3">
                         <div class="card-header d-flex p-2">
                             <div class="flex-grow-1">
-                                <input type="search" class="search form-control" placeholder="Search plants">
+                                <input type="search"
+                                       class="search form-control"
+                                       placeholder="Search plants"
+                                       v-model="search"
+                                       title="Search plants">
                             </div>
                             <div class="ml-auto pl-1 flex-shrink-0">
                                 <button class="btn btn-primary" @click.prevent="showForm = true">
@@ -57,14 +61,30 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="plant in plants">
+                                <tr v-for="plant in plants" :class="{'hover-visible-container': deleting !== plant.id}">
                                     <td>
                                         <router-link :to="`/app/plants/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
                                     </td>
                                     <td>{{ plant.species.name }}</td>
                                     <td>{{ plant.quadrant }}</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ plant.measurements_count }}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-end hover-visible">
+                                            <button type="button" class="btn btn-sm btn-link"
+                                                    v-tooltip="'Edit'"
+                                                    @click.prevent="edit(plant)">
+                                                <icon name="create"/>
+                                            </button>
+                                            <button type="button"
+                                                    @click="destroy(plant)"
+                                                    class="btn btn-sm"
+                                                    :class="deleting === plant.id ? 'btn-danger': 'btn-link'"
+                                                    v-tooltip="'Delete'">
+                                                <icon name="trash" v-if="deleting !== plant.id"/>
+                                                <inline-spinner v-else/>
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -100,6 +120,9 @@
                                 <dt>Subcanopy</dt>
                                 <dd v-if="plot.subcanopy !== null">{{plot.subcanopy}}</dd>
                                 <dd v-else>Not Provided</dd>
+
+                                <dt>Site</dt>
+                                <dd>{{plot.site.name}}</dd>
                             </dl>
                         </div>
                     </div>
@@ -122,9 +145,18 @@
 
         <plant-form
                 :plot="plot"
-                @close="showForm = false"
+                :plant="plant"
+                @close="closeForm"
+                @update="updated($event)"
                 v-if="showForm"
                 @create="created($event)"
+        />
+
+        <plot-form
+                :plot="plot"
+                v-if="editingPlot"
+                @close="editingPlot = false"
+                @update="plotUpdated($event)"
         />
     </div>
 </template>
@@ -135,28 +167,37 @@
   import Icon from '../components/Icon'
   import PlantForm from '../forms/PlantForm'
   import Pager from '../components/Pager'
+  import PlotForm from '../forms/PlotForm'
 
   export default {
     name      : 'Plants',
-    components: {Pager, PlantForm, Icon, PlotMap, InlineSpinner},
+    components: {PlotForm, Pager, PlantForm, Icon, PlotMap, InlineSpinner},
     data() {
       return {
-        loading : true,
-        plot    : null,
-        total   : 0,
-        page    : 1,
-        lastPage: 1,
-        search  : '',
-        request : null,
-        plants  : [],
-        showForm: false,
-
+        loading    : true,
+        plot       : null,
+        deleting   : null,
+        total      : 0,
+        editingPlot: false,
+        page       : 1,
+        lastPage   : 1,
+        search     : '',
+        request    : null,
+        plants     : [],
+        showForm   : false,
+        plant      : null,
       }
     },
 
     mounted() {
       this.loadPlot()
       this.loadPlants()
+    },
+
+    watch: {
+      search() {
+        this.loadPlants()
+      }
     },
 
     methods: {
@@ -210,7 +251,7 @@
       },
 
       created(plant) {
-        this.showForm = false
+        this.closeForm()
         this.loadPlants()
         this.$notify({
           text: 'Plant created successfully',
@@ -219,12 +260,52 @@
       },
 
       updated(plant) {
-        this.showForm = false
+        this.closeForm()
         this.plants = this.plants.map(p => p.id === plant.id ? plant : p)
         this.$notify({
           text: 'Plant updated successfully',
           type: 'success',
         })
+      },
+
+      closeForm() {
+        this.plant    = null
+        this.showForm = false
+      },
+
+      edit(plant) {
+        this.plant    = plant
+        this.showForm = true
+      },
+
+      destroy(plant) {
+        if (this.deleting !== null) {
+          return
+        }
+
+        this.$confirm({
+          title    : `Are you sure you want to delete Plant #${plant.tag}?`,
+          text     : 'This action is permanent!',
+          onConfirm: async () => {
+            this.deleting = plant.id
+            try {
+              await axios.delete(`/web/plants/${plant.id}`)
+              this.loadPlants()
+            } catch (e) {
+              this.$notify({
+                text: 'Unable to delete plant. Please try refreshing the page.',
+                type: 'error',
+              })
+              console.error(e)
+            }
+            this.deleting = null
+          },
+        })
+      },
+
+      plotUpdated(plot) {
+        this.plot        = plot
+        this.editingPlot = false
       },
     },
   }

@@ -6,6 +6,7 @@
                 ref="btn"
                 @click="focus()"
                 @keyup.down="focus()"
+                class="font-weight-normal"
                 :class="['btn', 'btn-select', 'd-flex', {'btn-placeholder-effect': value === null, 'btn-select-active': value !== null, 'border-danger': error}]">
             <span class="text-case-normal">
                 {{ selected }}
@@ -88,6 +89,10 @@
         },
         deep: true,
       },
+
+      value() {
+        this.setIndex()
+      }
     },
 
     methods: {
