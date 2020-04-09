@@ -36,7 +36,7 @@
                                        placeholder="Search...">
                             </div>
                             <div class="ml-auto flex-shrink-0 pl-1">
-                                <button class="btn btn-primary" @click.prevent="showForm = true">
+                                <button class="btn btn-primary" @click.prevent="add">
                                     <icon name="add"/>
                                     <span>Add Measurement</span>
                                 </button>
@@ -50,7 +50,7 @@
                             <div class="p-4" v-if="!loadingMeasurements && measurements.length === 0">
                                 <p class="mb-0 text-muted">No measurements recorded yet. Use the add measurement button above to add one.</p>
                             </div>
-                            <table class="table" v-if="!loadingMeasurements && measurements.length > 0">
+                            <table class="table mb-0" v-if="!loadingMeasurements && measurements.length > 0">
                                 <thead>
                                 <tr>
                                     <th>Date</th>
@@ -61,12 +61,23 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="measurement in measurements">
-                                    <td>{{ measurement.date }}</td>
+                                <tr v-for="measurement in measurements" class="hover-visible-container">
+                                    <td>{{ moment(measurement.date).format('MMM Do, YYYY') }}</td>
                                     <td>{{ measurement.is_alive ? 'Yes' : 'No'}}</td>
                                     <td>{{ measurement.is_located ? 'Yes' : 'No'}}</td>
                                     <td>{{ measurement.height }} in.</td>
-                                    <td></td>
+                                    <td>
+                                        <div class="d-flex justify-content-end hover-visible">
+                                            <button type="button"
+                                                    class="btn btn-link btn-sm"
+                                                    @click.prevent="edit(measurement)">
+                                                <icon name="create"/>
+                                            </button>
+                                            <button type="button" class="btn btn-link btn-sm">
+                                                <icon name="trash"/>
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -108,6 +119,9 @@
         <measurement-form
                 v-if="showForm"
                 @close="showForm = false"
+                :measurement="measurement"
+                @update="updated($event)"
+                @create="created($event)"
                 :plant="plant"/>
     </div>
 </template>
@@ -116,15 +130,16 @@
   import InlineSpinner from './InlineSpinner'
   import Icon from './Icon'
   import MeasurementForm from '../forms/MeasurementForm'
-  import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+  import moment from 'moment'
 
   export default {
     name: 'Measurements',
 
-    components: {MeasurementForm, Icon, InlineSpinner, DatePicker},
+    components: {MeasurementForm, Icon, InlineSpinner},
 
     data() {
       return {
+        moment,
         loading            : true,
         loadingMeasurements: true,
         plant              : null,
@@ -133,6 +148,7 @@
         total              : 0,
         page               : 1,
         lastPage           : 1,
+        measurement        : null,
       }
     },
 
@@ -179,6 +195,31 @@
           })
         }
         this.loadingMeasurements = false
+      },
+
+      add() {
+        this.measurement = null
+        this.showForm    = true
+      },
+
+      edit(measurement) {
+        this.measurement = measurement
+        this.showForm    = true
+      },
+
+      closeForm() {
+        this.measurement = null
+        this.showForm    = false
+      },
+
+      updated(measurement) {
+        this.closeForm()
+        this.measurements = this.measurements.map(m => m.id === measurement.id ? measurement : m)
+      },
+
+      created(measurement) {
+        this.closeForm()
+        this.loadMeasurements()
       },
     },
   }

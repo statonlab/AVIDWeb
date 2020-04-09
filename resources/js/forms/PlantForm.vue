@@ -6,7 +6,7 @@
                     <modal-title>Add A Plant</modal-title>
                     <close @click.prevent="$emit('close')"/>
                 </modal-header>
-                <modal-body>
+                <modal-body class="position-static">
                     <div class="form-group">
                         <label for="plant">Plant Type
                             <required/>
@@ -24,7 +24,7 @@
                         </small>
                     </div>
 
-                    <div class="row">
+                    <div class="row position-static">
                         <div class="form-group col-6">
                             <label for="tag-num">
                                 Tag Number
@@ -41,7 +41,7 @@
                                 {{ form.errors.first('tag') }}
                             </small>
                         </div>
-                        <div class="form-group col-6">
+                        <div class="form-group col-6 position-static">
                             <label for="species">
                                 Species
                                 <required/>
