@@ -43,4 +43,16 @@ class UserPolicy
     {
         return $user->id === $model->id || $user->isAdmin() || $user->isScientist();
     }
+
+    /**
+     * Determine whether the user can set the role of another user.
+     *
+     * @param \App\User $user
+     * @param \App\User $model
+     * @return mixed
+     */
+    public function setRole(User $user, User $model)
+    {
+        return $user->isAdmin();
+    }
 }
