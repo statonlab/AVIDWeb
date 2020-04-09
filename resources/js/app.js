@@ -25,21 +25,29 @@ Vue.use(Alert)
 Vue.use(VueNotification)
 Vue.use(VueRouter)
 
+Vue.filter('plural', (value, singular, plural) => {
+  if (value === 0 || value > 1) {
+    return `${value} ${plural}`
+  }
+
+  return `${value} ${singular}`
+})
+
 const routes = [
-    {path: '/app', component: Dashboard},
-    {path: '/app/sites', component: Sites},
-    {path: '/app/sites/:id', component: Plots},
-    {path: '/app/plots/:id', component: Plants},
-    {path: '/app/plants/:id', component: Measurements},
-    {path: '/app/species', component: Species},
-    {path: '/app/profile', component: Profile},
-    {path: '/app/users', component: Users},
-    {path: '/app/users/:id', component: User}
+  {path: '/app', component: Dashboard},
+  {path: '/app/sites', component: Sites},
+  {path: '/app/sites/:id', component: Plots},
+  {path: '/app/plots/:id', component: Plants},
+  {path: '/app/plants/:id', component: Measurements},
+  {path: '/app/species', component: Species},
+  {path: '/app/profile', component: Profile},
+  {path: '/app/users', component: Users},
+  {path: '/app/users/:id', component: User},
 ]
 
 const router = new VueRouter({
-    routes,
-    mode: 'history',
+  routes,
+  mode: 'history',
 })
 
 /**
@@ -50,23 +58,23 @@ const router = new VueRouter({
 
 // Add tooltips support using v-tooltip directive
 Vue.directive('tooltip', function (el, binding) {
-    const modifiers = Object.keys(binding.modifiers)
-    let placement   = null
+  const modifiers = Object.keys(binding.modifiers)
+  let placement   = null
 
-    if (modifiers.length > 0) {
-        placement = modifiers[0]
-    }
-    if (modifiers) {
-        $(el).tooltip({
-            title  : binding.value,
-            ...(placement ? {placement} : null),
-            trigger: 'hover',
-        })
-    }
+  if (modifiers.length > 0) {
+    placement = modifiers[0]
+  }
+  if (modifiers) {
+    $(el).tooltip({
+      title  : binding.value,
+      ...(placement ? {placement} : null),
+      trigger: 'hover',
+    })
+  }
 })
 
 Vue.config.ignoredElements = ['ion-icon']
 new Vue({
-    router,
-    components: {App},
+  router,
+  components: {App},
 }).$mount('#app')

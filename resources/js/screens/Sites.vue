@@ -1,11 +1,11 @@
 <template>
-    <div class="container">
+    <div>
         <h1 class="page-title mb-3">Sites</h1>
 
         <div class="card mb-3">
             <div class="card-header d-flex p-2">
                 <div class="flex-grow-1">
-                    <input type="search" class="form-control" placeholder="Search...">
+                    <input type="search" class="form-control" placeholder="Search..." v-model="search">
                 </div>
                 <div class="ml-auto flex-shrink-0 pl-1">
                     <button class="btn btn-primary" @click.prevent="showSiteForm = true">
@@ -25,13 +25,13 @@
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th class="text-right">Plots</th>
-                        <th class="text-right">Plants</th>
+                        <th>Plots</th>
+                        <th>Plants</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="site in sites" class="on-hover">
+                    <tr v-for="site in sites" :class="{'on-hover': deleting !== site.id}">
                         <td>
                             <router-link :to="`/app/sites/${site.id}`">
                                 <strong>{{ site.name }}</strong>
@@ -40,14 +40,19 @@
                                 {{ site.county.name }}, {{ site.state.code }}
                             </div>
                         </td>
-                        <td class="text-right">{{ site.plots_count }} Plots</td>
-                        <td class="text-right">{{ site.plants_count }} Plants</td>
+                        <td>{{ site.plots_count | plural('Plot', 'Plots')}}</td>
+                        <td>{{ site.plants_count | plural('Plant', 'Plants') }}</td>
                         <td class="text-right no-wrap">
-                            <button class="show-on-hover btn btn-link btn-sm mr-1" v-tooltip="'Edit Site'">
+                            <button class="show-on-hover btn btn-link btn-sm mr-1"
+                                    @click.prevent="edit(site)"
+                                    v-tooltip="'Edit Site'">
                                 <icon name="create"/>
                             </button>
-                            <button class="show-on-hover btn btn-link btn-sm" v-tooltip="'Delete Site'">
-                                <icon name="trash"/>
+                            <button class="show-on-hover btn btn-link btn-sm"
+                                    v-tooltip="'Delete Site'"
+                                    @click.prevent="destroy(site)">
+                                <icon name="trash" v-if="deleting !== site.id"/>
+                                <inline-spinner class="text-primary" v-else/>
                             </button>
                         </td>
                     </tr>
@@ -56,11 +61,13 @@
             </div>
         </div>
 
-        <site-form
-                v-if="showSiteForm"
-                @close="showSiteForm = false"
-                @create="siteCreated($event)"
-        />
+        <pager :last-page="lastPage" :page="page" @change="goTo($event)"/>
+
+        <site-form v-if="showSiteForm"
+                   @close="closeForm"
+                   @create="siteCreated($event)"
+                   @update="siteUpdated($event)"
+                   :site="site"/>
     </div>
 </template>
 
@@ -68,11 +75,12 @@
   import Icon from '../components/Icon'
   import SiteForm from '../forms/SiteForm'
   import InlineSpinner from '../components/InlineSpinner'
+  import Pager from '../components/Pager'
 
   export default {
     name: 'Sites',
 
-    components: {InlineSpinner, SiteForm, Icon},
+    components: {Pager, InlineSpinner, SiteForm, Icon},
 
     data() {
       return {
@@ -82,6 +90,10 @@
         page        : 1,
         lastPage    : 1,
         total       : 0,
+        site        : null,
+        deleting    : null,
+        search      : '',
+        _request    : null,
       }
     },
 
@@ -90,22 +102,81 @@
       this.loadSites()
     },
 
+    watch: {
+      search() {
+        this.loadSites()
+      },
+    },
+
     methods: {
       async loadSites() {
+        if (this._request) {
+          this._request()
+        }
+
         try {
-          const {data}  = await axios.get('/web/sites')
+          const {data}  = await axios.get('/web/sites', {
+            params     : {
+              search: this.search,
+              page  : this.page,
+            },
+            cancelToken: new axios.CancelToken(c => this._request = c),
+          })
           this.total    = data.total
           this.sites    = data.data
           this.lastPage = data.last_page
+          this.loading  = false
         } catch (e) {
-          console.error(e)
+          if (!axios.isCancel(e)) {
+            this.loading = false
+            console.error(e)
+          }
         }
-        this.loading = false
       },
 
       siteCreated() {
         this.loadSites()
+        this.closeForm()
+      },
+
+      siteUpdated(site) {
+        this.closeForm()
+        this.sites = this.sites.map(s => s.id === site.id ? site : s)
+      },
+
+      closeForm() {
+        this.site         = null
         this.showSiteForm = false
+      },
+
+      edit(site) {
+        this.site         = site
+        this.showSiteForm = true
+      },
+
+      destroy(site) {
+        this.$confirm({
+          title    : `Are you sure you want to delete ${site.name}?`,
+          text     : 'This action is permanent!',
+          onConfirm: async () => {
+            this.deleting = site.id
+            try {
+              await axios.delete(`/web/sites/${site.id}`)
+              await this.loadSites()
+            } catch (e) {
+              this.$notify({
+                text: 'Unable to delete site. Please try refreshing the page.',
+                type: 'error',
+              })
+            }
+            this.deleting = null
+          },
+        })
+      },
+
+      goTo(page) {
+        this.page = page
+        this.loadSites()
       },
     },
   }

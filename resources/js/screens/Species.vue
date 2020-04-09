@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <div class="d-flex">
             <h1 class="page-title mb-3">Species</h1>
             <div class="ml-auto text-muted">

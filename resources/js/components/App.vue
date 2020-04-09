@@ -1,5 +1,7 @@
 <template>
     <div>
+        <alerts/>
+
         <div :class="['main-container', '', {'sidebar-closed': !showSidebar}]">
             <!-- Navbar -->
             <navbar @toggle="toggleSidebar" ref="navbar"/>
