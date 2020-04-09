@@ -109,8 +109,10 @@
                             </dd>
 
                             <dt>Basal Area</dt>
-                            <dd class="text-muted">{{optional(site.basal_area)}}
-                                <span v-show="site.basal_area">ft<sup>2</sup>/ac</span></dd>
+                            <dd class="text-muted">
+                                {{optional(site.basal_area)}}
+                                <span v-show="site.basal_area">ft<sup>2</sup>/ac</span>
+                            </dd>
 
                             <dt>Average Overstory Tree Diameter</dt>
                             <dd class="text-muted">{{optional(site.diameter)}} <span v-show="site.diameter">in</span>
@@ -147,7 +149,7 @@
 
     data() {
       return {
-        search    : '',
+        search        : '',
         showPlotForm  : false,
         plots         : [],
         selectedPlotID: null,

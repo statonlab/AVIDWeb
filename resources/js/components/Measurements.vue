@@ -17,7 +17,10 @@
                     </div>
                 </div>
                 <div class="ml-auto">
-
+                    <button class="btn btn-link">
+                        <icon name="create"/>
+                        <span>Edit Plant</span>
+                    </button>
                 </div>
             </div>
 
