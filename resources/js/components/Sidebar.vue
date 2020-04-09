@@ -3,6 +3,7 @@
         <div class="sidebar-menu my-4">
             <div class="nav nav-pills flex-column">
                 <router-link
+                        @click.native="$emit('close')"
                         active-class="active"
                         v-for="(item, key) in items"
                         :to="item.to"
@@ -24,6 +25,7 @@
 
   export default {
     name      : 'Sidebar',
+
     components: {Icon},
 
     data() {

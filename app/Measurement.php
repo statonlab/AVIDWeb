@@ -21,10 +21,17 @@ class Measurement extends Model
         'height',
     ];
 
+    protected $casts = [
+        'is_located' => 'boolean',
+        'is_alive' => 'boolean',
+        'date' => 'date',
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function plant() {
+    public function plant()
+    {
         return $this->belongsTo(Plant::class);
     }
 
