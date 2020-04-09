@@ -116,11 +116,12 @@
   import InlineSpinner from './InlineSpinner'
   import Icon from './Icon'
   import MeasurementForm from '../forms/MeasurementForm'
+  import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 
   export default {
     name: 'Measurements',
 
-    components: {MeasurementForm, Icon, InlineSpinner},
+    components: {MeasurementForm, Icon, InlineSpinner, DatePicker},
 
     data() {
       return {
