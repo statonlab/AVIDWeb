@@ -21,7 +21,7 @@ class MeasurementController extends Controller
         $this->authorize('view', $plant);
 
         $measurements = $this->with($plant->measurements())
-            ->orderBy('date', 'asc')
+            ->orderBy('date', 'desc')
             ->paginate(20);
 
         return $this->success($measurements);
@@ -90,12 +90,12 @@ class MeasurementController extends Controller
         /** @var \App\User $user */
         $user = $request->user();
         $measurement = Measurement::create([
-            'plant_id' => $request->plant_id,
+            'plant_id' => $plant->id,
             'user_id' => $user->id,
-            'height' => $request->height,
-            'is_alive' => $request->is_alive == 1,
-            'is_located' => $request->is_located,
+            'is_located' => $request->is_located == 1,
             'date' => Carbon::createFromFormat('Y-m-d', $request->date),
+            'height' => $request->is_located == 1 ? $request->height : null,
+            'is_alive' => $request->is_located == 1 ? $request->is_alive == 1 : null,
         ]);
 
         $this->with($measurement);
@@ -129,11 +129,23 @@ class MeasurementController extends Controller
         }
 
         $measurement->fill([
-            'height' => $request->height,
-            'is_alive' => $request->is_alive == 1,
             'is_located' => $request->is_located,
             'date' => Carbon::createFromFormat('Y-m-d', $request->date),
-        ])->save();
+        ]);
+
+        if ($request->is_located == 1) {
+            $measurement->fill([
+                'height' => $request->height,
+                'is_alive' => $request->is_alive == 1,
+            ]);
+        } else {
+            $measurement->fill([
+                'height' => null,
+                'is_alive' => null,
+            ]);
+        }
+
+        $measurement->save();
 
         $this->with($measurement);
 

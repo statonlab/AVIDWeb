@@ -33,7 +33,8 @@ class PlantController extends Controller
         $plants = $plot->plants()->with([
             'species',
             'type',
-        ])->orderBy('tag', 'asc');
+            'plot'
+        ])->withCount(['measurements'])->orderBy('tag', 'asc');
 
         if (! empty($request->search)) {
             $term = $request->search;
@@ -41,6 +42,9 @@ class PlantController extends Controller
                 $term = "%$term%";
                 $query->whereHas('type', function ($query) use ($term) {
                     $query->where('plant_types.name', 'like', $term);
+                });
+                $query->orWhereHas('species', function($query) use($term) {
+                    $query->where('species.name', 'like', $term);
                 });
                 $query->orWhere('tag', 'like', $term);
                 $query->orWhere('quadrant', 'like', $term);
@@ -92,7 +96,10 @@ class PlantController extends Controller
         $plant->load([
             'species',
             'type',
+            'plot'
         ]);
+
+        $plant->loadCount(['measurements']);
 
         return $this->created($plant);
     }
@@ -118,6 +125,7 @@ class PlantController extends Controller
                 $query->with(['site']);
             },
         ]);
+        $plant->loadCount(['measurements']);
 
         return $this->success($plant);
     }
@@ -162,9 +170,15 @@ class PlantController extends Controller
         ])->save();
 
         $plant->load([
-            'species',
-            'type',
+            'type' => function ($query) {
+            },
+            'species' => function ($query) {
+            },
+            'plot' => function ($query) {
+                $query->with(['site']);
+            },
         ]);
+        $plant->loadCount(['measurements']);
 
         return $this->created($plant);
     }

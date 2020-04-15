@@ -1,11 +1,10 @@
 <template>
     <modal @close="$emit('close')" medium>
-        <form action="" @submit.prevent="submit()">
+        <form action="" @submit.prevent="save()">
             <modal-card>
                 <modal-header>
-                    <modal-title>
-                        Add a New Site
-                    </modal-title>
+                    <modal-title v-if="!site">Add a New Site</modal-title>
+                    <modal-title v-if="site">Update {{ site.name }}</modal-title>
                     <close @click="$emit('close')"/>
                 </modal-header>
                 <modal-body>
@@ -148,8 +147,8 @@
                     </div>
                 </modal-body>
                 <modal-footer class="d-flex">
-                    <button class="btn btn-primary" type="submit" :disabled="loading">
-                        <inline-spinner v-if="loading"/>
+                    <button class="btn btn-primary" type="submit" :disabled="saving">
+                        <inline-spinner v-if="saving"/>
                         <span>Save</span>
                     </button>
                     <button class="btn btn-light ml-auto"
@@ -194,9 +193,13 @@
       Modal,
     },
 
+    props: {
+      site: {required: false, default: null},
+    },
+
     data() {
       return {
-        loading        : false,
+        saving        : false,
         states         : [],
         stateSearch    : '',
         counties       : [],
@@ -219,6 +222,9 @@
     },
 
     mounted() {
+      if (this.site) {
+        this.form.setDefault(this.site)
+      }
       this.loadStates()
     },
 
@@ -255,6 +261,9 @@
             }
           })
           this.loadingStates = false
+          if (this.form.state_id) {
+            this.loadCounties()
+          }
         } catch (e) {
           if (!axios.isCancel(e)) {
             this.loadingStates = false
@@ -302,13 +311,46 @@
         this.$refs.county.clear()
       },
 
+      save() {
+        if (this.site) {
+          this.update()
+        } else {
+          this.submit()
+        }
+      },
+
+      async update() {
+        this.saving = true
+        try {
+          const {data} = await this.form.put(`/web/sites/${this.site.id}`)
+          this.$emit('update', data)
+        } catch (e) {
+          if (e.response && e.response.status !== 422) {
+            this.$notify({
+              text: 'Unable to save site. Please try refreshing the page.',
+              type: 'error',
+            })
+          }
+          console.error(e)
+        }
+        this.saving = false
+      },
+
       async submit() {
+        this.saving = true
         try {
           const {data} = await this.form.post(`/web/sites`)
           this.$emit('create', data)
         } catch (e) {
+          if (e.response && e.response.status !== 422) {
+            this.$notify({
+              text: 'Unable to save site. Please try refreshing the page.',
+              type: 'error',
+            })
+          }
           console.error(e)
         }
+        this.saving = false
       },
     },
   }

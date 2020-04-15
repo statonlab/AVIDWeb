@@ -1,10 +1,12 @@
 <template>
     <div>
+        <alerts/>
+
         <div :class="['main-container', '', {'sidebar-closed': !showSidebar}]">
             <!-- Navbar -->
-            <navbar @toggle="toggleSidebar()"/>
+            <navbar @toggle="toggleSidebar" ref="navbar"/>
             <!-- sidebar -->
-            <sidebar/>
+            <sidebar ref="sidebar" @close="smClose"/>
             <div class="main-content">
                 <!-- main content -->
                 <div class="py-4">
@@ -38,9 +40,40 @@
       }
     },
 
+    mounted() {
+      const outClick = (e) => {
+        if (this.showSidebar || !e) {
+          return
+        }
+
+        if (this.$refs.sidebar.$el.contains(e.target)) {
+          return
+        }
+
+        if (this.$refs.navbar.$el.contains(e.target)) {
+          return
+        }
+
+        e.preventDefault()
+
+        this.toggleSidebar()
+      }
+
+      document.addEventListener('click', outClick)
+      this.$once('hook:beforeDestroy', () => {
+        document.removeEventListener('click', outClick)
+      })
+    },
+
     methods: {
       toggleSidebar() {
         this.showSidebar = !this.showSidebar
+      },
+
+      smClose() {
+        if (window.outerWidth < 780) {
+          this.toggleSidebar()
+        }
       },
     },
   }

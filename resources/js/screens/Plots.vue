@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <div v-if="site" class="mb-3 d-flex">
             <div class="d-flex align-items-center">
                 <div class="flex-shrink-0">
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="ml-auto">
-                <button class="btn btn-link">
+                <button class="btn btn-link" @click.prevent="editingSite = true">
                     <icon name="create"/>
                     <span>
                         Edit Site
@@ -28,22 +28,7 @@
 
         <div class="row flex-column-reverse flex-md-row">
             <div class="col-md-8">
-                <div class="d-flex justify-content-center" v-if="loading">
-                    <inline-spinner class="text-primary"/>
-                </div>
-                <div class="card mb-3" v-if="!loading && plots.length === 0">
-                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-muted">
-                        <div>
-                            <p>Get started by creating a new plot using the button below.</p>
-                        </div>
-                        <button class="btn btn-outline-primary" @click.prevent="showPlotForm = true">
-                            <icon name="add"/>
-                            <span>New Plot</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card mb-3 table-responsive mb-0" v-if="!loading && plots.length > 0">
+                <div class="card mb-3 table-responsive mb-0">
                     <div class="card-header d-flex align-items-center p-2">
                         <div class="flex-grow-1">
                             <input type="search"
@@ -59,7 +44,20 @@
                             </button>
                         </div>
                     </div>
-                    <table class="table table-middle mb-0">
+                    <div class="p-4 d-flex justify-content-center" v-if="loading">
+                        <inline-spinner class="text-primary"/>
+                    </div>
+
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-muted" v-if="!loading && plots.length === 0">
+                        <div>
+                            <p>Get started by creating a new plot using the button below.</p>
+                        </div>
+                        <button class="btn btn-outline-primary" @click.prevent="showPlotForm = true">
+                            <icon name="add"/>
+                            <span>New Plot</span>
+                        </button>
+                    </div>
+                    <table class="table table-middle mb-0" v-if="!loading && plots.length > 0">
                         <thead>
                         <tr>
                             <th>Plot</th>
@@ -73,18 +71,20 @@
                                 <router-link :to="`/app/plots/${plot.id}`">Plot #{{ plot.number }}</router-link>
                             </td>
                             <td>
-                                {{ plot.plants_count }} {{plot.plants_count === 0 || plot.plants_count > 1 ? 'Plants' : 'Plant'}}
+                                {{ plot.plants_count | plural('Plant', 'Plants') }}
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">
-                                    <button class="btn btn-link" @click.prevent="edit(item)" v-tooltip="'Edit'">
+                                    <button class="btn btn-link" @click.prevent="edit(plot)" v-tooltip="'Edit'">
                                         <icon name="create"/>
                                     </button>
 
-                                    <button class="btn btn-link"
-                                            @click.prevent="destroy(item)"
+                                    <button class="btn"
+                                            :class="deleting === plot.id ? 'btn-danger' : 'btn-link'"
+                                            @click.prevent="destroy(plot)"
                                             v-tooltip="'Delete'">
-                                        <icon name="trash"/>
+                                        <icon name="trash" v-if="deleting !== plot.id"/>
+                                        <inline-spinner v-else/>
                                     </button>
                                 </div>
                             </td>
@@ -92,6 +92,7 @@
                         </tbody>
                     </table>
                 </div>
+                <pager :last-page="lastPage" :page="page" @change="goTo($event)"/>
             </div>
             <div class="col-md-4">
                 <div class="card mb-3" v-if="site">
@@ -99,7 +100,7 @@
                         <div class="pb-2">
                             <strong>Site Information</strong>
                         </div>
-                        <dl>
+                        <dl class="mb-0">
                             <dt>Owner</dt>
                             <dd class="text-muted">{{ optional(site.owner, 'Owner name') }}</dd>
 
@@ -109,8 +110,10 @@
                             </dd>
 
                             <dt>Basal Area</dt>
-                            <dd class="text-muted">{{optional(site.basal_area)}}
-                                <span v-show="site.basal_area">ft<sup>2</sup>/ac</span></dd>
+                            <dd class="text-muted">
+                                {{optional(site.basal_area)}}
+                                <span v-show="site.basal_area">ft<sup>2</sup>/ac</span>
+                            </dd>
 
                             <dt>Average Overstory Tree Diameter</dt>
                             <dd class="text-muted">{{optional(site.diameter)}} <span v-show="site.diameter">in</span>
@@ -122,11 +125,18 @@
         </div>
 
         <plot-form
-                @close="showPlotForm = false"
+                @close="closeForm"
                 v-if="site && showPlotForm"
                 :site="site"
+                :plot="plot"
                 @create="plotCreated($event)"
+                @update="plotUpdated($event)"
         />
+
+        <site-form @close="editingSite = false"
+                   @update="siteUpdated($event)"
+                   :site="site"
+                   v-if="editingSite"/>
     </div>
 </template>
 
@@ -139,25 +149,28 @@
   import PlantForm from '../forms/PlantForm'
   import PlotMap from '../components/PlotMap'
   import Dropdown from '../components/Dropdown'
+  import SiteForm from '../forms/SiteForm'
+  import Pager from '../components/Pager'
 
   export default {
     name: 'Plots',
 
-    components: {Dropdown, PlotMap, PlantForm, Tabs, Tab, PlotForm, Icon, InlineSpinner},
+    components: {Pager, SiteForm, Dropdown, PlotMap, PlantForm, Tabs, Tab, PlotForm, Icon, InlineSpinner},
 
     data() {
       return {
-        search    : '',
-        showPlotForm  : false,
-        plots         : [],
-        selectedPlotID: null,
-        page          : 1,
-        lastPage      : 1,
-        total         : 0,
-        loading       : false,
-        request       : null,
-        site          : null,
-        selectedPlot  : null,
+        search      : '',
+        showPlotForm: false,
+        editingSite : false,
+        plots       : [],
+        deleting    : null,
+        page        : 1,
+        lastPage    : 1,
+        total       : 0,
+        loading     : false,
+        request     : null,
+        site        : null,
+        plot        : null,
       }
     },
 
@@ -201,10 +214,11 @@
         }
       },
 
-      async loadPlots(plot) {
+      async loadPlots() {
         if (this.request !== null) {
           this.request()
         }
+
         try {
           const id     = this.$route.params.id
           const {data} = await axios.get(`/web/sites/${id}/plots`, {
@@ -215,17 +229,10 @@
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
 
-          this.plots   = data
-          this.loading = false
-          this.request = null
-
-          if (this.selectedPlot === null && this.plots.length > 0) {
-            this.setFromHistory()
-          }
-
-          if (plot) {
-            this.selectPlot(plot.id)
-          }
+          this.plots    = data.data
+          this.lastPage = data.last_page
+          this.loading  = false
+          this.request  = null
         } catch (e) {
           if (!axios.isCancel(e)) {
             this.loading = false
@@ -235,39 +242,57 @@
       },
 
       plotCreated(plot) {
+        this.closeForm()
+        this.loadPlots()
+      },
+
+      plotUpdated(plot) {
+        this.plots = this.plots(p => p.id === plot.id ? plot : p)
+        this.closeForm()
+      },
+
+      edit(plot) {
+        this.plot         = plot
+        this.showPlotForm = true
+      },
+
+      closeForm() {
+        this.plot         = null
         this.showPlotForm = false
-        this.loadPlots(plot)
       },
 
-      setFromHistory() {
-        let plot_id = this.$route.query.plot
-        if (plot_id) {
-          plot_id     = parseInt(plot_id)
-          const plots = this.plots.filter(p => p.id === plot_id)
-          if (plots.length > 0) {
-            this.selectedPlot   = plots[0]
-            this.selectedPlotID = plots[0].id
-            return
-          }
+      destroy(plot) {
+        if (this.deleting !== null) {
+          return
         }
 
-        this.selectedPlotID = this.plots[0].id
-        this.selectedPlot   = this.plots[0]
-      },
-
-      selectPlot(id) {
-        this.selectedPlotID = id
-
-        let plot = null
-
-        const plots = this.plots.filter(p => {
-          return p.id === id
+        this.$confirm({
+          title    : `Are you sure you want to delete Plot #${plot.number}?`,
+          text     : 'This action is permanent!',
+          onConfirm: async () => {
+            this.deleting = plot.id
+            try {
+              await axios.delete(`/web/plots/${plot.id}`)
+              this.loadPlots()
+            } catch (e) {
+              this.$notify({
+                text: 'Unable to delete plot. Please try refreshing the page.',
+                type: 'error',
+              })
+            }
+            this.deleting = null
+          },
         })
-        if (plots.length > 0) {
-          plot = plots[0]
-        }
+      },
 
-        this.selectedPlot = plot
+      siteUpdated(site) {
+        this.site        = site
+        this.editingSite = false
+      },
+
+      goTo(page) {
+        this.page = page
+        this.loadPlots()
       },
     },
   }

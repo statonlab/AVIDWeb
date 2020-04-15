@@ -3,12 +3,18 @@
         <form action="#" @submit.prevent="save">
             <modal-card>
                 <modal-header>
-                    <modal-title>Add A Plant</modal-title>
+                    <modal-title v-if="!plant">Add A Plant</modal-title>
+                    <modal-title v-if="plant">Update Plant #{{ plant.tag }}</modal-title>
                     <close @click.prevent="$emit('close')"/>
                 </modal-header>
-                <modal-body>
+                <modal-body class="d-flex justify-content-center align-items-center"
+                            v-if="loadingPlants || loadingSpecies">
+                    <inline-spinner class="text-primary"/>
+                </modal-body>
+                <modal-body class="position-static" v-if="!loadingSpecies && !loadingPlants">
                     <div class="form-group">
-                        <label for="plant">Plant Type
+                        <label for="plant">
+                            Plant Type
                             <required/>
                         </label>
                         <select id="plant"
@@ -24,7 +30,7 @@
                         </small>
                     </div>
 
-                    <div class="row">
+                    <div class="row position-static">
                         <div class="form-group col-6">
                             <label for="tag-num">
                                 Tag Number
@@ -41,7 +47,7 @@
                                 {{ form.errors.first('tag') }}
                             </small>
                         </div>
-                        <div class="form-group col-6">
+                        <div class="form-group col-6 position-static">
                             <label for="species">
                                 Species
                                 <required/>
@@ -81,10 +87,14 @@
                         </div>
                     </div>
                 </modal-body>
-                <modal-footer>
+                <modal-footer class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary" :disabled="saving">
                         <inline-spinner v-if="saving"/>
                         Save
+                    </button>
+
+                    <button type="button" class="btn btn-light" @click.prevent="$emit('close')">
+                        Cancel
                     </button>
                 </modal-footer>
             </modal-card>
@@ -122,7 +132,7 @@
     },
 
     props: {
-      plot : {required: true, type: Object},
+      plot : {required: false, type: Object},
       plant: {required: false, type: Object},
     },
 
@@ -153,13 +163,12 @@
       }
     },
 
-    mounted() {
+    async mounted() {
+      await this.loadTypes()
+      await this.loadSpecies()
       if (this.plant) {
         this.form.setDefault(this.plant)
       }
-
-      this.loadTypes()
-      this.loadSpecies()
     },
 
     methods: {
