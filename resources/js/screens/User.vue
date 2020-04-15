@@ -24,7 +24,7 @@
                                        :id="`role-${index}`"
                                        name="role-select"
                                        class="custom-control-input"
-                                       :value="role.id"
+                                       :value="`${role.id}`"
                                        v-model="userRole"
                                        v-on:change="setRole">
                                 <label class="custom-control-label"
