@@ -29,15 +29,13 @@
                     <table class="table table-middle mb-0">
                         <thead>
                         <tr>
-                            <th>Genus</th>
-                            <th>Species</th>
+                            <th>Name</th>
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr v-for="item in species" class="hover-visible-container">
-                            <td>{{ item.genus}}</td>
-                            <td>{{item.species}}</td>
+                            <td>{{ item.name}}</td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">
                                     <button class="btn btn-link" @click.prevent="edit(item)" v-tooltip="'Edit'">

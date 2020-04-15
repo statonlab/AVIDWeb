@@ -140,8 +140,7 @@
                 v-if="editingPlant"
                 :plant="plant"
                 @close="editingPlant = false"
-                @update="plantUpdated($event)"
-        />
+                @update="plantUpdated($event)"/>
     </div>
 </template>
 

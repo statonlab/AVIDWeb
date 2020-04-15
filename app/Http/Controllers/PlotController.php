@@ -39,8 +39,6 @@ class PlotController extends Controller
      */
     public function create(Site $site, Request $request)
     {
-        // Is the user allowed create a plot?
-        $this->authorize('create', Plot::class);
         // Is the user allowed to add plots to this site?
         $this->authorize('update', $site);
 

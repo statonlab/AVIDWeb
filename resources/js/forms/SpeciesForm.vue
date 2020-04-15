@@ -6,39 +6,25 @@
             <modal-card>
                 <modal-header>
                     <modal-title v-if="species">
-                        Update {{ species.genus }} {{ species.species }}
+                        Update {{ species.name }}
                     </modal-title>
                     <modal-title v-else>Create Species</modal-title>
                     <close @click.prevent="$emit('close')"/>
                 </modal-header>
                 <modal-body>
                     <div class="form-group">
-                        <label for="genus">Genus</label>
+                        <label for="name">Name</label>
                         <input type="text"
-                               ref="genus"
+                               ref="name"
                                autofocus
                                class="form-control"
-                               :class="{'is-invalid': form.errors.has('genus')}"
-                               placeholder="Genus"
-                               v-model="form.genus"
-                               name="genus"
-                               id="genus">
-                        <small class="form-text text-danger" v-if=" form.errors.has('genus')">
-                            {{ form.errors.first('genus') }}
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="species">Species</label>
-                        <input type="text"
-                               class="form-control"
-                               :class="{'is-invalid': form.errors.has('species')}"
-                               placeholder="Species"
-                               v-model="form.species"
-                               name="species"
-                               id="species">
-                        <small class="form-text text-danger" v-if=" form.errors.has('species')">
-                            {{ form.errors.first('species') }}
+                               :class="{'is-invalid': form.errors.has('name')}"
+                               placeholder="Species Name"
+                               v-model="form.name"
+                               name="name"
+                               id="name">
+                        <small class="form-text text-danger" v-if=" form.errors.has('name')">
+                            {{ form.errors.first('name') }}
                         </small>
                     </div>
                 </modal-body>
@@ -84,8 +70,7 @@
       return {
         loading: false,
         form   : new Form({
-          genus  : '',
-          species: '',
+          name  : '',
         }),
       }
     },
@@ -111,7 +96,7 @@
           const {data} = await this.form.post(`/web/species`)
           this.$emit('create', data)
           this.form.reset()
-          this.$refs.genus.focus()
+          this.$refs.name.focus()
           this.$notify({
             text: 'Species created successfully',
             type: 'success',

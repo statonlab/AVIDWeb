@@ -18,7 +18,7 @@ class Site extends Model
         'county_id',
         'name',
         'city',
-        'address',
+        'owner_address',
         'owner_name',
         'owner_contact',
         'basal_area',
@@ -55,5 +55,19 @@ class Site extends Model
     public function plants()
     {
         return $this->hasManyThrough(Plant::class, Plot::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function species() {
+        return $this->belongsToMany(Species::class, 'site_species', 'site_id', 'species_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function shrubs() {
+        return $this->belongsToMany(Species::class, 'site_shrubs', 'site_id', 'species_id');
     }
 }

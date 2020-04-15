@@ -24,6 +24,13 @@ class Plant extends Model
     ];
 
     /**
+     * @var string[]
+     */
+    protected $casts = [
+        'collected_at' => 'datetime',
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function plot()

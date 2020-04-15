@@ -43,21 +43,11 @@ class SpeciesController extends Controller
         $this->authorize('create', Species::class);
 
         $this->validate($request, [
-            'genus' => 'required|max:255',
-            'species' => 'required|max:255',
+            'name' => 'required|max:255|unique:species,name',
         ]);
 
-        $name = "$request->genus $request->species";
-        if (Species::where('name', $name)->exists()) {
-            return $this->error('Genus species must be unique', [
-                'species' => ["$name already exists."],
-            ]);
-        }
-
         $species = Species::create([
-            'genus' => $request->genus,
-            'species' => $request->species,
-            'name' => $name,
+            'name' => $request->name,
         ]);
 
         return $this->created($species);
@@ -74,24 +64,17 @@ class SpeciesController extends Controller
     {
         $this->authorize('update', $species);
 
-        $this->validate($request, [
-            'genus' => 'required|max:255',
-            'species' => 'required|max:255',
-        ]);
-
-        $name = "$request->genus $request->species";
-        if ($name !== $species->name) {
-            if (Species::where('name', $name)->exists()) {
-                return $this->error('Genus species must be unique', [
-                    'species' => ["$name already exists."],
-                ]);
-            }
+        $rules = [
+            'name' => 'required|max:255'
+        ];
+        if($request->name !== $species->name) {
+            $rules['name'] .= '|unique:species,name';
         }
 
+        $this->validate($request, $rules);
+
         $species->fill([
-            'genus' => $request->genus,
-            'species' => $request->species,
-            'name' => $name,
+            'name' => $request->name,
         ])->save();
 
         return $this->created($species);
