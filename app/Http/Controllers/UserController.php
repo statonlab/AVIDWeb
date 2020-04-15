@@ -49,4 +49,19 @@ class UserController extends Controller
 
         return $this->success($user);
     }
+
+    public function patchRole(User $user, Request $request)
+    {
+        $this->authorize('setRole', $user);
+
+        $this->validate($request, [
+            'role' => 'required|integer',
+        ]);
+
+        $user->fill([
+            'role_id' => $request->role,
+        ])->save();
+
+        return $this->success($user);
+    }
 }

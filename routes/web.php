@@ -107,4 +107,7 @@ Route::group([
 
     Route::get('/users', 'UserController@index');
     Route::get('/users/{user}', 'UserController@show');
+    Route::patch('/user/{user}/role', 'UserController@patchRole');
+
+    Route::get('/roles', 'RoleController@index');
 });

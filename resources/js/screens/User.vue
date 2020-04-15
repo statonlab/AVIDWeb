@@ -15,6 +15,26 @@
                         </div>
                     </div>
                 </div>
+                <div class="card mb-3">
+                    <div class="card-body rounded">
+                        <p class="font-weight-bold text-dark text-sm mb-1">Roles</p>
+                        <div v-for="(role, index) in roles" class="d-flex align-items-center">
+                            <div class="custom-control custom-radio">
+                                <input type="radio"
+                                       :id="`role-${index}`"
+                                       name="role-select"
+                                       class="custom-control-input"
+                                       :value="`${role.id}`"
+                                       v-model="userRole"
+                                       v-on:change="setRole">
+                                <label class="custom-control-label"
+                                       :for="`role-${index}`">
+                                    {{ role.name }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-xl-8 col-md-7">
                 <div class="d-flex">
@@ -81,7 +101,9 @@
     data() {
       return {
         user        : null,
+        userRole    : '',
         sites       : [],
+        roles       : [],
         loading     : true,
         search      : '',
         page        : 1,
@@ -92,6 +114,7 @@
     mounted() {
       this.loadUser()
       this.loadSites()
+      this.loadRoles()
       this.loading = false
     },
 
@@ -104,9 +127,10 @@
     methods: {
       async loadUser() {
         try {
-          const id     = this.$route.params.id
-          const {data} = await axios.get(`/web/users/${id}`)
-          this.user    = data
+          const id      = this.$route.params.id
+          const {data}  = await axios.get(`/web/users/${id}`)
+          this.user     = data
+          this.userRole = `${this.user.role_id}`
         } catch (e) {
           console.error(e)
           this.$notify({
@@ -128,6 +152,39 @@
           this.sites    = data.data
           this.page     = data.current_page
           this.lastPage = data.last_page
+        } catch (e) {
+          console.error(e)
+          this.$notify({
+            text: 'Unable to process this request. Please try refreshing the page.',
+            type: 'error',
+          })
+        }
+      },
+
+      async loadRoles() {
+        try {
+          const {data} = await axios.get(`/web/roles`)
+          this.roles    = data
+        } catch (e) {
+          console.error(e)
+          this.$notify({
+            text: 'Unable to process this request. Please try refreshing the page.',
+            type: 'error',
+          })
+        }
+      },
+
+      async setRole() {
+        try {
+          const id      = this.$route.params.id
+          await axios.patch(`/web/user/${id}/role`, {
+            role: this.userRole,
+          })
+          
+          this.$notify({
+              text: 'Role updated successfully.',
+              type: 'success'
+          })
         } catch (e) {
           console.error(e)
           this.$notify({
