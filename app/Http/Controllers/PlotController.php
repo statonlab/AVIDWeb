@@ -16,15 +16,28 @@ class PlotController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index(Site $site)
+    public function index(Site $site, Request $request)
     {
         $this->authorize('view', $site);
+
+        $this->validate($request, [
+            'search' => 'nullable|max:255',
+        ]);
 
         $plots = $site->plots()->with([
             'user' => function ($query) {
                 $query->select(['users.id', 'users.name']);
             },
-        ])->withCount(['plants'])->orderBy('number', 'asc')->paginate(20);
+        ]);
+
+        if (! empty($request->search)) {
+            $term = $request->search;
+            $plots->where(function ($query) use ($term) {
+                $query->where('number', 'like', "%$term%");
+            });
+        }
+
+        $plots = $plots->withCount(['plants'])->orderBy('number', 'asc')->paginate(20);
 
         return $this->success($plots);
     }
