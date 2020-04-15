@@ -25,6 +25,8 @@ class SiteController extends Controller
         }
 
         $this->validate($request, [
+            'order_by' => 'nullable|in:name,plots_count,plants_count',
+            'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
         ]);
 
@@ -40,7 +42,8 @@ class SiteController extends Controller
             });
         }
 
-        $sites = $sites->paginate(20);
+        $sites = $sites->orderBy($request->order_by ?? 'created_at', $request->order_dir ?? 'desc')
+            ->paginate(20);
 
         return $this->success($sites);
     }

@@ -24,9 +24,30 @@
                 <table class="table mb-0 table-middle table-hover" v-if="!loading && sites.length > 0">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Plots</th>
-                        <th>Plants</th>
+                        <th>
+                            Name
+                            <button class="btn btn-link btn-sm mr-1"
+                                    @click.prevent="sort('name')"
+                                    v-tooltip="'Sort'">
+                                <icon :name="sortIcon('name')"/>
+                            </button>
+                        </th>
+                        <th>
+                            Plots
+                            <button class="btn btn-link btn-sm mr-1"
+                                    @click.prevent="sort('plots_count')"
+                                    v-tooltip="'Sort'">
+                                <icon :name="sortIcon('plots_count')"/>
+                            </button>
+                        </th>
+                        <th>
+                            Plants
+                            <button class="btn btn-link btn-sm mr-1"
+                                    @click.prevent="sort('plants_count')"
+                                    v-tooltip="'Sort'">
+                                <icon :name="sortIcon('plants_count')"/>
+                            </button>
+                        </th>
                         <th></th>
                     </tr>
                     </thead>
@@ -94,6 +115,8 @@
         deleting    : null,
         search      : '',
         _request    : null,
+        orderBy     : '',
+        orderDir    : '',
       }
     },
 
@@ -117,8 +140,10 @@
         try {
           const {data}  = await axios.get('/web/sites', {
             params     : {
-              search: this.search,
-              page  : this.page,
+              search    : this.search,
+              page      : this.page,
+              order_by  : this.orderBy,
+              order_dir : this.orderDir,
             },
             cancelToken: new axios.CancelToken(c => this._request = c),
           })
@@ -178,6 +203,29 @@
         this.page = page
         this.loadSites()
       },
+
+      sort(column) {
+        if (column === this.orderBy) {
+          this.orderDir = this.orderDir === 'asc' ? 'desc' : 'asc'
+        } else {
+          this.orderBy  = column
+          this.orderDir = 'asc'
+        }
+
+        this.loadSites()
+      },
+
+      sortIcon(column) {
+        if (column !== this.orderBy) {
+          return 'swap-vertical'
+        }
+
+        if (this.orderDir === 'asc') {
+          return 'arrow-up'
+        }
+
+        return 'arrow-down'
+      }
     },
   }
 </script>
