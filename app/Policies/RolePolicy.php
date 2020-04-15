@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\User;
 use App\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,9 +14,10 @@ class RolePolicy
      * Listing roles.
      *
      * @param \App\User $user
+     * @param \App\Role $role
      * @return bool|void
      */
-    public function viewAny(Role $role)
+    public function viewAny(User $user)
     {
         return $user->isAdmin();
     }
