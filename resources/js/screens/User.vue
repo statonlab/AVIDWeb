@@ -130,7 +130,7 @@
           const id      = this.$route.params.id
           const {data}  = await axios.get(`/web/users/${id}`)
           this.user     = data
-          this.userRole = this.user.role_id
+          this.userRole = `${this.user.role_id}`
         } catch (e) {
           console.error(e)
           this.$notify({
