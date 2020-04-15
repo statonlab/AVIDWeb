@@ -7,6 +7,7 @@ use App\Measurement;
 use App\Plant;
 use App\PlantType;
 use App\Plot;
+use App\Role;
 use App\Site;
 use App\Species;
 use App\State;
@@ -74,7 +75,9 @@ class ImportFile extends Command
 
         // Collect new users to email them later
         $new_users = collect([]);
+        $role = Role::where('is_default', true)->first();
         while ($line = fgetcsv($users_fp)) {
+            array_walk($line, 'trim');
             [$username, $name, $email] = $line;
 
             // Check if the user exists
@@ -85,10 +88,16 @@ class ImportFile extends Command
                     'name' => $name,
                     'username' => $username,
                     'password' => bcrypt(Str::random(60)),
+                    'role_id' => $role->id,
                 ]));
+            } elseif ($user->username !== $username) {
+                $this->info('email: '.$user->email.' <'.$email.'>');
+                $this->info('Changed: '.$username.'. From '.$user->username.' to '.$username);
+                $user->fill(['username' => $username])->save();
             }
         }
 
+        return;
         // Done with users, close the file
         fclose($users_fp);
 
