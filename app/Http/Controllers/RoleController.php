@@ -9,7 +9,7 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('lists', Role::class);
+        $this->authorize('viewAny', Role::class);
 
         $roles = Role::get();
 
