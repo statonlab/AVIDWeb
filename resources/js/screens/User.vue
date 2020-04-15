@@ -180,6 +180,11 @@
           await axios.patch(`/web/user/${id}/role`, {
             role: this.userRole,
           })
+          
+          this.$notify({
+              text: 'Role updated successfully.',
+              type: 'success'
+          })
         } catch (e) {
           console.error(e)
           this.$notify({
