@@ -25,28 +25,28 @@
                     <thead>
                     <tr>
                         <th>
-                            Name
-                            <button class="btn btn-link btn-sm mr-1"
-                                    @click.prevent="sort('name')"
-                                    v-tooltip="'Sort'">
+                            <a href="#"
+                               class="d-flex align-items-center"
+                               @click.prevent="sort('name')">
+                                <span class="mr-1">Name</span>
                                 <icon :name="sortIcon('name')"/>
-                            </button>
+                            </a>
                         </th>
                         <th>
-                            Plots
-                            <button class="btn btn-link btn-sm mr-1"
-                                    @click.prevent="sort('plots_count')"
-                                    v-tooltip="'Sort'">
+                            <a href="#"
+                               class="d-flex align-items-center"
+                               @click.prevent="sort('plots_count')">
+                                <span class="mr-1">Plots</span>
                                 <icon :name="sortIcon('plots_count')"/>
-                            </button>
+                            </a>
                         </th>
                         <th>
-                            Plants
-                            <button class="btn btn-link btn-sm mr-1"
-                                    @click.prevent="sort('plants_count')"
-                                    v-tooltip="'Sort'">
+                            <a href="#"
+                               class="d-flex align-items-center"
+                               @click.prevent="sort('plants_count')">
+                                <span class="mr-1">Plants</span>
                                 <icon :name="sortIcon('plants_count')"/>
-                            </button>
+                            </a>
                         </th>
                         <th></th>
                     </tr>

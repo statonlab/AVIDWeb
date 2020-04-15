@@ -14,6 +14,8 @@ class UserController extends Controller
         $this->authorize('viewAny', User::class);
 
         $this->validate($request, [
+            'order_by' => 'nullable|in:name,email,created_at',
+            'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
         ]);
 
@@ -30,7 +32,8 @@ class UserController extends Controller
             });
         }
 
-        $users = $users->orderBy('name', 'asc')->paginate(25);
+        $users = $users->orderBy($request->order_by ?? 'name', $request->order_dir ?? 'asc')
+            ->paginate(25);
 
         $users->getCollection()->transform(function (User $user) {
             $user->member_since = $user->created_at->diffForHumans();
