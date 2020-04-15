@@ -101,7 +101,7 @@
     data() {
       return {
         user        : null,
-        userRole    : 0,
+        userRole    : '',
         sites       : [],
         roles       : [],
         loading     : true,
