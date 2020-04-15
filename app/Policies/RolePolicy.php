@@ -15,7 +15,7 @@ class RolePolicy
      * @param \App\User $user
      * @return bool|void
      */
-    public function lists(User $user)
+    public function viewAny(Role $role)
     {
         return $user->isAdmin();
     }
