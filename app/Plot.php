@@ -24,6 +24,7 @@ class Plot extends Model
         'canopy',
         'subcanopy',
         'ground_cover',
+        'recorders'
     ];
 
     /**
