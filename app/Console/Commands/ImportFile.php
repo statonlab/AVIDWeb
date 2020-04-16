@@ -42,6 +42,8 @@ class ImportFile extends Command
      */
     protected $plantType;
 
+    protected $userIndex = [];
+
     /**
      * Create a new command instance.
      *
@@ -83,21 +85,18 @@ class ImportFile extends Command
             // Check if the user exists
             $user = User::where('email', $email)->first();
             if (! $user) {
-                $new_users->push(User::create([
+                $user = User::create([
                     'email' => $email,
                     'name' => $name,
-                    'username' => $username,
                     'password' => bcrypt(Str::random(60)),
                     'role_id' => $role->id,
-                ]));
-            } elseif ($user->username !== $username) {
-                $this->info('email: '.$user->email.' <'.$email.'>');
-                $this->info('Changed: '.$username.'. From '.$user->username.' to '.$username);
-                $user->fill(['username' => $username])->save();
+                ]);
+                $new_users->push($user);
             }
+
+            $this->userIndex[$username] = $user;
         }
 
-        return;
         // Done with users, close the file
         fclose($users_fp);
 
@@ -180,7 +179,7 @@ class ImportFile extends Command
         array_walk($line, 'trim');
 
         // Find the user
-        $user = User::where('username', $username)->first();
+        $user = $this->userIndex[$username] ?? null;
         if (! $user) {
             $this->putError($i, "User $username does not exist.");
 
@@ -244,12 +243,12 @@ class ImportFile extends Command
         // Create the measurement.
         $located = $is_located === 'Yes';
 
-        return Measurement::create([
+        return Measurement::firstOrCreate([
             'user_id' => $user->id,
             'plant_id' => $plant->id,
+            'date' => Carbon::createFromFormat('M d, Y', $date)->toDateString(),
             'is_located' => $located,
             'is_alive' => $located ? $is_alive === 'Yes' : null,
-            'date' => Carbon::createFromFormat('M d, Y', $date),
             'height' => $located ? empty($height) ? null : floatval($height) : null,
         ]);
     }
