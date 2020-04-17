@@ -6,7 +6,7 @@
                 Page {{ page }} of {{ lastPage }}
             </div>
         </div>
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header d-flex p-2">
                 <div class="flex-grow-1">
                     <input type="search" class="form-control" placeholder="Search..." v-model="search" title="Search">
@@ -35,7 +35,10 @@
                         </thead>
                         <tbody>
                         <tr v-for="item in species" class="hover-visible-container">
-                            <td>{{ item.name}}</td>
+                            <td>
+                                <inline-spinner v-if="destroying.indexOf(item.id) > -1" class="text-primary"/>
+                                <span>{{ item.name}}</span>
+                            </td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">
                                     <button class="btn btn-link" @click.prevent="edit(item)" v-tooltip="'Edit'">
@@ -72,6 +75,7 @@
   import InlineSpinner from '../components/InlineSpinner'
   import SpeciesForm from '../forms/SpeciesForm'
   import Pager from '../components/Pager'
+  import Errors from '../forms/Errors'
 
   export default {
     name: 'Species',
@@ -80,15 +84,16 @@
 
     data() {
       return {
-        loading : true,
-        search  : '',
-        species : [],
-        page    : 1,
-        lastPage: 1,
-        total   : 0,
-        editing : null,
-        showForm: false,
-        request : null,
+        loading   : true,
+        search    : '',
+        species   : [],
+        page      : 1,
+        lastPage  : 1,
+        total     : 0,
+        editing   : null,
+        showForm  : false,
+        request   : null,
+        destroying: [],
       }
     },
 
@@ -123,11 +128,11 @@
           this.total    = data.total
         } catch (e) {
           if (!axios.isCancel(e)) {
+            console.error(e)
             this.$notify({
               type: 'error',
               text: 'Unable to load species. Please try refreshing the page.',
             })
-            console.error(e)
           }
         }
         this.loading = false
@@ -158,10 +163,17 @@
                 text: 'Species deleted successfully',
               })
             } catch (e) {
-              this.$notify({
-                type: 'error',
-                text: 'Unable to delete species. Please try refreshing the page.',
-              })
+              if (e.response && e.response.status === 422) {
+                const errors = new Errors(e.response.data)
+                if(errors.has('species')) {
+                  this.$alert(errors.first('species'))
+                }
+              } else {
+                this.$alert({
+                  title: 'Error',
+                  text: 'Unable to delete species. Please try refreshing the page.',
+                })
+              }
             }
 
             this.destroying = this.destroying.filter(id => id !== species.id)

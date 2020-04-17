@@ -13,12 +13,20 @@
                 <form class="form-inline my-0 mr-auto" data-toggle="dropdown">
                     <div class="input-group">
                         <input type="search"
+                               v-model="search"
                                class="form-control navbar-form-control"
                                placeholder="Search users and entries">
                     </div>
                 </form>
                 <div class="dropdown-menu search-dropdown">
-                    <small class="d-block text-center text-muted">No results found</small>
+                    <small class="d-block text-center text-muted" v-if="results.length === 0 && search.length > 0">No results found</small>
+                    <small class="d-block text-center text-muted" v-if="results.length === 0 && search.length === 0">Type to search</small>
+                    <router-link :key="item.id" :to="`/app/plants/${item.id}`" class="dropdown-item" v-for="item in results">
+                        <span>Plant #{{ item.tag }}</span>
+                        <div class="text-muted">
+                            Plot #{{ item.plot.number }}, {{ item.plot.site.name }}
+                        </div>
+                    </router-link>
                 </div>
             </div>
             <ul class="navbar-nav ml-auto">
@@ -52,15 +60,36 @@
   import User from '../helpers/User'
 
   export default {
-    name      : 'Navbar',
+    name: 'Navbar',
 
     components: {Avatar, Icon},
 
     data() {
       return {
-        csrf: document.head.querySelector('meta[name="csrf-token"]').content,
-        user: User.get(),
+        csrf   : document.head.querySelector('meta[name="csrf-token"]').content,
+        user   : User.get(),
+        results: '',
+        search : '',
+        request: null
       }
+    },
+
+    watch: {
+      async search() {
+        if(this.request) {
+          this.request()
+        }
+        axios.get(`/web/search`, {
+          params: {
+            search: this.search,
+            cancelToken: new axios.CancelToken(fn => this.request = fn)
+          },
+        }).then(response => {
+          this.results = response.data.data
+        }).catch(e => {
+          console.error(e)
+        })
+      },
     },
   }
 </script>

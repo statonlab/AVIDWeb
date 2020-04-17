@@ -32,28 +32,33 @@
       return {
         items: [
           {
-            icon : 'analytics',
+            icon : 'analytics-outline',
             to   : '/app',
             exact: true,
             label: 'Dashboard',
           },
           {
-            icon : 'file-tray-full',
+            icon : 'file-tray-full-outline',
             to   : '/app/sites',
             label: 'My Data',
           },
           {
-            icon : 'rose',
+            icon : 'rose-outline',
             to   : '/app/species',
             label: 'Species',
           },
           {
-            icon : 'people',
+            icon : 'people-outline',
             to   : '/app/users',
             label: 'Users',
           },
           {
-            icon : 'cog',
+            icon: 'lock-closed-outline',
+            to: '/app/roles',
+            label: 'Roles & Permissions',
+          },
+          {
+            icon : 'cog-outline',
             to   : '/app/profile',
             label: 'Settings',
           },

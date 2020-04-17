@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Plant;
+use App\Site;
 use App\Species;
 use Illuminate\Http\Request;
 
@@ -24,7 +26,9 @@ class SpeciesController extends Controller
         $species = Species::orderBy('name', 'asc');
 
         if (! empty($request->search)) {
-            $species->where('name', 'like', "%{$request->search}%");
+            $species->where(function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->search}%");
+            });
         }
 
         $species = $species->paginate(20);
@@ -65,9 +69,9 @@ class SpeciesController extends Controller
         $this->authorize('update', $species);
 
         $rules = [
-            'name' => 'required|max:255'
+            'name' => 'required|max:255',
         ];
-        if($request->name !== $species->name) {
+        if ($request->name !== $species->name) {
             $rules['name'] .= '|unique:species,name';
         }
 
@@ -89,6 +93,28 @@ class SpeciesController extends Controller
     public function delete(Species $species)
     {
         $this->authorize('delete', $species);
+
+        $common_trees = Site::whereHas('species', function ($query) use ($species) {
+            $query->where('species.id', $species->id);
+        })->count();
+
+        $shrubs = Site::whereHas('shrubs', function ($query) use ($species) {
+            $query->where('species.id', $species->id);
+        })->count();
+
+        $plants = Plant::whereHas('species', function ($query) use ($species) {
+            $query->where('species.id', $species->id);
+        })->count();
+
+        if ($common_trees > 0 || $plants > 0 || $shrubs > 0) {
+            return $this->error('Sites are attached to this species', [
+                'species' => [
+                    'This species is used in multiple resources and cannot be deleted
+                     until all sites (common trees and shrubs) and plants are no longer
+                     associated with this species.'
+                ],
+            ]);
+        }
 
         $species->delete();
 

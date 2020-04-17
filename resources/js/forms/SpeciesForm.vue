@@ -12,6 +12,10 @@
                     <close @click.prevent="$emit('close')"/>
                 </modal-header>
                 <modal-body>
+                    <div class="alert alert-warning" v-if="species">
+                        <p class="mb-0"><strong>Warning</strong></p>
+                        <div>Changing the name of this species will affect any resources that are attached to it such as plants and sites.</div>
+                    </div>
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text"
