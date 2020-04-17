@@ -53,10 +53,38 @@
                             <table class="table mb-0" v-if="plants.length > 0">
                                 <thead>
                                 <tr>
-                                    <th>Tag</th>
-                                    <th>Species</th>
-                                    <th>Quadrant</th>
-                                    <th>Measurements</th>
+                                    <th>
+                                        <a href="#"
+                                           class="d-flex align-items-center"
+                                           @click.prevent="sort('tag')">
+                                            <span class="mr-1">Tag</span>
+                                            <icon :name="sortIcon('tag')"/>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="#"
+                                           class="d-flex align-items-center"
+                                           @click.prevent="sort('name')">
+                                            <span class="mr-1">Species</span>
+                                            <icon :name="sortIcon('name')"/>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="#"
+                                           class="d-flex align-items-center"
+                                           @click.prevent="sort('quadrant')">
+                                            <span class="mr-1">Quadrant</span>
+                                            <icon :name="sortIcon('quadrant')"/>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="#"
+                                           class="d-flex align-items-center"
+                                           @click.prevent="sort('measurements_count')">
+                                            <span class="mr-1">Measurements</span>
+                                            <icon :name="sortIcon('measurements_count')"/>
+                                        </a>
+                                    </th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -65,7 +93,7 @@
                                     <td>
                                         <router-link :to="`/app/plants/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
                                     </td>
-                                    <td>{{ plant.species.name }}</td>
+                                    <td>{{ plant.name }}</td>
                                     <td>{{ plant.quadrant }}</td>
                                     <td>{{ plant.measurements_count }}</td>
                                     <td>
@@ -186,6 +214,8 @@
         plants     : [],
         showForm   : false,
         plant      : null,
+        orderBy    : '',
+        orderDir   : '',
       }
     },
 
@@ -226,8 +256,10 @@
         try {
           const {data}  = await axios.get(`/web/plots/${id}/plants`, {
             params     : {
-              search: this.search,
-              page  : this.page,
+              search    : this.search,
+              page      : this.page,
+              order_by  : this.orderBy,
+              order_dir : this.orderDir,
             },
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
@@ -307,6 +339,29 @@
         this.plot        = plot
         this.editingPlot = false
       },
+
+      sort(column) {
+        if (column === this.orderBy) {
+          this.orderDir = this.orderDir === 'asc' ? 'desc' : 'asc'
+        } else {
+          this.orderBy  = column
+          this.orderDir = 'asc'
+        }
+
+        this.loadPlants()
+      },
+
+      sortIcon(column) {
+        if (column !== this.orderBy) {
+          return 'swap-vertical'
+        }
+
+        if (this.orderDir === 'asc') {
+          return 'arrow-up'
+        }
+
+        return 'arrow-down'
+      }
     },
   }
 </script>

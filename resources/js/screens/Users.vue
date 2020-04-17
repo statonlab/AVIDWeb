@@ -24,9 +24,30 @@
                         <thead>
                         <tr>
                             <th style="width: 55px"></th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Member Since</th>
+                            <th>
+                                <a href="#"
+                                   class="d-flex align-items-center"
+                                   @click.prevent="sort('name')">
+                                    <span class="mr-1">Name</span>
+                                    <icon :name="sortIcon('name')"/>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="#"
+                                   class="d-flex align-items-center"
+                                   @click.prevent="sort('email')">
+                                    <span class="mr-1">Email</span>
+                                    <icon :name="sortIcon('email')"/>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="#"
+                                   class="d-flex align-items-center"
+                                   @click.prevent="sort('created_at')">
+                                    <span class="mr-1">Member Since</span>
+                                    <icon :name="sortIcon('created_at')"/>
+                                </a>
+                            </th>
                             <th>Role</th>
                         </tr>
                         </thead>
@@ -65,6 +86,7 @@
 </template>
 
 <script>
+  import Icon from '../components/Icon'
   import InlineSpinner from '../components/InlineSpinner'
   import Pager from '../components/Pager'
   import Avatar from '../components/Avatar'
@@ -75,17 +97,20 @@
     components: {
       Avatar,
       Pager,
-      InlineSpinner
+      InlineSpinner,
+      Icon,
     },
 
     data() {
       return {
-        loading : true,
-        users   : [],
-        search  : '',
-        page    : 1,
-        lastPage: 1,
-        total   : 0,
+        loading     : true,
+        users       : [],
+        search      : '',
+        page        : 1,
+        lastPage    : 1,
+        total       : 0,
+        orderBy     : '',
+        orderDir    : '',
       }
     },
 
@@ -104,8 +129,10 @@
         try {
           const {data} = await axios.get(`/web/users`, {
             params     : {
-              search: this.search,
-              page  : this.page,
+              search    : this.search,
+              page      : this.page,
+              order_by  : this.orderBy,
+              order_dir : this.orderDir
             },
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
@@ -131,6 +158,29 @@
         this.page    = page
         this.loadUsers()
       },
+
+      sort(column) {
+        if (column === this.orderBy) {
+          this.orderDir = this.orderDir === 'asc' ? 'desc' : 'asc'
+        } else {
+          this.orderBy  = column
+          this.orderDir = 'asc'
+        }
+
+        this.loadUsers()
+      },
+
+      sortIcon(column) {
+        if (column !== this.orderBy) {
+          return 'swap-vertical'
+        }
+
+        if (this.orderDir === 'asc') {
+          return 'arrow-up'
+        }
+
+        return 'arrow-down'
+      }
     },
   }
 </script>
