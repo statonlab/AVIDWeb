@@ -49,10 +49,38 @@
                             <table class="table mb-0" v-if="!loadingMeasurements && measurements.length > 0">
                                 <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Located</th>
-                                    <th>Alive</th>
-                                    <th>Height</th>
+                                    <th>
+                                        <a href="#"
+                                           class="d-flex align-items-center"
+                                           @click.prevent="sort('date')">
+                                            <span class="mr-1">Date</span>
+                                            <icon :name="sortIcon('date')"/>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="#"
+                                           class="d-flex align-items-center"
+                                           @click.prevent="sort('is_located')">
+                                            <span class="mr-1">Located</span>
+                                            <icon :name="sortIcon('is_located')"/>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="#"
+                                           class="d-flex align-items-center"
+                                           @click.prevent="sort('is_alive')">
+                                            <span class="mr-1">Alive</span>
+                                            <icon :name="sortIcon('is_alive')"/>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="#"
+                                           class="d-flex align-items-center"
+                                           @click.prevent="sort('height')">
+                                            <span class="mr-1">Height</span>
+                                            <icon :name="sortIcon('height')"/>
+                                        </a>
+                                    </th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -170,6 +198,8 @@
         lastPage           : 1,
         measurement        : null,
         deleting           : false,
+        orderBy            : '',
+        orderDir           : '',
       }
     },
 
@@ -199,8 +229,10 @@
         try {
           const {id}   = this.$route.params
           const {data} = await axios.get(`/web/plants/${id}/measurements`, {
-            params: {
-              page: this.page,
+            params     : {
+              order_by  : this.orderBy,
+              order_dir : this.orderDir,
+              page      : this.page,
             },
           })
 
@@ -270,6 +302,29 @@
         this.plant        = plant
         this.editingPlant = false
       },
+
+      sort(column) {
+        if (column === this.orderBy) {
+          this.orderDir = this.orderDir === 'asc' ? 'desc' : 'asc'
+        } else {
+          this.orderBy  = column
+          this.orderDir = 'asc'
+        }
+
+        this.loadMeasurements()
+      },
+
+      sortIcon(column) {
+        if (column !== this.orderBy) {
+          return 'swap-vertical'
+        }
+
+        if (this.orderDir === 'asc') {
+          return 'arrow-up'
+        }
+
+        return 'arrow-down'
+      }
     },
   }
 </script>

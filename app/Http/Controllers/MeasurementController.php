@@ -16,12 +16,17 @@ class MeasurementController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index(Plant $plant)
+    public function index(Plant $plant, Request $request)
     {
         $this->authorize('view', $plant);
 
+        $this->validate($request, [
+            'order_by' => 'nullable|in:date,is_located,is_alive,height',
+            'order_dir' => 'nullable|in:asc,desc',
+        ]);
+
         $measurements = $this->with($plant->measurements())
-            ->orderBy('date', 'desc')
+            ->orderBy($request->order_by ?? 'date', $request->order_dir ?? 'desc')
             ->paginate(20);
 
         return $this->success($measurements);

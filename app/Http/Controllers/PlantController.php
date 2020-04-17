@@ -28,13 +28,17 @@ class PlantController extends Controller
 
         $this->validate($request, [
             'search' => 'nullable|max:255',
+            'order_by' => 'nullable|in:tag,name,quadrant,measurements_count',
+            'order_dir' => 'nullable|in:asc,desc',
         ]);
 
         $plants = $plot->plants()->with([
-            'species',
             'type',
             'plot'
-        ])->withCount(['measurements'])->orderBy('tag', 'asc');
+        ]);
+
+        $plants = $plants->join('species', 'plants.species_id', '=', 'species.id')
+            ->select(['*'])->withCount(['measurements']);
 
         if (! empty($request->search)) {
             $term = $request->search;
@@ -43,15 +47,14 @@ class PlantController extends Controller
                 $query->whereHas('type', function ($query) use ($term) {
                     $query->where('plant_types.name', 'like', $term);
                 });
-                $query->orWhereHas('species', function($query) use($term) {
-                    $query->where('species.name', 'like', $term);
-                });
                 $query->orWhere('tag', 'like', $term);
                 $query->orWhere('quadrant', 'like', $term);
+                $query->orWhere('name', 'like', $term);
             });
         }
 
-        $plants = $plants->paginate(20);
+        $plants = $plants->orderBy($request->order_by ?? 'tag', $request->order_dir ?? 'asc')
+            ->paginate(20);
 
         return $this->success($plants);
     }
