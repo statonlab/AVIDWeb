@@ -20,8 +20,6 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
-        // The username field is related to the old platform.
-        'username',
     ];
 
     /**
