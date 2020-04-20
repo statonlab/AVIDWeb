@@ -46,6 +46,10 @@
           return
         }
 
+        if (window.outerWidth > 791) {
+          return
+        }
+
         if (this.$refs.sidebar.$el.contains(e.target)) {
           return
         }

@@ -21,6 +21,24 @@ class HomeController extends Controller
      */
     public function data()
     {
-        return view('dashboard');
+        $user = null;
+        if (auth()->check()) {
+            /** @var \App\User $user */
+            $userModel = auth()->user();
+
+            $user = [
+                'id' => $userModel->id,
+                'name' => $userModel->name,
+                'permissions' => $userModel->permissions->pluck('name'),
+                'role' => $userModel->role->only([
+                    'id',
+                    'name',
+                ]),
+            ];
+        }
+
+        return view('dashboard', [
+            'user' => $user,
+        ]);
     }
 }

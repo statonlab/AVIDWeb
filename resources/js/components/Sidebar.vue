@@ -22,9 +22,10 @@
 
 <script>
   import Icon from './Icon'
+  import User from '../helpers/User'
 
   export default {
-    name      : 'Sidebar',
+    name: 'Sidebar',
 
     components: {Icon},
 
@@ -46,16 +47,19 @@
             icon : 'rose-outline',
             to   : '/app/species',
             label: 'Species',
+            if   : User.can('manage species'),
           },
           {
             icon : 'people-outline',
             to   : '/app/users',
             label: 'Users',
+            if   : User.can('view users'),
           },
           {
-            icon: 'lock-closed-outline',
-            to: '/app/roles',
+            icon : 'lock-closed-outline',
+            to   : '/app/roles',
             label: 'Roles & Permissions',
+            if   : User.can('manage permissions'),
           },
           {
             icon : 'cog-outline',

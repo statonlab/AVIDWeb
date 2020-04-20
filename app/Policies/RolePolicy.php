@@ -21,4 +21,14 @@ class RolePolicy
     {
         return $user->isAdmin();
     }
+
+    /**
+     * @param \App\User $user
+     * @param \App\Role $role
+     * @return bool
+     */
+    public function update(User $user, Role $role)
+    {
+        return $user->isAdmin();
+    }
 }

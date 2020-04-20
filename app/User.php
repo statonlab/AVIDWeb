@@ -2,13 +2,14 @@
 
 namespace App;
 
+use App\ModelTraits\Permissions\HasRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasRole;
 
     /**
      * The attributes that are mass assignable.
@@ -40,14 +41,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

@@ -95,6 +95,7 @@ Route::group([
     Route::get('/species', 'HomeController@data');
     Route::get('/users', 'HomeController@data');
     Route::get('/users/{user}', 'HomeController@data');
+    Route::get('/roles', 'HomeController@data');
 });
 
 /**
@@ -113,4 +114,7 @@ Route::group([
     Route::patch('/user/{user}/role', 'UserController@patchRole');
 
     Route::get('/roles', 'RoleController@index');
+
+    Route::get('/permissions', 'PermissionController@index');
+    Route::patch('/permissions/{permission}/roles/{role}', 'PermissionController@toggle');
 });

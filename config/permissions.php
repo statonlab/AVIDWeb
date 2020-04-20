@@ -1,10 +1,11 @@
 <?php
+
 return [
     [
         'name' => 'view sites',
         'title' => 'View Any Site',
         'description' => 'Allow users to view any site, plot, plant and measurement including those belonging to other users.',
-        'default' => ['scientist'],
+        'default' => ['Scientist'],
     ],
     [
         'name' => 'update sites',
@@ -33,7 +34,19 @@ return [
     [
         'name' => 'delete users',
         'title' => 'Delete Any User',
-        'description' => 'Allow users to permanently delete other users.',
+        'description' => 'Allow users to permanently delete other users. Note that deleting users will result in losing their collected data.',
+        'default' => [],
+    ],
+    [
+        'name' => 'manage species',
+        'title' => 'Manage Species List',
+        'description' => 'Allow users to manage the species list. Users will be allowed to add, update and delete species.',
+        'default' => [],
+    ],
+    [
+        'name' => 'manage permissions',
+        'title' => 'Manage Roles & Permissions',
+        'description' => 'Allow users to manage roles and permissions. This would give users access to the current page.',
         'default' => [],
     ],
 ];
