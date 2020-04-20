@@ -22,6 +22,7 @@ class HomeController extends Controller
     public function data()
     {
         $user = null;
+        $last_date = null;
         if (auth()->check()) {
             /** @var \App\User $user */
             $userModel = auth()->user();
@@ -35,10 +36,18 @@ class HomeController extends Controller
                     'name',
                 ]),
             ];
+
+            /** @var \App\Measurement $measurement */
+            $measurement = $userModel->measurements()->orderBy('id', 'desc')->limit(1)->first();
+            if ($measurement) {
+                $last_date = $measurement->date->format('Y-m-d');
+            }
         }
 
         return view('dashboard', [
             'user' => $user,
+            // This is used to determine the next date value for measurements form.
+            'last_date' => $last_date,
         ]);
     }
 }

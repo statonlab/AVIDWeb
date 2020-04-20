@@ -238,16 +238,19 @@
         try {
           const {id}   = this.$route.params
           const {data} = await axios.get(`/web/plants/${id}/measurements`, {
-            params     : {
-              order_by  : this.orderBy,
-              order_dir : this.orderDir,
-              page      : this.page,
+            params: {
+              order_by : this.orderBy,
+              order_dir: this.orderDir,
+              page     : this.page,
             },
           })
 
           this.measurements = data.data
           this.lastPage     = data.last_page
           this.total        = data.total
+          data.data.map(m => {
+            console.log(m.date, moment(m.date.replace('T', ' ')).format('YYYY-MM-DD'))
+          })
         } catch (e) {
           console.error(e)
           this.$notify({
@@ -333,7 +336,7 @@
         }
 
         return 'arrow-down'
-      }
+      },
     },
   }
 </script>
