@@ -60,8 +60,22 @@
                     <table class="table table-middle mb-0" v-if="!loading && plots.length > 0">
                         <thead>
                         <tr>
-                            <th>Plot</th>
-                            <th>Plants</th>
+                            <th>
+                                <a href="#"
+                                   class="d-flex align-items-center"
+                                   @click.prevent="sort('number')">
+                                    <span class="mr-1">Plot</span>
+                                    <icon :name="sortIcon('number')"/>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="#"
+                                   class="d-flex align-items-center"
+                                   @click.prevent="sort('plants_count')">
+                                    <span class="mr-1">Plants</span>
+                                    <icon :name="sortIcon('plants_count')"/>
+                                </a>
+                            </th>
                             <th></th>
                         </tr>
                         </thead>
@@ -171,6 +185,8 @@
         request     : null,
         site        : null,
         plot        : null,
+        orderBy     : '',
+        orderDir    : '',
       }
     },
 
@@ -223,8 +239,10 @@
           const id     = this.$route.params.id
           const {data} = await axios.get(`/web/sites/${id}/plots`, {
             params     : {
-              page  : this.page,
-              search: this.search,
+              page      : this.page,
+              search    : this.search,
+              order_by  : this.orderBy,
+              order_dir : this.orderDir,
             },
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
@@ -294,6 +312,29 @@
         this.page = page
         this.loadPlots()
       },
+
+      sort(column) {
+        if (column === this.orderBy) {
+          this.orderDir = this.orderDir === 'asc' ? 'desc' : 'asc'
+        } else {
+          this.orderBy  = column
+          this.orderDir = 'asc'
+        }
+
+        this.loadPlots()
+      },
+
+      sortIcon(column) {
+        if (column !== this.orderBy) {
+          return 'swap-vertical'
+        }
+
+        if (this.orderDir === 'asc') {
+          return 'arrow-up'
+        }
+
+        return 'arrow-down'
+      }
     },
   }
 </script>
