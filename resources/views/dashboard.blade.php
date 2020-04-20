@@ -28,8 +28,7 @@
       }
 
       @if(auth()->check())
-        window.avid.user = {!!  json_encode(auth()->user()->only(['id', 'name', 'avatar']))  !!}
-        window.avid.user.role = {!!  json_encode(auth()->user()->role->only(['id', 'name']))  !!}
+        window.avid.user = {!!  json_encode($user)  !!}
       @endif
     </script>
     <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>

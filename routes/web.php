@@ -28,6 +28,7 @@ Route::group([
     Route::get('/plots/{id}', 'HomeController@data');
     Route::get('/plants/{id}', 'HomeController@data');
     Route::get('/profile', 'HomeController@data');
+    Route::get('/roles', 'HomeController@data');
 });
 
 /**
@@ -37,6 +38,8 @@ Route::group([
     'middleware' => ['auth'],
     'prefix' => '/web',
 ], function () {
+    Route::get('/search', 'SearchController@index');
+
     // Profile Controller
     Route::get('/profile', 'ProfileController@index');
 
@@ -92,6 +95,7 @@ Route::group([
     Route::get('/species', 'HomeController@data');
     Route::get('/users', 'HomeController@data');
     Route::get('/users/{user}', 'HomeController@data');
+    Route::get('/roles', 'HomeController@data');
 });
 
 /**
@@ -110,4 +114,7 @@ Route::group([
     Route::patch('/user/{user}/role', 'UserController@patchRole');
 
     Route::get('/roles', 'RoleController@index');
+
+    Route::get('/permissions', 'PermissionController@index');
+    Route::patch('/permissions/{permission}/roles/{role}', 'PermissionController@toggle');
 });

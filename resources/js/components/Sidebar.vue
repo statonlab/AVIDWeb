@@ -22,9 +22,10 @@
 
 <script>
   import Icon from './Icon'
+  import User from '../helpers/User'
 
   export default {
-    name      : 'Sidebar',
+    name: 'Sidebar',
 
     components: {Icon},
 
@@ -32,28 +33,36 @@
       return {
         items: [
           {
-            icon : 'analytics',
+            icon : 'analytics-outline',
             to   : '/app',
             exact: true,
             label: 'Dashboard',
           },
           {
-            icon : 'file-tray-full',
+            icon : 'file-tray-full-outline',
             to   : '/app/sites',
             label: 'My Data',
           },
           {
-            icon : 'rose',
+            icon : 'rose-outline',
             to   : '/app/species',
             label: 'Species',
+            if   : User.can('manage species'),
           },
           {
-            icon : 'people',
+            icon : 'people-outline',
             to   : '/app/users',
             label: 'Users',
+            if   : User.can('view users'),
           },
           {
-            icon : 'cog',
+            icon : 'lock-closed-outline',
+            to   : '/app/roles',
+            label: 'Roles & Permissions',
+            if   : User.can('manage permissions'),
+          },
+          {
+            icon : 'cog-outline',
             to   : '/app/profile',
             label: 'Settings',
           },

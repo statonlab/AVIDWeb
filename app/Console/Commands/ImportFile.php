@@ -212,7 +212,7 @@ class ImportFile extends Command
         $site->shrubs()->syncWithoutDetaching($shrubs->pluck('id'));
 
         // Find the plot. If does not exist, create one
-        $plot = Plot::firstOrCreate([
+        $plot = Plot::updateOrCreate([
             'user_id' => $user->id,
             'site_id' => $site->id,
             'number' => $plot_number,
@@ -225,6 +225,7 @@ class ImportFile extends Command
             'canopy' => empty($plot_canopy) ? null : "{$plot_canopy}%",
             'subcanopy' => empty($plot_subcanopy) ? null : "{$plot_subcanopy}%",
             'ground_cover' => empty($plot_ground_cover) ? 'null' : "{$plot_ground_cover}%",
+            'recorders' => $recorders,
         ]);
 
         $species = $this->getSpecies($species_name);

@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-content bg-light">
+    <div class="modal-content bg-light border-0 p-0">
         <div class="modal-body text-center py-4">
             <div v-if="title">
                 <h5 class="m-0 text-danger">{{ title }}</h5>
@@ -10,7 +10,7 @@
         </div>
         <div class="modal-footer border-0 p-0 d-block">
             <a href="#"
-               class="d-block w-100 text-center rounded-bottom p-3 text-uppercase text-white bg-danger"
+               class="d-block text-center rounded-bottom p-3 text-uppercase text-white bg-danger m-0"
                @click.prevent="$emit('ok')">
                 {{ ok }}
             </a>

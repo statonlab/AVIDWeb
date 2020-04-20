@@ -208,6 +208,15 @@
       this.loadMeasurements()
     },
 
+    watch: {
+      '$route.params.id': {
+        handler() {
+          this.loadPlant()
+          this.loadMeasurements()
+        },
+      },
+    },
+
     methods: {
       async loadPlant() {
         this.loading = true

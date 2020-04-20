@@ -1,23 +1,37 @@
 class User {
-    constructor(app) {
-        this.user = app.user
+  constructor(app) {
+    this.user = app.user
+  }
+
+  get() {
+    return this.user
+  }
+
+  is(user) {
+    return user.id === this.user.id
+  }
+
+  owns(resource) {
+    return this.user.id === resource.user_id
+  }
+
+  can(ability) {
+    if (Array.isArray(ability)) {
+      return ability.filter(a => {
+        return this.user.permissions.indexOf(a) > -1
+      }).length > 0
     }
 
-    get() {
-        return this.user
-    }
+    return this.user.permissions.indexOf(ability) > -1
+  }
 
-    is(user) {
-        return user.id === this.user.id
-    }
+  isAdmin() {
+    return this.user.role.name === 'Admin'
+  }
 
-    isAdmin() {
-        return this.user.role.name === 'Admin'
-    }
-
-    isScientist() {
-        return this.user.role.name === 'scientist'
-    }
+  isScientist() {
+    return this.user.role.name === 'scientist'
+  }
 }
 
 export default new User(window.avid)

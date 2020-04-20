@@ -227,7 +227,7 @@
     watch: {
       search() {
         this.loadPlants()
-      }
+      },
     },
 
     methods: {
