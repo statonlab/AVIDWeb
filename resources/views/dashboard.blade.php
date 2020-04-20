@@ -20,11 +20,12 @@
 
     <script>
       window.avid = {
-        user: null,
-        csrf: '{{ csrf_token() }}',
-        keys: {
-          maps: '{{ config('services.maps.key') }}'
-        }
+        user      : null,
+        csrf      : '{{ csrf_token() }}',
+        keys      : {
+          maps: '{{ config('services.maps.key') }}',
+        },
+        last_entry: {!! $last_date ? "'$last_date'" : "null" !!}
       }
 
       @if(auth()->check())

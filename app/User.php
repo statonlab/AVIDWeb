@@ -75,4 +75,18 @@ class User extends Authenticatable
     {
         return $this->id === ($model->user_id ?? null);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function plants() {
+        return $this->hasManyThrough(Plant::class, Plot::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function measurements() {
+        return $this->hasMany(Measurement::class);
+    }
 }

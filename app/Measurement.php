@@ -24,7 +24,7 @@ class Measurement extends Model
     protected $casts = [
         'is_located' => 'boolean',
         'is_alive' => 'boolean',
-        'date' => 'date',
+        'date' => 'date:Y-m-d',
     ];
 
     /**

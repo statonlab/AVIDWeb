@@ -93,7 +93,7 @@
                                     <td>
                                         <router-link :to="`/app/plants/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
                                     </td>
-                                    <td>{{ plant.name }}</td>
+                                    <td>{{ plant.species_name }}</td>
                                     <td>{{ plant.quadrant }}</td>
                                     <td>{{ plant.measurements_count }}</td>
                                     <td>
@@ -264,6 +264,7 @@
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
           this.plants   = data.data
+          console.log(data.data)
           this.lastPage = data.last_page
           this.total    = data.total
         } catch (e) {

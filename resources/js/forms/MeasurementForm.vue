@@ -140,21 +140,22 @@
         this.form.setDefault({
           ...this.measurement,
           is_located: this.measurement.is_located ? '1' : '0',
-          is_alive: this.measurement.is_alive === null ? '' : (this.measurement.is_alive ? '1' : '0'),
-          date: this.measurement.date ? moment(this.measurement.date).format('YYYY-MM-DD') : null,
+          is_alive  : this.measurement.is_alive === null ? '' : (this.measurement.is_alive ? '1' : '0'),
+          date      : this.measurement.date ? moment(this.measurement.date).format('YYYY-MM-DD') : null,
         })
         this.date = this.measurement.date ? moment(this.measurement.date).toDate() : null
       }
     },
 
     data() {
+      const date = window.avid.last_entry
       return {
         saving: false,
-        date  : null,
+        date  : date ? moment(date).toDate() : null,
         form  : new Form({
           is_located: '0',
           is_alive  : '',
-          date      : null,
+          date      : window.avid.last_entry,
           height    : '',
         }),
       }
@@ -162,7 +163,7 @@
 
     watch: {
       date(date) {
-        this.form.date = date ? moment(date, 'MM/DD/YYYY').format('YYYY-MM-DD') : null
+        this.form.date = date ? moment(date).format('YYYY-MM-DD') : null
       },
     },
 
@@ -179,7 +180,8 @@
         this.form.errors.clearAll()
         this.saving = true
         try {
-          const {data} = await this.form.post(`/web/plants/${this.plant.id}/measurements`)
+          const {data}           = await this.form.post(`/web/plants/${this.plant.id}/measurements`)
+          window.avid.last_entry = data.date ? moment(data.date).format('YYYY-MM-DD') : null
           this.$emit('create', data)
         } catch (e) {
           if (e.response && e.response.status !== 422) {
