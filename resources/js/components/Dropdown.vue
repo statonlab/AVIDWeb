@@ -1,6 +1,7 @@
 <template>
     <div class="dropdown autocomplete">
         <button data-toggle="dropdown"
+                data-boundary="window"
                 :disabled="disabled"
                 data-flip="false"
                 ref="btn"
@@ -14,7 +15,7 @@
             <inline-spinner v-if="loading" class="ml-auto text-primary"/>
             <icon name="caret-down" class="ml-auto btn-dropdown-icon" v-else/>
         </button>
-        <div class="dropdown-menu w-100" ref="menu">
+        <div class="dropdown-menu w-100" ref="menu" :style="`max-width: ${maxWidth}px;`">
             <div class="pb-2 px-3" v-if="autocomplete">
                 <input type="search"
                        class="form-control form-control-sm"
@@ -60,6 +61,7 @@
       autocomplete: {required: false, type: Boolean, default: false},
       loading     : {required: false, type: Boolean, default: false},
       error       : {required: false, type: Boolean, default: false},
+      maxWidth    : {required: false, type: Number, default: 230},
     },
 
     data() {
@@ -92,7 +94,7 @@
 
       value() {
         this.setIndex()
-      }
+      },
     },
 
     methods: {
