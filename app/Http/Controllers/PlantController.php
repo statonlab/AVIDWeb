@@ -43,7 +43,7 @@ class PlantController extends Controller
             'species.name as species_name',
             'quadrant',
             'plant_type_id',
-            'plot_id'
+            'plot_id',
         ])
             ->join('species', 'plants.species_id', '=', 'species.id')
             ->withCount(['measurements']);
@@ -102,6 +102,7 @@ class PlantController extends Controller
             'species_id' => $request->species_id,
             'tag' => $request->tag,
             'quadrant' => $request->quadrant,
+            'user_id' => $request->user()->id,
         ]);
 
         $plant->load([

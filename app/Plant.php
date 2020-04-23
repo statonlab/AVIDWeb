@@ -14,6 +14,7 @@ class Plant extends Model
      */
     protected $fillable = [
         'plot_id',
+        'user_id',
         'plant_type_id',
         'species_id',
         'tag',
