@@ -232,6 +232,7 @@ class ImportFile extends Command
 
         // Find the plant. If does not exist, create one
         $plant = Plant::firstOrCreate([
+            'user_id' => $user->id,
             'plot_id' => $plot->id,
             'plant_type_id' => $this->plantType->id,
             'species_id' => $species->id,

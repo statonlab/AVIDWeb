@@ -89,4 +89,11 @@ class User extends Authenticatable
     public function measurements() {
         return $this->hasMany(Measurement::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function groups() {
+        return $this->belongsToMany(Group::class);
+    }
 }
