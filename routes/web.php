@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -83,6 +85,12 @@ Route::group([
 
     // Species Search
     Route::get('/species', 'SpeciesController@index');
+
+    // Group Controller
+    Route::get('/groups', 'GroupsController@index');
+    Route::post('/groups', 'GroupsController@create');
+    Route::put('/groups/{group}', 'GroupsController@update');
+    Route::delete('/groups/{group}', 'GroupsController@index');
 });
 
 /**
