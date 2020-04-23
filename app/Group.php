@@ -30,7 +30,6 @@ class Group extends Model
         return $this->belongsToMany(User::class)->withPivot([
             'is_leader',
             'can_view',
-            'can_edit',
         ]);
     }
 
@@ -40,5 +39,22 @@ class Group extends Model
     public function sites()
     {
         return $this->belongsToMany(Site::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
+    /**
+     * @param \App\User $user
+     * @return bool
+     */
+    public function isLeader(User $user)
+    {
+        return ! ! $this->users()->wherePivot('is_leader', true)->find($user->id);
     }
 }
