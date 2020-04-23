@@ -87,10 +87,16 @@ Route::group([
     Route::get('/species', 'SpeciesController@index');
 
     // Group Controller
-    Route::get('/groups', 'GroupsController@index');
-    Route::post('/groups', 'GroupsController@create');
-    Route::put('/groups/{group}', 'GroupsController@update');
-    Route::delete('/groups/{group}', 'GroupsController@index');
+    Route::get('/groups', 'GroupController@index');
+    Route::post('/groups', 'GroupController@create');
+    Route::put('/groups/{group}', 'GroupController@update');
+    Route::get('/groups/{group}', 'GroupController@show');
+    Route::delete('/groups/{group}', 'GroupController@index');
+
+    // Invitation Controller
+    Route::get('/invitations/{group}', 'InvitationController@index');
+    Route::post('/invitations/{group}', 'InvitationController@create');
+    Route::delete('/invitations/{invitation}', 'InvitationController@delete');
 });
 
 /**

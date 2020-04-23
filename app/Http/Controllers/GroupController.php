@@ -27,18 +27,19 @@ class GroupController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $this->authorize('create', Group::class);
 
         $this->validate($request, [
-            'name' => 'required|max:255'
+            'name' => 'required|max:255',
         ]);
 
         /** @var \App\User $user */
         $user = $request->user();
         $group = Group::create([
             'user_id' => $user->id,
-            'name' => $request->name
+            'name' => $request->name,
         ]);
 
         $group->users()->attach($user->id);
@@ -53,15 +54,16 @@ class GroupController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Group $group, Request $request) {
+    public function update(Group $group, Request $request)
+    {
         $this->authorize('update', $group);
 
         $this->validate($request, [
-            'name' => 'required|max:255'
+            'name' => 'required|max:255',
         ]);
 
         $group->fill([
-            'name' => $request->name
+            'name' => $request->name,
         ])->save();
 
         return $this->created($group);
@@ -72,7 +74,24 @@ class GroupController extends Controller
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function delete(Group $group) {
+    public function show(Group $group)
+    {
+        $this->authorize('view', $group);
+
+        $group->load([
+            'invitations',
+        ]);
+
+        return $this->success($group);
+    }
+
+    /**
+     * @param \App\Group $group
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function delete(Group $group)
+    {
         $this->authorize('delete', $group);
 
         $group->delete();
