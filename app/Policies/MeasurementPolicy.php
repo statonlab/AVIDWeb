@@ -18,7 +18,7 @@ class MeasurementPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->isAdmin() || $user->isScientist();
+        return $user->hasPermissionTo('view sites');
     }
 
     /**
@@ -30,7 +30,7 @@ class MeasurementPolicy
      */
     public function view(User $user, Measurement $measurement)
     {
-        return $user->id === $measurement->user_id || $user->isAdmin() || $user->isScientist();
+        return $user->owns($measurement) || $user->hasPermissionTo('view sites');
     }
 
     /**
@@ -53,7 +53,7 @@ class MeasurementPolicy
      */
     public function update(User $user, Measurement $measurement)
     {
-        return $user->id === $measurement->user_id || $user->isAdmin() || $user->isScientist();
+        return $user->id === $measurement->user_id || $user->hasPermissionTo('update sites');
     }
 
     /**
@@ -65,7 +65,7 @@ class MeasurementPolicy
      */
     public function delete(User $user, Measurement $measurement)
     {
-        return $user->id === $measurement->user_id || $user->isAdmin() || $user->isScientist();
+        return $user->id === $measurement->user_id || $user->hasPermissionTo('delete sites');
     }
 
     /**
@@ -77,7 +77,7 @@ class MeasurementPolicy
      */
     public function restore(User $user, Measurement $measurement)
     {
-        return $user->id === $measurement->user_id || $user->isAdmin() || $user->isScientist();
+        return $user->id === $measurement->user_id || $user->hasPermissionTo('delete sites');
     }
 
     /**
@@ -89,6 +89,6 @@ class MeasurementPolicy
      */
     public function forceDelete(User $user, Measurement $measurement)
     {
-        return $user->id === $measurement->user_id || $user->isAdmin() || $user->isScientist();
+        return $user->id === $measurement->user_id || $user->hasPermissionTo('delete sites');
     }
 }

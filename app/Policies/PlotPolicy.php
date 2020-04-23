@@ -18,7 +18,7 @@ class PlotPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->isAdmin() || $user->isScientist();
+        return $user->hasPermissionTo('view sites');
     }
 
     /**
@@ -30,7 +30,11 @@ class PlotPolicy
      */
     public function view(User $user, Plot $plot)
     {
-        return $user->owns($plot) || $user->owns($plot->site) || $user->isAdmin() || $user->isScientist();
+        if($user->owns($plot) || $user->owns($plot->site)) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('view sites');
     }
 
     /**
@@ -53,7 +57,11 @@ class PlotPolicy
      */
     public function update(User $user, Plot $plot)
     {
-        return $user->owns($plot) || $user->owns($plot->site) || $user->isAdmin();
+        if($user->owns($plot) || $user->owns($plot->site)) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('update sites');
     }
 
     /**
@@ -65,7 +73,11 @@ class PlotPolicy
      */
     public function delete(User $user, Plot $plot)
     {
-        return $user->owns($plot) || $user->owns($plot->site) || $user->isAdmin();
+        if($user->owns($plot) || $user->owns($plot->site)) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('delete sites');
     }
 
     /**
@@ -77,7 +89,11 @@ class PlotPolicy
      */
     public function restore(User $user, Plot $plot)
     {
-        return $user->owns($plot) || $user->owns($plot->site) || $user->isAdmin();
+        if($user->owns($plot) || $user->owns($plot->site)) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('delete sites');
     }
 
     /**
@@ -89,6 +105,10 @@ class PlotPolicy
      */
     public function forceDelete(User $user, Plot $plot)
     {
-        return $user->owns($plot) || $user->owns($plot->site) || $user->isAdmin();
+        if($user->owns($plot) || $user->owns($plot->site)) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('delete sites');
     }
 }

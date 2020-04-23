@@ -41,7 +41,7 @@ class SpeciesPolicy
      */
     public function create(User $user)
     {
-        return $user->isAdmin();
+        return $user->hasPermissionTo('manage species');
     }
 
     /**
@@ -53,7 +53,7 @@ class SpeciesPolicy
      */
     public function update(User $user, Species $species)
     {
-        return $user->isAdmin();
+        return $user->hasPermissionTo('manage species');
     }
 
     /**
@@ -65,7 +65,7 @@ class SpeciesPolicy
      */
     public function delete(User $user, Species $species)
     {
-        return $user->isAdmin();
+        return $user->hasPermissionTo('manage species');
     }
 
     /**
@@ -77,7 +77,7 @@ class SpeciesPolicy
      */
     public function restore(User $user, Species $species)
     {
-        return $user->isAdmin();
+        return $user->hasPermissionTo('manage species');
     }
 
     /**
@@ -89,6 +89,6 @@ class SpeciesPolicy
      */
     public function forceDelete(User $user, Species $species)
     {
-        return $user->isAdmin();
+        return $user->hasPermissionTo('manage species');
     }
 }
