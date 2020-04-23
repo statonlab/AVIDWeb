@@ -17,7 +17,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->isAdmin();
+        return $user->hasPermissionTo('view users');
     }
 
     /**
@@ -29,7 +29,7 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        return $user->id === $model->id || $user->isAdmin();
+        return $user->is($model) || $user->hasPermissionTo('view users');
     }
 
     /**
@@ -41,7 +41,7 @@ class UserPolicy
      */
     public function viewSites(User $user, User $model)
     {
-        return $user->id === $model->id || $user->isAdmin() || $user->isScientist();
+        return $user->is($model) || $user->hasPermissionTo('view sites') || $user->hasPermissionTo('view users');
     }
 
     /**
@@ -53,6 +53,6 @@ class UserPolicy
      */
     public function setRole(User $user, User $model)
     {
-        return $user->isAdmin();
+        return $user->hasPermissionTo('manage permissions');
     }
 }
