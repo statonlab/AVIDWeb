@@ -31,6 +31,8 @@ Route::group([
     Route::get('/plants/{id}', 'HomeController@data');
     Route::get('/profile', 'HomeController@data');
     Route::get('/roles', 'HomeController@data');
+    Route::get('/groups', 'HomeController@data');
+    Route::get('/groups/{id}', 'HomeController@data');
 });
 
 /**

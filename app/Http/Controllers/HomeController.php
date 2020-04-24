@@ -19,7 +19,7 @@ class HomeController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function data()
+    public function data(...$args)
     {
         $user = null;
         $last_date = null;

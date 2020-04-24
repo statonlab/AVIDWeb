@@ -264,7 +264,6 @@
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
           this.plants   = data.data
-          console.log(data.data)
           this.lastPage = data.last_page
           this.total    = data.total
         } catch (e) {

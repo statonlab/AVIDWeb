@@ -248,9 +248,6 @@
           this.measurements = data.data
           this.lastPage     = data.last_page
           this.total        = data.total
-          data.data.map(m => {
-            console.log(m.date, moment(m.date.replace('T', ' ')).format('YYYY-MM-DD'))
-          })
         } catch (e) {
           console.error(e)
           this.$notify({
