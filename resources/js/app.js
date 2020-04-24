@@ -21,6 +21,8 @@ import User from './screens/User'
 import Plants from './screens/Plants'
 import Measurements from './components/Measurements'
 import Roles from './screens/Roles'
+import Groups from './screens/Groups'
+import Group from './screens/Group'
 
 Vue.use(Alert)
 Vue.use(VueNotification)
@@ -45,6 +47,8 @@ const routes = [
   {path: '/app/users', component: Users},
   {path: '/app/users/:id', component: User},
   {path: '/app/roles', component: Roles},
+  {path: '/app/groups', component: Groups},
+  {path: '/app/groups/:id', component: Group},
 ]
 
 const router = new VueRouter({
