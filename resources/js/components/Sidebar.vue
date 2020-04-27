@@ -15,17 +15,17 @@
                     </router-link>
                     <div v-if="typeof item.menu !== 'undefined' && (typeof item.if === 'undefined' || item.if)"
                          class="sidebar-menu-container"
-                         :class="{'is-open': isOpen(item.menu, key)}">
+                         :class="{'is-open': isOpen(key)}">
                         <a href="#"
                            @click.prevent="open(key)"
                            class="nav-link sidebar-menu-header"
                            style="padding-right:0 !important;">
-                            <icon :name="isOpen(item.menu, key) ? item.icon.replace('-outlined', '') : item.icon"/>
+                            <icon :name="isOpen(key) ? item.icon.replace('-outlined', '') : item.icon"/>
                             <span class="my-auto">{{ item.label }}</span>
                             <icon name="caret-back" class="menu-caret ml-auto"/>
                         </a>
                         <transition name="slide">
-                            <div class="sidebar-menu nav nav-pills flex-column" v-if="isOpen(item.menu, key)">
+                            <div class="sidebar-menu nav nav-pills flex-column" v-if="isOpen(key)">
                                 <router-link
                                         v-for="(link, i) in item.menu"
                                         :key="i"
@@ -124,14 +124,8 @@
     },
 
     methods: {
-      isOpen(menu, key) {
+      isOpen(key) {
         return this.opened === key
-        return true
-
-        const path = this.$route.path
-        return menu.filter(item => {
-          return path.includes(item.to)
-        }).length > 0
       },
 
       open(key, close) {
