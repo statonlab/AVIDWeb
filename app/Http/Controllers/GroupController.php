@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\Http\Controllers\Traits\ListsSites;
 use App\Invitation;
 use App\User;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
 {
+    use ListsSites;
+
     /**
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
@@ -136,7 +139,56 @@ class GroupController extends Controller
         return $this->deleted('Deleted');
     }
 
-    public function deleteUser(Group $group, Request $request) {
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function restore($id)
+    {
+        $group = Group::onlyTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $group);
+
+        $group->restore();
+
+        return $this->created($group);
+    }
+
+    /**
+     * @param \App\Group $group
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \App\Exceptions\UserDoesntBelongToGroupException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function deleteUser(Group $group, Request $request)
+    {
         $this->authorize('deleteUser', $group);
+
+        $this->validate($request, [
+            'user' => 'required|exists:users,id',
+        ]);
+
+        $user = User::findOrFail($request->user);
+
+        $group->remove($user);
+
+        return $this->deleted();
+    }
+
+    /**
+     * @param \App\Group $group
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException'
+     */
+    public function sites(Group $group)
+    {
+        $this->authorize('view', $group);
+
+        $sites = $this->getSites($group->sites());
+
+        return $this->success($sites->paginate(20));
     }
 }

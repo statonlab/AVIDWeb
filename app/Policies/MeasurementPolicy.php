@@ -30,7 +30,23 @@ class MeasurementPolicy
      */
     public function view(User $user, Measurement $measurement)
     {
-        return $user->owns($measurement) || $user->hasPermissionTo('view sites');
+        if ($user->owns($measurement) || $user->hasPermissionTo('view sites')) {
+            return  true;
+        }
+
+        if($user->isFriendsWith($measurement->plant->user)) {
+            return true;
+        }
+
+        if ($user->isFriendsWith($measurement->plot->user)) {
+            return true;
+        }
+
+        if ($user->isFriendsWith($measurement->site->user)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

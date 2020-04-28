@@ -36,6 +36,13 @@ class Measurement extends Model
     }
 
     /**
+     * @return mixed
+     */
+    public function plot() {
+        return $this->plant()->first()->plot();
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
@@ -47,6 +54,6 @@ class Measurement extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function site() {
-        return $this->plant->plot->site();
+        return $this->plant()->first()->plot()->first()->site();
     }
 }

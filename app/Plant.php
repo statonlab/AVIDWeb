@@ -68,6 +68,6 @@ class Plant extends Model
      */
     public function site()
     {
-        return $this->plot->site();
+        return $this->plot()->first()->site();
     }
 }

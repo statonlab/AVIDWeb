@@ -5,9 +5,9 @@
         </div>
 
         <div v-if="!loading && group">
-            <div class="d-flex">
+            <div class="d-flex mb-3 align-items-center">
                 <div class="flex-grow-1">
-                    <h1 class="page-title mb-3">
+                    <h1 class="page-title">
                         {{ group.name }}
                     </h1>
                 </div>
@@ -98,7 +98,10 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-
+                    <sites-data-view
+                        :url="`/web/groups/${group.id}/sites`"
+                        :show-owner="true"
+                    />
                 </div>
             </div>
         </div>
@@ -132,11 +135,12 @@
   import InvitationForm from '../forms/InvitationForm'
   import User from '../helpers/User'
   import GroupForm from '../forms/GroupForm'
+  import SitesDataView from '../components/Data/SitesDataView'
 
   export default {
     name: 'Group',
 
-    components: {GroupForm, InvitationForm, Icon, Avatar, InlineSpinner},
+    components: {SitesDataView, GroupForm, InvitationForm, Icon, Avatar, InlineSpinner},
 
     data() {
       return {
