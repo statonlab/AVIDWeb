@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
 
 /**
  * Views for authenticated users.
@@ -96,8 +97,8 @@ Route::group([
     Route::delete('/groups/{group}', 'GroupController@index');
 
     // Invitation Controller
-    Route::get('/invitations/{group}', 'InvitationController@index');
-    Route::post('/invitations/{group}', 'InvitationController@create');
+    Route::get('groups/{group}/invitations', 'InvitationController@index');
+    Route::post('groups/{group}/invitations', 'InvitationController@create');
     Route::delete('/invitations/{invitation}', 'InvitationController@delete');
 });
 

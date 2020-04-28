@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-        <div class="modal show" tabindex="-1" role="dialog" style="display: block" v-show="show">
+        <div class="modal show" tabindex="-1" role="dialog" style="display: block; z-index: 99999999" v-show="show">
             <div class="modal-backdrop bg-transparent-dark">
                 <div :class="['modal-dialog', {'alert-max-width': type === 'alert'}]" role="document" ref="modal">
                     <simple-alert

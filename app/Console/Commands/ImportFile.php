@@ -23,7 +23,7 @@ class ImportFile extends Command
      *
      * @var string
      */
-    protected $signature = 'import:file {data_file} {users_file} {--plant_type=}';
+    protected $signature = 'import:file {data_file} {--users_file=} {--plant_type=}';
 
     /**
      * The console command description.
@@ -81,6 +81,7 @@ class ImportFile extends Command
         while ($line = fgetcsv($users_fp)) {
             array_walk($line, 'trim');
             [$username, $name, $email] = $line;
+            $username = strtolower($username);
 
             // Check if the user exists
             $user = User::where('email', $email)->first();
@@ -177,6 +178,7 @@ class ImportFile extends Command
             $url,
         ] = $line;
         array_walk($line, 'trim');
+        $username = strtolower($username);
 
         // Find the user
         $user = $this->userIndex[$username] ?? null;
@@ -339,7 +341,7 @@ class ImportFile extends Command
     public function getFileDescriptors()
     {
         $data_file_path = $this->argument('data_file');
-        $users_file_path = $this->argument('users_file');
+        $users_file_path = $this->option('users_file');
 
         $this->fileExists($data_file_path);
         $this->fileExists($users_file_path);

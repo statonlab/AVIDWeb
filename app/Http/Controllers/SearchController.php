@@ -8,12 +8,16 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function index(Request $request) {
-        $plants = Plant::where('tag', $request->search)->with([
-            'plot' => function($query) {
-                $query->with(['site']);
-            }
-        ])->paginate(10);
+    public function index(Request $request)
+    {
+        $plants = Plant::where('tag', $request->search)
+            ->where('user_id', $request->user()->id)
+            ->with([
+                'plot' => function ($query) {
+                    $query->with(['site']);
+                },
+            ])
+            ->paginate(10);
 
         return $this->success($plants);
     }

@@ -62,4 +62,12 @@ class Plant extends Model
     {
         return $this->hasMany(Measurement::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function site()
+    {
+        return $this->plot->site();
+    }
 }
