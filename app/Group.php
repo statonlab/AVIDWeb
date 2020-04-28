@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Exceptions\UserDoesntBelongToGroupException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -56,5 +57,21 @@ class Group extends Model
     public function isLeader(User $user)
     {
         return ! ! $this->users()->wherePivot('is_leader', true)->find($user->id);
+    }
+
+    /**
+     * @param \App\User $user
+     * @return $this
+     * @throws \App\Exceptions\UserDoesntBelongToGroupException
+     */
+    public function remove(User $user) {
+        if($this->users()->where('users.id', $user->id)->doesntExist()) {
+            throw new UserDoesntBelongToGroupException();
+        }
+
+        $this->sites()->detach($user->sites->pluck('id'));
+        $this->users()->detach($user->id);
+
+        return $this;
     }
 }

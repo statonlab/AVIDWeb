@@ -30,7 +30,15 @@ class PlantPolicy
      */
     public function view(User $user, Plant $plant)
     {
-        return $user->owns($plant->plot) || $user->hasPermissionTo('view sites');
+        if ($user->owns($plant->plot) || $user->hasPermissionTo('view sites')) {
+            return true;
+        }
+
+        if ($user->isFriendsWith($plant->user) || $user->isFriendsWith($plant->plot->user) || $user->isFriendsWith($plant->plot->site->user)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

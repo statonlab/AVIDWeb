@@ -95,6 +95,7 @@ Route::group([
     Route::put('/groups/{group}', 'GroupController@update');
     Route::get('/groups/{group}', 'GroupController@show');
     Route::delete('/groups/{group}', 'GroupController@index');
+    Route::get('/groups/{group}/sites', 'GroupController@sites');
 
     // Invitation Controller
     Route::get('groups/{group}/invitations', 'InvitationController@index');

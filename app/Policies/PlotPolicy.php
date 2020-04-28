@@ -30,11 +30,19 @@ class PlotPolicy
      */
     public function view(User $user, Plot $plot)
     {
-        if($user->owns($plot) || $user->owns($plot->site)) {
+        if ($user->owns($plot) || $user->owns($plot->site)) {
             return true;
         }
 
-        return $user->hasPermissionTo('view sites');
+        if ($user->hasPermissionTo('view sites')) {
+            return true;
+        }
+
+        if ($user->isFriendsWith($plot->user) || $user->isFriendsWith($plot->site->user)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -57,7 +65,7 @@ class PlotPolicy
      */
     public function update(User $user, Plot $plot)
     {
-        if($user->owns($plot) || $user->owns($plot->site)) {
+        if ($user->owns($plot) || $user->owns($plot->site)) {
             return true;
         }
 
@@ -73,7 +81,7 @@ class PlotPolicy
      */
     public function delete(User $user, Plot $plot)
     {
-        if($user->owns($plot) || $user->owns($plot->site)) {
+        if ($user->owns($plot) || $user->owns($plot->site)) {
             return true;
         }
 
@@ -89,7 +97,7 @@ class PlotPolicy
      */
     public function restore(User $user, Plot $plot)
     {
-        if($user->owns($plot) || $user->owns($plot->site)) {
+        if ($user->owns($plot) || $user->owns($plot->site)) {
             return true;
         }
 
@@ -105,7 +113,7 @@ class PlotPolicy
      */
     public function forceDelete(User $user, Plot $plot)
     {
-        if($user->owns($plot) || $user->owns($plot->site)) {
+        if ($user->owns($plot) || $user->owns($plot->site)) {
             return true;
         }
 

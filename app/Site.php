@@ -28,6 +28,14 @@ class Site extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function county()
     {
         return $this->belongsTo(County::class);
@@ -60,14 +68,18 @@ class Site extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function species() {
-        return $this->belongsToMany(Species::class, 'site_species', 'site_id', 'species_id');
+    public function species()
+    {
+        return $this->belongsToMany(Species::class, 'site_species', 'site_id',
+            'species_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function shrubs() {
-        return $this->belongsToMany(Species::class, 'site_shrubs', 'site_id', 'species_id');
+    public function shrubs()
+    {
+        return $this->belongsToMany(Species::class, 'site_shrubs', 'site_id',
+            'species_id');
     }
 }
