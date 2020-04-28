@@ -42,4 +42,11 @@ class Measurement extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function site() {
+        return $this->plant->plot->site();
+    }
 }

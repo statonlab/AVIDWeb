@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Invitation;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -35,5 +37,30 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param $user
+     * @return \Illuminate\Http\RedirectResponse|null
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if (session()->has('invitation')) {
+            $invitation = Invitation::find(session('invitation'));
+            session()->remove('invitation');
+
+            if (! $invitation) {
+                return null;
+            }
+
+            if ($invitation->status !== Invitation::PENDING) {
+                return null;
+            }
+
+            $invitation->accept($user);
+
+            return redirect()->to('/app/groups/'.$invitation->group_id.'?accepted=1');
+        }
     }
 }

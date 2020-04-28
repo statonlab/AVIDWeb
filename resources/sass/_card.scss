@@ -21,3 +21,9 @@
 .card-border-top {
     border-top: 3px solid $primary;
 }
+
+.hover-highlight {
+    &:hover {
+        background-color: $gray-100;
+    }
+}

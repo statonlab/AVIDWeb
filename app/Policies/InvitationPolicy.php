@@ -15,9 +15,10 @@ class InvitationPolicy
      * Determine whether the user can view any models.
      *
      * @param \App\User $user
+     * @param Group $group
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, Group $group)
     {
         return $user->hasPermissionTo('view groups');
     }
@@ -31,7 +32,7 @@ class InvitationPolicy
      */
     public function view(User $user, Invitation $invitation)
     {
-        return $user->owns($invitation) || $user->isAdmin();
+        return $user->owns($invitation) || $invitation->group->isLeader($user) || $user->isAdmin();
     }
 
     /**
@@ -83,7 +84,7 @@ class InvitationPolicy
      */
     public function delete(User $user, Invitation $invitation)
     {
-        //
+        return $user->owns($invitation) || $invitation->group->isLeader($user) || $user->isAdmin();
     }
 
     /**
@@ -95,7 +96,7 @@ class InvitationPolicy
      */
     public function restore(User $user, Invitation $invitation)
     {
-        //
+        return $user->owns($invitation) || $invitation->group->isLeader($user) || $user->isAdmin();
     }
 
     /**
@@ -107,6 +108,6 @@ class InvitationPolicy
      */
     public function forceDelete(User $user, Invitation $invitation)
     {
-        //
+        return $user->owns($invitation) || $invitation->group->isLeader($user) || $user->isAdmin();
     }
 }

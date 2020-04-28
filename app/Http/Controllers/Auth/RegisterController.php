@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Invitation;
 use App\Role;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -54,6 +56,33 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param $user
+     * @return \Illuminate\Http\RedirectResponse|null
+     */
+    protected function registered(Request $request, $user)
+    {
+        if (session()->has('invitation')) {
+            $invitation = Invitation::find(session('invitation'));
+            session()->remove('invitation');
+
+            if (! $invitation) {
+                return null;
+            }
+
+            if ($invitation->status !== Invitation::PENDING) {
+                return null;
+            }
+
+            $invitation->accept($user);
+
+            return redirect()->to('/app/groups/'.$invitation->group_id.'?accepted=1');
+        }
+
+        return null;
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\Invitation;
+use App\User;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -16,7 +18,13 @@ class GroupController extends Controller
         /** @var \App\User $user */
         $user = $request->user();
 
-        $groups = $user->groups()->orderBy('name', 'asc')->paginate(20);
+        $groups = $user->groups()->with([
+            'owner' => function ($query) {
+                $query->select(['users.id', 'users.name']);
+            },
+        ])->withCount([
+            'users',
+        ])->orderBy('name', 'asc')->paginate(20);
 
         return $this->success($groups);
     }
@@ -74,13 +82,42 @@ class GroupController extends Controller
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show(Group $group)
+    public function show(Group $group, Request $request)
     {
         $this->authorize('view', $group);
 
+        /** @var \App\User $user */
+        $user = $request->user();
+
         $group->load([
-            'invitations',
+            'users' => function ($query) {
+                $query->select(['users.id', 'users.name']);
+            },
+            'owner' => function ($query) {
+                $query->select(['users.id', 'users.name']);
+            },
         ]);
+
+        if ($user->can('viewAny', [Invitation::class, $group])) {
+            $group->load([
+                'invitations' => function ($query) {
+                    $query->where([
+                        'status' => Invitation::PENDING,
+                    ]);
+                    $query->with([
+                        'user' => function ($query) {
+                            $query->select(['users.id', 'users.name']);
+                        },
+                    ]);
+                },
+            ]);
+
+            $group->invitations->transform(function (Invitation $invitation) {
+                $invitation->expired = $invitation->expires_at->isPast();
+
+                return $invitation;
+            });
+        }
 
         return $this->success($group);
     }
@@ -97,5 +134,9 @@ class GroupController extends Controller
         $group->delete();
 
         return $this->deleted('Deleted');
+    }
+
+    public function deleteUser(Group $group, Request $request) {
+        $this->authorize('deleteUser', $group);
     }
 }

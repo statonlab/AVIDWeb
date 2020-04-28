@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class InvitationMail extends Mailable implements ShouldQueue
+class InvitationAcceptedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -31,8 +31,9 @@ class InvitationMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->to($this->invitation->email, $this->invitation->name)
-            ->subject($this->invitation->user->name.' Invited you to Join '.$this->invitation->group->name)
-            ->markdown('mail.invitation');
+        return $this
+            ->to($this->invitation->user->email, $this->invitation->user->name)
+            ->subject("{$this->invitation->name} has Accepted Your Invitation")
+            ->markdown('mail.invitation_accepted');
     }
 }

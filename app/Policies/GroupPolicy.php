@@ -30,7 +30,16 @@ class GroupPolicy
      */
     public function view(User $user, Group $group)
     {
-        return $user->owns($group) || $user->hasPermissionTo('view groups');
+
+        if ($user->owns($group)) {
+            return true;
+        }
+
+        if ($group->users()->where('users.id', $user->id)->exists()) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('view groups');
     }
 
     /**
@@ -88,6 +97,18 @@ class GroupPolicy
      * @return mixed
      */
     public function forceDelete(User $user, Group $group)
+    {
+        return $user->owns($group) || $user->hasPermissionTo('delete groups');
+    }
+
+    /**
+     * Determine whether the user can permanently remove the model.
+     *
+     * @param \App\User $user
+     * @param \App\Group $group
+     * @return mixed
+     */
+    public function deleteUser(User $user, Group $group)
     {
         return $user->owns($group) || $user->hasPermissionTo('delete groups');
     }

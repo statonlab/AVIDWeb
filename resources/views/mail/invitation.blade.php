@@ -1,5 +1,5 @@
 @component('mail::message')
-Hello,
+Hello{{ $invitation->name ? " $invitation->name" : '' }},
 
 {{ $invitation->user->name }} has invited you to join their group ({{ $invitation->group->name }}) on AVID.
 Use the button bellow to accept the invitation and join the group.

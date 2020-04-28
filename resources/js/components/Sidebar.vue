@@ -83,13 +83,13 @@
               {
                 icon : 'rose-outline',
                 to   : '/app/species',
-                label: 'Species',
+                label: 'Manage Species',
                 if   : User.can('manage species'),
               },
               {
                 icon : 'people-outline',
                 to   : '/app/users',
-                label: 'Users',
+                label: 'Manage Users',
                 if   : User.can('view users'),
               },
               {
