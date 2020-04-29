@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="ml-auto">
-                    <button class="btn btn-link" @click.prevent="editingPlant = true">
+                    <button class="btn btn-link" v-if="User.owns(plant) || User.can('update sites')" @click.prevent="editingPlant = true">
                         <icon name="create"/>
                         <span>Edit Plant</span>
                     </button>
@@ -32,7 +32,7 @@
                                 <strong>Measurements</strong>
                             </div>
                             <div class="ml-auto flex-shrink-0 pl-1">
-                                <button class="btn btn-primary" @click.prevent="add">
+                                <button class="btn btn-primary" @click.prevent="add" v-if="User.owns(plant) || User.can('update sites')">
                                     <icon name="add"/>
                                     <span>Add Measurement</span>
                                 </button>
@@ -104,12 +104,14 @@
                                             <button type="button"
                                                     class="btn btn-link btn-sm"
                                                     v-tooltip="'Edit'"
+                                                    v-if="User.owns(measurement) || User.can('update sites')"
                                                     @click.prevent="edit(measurement)">
                                                 <icon name="create"/>
                                             </button>
                                             <button type="button"
                                                     class="btn btn-sm"
                                                     v-tooltip="'Delete'"
+                                                    v-if="User.owns(measurement) || User.can('delete sites')"
                                                     @click.prevent="destroy(measurement)"
                                                     :class="deleting !== measurement.id ? 'btn-link' : 'btn-danger'"
                                                     :disabled="deleting === measurement.id">
@@ -178,6 +180,7 @@
   import MeasurementForm from '../forms/MeasurementForm'
   import moment from 'moment'
   import PlantForm from '../forms/PlantForm'
+  import User from '../helpers/User'
 
   export default {
     name: 'Measurements',
@@ -186,6 +189,7 @@
 
     data() {
       return {
+        User,
         moment,
         loading            : true,
         editingPlant       : false,

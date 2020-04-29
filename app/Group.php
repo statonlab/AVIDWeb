@@ -10,6 +10,9 @@ class Group extends Model
 {
     use SoftDeletes;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'user_id',
         'name',
