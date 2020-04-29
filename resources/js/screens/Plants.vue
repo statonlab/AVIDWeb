@@ -151,6 +151,10 @@
 
                                 <dt>Site</dt>
                                 <dd>{{plot.site.name}}</dd>
+
+                                <dt>Recorders</dt>
+                                <dd v-if="plot.recorders !== null">{{plot.recorders}}</dd>
+                                <dd v-else>Not Provided</dd>
                             </dl>
                         </div>
                     </div>
