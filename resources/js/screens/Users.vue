@@ -109,8 +109,8 @@
         page        : 1,
         lastPage    : 1,
         total       : 0,
-        orderBy     : '',
-        orderDir    : '',
+        orderBy     : 'name',
+        orderDir    : 'asc',
       }
     },
 

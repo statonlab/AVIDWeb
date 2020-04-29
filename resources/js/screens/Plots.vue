@@ -185,8 +185,8 @@
         request     : null,
         site        : null,
         plot        : null,
-        orderBy     : '',
-        orderDir    : '',
+        orderBy     : 'number',
+        orderDir    : 'asc',
       }
     },
 

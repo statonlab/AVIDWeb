@@ -214,8 +214,8 @@
         plants     : [],
         showForm   : false,
         plant      : null,
-        orderBy    : '',
-        orderDir   : '',
+        orderBy    : 'tag',
+        orderDir   : 'asc',
       }
     },
 
