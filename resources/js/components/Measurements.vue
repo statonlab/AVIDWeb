@@ -202,8 +202,8 @@
         lastPage           : 1,
         measurement        : null,
         deleting           : false,
-        orderBy            : '',
-        orderDir           : '',
+        orderBy            : 'date',
+        orderDir           : 'desc',
       }
     },
 
