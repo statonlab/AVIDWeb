@@ -7,7 +7,7 @@ trait ListsSites
     /**
      * Get a list of ordered.
      *
-     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Relations\Relation $sites
+     * @param \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Relations\Relation $sites
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function getSites($sites)

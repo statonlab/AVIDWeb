@@ -23,6 +23,7 @@ import Measurements from './components/Measurements'
 import Roles from './screens/Roles'
 import Groups from './screens/Groups'
 import Group from './screens/Group'
+import AdminSites from './screens/admin/AdminSites'
 
 Vue.use(Alert)
 Vue.use(VueNotification)
@@ -49,6 +50,7 @@ const routes = [
   {path: '/app/roles', component: Roles},
   {path: '/app/groups', component: Groups},
   {path: '/app/groups/:id', component: Group},
+  {path: '/app/admin/sites', component: AdminSites}
 ]
 
 const router = new VueRouter({

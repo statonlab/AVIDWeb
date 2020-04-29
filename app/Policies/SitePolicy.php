@@ -30,7 +30,15 @@ class SitePolicy
      */
     public function view(User $user, Site $site)
     {
-        return $user->owns($site) || $user->hasPermissionTo('view sites');
+        if ($user->owns($site)) {
+            return true;
+        }
+
+        if($user->isFriendsWith($site->user)) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('view sites');
     }
 
     /**
