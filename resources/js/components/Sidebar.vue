@@ -78,22 +78,24 @@
           {
             icon : 'lock-closed-outline',
             label: 'Admin Menu',
-            if   : User.can(['manage species', 'view users', 'manage permissions']),
+            if   : User.can(['manage species', 'view users', 'manage permissions', 'view sites']),
             menu : [
               {
-                icon : 'rose-outline',
+                to   : '/app/admin/sites',
+                label: 'All Data',
+                if   : User.can('view sites'),
+              },
+              {
                 to   : '/app/species',
                 label: 'Manage Species',
                 if   : User.can('manage species'),
               },
               {
-                icon : 'people-outline',
                 to   : '/app/users',
                 label: 'Manage Users',
                 if   : User.can('view users'),
               },
               {
-                icon : 'lock-closed-outline',
                 to   : '/app/roles',
                 label: 'Roles & Permissions',
                 if   : User.can('manage permissions'),

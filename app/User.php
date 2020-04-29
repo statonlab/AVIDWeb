@@ -108,7 +108,7 @@ class User extends Authenticatable
     public function isFriendsWith(User $user)
     {
         return $user->groups()
-            ->whereHas('user', function($query) use($user) {
+            ->whereHas('users', function($query) use($user) {
                 $query->where('users.id', $user->id);
             })
             ->exists();

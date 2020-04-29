@@ -63,7 +63,6 @@ class InvitationPolicy
      */
     public function update(User $user, Invitation $invitation)
     {
-
         if ($user->owns($invitation)) {
             return true;
         }

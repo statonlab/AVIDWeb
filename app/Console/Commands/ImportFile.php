@@ -181,6 +181,7 @@ class ImportFile extends Command
         $username = strtolower($username);
 
         // Find the user
+        /** @var \App\User|null $user */
         $user = $this->userIndex[$username] ?? null;
         if (! $user) {
             $this->putError($i, "User $username does not exist.");
@@ -217,7 +218,7 @@ class ImportFile extends Command
         $plot = Plot::updateOrCreate([
             'user_id' => $user->id,
             'site_id' => $site->id,
-            'number' => $plot_number,
+            'number' => intval($plot_number),
         ], [
             'latitude' => empty($latitude) ? null : floatval($latitude),
             'longitude' => empty($longitude) ? null : floatval($longitude),

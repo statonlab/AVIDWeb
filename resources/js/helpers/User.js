@@ -24,14 +24,6 @@ class User {
 
     return this.user.permissions.indexOf(ability) > -1
   }
-
-  isAdmin() {
-    return this.user.role.name === 'Admin'
-  }
-
-  isScientist() {
-    return this.user.role.name === 'scientist'
-  }
 }
 
 export default new User(window.avid)

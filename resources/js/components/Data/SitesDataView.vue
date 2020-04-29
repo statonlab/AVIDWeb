@@ -67,12 +67,14 @@
                         <td>{{ site.plants_count | plural('Plant', 'Plants') }}</td>
                         <td class="text-right no-wrap">
                             <button class="show-on-hover btn btn-link btn-sm mr-1"
+                                    v-if="User.owns(site) || User.can('update sites')"
                                     @click.prevent="edit(site)"
                                     v-tooltip="'Edit Site'">
                                 <icon name="create"/>
                             </button>
                             <button class="show-on-hover btn btn-link btn-sm"
                                     v-tooltip="'Delete Site'"
+                                    v-if="User.owns(site) || User.can('delete sites')"
                                     @click.prevent="destroy(site)">
                                 <icon name="trash" v-if="deleting !== site.id"/>
                                 <inline-spinner class="text-primary" v-else/>
@@ -99,6 +101,7 @@
   import InlineSpinner from '../InlineSpinner'
   import SiteForm from '../../forms/SiteForm'
   import Icon from '../Icon'
+  import User from '../../helpers/User'
 
   export default {
     name: 'SitesDataView',
@@ -112,6 +115,7 @@
 
     data() {
       return {
+        User: User,
         showSiteForm: false,
         sites       : [],
         loading     : false,
@@ -159,6 +163,7 @@
           this.sites    = data.data
           this.lastPage = data.last_page
           this.loading  = false
+          this.$emit('load', data)
         } catch (e) {
           if (!axios.isCancel(e)) {
             this.loading = false

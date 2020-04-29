@@ -34,6 +34,11 @@ Route::group([
     Route::get('/roles', 'HomeController@data');
     Route::get('/groups', 'HomeController@data');
     Route::get('/groups/{id}', 'HomeController@data');
+    Route::get('/species', 'HomeController@data');
+    Route::get('/users', 'HomeController@data');
+    Route::get('/users/{user}', 'HomeController@data');
+    Route::get('/roles', 'HomeController@data');
+    Route::get('/admin/sites', 'HomeController@data');
 });
 
 /**
@@ -43,6 +48,7 @@ Route::group([
     'middleware' => ['auth'],
     'prefix' => '/web',
 ], function () {
+    // Search Controller
     Route::get('/search', 'SearchController@index');
 
     // Profile Controller
@@ -101,38 +107,24 @@ Route::group([
     Route::get('groups/{group}/invitations', 'InvitationController@index');
     Route::post('groups/{group}/invitations', 'InvitationController@create');
     Route::delete('/invitations/{invitation}', 'InvitationController@delete');
-});
 
-/**
- * Views for admin users only!
- */
-Route::group([
-    'middleware' => ['auth', 'admin'],
-    'prefix' => '/app',
-], function () {
-    Route::get('/species', 'HomeController@data');
-    Route::get('/users', 'HomeController@data');
-    Route::get('/users/{user}', 'HomeController@data');
-    Route::get('/roles', 'HomeController@data');
-});
-
-/**
- * Web API routes for admin users only!
- */
-Route::group([
-    'middleware' => ['auth', 'admin'],
-    'prefix' => '/web',
-], function () {
+    // Species Controller
     Route::post('/species', 'SpeciesController@create');
     Route::put('/species/{species}', 'SpeciesController@update');
     Route::delete('/species/{species}', 'SpeciesController@delete');
 
+    // Users Controller
     Route::get('/users', 'UserController@index');
     Route::get('/users/{user}', 'UserController@show');
     Route::patch('/user/{user}/role', 'UserController@patchRole');
 
+    // Roles Controller
     Route::get('/roles', 'RoleController@index');
 
+    // Permissions Controller
     Route::get('/permissions', 'PermissionController@index');
     Route::patch('/permissions/{permission}/roles/{role}', 'PermissionController@toggle');
+
+    // Admin Sites
+    Route::get('/admin/sites', 'Admin\SiteController@index');
 });
