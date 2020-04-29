@@ -145,6 +145,18 @@
                             {{ form.errors.first('diameter') }}
                         </span>
                     </div>
+                    <div class="form-group">
+                        <label for="species">
+                            Species
+                        </label>
+                        <tokens-field id="species" v-model="form.species" />
+                    </div>
+                    <div class="form-group">
+                        <label for="shrubs">
+                            Shrubs
+                        </label>
+                        <tokens-field id="shrubs" v-model="form.shrubs" />
+                    </div>
                 </modal-body>
                 <modal-footer class="d-flex">
                     <button class="btn btn-primary" type="submit" :disabled="saving">
@@ -175,6 +187,7 @@
   import Autocomplete from '../components/Autocomplete'
   import Dropdown from '../components/Dropdown'
   import InlineSpinner from '../components/InlineSpinner'
+  import TokensField from '../components/TokensField'
 
   export default {
     name: 'SiteForm',
@@ -191,6 +204,7 @@
       ModalHeader,
       ModalCard,
       Modal,
+      TokensField,
     },
 
     props: {
@@ -204,6 +218,7 @@
         stateSearch    : '',
         counties       : [],
         countySearch   : '',
+        species        : [],
         form           : new Form({
           state_id     : null,
           county_id    : null,
@@ -213,6 +228,8 @@
           basal_area   : '',
           owner_name   : '',
           owner_contact: '',
+          species      : [],
+          shrubs       : [],
         }),
         stateRequest   : null,
         countyRequest  : null,
@@ -223,7 +240,11 @@
 
     mounted() {
       if (this.site) {
-        this.form.setDefault(this.site)
+        this.form.setDefault({
+          ...this.site,
+          species: this.site.species.map(({name, id}) => ({name, id})),
+          shrubs : this.site.shrubs.map(({name, id}) => ({name, id}))
+        })
       }
       this.loadStates()
     },
@@ -337,6 +358,7 @@
       },
 
       async submit() {
+        console.log(this.species)
         this.saving = true
         try {
           const {data} = await this.form.post(`/web/sites`)
