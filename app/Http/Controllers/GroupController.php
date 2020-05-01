@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UserDoesntBelongToGroupException;
 use App\Group;
 use App\Http\Controllers\Traits\ListsSites;
 use App\Invitation;
@@ -165,7 +166,6 @@ class GroupController extends Controller
      * @param \App\Group $group
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
-     * @throws \App\Exceptions\UserDoesntBelongToGroupException
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -179,7 +179,19 @@ class GroupController extends Controller
 
         $user = User::findOrFail($request->user);
 
-        $group->remove($user);
+        if ($group->owner->id === $user->id) {
+            return $this->error('Cannot remove group owner', [
+                'user' => ['Cannot remove group owner'],
+            ]);
+        }
+
+        try {
+            $group->remove($user);
+        } catch (UserDoesntBelongToGroupException $exception) {
+            return $this->error($exception->getMessage(), [
+                'user' => [$exception->getMessage()],
+            ]);
+        }
 
         return $this->deleted();
     }
