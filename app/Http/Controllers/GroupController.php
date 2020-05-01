@@ -78,6 +78,12 @@ class GroupController extends Controller
             'name' => $request->name,
         ])->save();
 
+        $group->load([
+            'owner' => function ($query) {
+                $query->select(['users.id', 'users.name']);
+            },
+        ]);
+
         return $this->created($group);
     }
 

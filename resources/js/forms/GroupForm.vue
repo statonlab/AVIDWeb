@@ -74,6 +74,12 @@
       }
     },
 
+    mounted() {
+      if (this.group) {
+        this.form.name = this.group.name
+      }
+    },
+
     methods: {
       save() {
         if (this.group) {
@@ -101,7 +107,7 @@
 
       async update() {
         try {
-          const {data} = await this.form.put('/web/groups')
+          const {data} = await this.form.put(`/web/groups/${this.group.id}`)
           this.$emit('update', data)
         } catch (e) {
           if (!e.response || e.response.status !== 422) {

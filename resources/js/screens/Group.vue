@@ -58,7 +58,9 @@
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0 hover-visible" v-if="User.owns(group)">
-                                    <button class="btn btn-link" v-tooltip="`Remove Member`" v-if="group.owner.id !== user.id">
+                                    <button class="btn btn-link"
+                                            v-tooltip="`Remove Member`"
+                                            v-if="group.owner.id !== user.id">
                                         <icon name="trash"/>
                                     </button>
                                 </div>
@@ -124,6 +126,7 @@
                 v-if="showGroupForm"
                 :group="group"
                 @update="updated($event)"
+                @close="closeForm"
         />
     </div>
 </template>
@@ -189,17 +192,22 @@
       },
 
       updated(group) {
+        this.closeForm()
         this.group = {
           ...this.group,
           ...group,
         }
       },
 
+      closeForm() {
+        this.showGroupForm = false
+      },
+      
       sitesLoaded(data) {
-        this.page = data.current_page
-        this.total = data.total
+        this.page     = data.current_page
+        this.total    = data.total
         this.lastPage = data.last_page
-      }
+      },
     },
   }
 </script>
