@@ -154,13 +154,8 @@ class SiteController extends Controller
             'owner_contact' => $request->owner_contact,
         ])->save();
 
-        $site->species()->sync(array_map(function ($species) {
-            return $species['id'];
-        }, $request->species));
-
-        $site->shrubs()->sync(array_map(function ($shrub) {
-            return $shrub['id'];
-        }, $request->shrubs));
+        $site->species()->sync($request->species);
+        $site->shrubs()->sync($request->shrubs);
 
         $site->load(['county', 'state', 'species', 'shrubs']);
         $site->loadCount(['plants', 'plots']);
