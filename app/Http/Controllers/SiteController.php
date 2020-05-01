@@ -138,9 +138,7 @@ class SiteController extends Controller
             'owner_name' => 'nullable|max:255',
             'owner_contact' => 'nullable',
             'species' => 'nullable|array',
-            'species.*' => 'nullable|exists:species,id',
             'shrubs' => 'nullable|array',
-            'shrubs.*' => 'nullable|exists:species,id',
         ]);
 
         $site->fill([
