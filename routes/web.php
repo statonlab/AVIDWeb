@@ -100,7 +100,7 @@ Route::group([
     Route::post('/groups', 'GroupController@create');
     Route::put('/groups/{group}', 'GroupController@update');
     Route::get('/groups/{group}', 'GroupController@show');
-    Route::delete('/groups/{group}', 'GroupController@index');
+    Route::delete('/groups/{group}', 'GroupController@delete');
     Route::get('/groups/{group}/sites', 'GroupController@sites');
 
     // Invitation Controller

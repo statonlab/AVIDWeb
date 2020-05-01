@@ -12,7 +12,7 @@
                     </h1>
                 </div>
                 <div class="flex-shrink-0 ml-auto" v-if="User.owns(group) || User.can('update groups')">
-                    <button class="btn btn-link" @click.prevent="showGroupForm">
+                    <button class="btn btn-link" @click.prevent="() => showGroupForm = true">
                         <icon name="create"/>
                         <span>Edit Group</span>
                     </button>
@@ -124,6 +124,7 @@
                 v-if="showGroupForm"
                 :group="group"
                 @update="updated($event)"
+                @close="closeForm"
         />
     </div>
 </template>
@@ -186,10 +187,15 @@
       },
 
       updated(group) {
+        this.closeForm()
         this.group = {
           ...this.group,
           ...group,
         }
+      },
+
+      closeForm() {
+        this.showGroupForm = false
       },
     },
   }

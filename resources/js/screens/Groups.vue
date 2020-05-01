@@ -29,7 +29,7 @@
                         <input type="search" class="form-control" placeholder="Search Groups">
                     </div>
                     <div class="flex-shrink-0">
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary" @click.prevent="showForm = true">
                             <icon name="add"/>
                             <span>New Group</span>
                         </button>
@@ -58,10 +58,16 @@
                             <td>{{ group.users_count }}</td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible" v-if="User.owns(group) || User.can(['update groups', 'delete groups'])">
-                                    <button class="btn btn-link mr-1" v-tooltip="'Edit Group'" v-if="User.can('update groups')">
+                                    <button class="btn btn-link mr-1"
+                                            v-tooltip="'Edit Group'"
+                                            v-if="User.can('update groups')"
+                                            @click.prevent="edit(group)">
                                         <icon name="create"/>
                                     </button>
-                                    <button class="btn btn-link" v-tooltip="'Delete Group'" v-if="User.can('delete groups')">
+                                    <button class="btn btn-link"
+                                            v-tooltip="'Delete Group'"
+                                            v-if="User.can('delete groups')"
+                                            @click.prevent="destroy(group)">
                                         <icon name="trash"/>
                                     </button>
                                 </div>
@@ -77,7 +83,8 @@
                 v-if="showForm"
                 :group="group"
                 @create="created($event)"
-                @update="updated($event)"/>
+                @update="updated($event)"
+                @close="closeForm"/>
     </div>
 </template>
 
@@ -94,6 +101,7 @@
         User: User,
         showForm: false,
         loading : true,
+        deleting: null,
         groups  : [],
         page    : 1,
         lastPage: 1,
@@ -139,7 +147,27 @@
       edit(group) {
         this.group = group
         this.showForm = true
-      }
+      },
+
+      destroy(group) {
+        this.$confirm({
+          title    : `Are you sure you want to delete ${group.name}?`,
+          text     : 'This action is permanent!',
+          onConfirm: async () => {
+            this.deleting = group.id
+            try {
+              await axios.delete(`/web/groups/${group.id}`)
+              await this.loadGroups()
+            } catch (e) {
+              this.$notify({
+                text: 'Unable to delete group. Please try refreshing the page.',
+                type: 'error',
+              })
+            }
+            this.deleting = null
+          },
+        })
+      },
     },
   }
 </script>
