@@ -44,8 +44,8 @@ class SiteController extends Controller
             });
         }
 
-        $sites = $sites->orderBy($request->order_by ?? 'created_at', $request->order_dir ?? 'desc')
-            ->paginate(20);
+        $sites = $sites->orderBy($request->order_by ?? 'created_at',
+            $request->order_dir ?? 'desc')->paginate(20);
 
         return $this->success($sites);
     }
@@ -72,7 +72,9 @@ class SiteController extends Controller
             'owner_name' => 'nullable|max:255',
             'owner_contact' => 'nullable',
             'species' => 'nullable|array',
+            'species.*' => 'nullable|exists:species,id',
             'shrubs' => 'nullable|array',
+            'shrubs.*' => 'nullable|exists:species,id',
         ]);
 
         $site = Site::create([
@@ -136,9 +138,9 @@ class SiteController extends Controller
             'owner_name' => 'nullable|max:255',
             'owner_contact' => 'nullable',
             'species' => 'nullable|array',
-            'species.*.id' => 'required|exists:species,id',
+            'species.*' => 'nullable|exists:species,id',
             'shrubs' => 'nullable|array',
-            'shrubs.*.id' => 'required|exists:species,id',
+            'shrubs.*' => 'nullable|exists:species,id',
         ]);
 
         $site->fill([
@@ -152,11 +154,11 @@ class SiteController extends Controller
             'owner_contact' => $request->owner_contact,
         ])->save();
 
-        $site->species()->sync(array_map(function($species) {
+        $site->species()->sync(array_map(function ($species) {
             return $species['id'];
         }, $request->species));
 
-        $site->shrubs()->sync(array_map(function($shrub) {
+        $site->shrubs()->sync(array_map(function ($shrub) {
             return $shrub['id'];
         }, $request->shrubs));
 

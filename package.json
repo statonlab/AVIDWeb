@@ -26,6 +26,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "@ttskch/select2-bootstrap4-theme": "^1.4.0",
         "moment": "^2.24.0",
         "v-calendar": "^1.0.3",
         "v-select2-component": "^0.4.3",

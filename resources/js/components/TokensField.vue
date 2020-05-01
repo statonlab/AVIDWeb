@@ -3,8 +3,8 @@
         <div class="form-group">
             <Select2 :options="results.map(({id, name}) => ({id, text: name}))"
                      v-model="selects"
-                     placeholder="Type and select a species"
-                     :settings="{ multiple: 'true' }"
+                     placeholder="Search..."
+                     :settings="{ multiple: 'true', theme: 'bootstrap4' }"
                      @change="onChange($event)" />
         </div>
     </div>

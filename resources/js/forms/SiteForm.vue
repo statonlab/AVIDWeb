@@ -106,9 +106,20 @@
                         </span>
                     </div>
                     <div class="form-group">
+                        <label for="species">
+                            Overstory Species
+                        </label>
+                        <tokens-field id="species" v-model="form.species" />
+                    </div>
+                    <div class="form-group">
+                        <label for="shrubs">
+                            Seedling or Shrub Species
+                        </label>
+                        <tokens-field id="shrubs" v-model="form.shrubs" />
+                    </div>
+                    <div class="form-group">
                         <label for="basal-area">
                             Approximate Basal Area
-                            <required/>
                         </label>
                         <div class="input-group is-appended">
                             <input type="text"
@@ -128,7 +139,6 @@
                     <div class="form-group">
                         <label for="diameter">
                             Average Overstory Tree Diameter
-                            <required/>
                         </label>
                         <div class="input-group is-appended">
                             <input type="text"
@@ -144,18 +154,6 @@
                         <span class="form-text text-danger" v-if="form.errors.has('diameter')">
                             {{ form.errors.first('diameter') }}
                         </span>
-                    </div>
-                    <div class="form-group">
-                        <label for="species">
-                            Species
-                        </label>
-                        <tokens-field id="species" v-model="form.species" />
-                    </div>
-                    <div class="form-group">
-                        <label for="shrubs">
-                            Shrubs
-                        </label>
-                        <tokens-field id="shrubs" v-model="form.shrubs" />
                     </div>
                 </modal-body>
                 <modal-footer class="d-flex">
@@ -346,9 +344,14 @@
           const {data} = await this.form.put(`/web/sites/${this.site.id}`)
           this.$emit('update', data)
         } catch (e) {
-          if (e.response && e.response.status !== 422) {
+          if (!e.response || e.response.status !== 422) {
             this.$notify({
               text: 'Unable to save site. Please try refreshing the page.',
+              type: 'error',
+            })
+          } else {
+            this.$notify({
+              text: 'One or more fields need your attention. Please review the form.',
               type: 'error',
             })
           }
