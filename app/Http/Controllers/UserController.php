@@ -14,12 +14,13 @@ class UserController extends Controller
         $this->authorize('viewAny', User::class);
 
         $this->validate($request, [
-            'order_by' => 'nullable|in:name,email,created_at',
+            'order_by' => 'nullable|in:name,email,created_at,sites_count',
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
         ]);
 
-        $users = User::with('role');
+        $users = User::with(['role'])
+        ->withCount(['sites']);
 
         if ($request->search) {
             $term = $request->search;

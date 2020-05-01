@@ -11,11 +11,10 @@
                         {{ group.name }}
                     </h1>
                 </div>
-                <div class="flex-shrink-0 ml-auto" v-if="User.owns(group) || User.can('update groups')">
-                    <button class="btn btn-link" @click.prevent="showGroupForm">
-                        <icon name="create"/>
-                        <span>Edit Group</span>
-                    </button>
+                <div class="flex-shrink-0 ml-auto">
+                    <div class="text-muted">
+                        Page {{page}} of {{lastPage}}. {{ total }} sites found.
+                    </div>
                 </div>
             </div>
 
@@ -59,7 +58,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0 hover-visible" v-if="User.owns(group)">
-                                    <button class="btn btn-link" v-tooltip="`Remove Member`">
+                                    <button class="btn btn-link" v-tooltip="`Remove Member`" v-if="group.owner.id !== user.id">
                                         <icon name="trash"/>
                                     </button>
                                 </div>
@@ -99,8 +98,9 @@
                 </div>
                 <div class="col-md-8">
                     <sites-data-view
-                        :url="`/web/groups/${group.id}/sites`"
-                        :show-owner="true"
+                            :url="`/web/groups/${group.id}/sites`"
+                            :show-owner="true"
+                            @load="sitesLoaded($event)"
                     />
                 </div>
             </div>
@@ -150,6 +150,9 @@
         showInviteForm: false,
         showGroupForm : false,
         accepted      : false,
+        page          : 1,
+        lastPage      : 1,
+        total         : 0,
       }
     },
 
@@ -191,6 +194,12 @@
           ...group,
         }
       },
+
+      sitesLoaded(data) {
+        this.page = data.current_page
+        this.total = data.total
+        this.lastPage = data.last_page
+      }
     },
   }
 </script>
