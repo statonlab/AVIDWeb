@@ -72,9 +72,7 @@ class SiteController extends Controller
             'owner_name' => 'nullable|max:255',
             'owner_contact' => 'nullable',
             'species' => 'nullable|array',
-            'species.*.id' => 'required|exists:species,id',
             'shrubs' => 'nullable|array',
-            'shrubs.*.id' => 'required|exists:species,id',
         ]);
 
         $site = Site::create([
@@ -89,13 +87,8 @@ class SiteController extends Controller
             'owner_contact' => $request->owner_contact,
         ]);
 
-        $site->species()->sync(array_map(function($species) {
-            return $species['id'];
-        }, $request->species));
-
-        $site->shrubs()->sync(array_map(function($shrub) {
-            return $shrub['id'];
-        }, $request->shrubs));
+        $site->species()->sync($request->species);
+        $site->shrubs()->sync($request->shrubs);
 
         $site->load(['county', 'state']);
         $site->loadCount(['plants', 'plots']);

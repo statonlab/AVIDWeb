@@ -1,5 +1,5 @@
 <template>
-    <modal @close="$emit('close')" medium>
+    <modal medium>
         <form action="" @submit.prevent="save()">
             <modal-card>
                 <modal-header>
@@ -242,8 +242,8 @@
       if (this.site) {
         this.form.setDefault({
           ...this.site,
-          species: this.site.species.map(({name, id}) => ({name, id})),
-          shrubs : this.site.shrubs.map(({name, id}) => ({name, id}))
+          species: this.site.species.map(({id}) => `${id}`),
+          shrubs : this.site.shrubs.map(({id}) => `${id}`)
         })
       }
       this.loadStates()
