@@ -11,18 +11,10 @@
                         {{ group.name }}
                     </h1>
                 </div>
-<<<<<<< HEAD
-                <div class="flex-shrink-0 ml-auto" v-if="User.owns(group) || User.can('update groups')">
-                    <button class="btn btn-link" @click.prevent="() => showGroupForm = true">
-                        <icon name="create"/>
-                        <span>Edit Group</span>
-                    </button>
-=======
                 <div class="flex-shrink-0 ml-auto">
                     <div class="text-muted">
                         Page {{page}} of {{lastPage}}. {{ total }} sites found.
                     </div>
->>>>>>> master
                 </div>
             </div>
 
@@ -66,7 +58,9 @@
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0 hover-visible" v-if="User.owns(group)">
-                                    <button class="btn btn-link" v-tooltip="`Remove Member`" v-if="group.owner.id !== user.id">
+                                    <button class="btn btn-link"
+                                            v-tooltip="`Remove Member`"
+                                            v-if="group.owner.id !== user.id">
                                         <icon name="trash"/>
                                     </button>
                                 </div>
@@ -205,17 +199,15 @@
         }
       },
 
-<<<<<<< HEAD
       closeForm() {
         this.showGroupForm = false
       },
-=======
+      
       sitesLoaded(data) {
-        this.page = data.current_page
-        this.total = data.total
+        this.page     = data.current_page
+        this.total    = data.total
         this.lastPage = data.last_page
-      }
->>>>>>> master
+      },
     },
   }
 </script>
