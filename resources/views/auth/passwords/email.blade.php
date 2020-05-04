@@ -30,6 +30,11 @@
                                 <p class=" font-weight-bold text-center">
                                     Reset Password
                                 </p>
+                                @if (session('status'))
+                                    <div class="alert alert-success" role="alert">
+                                        {{ session('status') }}
+                                    </div>
+                                @endif
                                 <form method="POST" action="{{ route('password.email') }}">
                                     @csrf
 
