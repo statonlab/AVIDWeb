@@ -24,6 +24,7 @@ import Roles from './screens/Roles'
 import Groups from './screens/Groups'
 import Group from './screens/Group'
 import AdminSites from './screens/admin/AdminSites'
+import Reminders from './screens/Reminders'
 
 Vue.use(Alert)
 Vue.use(VueNotification)
@@ -50,7 +51,8 @@ const routes = [
   {path: '/app/roles', component: Roles},
   {path: '/app/groups', component: Groups},
   {path: '/app/groups/:id', component: Group},
-  {path: '/app/admin/sites', component: AdminSites}
+  {path: '/app/admin/sites', component: AdminSites},
+  {path: '/app/reminders', component: Reminders}
 ]
 
 const router = new VueRouter({
