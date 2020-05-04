@@ -1,5 +1,5 @@
 <template>
-    <modal @close="$emit('close')" medium>
+    <modal medium>
         <form action="" @submit.prevent="save()">
             <modal-card>
                 <modal-header>
@@ -106,9 +106,20 @@
                         </span>
                     </div>
                     <div class="form-group">
+                        <label for="species">
+                            Overstory Species
+                        </label>
+                        <tokens-field id="species" v-model="form.species" />
+                    </div>
+                    <div class="form-group">
+                        <label for="shrubs">
+                            Seedling or Shrub Species
+                        </label>
+                        <tokens-field id="shrubs" v-model="form.shrubs" />
+                    </div>
+                    <div class="form-group">
                         <label for="basal-area">
                             Approximate Basal Area
-                            <required/>
                         </label>
                         <div class="input-group is-appended">
                             <input type="text"
@@ -128,7 +139,6 @@
                     <div class="form-group">
                         <label for="diameter">
                             Average Overstory Tree Diameter
-                            <required/>
                         </label>
                         <div class="input-group is-appended">
                             <input type="text"
@@ -175,6 +185,7 @@
   import Autocomplete from '../components/Autocomplete'
   import Dropdown from '../components/Dropdown'
   import InlineSpinner from '../components/InlineSpinner'
+  import TokensField from '../components/TokensField'
 
   export default {
     name: 'SiteForm',
@@ -191,6 +202,7 @@
       ModalHeader,
       ModalCard,
       Modal,
+      TokensField,
     },
 
     props: {
@@ -204,6 +216,7 @@
         stateSearch    : '',
         counties       : [],
         countySearch   : '',
+        species        : [],
         form           : new Form({
           state_id     : null,
           county_id    : null,
@@ -213,6 +226,8 @@
           basal_area   : '',
           owner_name   : '',
           owner_contact: '',
+          species      : [],
+          shrubs       : [],
         }),
         stateRequest   : null,
         countyRequest  : null,
@@ -223,7 +238,11 @@
 
     mounted() {
       if (this.site) {
-        this.form.setDefault(this.site)
+        this.form.setDefault({
+          ...this.site,
+          species: this.site.species.map(({id}) => `${id}`),
+          shrubs : this.site.shrubs.map(({id}) => `${id}`)
+        })
       }
       this.loadStates()
     },
@@ -325,9 +344,14 @@
           const {data} = await this.form.put(`/web/sites/${this.site.id}`)
           this.$emit('update', data)
         } catch (e) {
-          if (e.response && e.response.status !== 422) {
+          if (!e.response || e.response.status !== 422) {
             this.$notify({
               text: 'Unable to save site. Please try refreshing the page.',
+              type: 'error',
+            })
+          } else {
+            this.$notify({
+              text: 'One or more fields need your attention. Please review the form.',
               type: 'error',
             })
           }
@@ -337,6 +361,7 @@
       },
 
       async submit() {
+        console.log(this.species)
         this.saving = true
         try {
           const {data} = await this.form.post(`/web/sites`)

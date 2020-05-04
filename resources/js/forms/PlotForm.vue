@@ -206,6 +206,19 @@
                             {{ form.errors.first('protection_seasons') }}
                         </small>
                     </div>
+
+                    <div class="form-group">
+                        <label for="recorders">Recorders</label>
+                        <textarea type="text"
+                                  class="form-control"
+                                  name="recorders"
+                                  v-model="form.recorders"
+                                  id="recorders"
+                                  placeholder="Type recorders"></textarea>
+                        <span class="form-text text-danger" v-if="form.errors.has('owner_contact')">
+                            {{ form.errors.first('owner_contact') }}
+                        </span>
+                    </div>
                 </modal-body>
                 <modal-footer class="d-flex">
                     <button class="btn btn-primary" type="submit" :disabled="loading">
@@ -269,6 +282,7 @@
           canopy            : '',
           is_protected      : '',
           protection_seasons: '',
+          recorders         : '',
         }),
         options: Options,
         showMap: false,

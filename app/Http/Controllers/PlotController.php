@@ -88,6 +88,7 @@ class PlotController extends Controller
             'canopy' => $request->canopy,
             'subcanopy' => $request->subcanopy,
             'ground_cover' => $request->ground_cover,
+            'recorders' => $request->recorders,
         ]);
 
         $plot->load([
@@ -162,6 +163,7 @@ class PlotController extends Controller
             'canopy' => $request->canopy,
             'subcanopy' => $request->subcanopy,
             'ground_cover' => $request->ground_cover,
+            'recorders' => $request->recorders,
         ])->save();
 
         $plot->load([
@@ -225,6 +227,7 @@ class PlotController extends Controller
             'canopy' => ['nullable', Rule::in($percentages)],
             'subcanopy' => ['nullable', Rule::in($percentages)],
             'ground_cover' => ['nullable', Rule::in($percentages)],
+            'recorders' => 'nullable',
         ];
     }
 }

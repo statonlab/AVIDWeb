@@ -60,6 +60,10 @@ class SiteController extends Controller
             'city' => 'nullable|max:255',
             'owner_name' => 'nullable|max:255',
             'owner_contact' => 'nullable',
+            'species' => 'nullable|array',
+            'species.*' => 'nullable|exists:species,id',
+            'shrubs' => 'nullable|array',
+            'shrubs.*' => 'nullable|exists:species,id',
         ]);
 
         $site = Site::create([
@@ -73,6 +77,9 @@ class SiteController extends Controller
             'owner_name' => $request->owner_name,
             'owner_contact' => $request->owner_contact,
         ]);
+
+        $site->species()->sync($request->species);
+        $site->shrubs()->sync($request->shrubs);
 
         $site->load(['county', 'state']);
         $site->loadCount(['plants', 'plots']);
@@ -91,7 +98,7 @@ class SiteController extends Controller
     {
         $this->authorize('view', $site);
 
-        $site->load(['county', 'state']);
+        $site->load(['county', 'state', 'species', 'shrubs']);
         $site->loadCount(['plants', 'plots']);
 
         return $this->success($site);
@@ -119,6 +126,10 @@ class SiteController extends Controller
             'city' => 'nullable|max:255',
             'owner_name' => 'nullable|max:255',
             'owner_contact' => 'nullable',
+            'species' => 'nullable|array',
+            'species.*' => 'nullable|exists:species,id',
+            'shrubs' => 'nullable|array',
+            'shrubs.*' => 'nullable|exists:species,id',
         ]);
 
         $site->fill([
@@ -132,7 +143,10 @@ class SiteController extends Controller
             'owner_contact' => $request->owner_contact,
         ])->save();
 
-        $site->load(['county', 'state']);
+        $site->species()->sync($request->species);
+        $site->shrubs()->sync($request->shrubs);
+
+        $site->load(['county', 'state', 'species', 'shrubs']);
         $site->loadCount(['plants', 'plots']);
 
         return $this->created($site);
