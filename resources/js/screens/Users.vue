@@ -35,9 +35,9 @@
                             <th>
                                 <a href="#"
                                    class="d-flex align-items-center"
-                                   @click.prevent="sort('email')">
-                                    <span class="mr-1">Email</span>
-                                    <icon :name="sortIcon('email')"/>
+                                   @click.prevent="sort('sites_count')">
+                                    <span class="mr-1">Sites</span>
+                                    <icon :name="sortIcon('sites_count')"/>
                                 </a>
                             </th>
                             <th>
@@ -60,11 +60,14 @@
                                 <router-link :to="`/app/users/${user.id}`">
                                     <div>{{ user.name }}</div>
                                 </router-link>
+                                <div>
+                                    <a :href="`mailto:${user.email}`" class="text-muted">
+                                        {{ user.email }}
+                                    </a>
+                                </div>
                             </td>
                             <td>
-                                <a :href="`mailto:${user.email}`">
-                                    {{ user.email }}
-                                </a>
+                                {{ user.sites_count }}
                             </td>
                             <td>
                                 <div>{{ user.member_since }}</div>
@@ -103,14 +106,14 @@
 
     data() {
       return {
-        loading     : true,
-        users       : [],
-        search      : '',
-        page        : 1,
-        lastPage    : 1,
-        total       : 0,
-        orderBy     : '',
-        orderDir    : '',
+        loading : true,
+        users   : [],
+        search  : '',
+        page    : 1,
+        lastPage: 1,
+        total   : 0,
+        orderBy : 'name',
+        orderDir: 'asc',
       }
     },
 
@@ -129,10 +132,10 @@
         try {
           const {data} = await axios.get(`/web/users`, {
             params     : {
-              search    : this.search,
-              page      : this.page,
-              order_by  : this.orderBy,
-              order_dir : this.orderDir
+              search   : this.search,
+              page     : this.page,
+              order_by : this.orderBy,
+              order_dir: this.orderDir,
             },
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
@@ -180,7 +183,7 @@
         }
 
         return 'arrow-down'
-      }
+      },
     },
   }
 </script>

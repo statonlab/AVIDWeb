@@ -10,18 +10,39 @@
 
         <div class="d-flex flex-grow-1">
             <div class="dropdown d-none d-md-inline-block">
-                <form class="form-inline my-0 mr-auto" data-toggle="dropdown">
+                <form class="form-inline my-0 mr-auto" data-toggle="dropdown" id="navbar-search-trigger">
                     <div class="input-group">
-                        <input type="search"
+                        <input type="text"
+                               autocomplete="off"
+                               ref="search"
+                               @focus="showDropdown"
                                v-model="search"
                                class="form-control navbar-form-control"
-                               placeholder="Search users and entries">
+                               placeholder="Search by plant tag">
                     </div>
                 </form>
                 <div class="dropdown-menu search-dropdown">
-                    <small class="d-block text-center text-muted" v-if="results.length === 0 && search.length > 0">No results found</small>
-                    <small class="d-block text-center text-muted" v-if="results.length === 0 && search.length === 0">Type to search</small>
-                    <router-link :key="item.id" :to="`/app/plants/${item.id}`" class="dropdown-item" v-for="item in results">
+                    <div class="form-group px-3 pb-2 border-bottom" v-if="User.can('view sites')" @click.stop>
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
+                                   :checked="include"
+                                   @change="include = $event.target.checked"
+                                   id="include-others-data">
+                            <label class="form-check-label font-weight-normal" for="include-others-data">
+                                Show my data only
+                            </label>
+                        </div>
+                    </div>
+                    <small class="d-block text-center text-muted"
+                           v-if="results.length === 0 && search.length > 0">No results found</small>
+                    <small class="d-block text-center text-muted"
+                           v-if="results.length === 0 && search.length === 0">Type to search</small>
+                    <router-link :key="item.id"
+                                 :to="`/app/plants/${item.id}`"
+                                 class="dropdown-item"
+                                 v-for="item in results">
                         <span>Plant #{{ item.tag }}</span>
                         <div class="text-muted">
                             Plot #{{ item.plot.number }}, {{ item.plot.site.name }}
@@ -66,30 +87,71 @@
 
     data() {
       return {
+        User   : User,
         csrf   : document.head.querySelector('meta[name="csrf-token"]').content,
         user   : User.get(),
         results: '',
         search : '',
-        request: null
+        request: null,
+        include: false,
       }
     },
 
     watch: {
-      async search() {
-        if(this.request) {
+      search() {
+        this.loadSearch()
+      },
+
+      include() {
+        this.loadSearch()
+      },
+    },
+
+    mounted() {
+      this.registerSearchEvents()
+    },
+
+    methods: {
+      async loadSearch() {
+        if (this.request) {
           this.request()
         }
-        axios.get(`/web/search`, {
-          params: {
-            search: this.search,
-            cancelToken: new axios.CancelToken(fn => this.request = fn)
-          },
-        }).then(response => {
-          this.results = response.data.data
-        }).catch(e => {
+
+        try {
+          const {data} = await axios.get(`/web/search`, {
+            params     : {
+              search: this.search,
+              mine  : this.include ? '1' : '0',
+            },
+            cancelToken: new axios.CancelToken(fn => this.request = fn),
+          })
+          this.results = data.data
+          this.showDropdown()
+        } catch (e) {
           console.error(e)
+        }
+      },
+
+      registerSearchEvents() {
+        const handler = e => {
+          if (e.metaKey || e.ctrlKey) {
+            if (`${e.key}`.toLowerCase() === 'k') {
+              this.$refs.search.focus()
+              this.$refs.search.click()
+            }
+          }
+        }
+        document.addEventListener('keydown', handler)
+        this.$once('hook:beforeDestroy', () => {
+          document.removeEventListener('keydown', handler)
         })
       },
+
+      showDropdown() {
+        setTimeout(() => {
+          $('#navbar-search-trigger').dropdown('show')
+        }, 100)
+      }
     },
   }
 </script>

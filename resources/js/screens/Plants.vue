@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="ml-auto">
-                    <button class="btn btn-link" @click.prevent="editingPlot = true">
+                    <button class="btn btn-link" v-if="User.owns(plot) || User.can('update sites')" @click.prevent="editingPlot = true">
                         <icon name="create"/>
                         <span>Edit Plot</span>
                     </button>
@@ -40,7 +40,9 @@
                                        title="Search plants">
                             </div>
                             <div class="ml-auto pl-1 flex-shrink-0">
-                                <button class="btn btn-primary" @click.prevent="showForm = true">
+                                <button class="btn btn-primary"
+                                        v-if="User.owns(plot) || User.can('update sites')"
+                                        @click.prevent="showForm = true">
                                     <icon name="add"/>
                                     <span>New Plant</span>
                                 </button>
@@ -93,17 +95,19 @@
                                     <td>
                                         <router-link :to="`/app/plants/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
                                     </td>
-                                    <td>{{ plant.name }}</td>
+                                    <td>{{ plant.species_name }}</td>
                                     <td>{{ plant.quadrant }}</td>
                                     <td>{{ plant.measurements_count }}</td>
                                     <td>
                                         <div class="d-flex justify-content-end hover-visible">
                                             <button type="button" class="btn btn-sm btn-link"
                                                     v-tooltip="'Edit'"
+                                                    v-if="User.owns(plant) || User.can('update sites')"
                                                     @click.prevent="edit(plant)">
                                                 <icon name="create"/>
                                             </button>
                                             <button type="button"
+                                                    v-if="User.owns(plant) || User.can('delete sites')"
                                                     @click="destroy(plant)"
                                                     class="btn btn-sm"
                                                     :class="deleting === plant.id ? 'btn-danger': 'btn-link'"
@@ -200,12 +204,14 @@
   import PlantForm from '../forms/PlantForm'
   import Pager from '../components/Pager'
   import PlotForm from '../forms/PlotForm'
+  import User from '../helpers/User'
 
   export default {
     name      : 'Plants',
     components: {PlotForm, Pager, PlantForm, Icon, PlotMap, InlineSpinner},
     data() {
       return {
+        User       : User,
         loading    : true,
         plot       : null,
         deleting   : null,
@@ -218,8 +224,8 @@
         plants     : [],
         showForm   : false,
         plant      : null,
-        orderBy    : '',
-        orderDir   : '',
+        orderBy    : 'tag',
+        orderDir   : 'asc',
       }
     },
 
@@ -260,10 +266,10 @@
         try {
           const {data}  = await axios.get(`/web/plots/${id}/plants`, {
             params     : {
-              search    : this.search,
-              page      : this.page,
-              order_by  : this.orderBy,
-              order_dir : this.orderDir,
+              search   : this.search,
+              page     : this.page,
+              order_by : this.orderBy,
+              order_dir: this.orderDir,
             },
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
@@ -365,7 +371,7 @@
         }
 
         return 'arrow-down'
-      }
+      },
     },
   }
 </script>

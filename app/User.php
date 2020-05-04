@@ -45,7 +45,8 @@ class User extends Authenticatable
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function sites() {
+    public function sites()
+    {
         return $this->hasMany(Site::class);
     }
 
@@ -74,5 +75,42 @@ class User extends Authenticatable
     public function owns($model)
     {
         return $this->id === ($model->user_id ?? null);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function plants()
+    {
+        return $this->hasManyThrough(Plant::class, Plot::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function measurements()
+    {
+        return $this->hasMany(Measurement::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class);
+    }
+
+    /**
+     * @param \App\User $user
+     * @return bool
+     */
+    public function isFriendsWith(User $user)
+    {
+        return $user->groups()
+            ->whereHas('users', function($query) use($user) {
+                $query->where('users.id', $user->id);
+            })
+            ->exists();
     }
 }

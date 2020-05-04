@@ -17,7 +17,9 @@
                 </div>
             </div>
             <div class="ml-auto">
-                <button class="btn btn-link" @click.prevent="editingSite = true">
+                <button class="btn btn-link"
+                        @click.prevent="editingSite = true"
+                        v-if="User.owns(site) || User.can('update sites')">
                     <icon name="create"/>
                     <span>
                         Edit Site
@@ -38,7 +40,9 @@
                                    v-model="search">
                         </div>
                         <div class="ml-auto flex-shrink-0 pl-1">
-                            <button class="btn btn-primary" @click.prevent="showPlotForm = true">
+                            <button class="btn btn-primary"
+                                    @click.prevent="showPlotForm = true"
+                                    v-if="(site && User.owns(site)) || User.can('update sites')">
                                 <icon name="add"/>
                                 <span>New Plot</span>
                             </button>
@@ -48,7 +52,8 @@
                         <inline-spinner class="text-primary"/>
                     </div>
 
-                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-muted" v-if="!loading && plots.length === 0">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-muted"
+                         v-if="!loading && plots.length === 0">
                         <div>
                             <p>Get started by creating a new plot using the button below.</p>
                         </div>
@@ -89,11 +94,14 @@
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">
-                                    <button class="btn btn-link" @click.prevent="edit(plot)" v-tooltip="'Edit'">
+                                    <button class="btn btn-link"
+                                            v-if="User.owns(plot) || User.can('update sites')"
+                                            @click.prevent="edit(plot)" v-tooltip="'Edit'">
                                         <icon name="create"/>
                                     </button>
 
                                     <button class="btn"
+                                            v-if="User.owns(plot) || User.can('delete sites')"
                                             :class="deleting === plot.id ? 'btn-danger' : 'btn-link'"
                                             @click.prevent="destroy(plot)"
                                             v-tooltip="'Delete'">
@@ -177,6 +185,7 @@
   import Dropdown from '../components/Dropdown'
   import SiteForm from '../forms/SiteForm'
   import Pager from '../components/Pager'
+  import User from '../helpers/User'
 
   export default {
     name: 'Plots',
@@ -185,6 +194,7 @@
 
     data() {
       return {
+        User        : User,
         search      : '',
         showPlotForm: false,
         editingSite : false,
@@ -197,8 +207,8 @@
         request     : null,
         site        : null,
         plot        : null,
-        orderBy     : '',
-        orderDir    : '',
+        orderBy     : 'number',
+        orderDir    : 'asc',
       }
     },
 
@@ -254,10 +264,10 @@
           const id     = this.$route.params.id
           const {data} = await axios.get(`/web/sites/${id}/plots`, {
             params     : {
-              page      : this.page,
-              search    : this.search,
-              order_by  : this.orderBy,
-              order_dir : this.orderDir,
+              page     : this.page,
+              search   : this.search,
+              order_by : this.orderBy,
+              order_dir: this.orderDir,
             },
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
@@ -280,7 +290,7 @@
       },
 
       plotUpdated(plot) {
-        this.plots = this.plots(p => p.id === plot.id ? plot : p)
+        this.plots = this.plots.map(p => p.id === plot.id ? plot : p)
         this.closeForm()
       },
 
@@ -349,7 +359,7 @@
         }
 
         return 'arrow-down'
-      }
+      },
     },
   }
 </script>

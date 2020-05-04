@@ -34,11 +34,19 @@ class PlantController extends Controller
 
         $plants = $plot->plants()->with([
             'type',
-            'plot'
+            'plot',
         ]);
 
-        $plants = $plants->join('species', 'plants.species_id', '=', 'species.id')
-            ->select(['*'])->withCount(['measurements']);
+        $plants = $plants->select([
+            'plants.id as id',
+            'plants.tag as tag',
+            'species.name as species_name',
+            'quadrant',
+            'plant_type_id',
+            'plot_id',
+        ])
+            ->join('species', 'plants.species_id', '=', 'species.id')
+            ->withCount(['measurements']);
 
         if (! empty($request->search)) {
             $term = $request->search;
@@ -53,8 +61,8 @@ class PlantController extends Controller
             });
         }
 
-        $plants = $plants->orderBy($request->order_by ?? 'tag', $request->order_dir ?? 'asc')
-            ->paginate(20);
+        $plants = $plants->orderBy($request->order_by ?? 'tag',
+            $request->order_dir ?? 'asc')->paginate(20);
 
         return $this->success($plants);
     }
@@ -94,12 +102,13 @@ class PlantController extends Controller
             'species_id' => $request->species_id,
             'tag' => $request->tag,
             'quadrant' => $request->quadrant,
+            'user_id' => $request->user()->id,
         ]);
 
         $plant->load([
             'species',
             'type',
-            'plot'
+            'plot',
         ]);
 
         $plant->loadCount(['measurements']);

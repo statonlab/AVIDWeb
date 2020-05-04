@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ListsSites;
 use App\Site;
 use App\User;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
 {
+    use ListsSites;
+
     /**
      * Display a listing of the resource.
      *
@@ -17,6 +20,7 @@ class SiteController extends Controller
      */
     public function index(Request $request, ?User $user = null)
     {
+        // If given a user then we want to view sites for the given user only
         if ($user !== null) {
             $this->authorize('viewSites', $user);
         } else {
@@ -30,22 +34,7 @@ class SiteController extends Controller
             'search' => 'nullable|max:255',
         ]);
 
-        $sites = $user->sites()->with([
-            'state',
-            'county',
-            'species',
-            'shrubs',
-        ])->withCount(['plants', 'plots']);
-
-        if (! empty($request->search)) {
-            $term = $request->search;
-            $sites->where(function ($query) use ($term) {
-                $query->where('name', 'like', "%$term%");
-            });
-        }
-
-        $sites = $sites->orderBy($request->order_by ?? 'created_at',
-            $request->order_dir ?? 'desc')->paginate(20);
+        $sites = $this->getSites($user->sites())->paginate(20);
 
         return $this->success($sites);
     }

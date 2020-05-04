@@ -23,7 +23,7 @@ class ImportFile extends Command
      *
      * @var string
      */
-    protected $signature = 'import:file {data_file} {users_file} {--plant_type=}';
+    protected $signature = 'import:file {data_file} {--users_file=} {--plant_type=}';
 
     /**
      * The console command description.
@@ -81,6 +81,7 @@ class ImportFile extends Command
         while ($line = fgetcsv($users_fp)) {
             array_walk($line, 'trim');
             [$username, $name, $email] = $line;
+            $username = strtolower($username);
 
             // Check if the user exists
             $user = User::where('email', $email)->first();
@@ -177,8 +178,10 @@ class ImportFile extends Command
             $url,
         ] = $line;
         array_walk($line, 'trim');
+        $username = strtolower($username);
 
         // Find the user
+        /** @var \App\User|null $user */
         $user = $this->userIndex[$username] ?? null;
         if (! $user) {
             $this->putError($i, "User $username does not exist.");
@@ -215,7 +218,7 @@ class ImportFile extends Command
         $plot = Plot::updateOrCreate([
             'user_id' => $user->id,
             'site_id' => $site->id,
-            'number' => $plot_number,
+            'number' => intval($plot_number),
         ], [
             'latitude' => empty($latitude) ? null : floatval($latitude),
             'longitude' => empty($longitude) ? null : floatval($longitude),
@@ -232,6 +235,7 @@ class ImportFile extends Command
 
         // Find the plant. If does not exist, create one
         $plant = Plant::firstOrCreate([
+            'user_id' => $user->id,
             'plot_id' => $plot->id,
             'plant_type_id' => $this->plantType->id,
             'species_id' => $species->id,
@@ -338,7 +342,7 @@ class ImportFile extends Command
     public function getFileDescriptors()
     {
         $data_file_path = $this->argument('data_file');
-        $users_file_path = $this->argument('users_file');
+        $users_file_path = $this->option('users_file');
 
         $this->fileExists($data_file_path);
         $this->fileExists($users_file_path);

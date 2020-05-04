@@ -14,6 +14,7 @@ class Plant extends Model
      */
     protected $fillable = [
         'plot_id',
+        'user_id',
         'plant_type_id',
         'species_id',
         'tag',
@@ -60,5 +61,13 @@ class Plant extends Model
     public function measurements()
     {
         return $this->hasMany(Measurement::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function site()
+    {
+        return $this->plot()->first()->site();
     }
 }

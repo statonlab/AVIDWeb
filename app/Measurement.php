@@ -24,7 +24,7 @@ class Measurement extends Model
     protected $casts = [
         'is_located' => 'boolean',
         'is_alive' => 'boolean',
-        'date' => 'date',
+        'date' => 'date:Y-m-d',
     ];
 
     /**
@@ -36,10 +36,24 @@ class Measurement extends Model
     }
 
     /**
+     * @return mixed
+     */
+    public function plot() {
+        return $this->plant()->first()->plot();
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function site() {
+        return $this->plant()->first()->plot()->first()->site();
     }
 }

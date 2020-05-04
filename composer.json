@@ -2,14 +2,25 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
+    "authors": [
+        {
+            "name": "Abdullah Almsaeed",
+            "email": "almasaeed2010@gmail.com"
+        },
+        {
+            "name": "Joseph West",
+            "email": "jwest2178@gmail.com"
+        }
+    ],
     "keywords": [
         "framework",
         "laravel"
     ],
-    "license": "MIT",
+    "license": "GPL-3.0-only",
     "require": {
         "php": "^7.4",
         "fideloper/proxy": "^4.0",
+        "guzzlehttp/guzzle": "^6.5",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0"
     },

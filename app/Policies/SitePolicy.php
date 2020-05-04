@@ -18,7 +18,7 @@ class SitePolicy
      */
     public function viewAny(User $user)
     {
-        return $user->isAdmin() || $user->isScientist();
+        return $user->hasPermissionTo('view sites');
     }
 
     /**
@@ -30,7 +30,15 @@ class SitePolicy
      */
     public function view(User $user, Site $site)
     {
-        return $user->owns($site) || $user->isAdmin() || $user->isScientist();
+        if ($user->owns($site)) {
+            return true;
+        }
+
+        if($user->isFriendsWith($site->user)) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('view sites');
     }
 
     /**
@@ -53,7 +61,7 @@ class SitePolicy
      */
     public function update(User $user, Site $site)
     {
-        return $user->owns($site) || $user->isAdmin();
+        return $user->owns($site) || $user->hasPermissionTo('update sites');
     }
 
     /**
@@ -65,7 +73,7 @@ class SitePolicy
      */
     public function delete(User $user, Site $site)
     {
-        return $user->owns($site) || $user->isAdmin();
+        return $user->owns($site) || $user->hasPermissionTo('delete sites');
     }
 
     /**
@@ -77,7 +85,7 @@ class SitePolicy
      */
     public function restore(User $user, Site $site)
     {
-        return $user->owns($site) || $user->isAdmin();
+        return $user->owns($site) || $user->hasPermissionTo('delete sites');
     }
 
     /**
@@ -89,6 +97,6 @@ class SitePolicy
      */
     public function forceDelete(User $user, Site $site)
     {
-        return $user->owns($site) || $user->isAdmin();
+        return $user->owns($site) || $user->hasPermissionTo('delete sites');
     }
 }

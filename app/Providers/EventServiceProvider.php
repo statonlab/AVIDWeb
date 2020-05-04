@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\InvitationAccepted;
+use App\Events\InvitationCreated;
 use App\Events\PlotCreated;
 use App\Events\PlotUpdated;
 use App\Listeners\AttachAddressToPlotListener;
+use App\Listeners\InvitationAcceptedListener;
+use App\Listeners\SendInvitationListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,6 +31,12 @@ class EventServiceProvider extends ServiceProvider
         PlotUpdated::class => [
             AttachAddressToPlotListener::class,
         ],
+        InvitationCreated::class => [
+            SendInvitationListener::class
+        ],
+        InvitationAccepted::class => [
+            InvitationAcceptedListener::class
+        ]
     ];
 
     /**

@@ -18,7 +18,7 @@ class PlantPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->isAdmin() || $user->isScientist();
+        return $user->hasPermissionTo('view sites');
     }
 
     /**
@@ -30,7 +30,15 @@ class PlantPolicy
      */
     public function view(User $user, Plant $plant)
     {
-        return $user->owns($plant) || $user->isAdmin() || $user->isScientist();
+        if ($user->owns($plant->plot) || $user->can('view', $plant->site)) {
+            return true;
+        }
+
+        if ($user->isFriendsWith($plant->user) || $user->isFriendsWith($plant->plot->user) || $user->isFriendsWith($plant->plot->site->user)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -53,7 +61,7 @@ class PlantPolicy
      */
     public function update(User $user, Plant $plant)
     {
-        return $user->owns($plant) || $user->isAdmin();
+        return $user->owns($plant->plot) || $user->can('update', $plant->site);
     }
 
     /**
@@ -65,7 +73,7 @@ class PlantPolicy
      */
     public function delete(User $user, Plant $plant)
     {
-        return $user->owns($plant) || $user->isAdmin();
+        return $user->owns($plant->plot) || $user->can('delete', $plant->site);
     }
 
     /**
@@ -77,7 +85,7 @@ class PlantPolicy
      */
     public function restore(User $user, Plant $plant)
     {
-        return $user->owns($plant) || $user->isAdmin();
+        return $user->owns($plant->plot) || $user->can('delete', $plant->site);
     }
 
     /**
@@ -89,6 +97,6 @@ class PlantPolicy
      */
     public function forceDelete(User $user, Plant $plant)
     {
-        return $user->owns($plant) || $user->isAdmin();
+        return $user->owns($plant->plot) || $user->can('delete', $plant->site);
     }
 }

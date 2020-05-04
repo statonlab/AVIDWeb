@@ -68,8 +68,6 @@ dd {
     background-color: $white;
     overflow-y: auto;
     border-right: 1px solid $border-color;
-    padding-left: .5rem;
-    padding-right: .5rem;
 }
 
 .w-sidebar {
@@ -198,6 +196,12 @@ dd {
 .search-dropdown {
     @include media-breakpoint-up(lg) {
         width: 300px !important;
+    }
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+
+    .dropdown-item {
+        white-space: normal;
     }
 }
 

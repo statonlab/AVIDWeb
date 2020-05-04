@@ -19,7 +19,7 @@ class RolePolicy
      */
     public function viewAny(User $user)
     {
-        return $user->isAdmin();
+        return $user->hasPermissionTo('manage permissions');
     }
 
     /**
@@ -29,6 +29,6 @@ class RolePolicy
      */
     public function update(User $user, Role $role)
     {
-        return $user->isAdmin();
+        return $user->hasPermissionTo('manage permissions');
     }
 }
