@@ -55,7 +55,7 @@ class ProfileController extends Controller
             'new_password' => ['required', 'min:6', 'max:255', 'confirmed'],
         ]);
 
-        $logged_in = auth('web')->attempt([
+        $logged_in = auth()->attempt([
             'email' => $user->email,
             'password' => $request->password,
         ]);
