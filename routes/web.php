@@ -54,7 +54,7 @@ Route::group([
     // Profile Controller
     Route::get('/profile', 'ProfileController@index');
     Route::put('/profile', 'ProfileController@update');
-    Route::put('profile/password', 'ProfileController@updatePassword');
+    Route::put('/profile/password', 'ProfileController@updatePassword');
 
     // State Controller
     Route::get('/states', 'StateController@index');
