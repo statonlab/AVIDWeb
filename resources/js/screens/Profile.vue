@@ -17,41 +17,63 @@
                 <div class="card">
                     <tabs>
                         <tab name="Personal Info" selected icon="person">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control" v-model="form.name">
-                                </div>
+                            <form @submit.prevent="updateInfo()">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" v-model="form.name">
+                                        <span class="form-text text-danger" v-if="form.errors.has('name')">
+                                            {{ form.errors.first('name') }}
+                                        </span>
+                                    </div>
 
-                                <div class="form-group mb-0">
-                                    <label>Email Address</label>
-                                    <input type="text" class="form-control" v-model="form.email">
+                                    <div class="form-group mb-0">
+                                        <label>Email Address</label>
+                                        <input type="text" class="form-control" v-model="form.email">
+                                        <span class="form-text text-danger" v-if="form.errors.has('email')">
+                                            {{ form.errors.first('email') }}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-footer bg-light">
-                                <button class="btn btn-primary">Save</button>
-                            </div>
+                                <div class="card-footer bg-light">
+                                    <button class="btn btn-primary">Save</button>
+                                </div>
+                            </form>
                         </tab>
                         <tab name="Password" icon="lock-closed">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label>Current Password</label>
-                                    <input type="password" class="form-control">
-                                </div>
+                            <form @submit.prevent="updatePassword()">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Current Password</label>
+                                        <input type="password"
+                                               class="form-control"
+                                               v-model="passForm.password">
+                                        <span class="form-text text-danger" v-if="passForm.errors.has('password')">
+                                            {{ passForm.errors.first('password') }}
+                                        </span>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label>New Password</label>
-                                    <input type="password" class="form-control">
-                                </div>
+                                    <div class="form-group">
+                                        <label>New Password</label>
+                                        <input type="password"
+                                               class="form-control"
+                                               v-model="passForm.new_password">
+                                        <span class="form-text text-danger" v-if="passForm.errors.has('new_password')">
+                                            {{ passForm.errors.first('new_password') }}
+                                        </span>
+                                    </div>
 
-                                <div class="form-group mb-0">
-                                    <label>Repeat Password</label>
-                                    <input type="password" class="form-control">
+                                    <div class="form-group mb-0">
+                                        <label>Repeat Password</label>
+                                        <input type="password"
+                                               class="form-control"
+                                               v-model="passForm.new_password_confirmation">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-footer bg-light">
-                                <button class="btn btn-primary">Save</button>
-                            </div>
+                                <div class="card-footer bg-light">
+                                    <button class="btn btn-primary" type="submit">Save</button>
+                                </div>
+                            </form>
                         </tab>
                     </tabs>
                 </div>
@@ -107,6 +129,46 @@
           })
         }
         this.loading = false
+      },
+
+      async updateInfo() {
+        try {
+          const {data} = await this.form.put(`/web/profile`)
+          this.user    = data
+          this.$notify({
+            text: 'Information updated successfully',
+            type: 'success',
+          })
+          this.form.errors.clearAll()
+        } catch (e) {
+          if (e.response && e.response.status !== 422) {
+            this.$notify({
+              text: 'Unable to update password. Please try refreshing the page.',
+              type: 'error',
+            })
+          }
+          console.error(e)
+        }
+      },
+
+      async updatePassword() {
+        try {
+          const {data} = await this.passForm.put(`/web/profile/password`)
+          this.user    = data
+          this.$notify({
+            text: 'Password updated successfully',
+            type: 'success',
+          })
+          this.passForm.reset()
+        } catch (e) {
+          if (e.response && e.response.status !== 422) {
+            this.$notify({
+              text: 'Unable to update password. Please try refreshing the page.',
+              type: 'error',
+            })
+          }
+          console.error(e)
+        }
       },
     },
   }

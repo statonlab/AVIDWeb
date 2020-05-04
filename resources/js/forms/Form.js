@@ -110,6 +110,8 @@ export default class Form {
         this[field] = this.originalData[field]
       }
     }
+
+    this.errors.clearAll()
   }
 
   /**
