@@ -90,7 +90,9 @@
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0 hover-visible">
-                                    <button class="btn btn-link" v-tooltip="`Delete Invitation`">
+                                    <button class="btn btn-link"
+                                            v-tooltip="`Delete Invitation`"
+                                            @click.prevent="deleteInvite(invitation)">
                                         <icon name="trash"/>
                                     </button>
                                 </div>
@@ -202,11 +204,34 @@
       closeForm() {
         this.showGroupForm = false
       },
-      
+
       sitesLoaded(data) {
         this.page     = data.current_page
         this.total    = data.total
         this.lastPage = data.last_page
+      },
+
+      deleteInvite(invitation) {
+        this.$confirm({
+          title    : `Delete ${invitation.name}'s Invitation`,
+          text     : 'This action is permanent.',
+          onConfirm: async () => {
+            try {
+              await axios.delete(`/web/invitations/${invitation.id}`)
+              this.group.invitations = this.group.invitations.filter(i => i.id !== invitation.id)
+              this.$notify({
+                type: 'success',
+                text: 'Invitation deleted successfully',
+              })
+            } catch (e) {
+              console.error(e)
+              this.$notify({
+                text: 'Unable to delete invitation. Please try refreshing the page.',
+                type: 'error',
+              })
+            }
+          },
+        })
       },
     },
   }
