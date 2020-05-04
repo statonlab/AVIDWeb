@@ -218,12 +218,13 @@
           onConfirm: async () => {
             try {
               await axios.delete(`/web/invitations/${invitation.id}`)
-              this.invitations = this.invitations.filter(i => i.id !== invitation.id)
+              this.group.invitations = this.group.invitations.filter(i => i.id !== invitation.id)
               this.$notify({
                 type: 'success',
                 text: 'Invitation deleted successfully',
               })
             } catch (e) {
+              console.error(e)
               this.$notify({
                 text: 'Unable to delete invitation. Please try refreshing the page.',
                 type: 'error',
