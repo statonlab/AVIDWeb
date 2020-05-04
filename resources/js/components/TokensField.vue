@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="form-group">
-            <Select2 :options="results.map(({id, name}) => ({id, text: name}))"
+            <Select2 :id="`${id}_select`"
+                     :options="results.map(({id, name}) => ({id, text: name}))"
                      v-model="selects"
                      placeholder="Search..."
                      :settings="{ multiple: 'true', theme: 'bootstrap4' }"
@@ -16,7 +17,10 @@
   export default {
     name: 'TokensField',
 
-    props: {value: {required: false, type: Array}},
+    props: {
+      id: {required: false, type: String},
+      value: {required: false, type: Array}
+    },
 
     components: {Select2},
 

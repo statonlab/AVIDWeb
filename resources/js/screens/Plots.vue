@@ -123,6 +123,18 @@
                                 {{ optional(site.owner_contact, 'Owner contact info') }}
                             </dd>
 
+                            <dt>Overstory Species</dt>
+                            <dd class="text-muted" v-if="site.species.length !== 0">
+                                {{ site.species.map(v => v.name).join(', ') }}
+                            </dd>
+                            <dd class="text-muted" v-else>Not provided</dd>
+
+                            <dt>Seedling or Shrub Species</dt>
+                            <dd class="text-muted" v-if="site.shrubs.length !== 0">
+                                {{ site.shrubs.map(v => v.name).join(', ') }}
+                            </dd>
+                            <dd class="text-muted" v-else>Not provided</dd>
+
                             <dt>Basal Area</dt>
                             <dd class="text-muted">
                                 {{optional(site.basal_area)}}
@@ -210,6 +222,9 @@
     methods: {
       optional(value, field) {
         if (value) {
+          if (Array.isArray(value) && value.length !== 0) {
+            return value.map(v => v.name).join(', ')
+          }
           return value
         }
 
