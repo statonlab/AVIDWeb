@@ -49,6 +49,8 @@ class SiteController extends Controller
      */
     public function create(Request $request)
     {
+        $user = $request->user();
+
         $this->authorize('create', Site::class);
 
         $this->validate($request, [
@@ -77,6 +79,10 @@ class SiteController extends Controller
             'owner_name' => $request->owner_name,
             'owner_contact' => $request->owner_contact,
         ]);
+
+        foreach ($user->groups as $group) {
+            $group->sites()->attach($site->id);
+        }
 
         $site->species()->sync($request->species);
         $site->shrubs()->sync($request->shrubs);
