@@ -20,7 +20,7 @@ class InvitationPolicy
      */
     public function viewAny(User $user, Group $group)
     {
-        return $user->hasPermissionTo('view groups');
+        return $user->owns($group) || $group->isLeader($user) || $user->hasPermissionTo('view groups');
     }
 
     /**

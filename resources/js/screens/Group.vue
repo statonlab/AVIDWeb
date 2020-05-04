@@ -189,7 +189,7 @@
 
         this.group = {
           ...this.group,
-          invitations: [invitation].concat(this.group.invitations),
+          invitations: this.group.invitations.concat([invitation]),
         }
       },
 
