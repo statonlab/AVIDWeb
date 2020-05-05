@@ -26,7 +26,7 @@
                     There are no species found. Please user the "+ species" button above to add one.
                 </p>
                 <div class="table-responsive" v-if="!loading && species.length > 0">
-                    <table class="table table-middle mb-0">
+                    <table class="table table-hover table-middle mb-0">
                         <thead>
                         <tr>
                             <th>Name</th>
