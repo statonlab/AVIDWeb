@@ -27,9 +27,14 @@ class Plot extends Model
         'recorders',
         'last_measured_at',
     ];
+
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'last_measured_at' => 'date',
     ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -63,7 +68,7 @@ class Plot extends Model
             $this->fill(['last_measured_at' => $measurement->date])->save();
 
             /** @var \App\Site $site */
-            $site = $this->site;
+            $site = $this->site()->first();
 
             if ($site->last_measured_at === null || $site->last_measured_at < $this->last_measured_at) {
                 $site->fill(['last_measured_at' => $this->last_measured_at])->save();

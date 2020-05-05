@@ -39,16 +39,18 @@ class SetLastMeasuredAt extends Command
      */
     public function handle()
     {
+        $i = 0;
         $plots = Plot::cursor();
 
+        /** @var Plot $plot */
         foreach ($plots as $plot) {
+            $i++;
             $most_recent = null;
 
             $plants = $plot->plants()->cursor();
             foreach ($plants as $plant) {
                 $measurement = $plant->measurements()->orderBy('date', 'desc')->first();
-                if ($measurement === null) continue;
-                if ($most_recent === null || $measurement->date > $most_recent->date) {
+                if ($measurement && ($most_recent === null || $measurement->date > $most_recent->date)) {
                     $most_recent = $measurement;
                 }
             }
@@ -57,5 +59,7 @@ class SetLastMeasuredAt extends Command
                 $plot->setLastMeasuredAt($most_recent);
             }
         }
+
+        $this->info("Processed $i plots");
     }
 }
