@@ -57,6 +57,7 @@
                                 <icon :name="sortIcon('last_measured_at')"/>
                             </a>
                         </th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -72,7 +73,11 @@
                         <td v-if="showOwner">{{ site.user.name }}</td>
                         <td>{{ site.plots_count | plural('Plot', 'Plots')}}</td>
                         <td>{{ site.plants_count | plural('Plant', 'Plants') }}</td>
-                        <td>{{ site.last_measured_at }}</td>
+                        <td>
+                            <span v-if="site.last_measured_at">
+                                {{ moment(site.last_measured_at).format('MMM Do, YYYY') }}
+                            </span>
+                        </td>
                         <td class="text-right no-wrap">
                             <button class="show-on-hover btn btn-link btn-sm mr-1"
                                     v-if="User.owns(site) || User.can('update sites')"
@@ -110,6 +115,7 @@
   import SiteForm from '../../forms/SiteForm'
   import Icon from '../Icon'
   import User from '../../helpers/User'
+  import moment from 'moment'
 
   export default {
     name: 'SitesDataView',
@@ -123,6 +129,7 @@
 
     data() {
       return {
+        moment,
         User: User,
         showSiteForm: false,
         sites       : [],

@@ -89,6 +89,7 @@
                                     <icon :name="sortIcon('last_measured_at')"/>
                                 </a>
                             </th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -100,7 +101,7 @@
                                 {{ plot.plants_count | plural('Plant', 'Plants') }}
                             </td>
                             <td>
-                                {{ plot.last_measured_at }}
+                                <span v-if="plot.last_measured_at">{{ moment(plot.last_measured_at).format('MMM Do, YYYY') }}</span>
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">
@@ -196,6 +197,7 @@
   import SiteForm from '../forms/SiteForm'
   import Pager from '../components/Pager'
   import User from '../helpers/User'
+  import moment from 'moment'
 
   export default {
     name: 'Plots',
@@ -204,6 +206,7 @@
 
     data() {
       return {
+        moment,
         User        : User,
         search      : '',
         showPlotForm: false,
