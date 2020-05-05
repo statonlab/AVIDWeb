@@ -23,6 +23,7 @@ class Site extends Model
         'owner_contact',
         'basal_area',
         'diameter',
+        'last_measured_at',
     ];
 
     /**

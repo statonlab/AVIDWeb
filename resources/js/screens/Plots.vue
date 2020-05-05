@@ -81,7 +81,14 @@
                                     <icon :name="sortIcon('plants_count')"/>
                                 </a>
                             </th>
-                            <th></th>
+                            <th>
+                                <a href="#"
+                                   class="d-flex align-items-center"
+                                   @click.prevent="sort('last_measured_at')">
+                                    <span class="mr-1">Last Measured At</span>
+                                    <icon :name="sortIcon('last_measured_at')"/>
+                                </a>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -91,6 +98,9 @@
                             </td>
                             <td>
                                 {{ plot.plants_count | plural('Plant', 'Plants') }}
+                            </td>
+                            <td>
+                                {{ plot.last_measured_at }}
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">
@@ -207,8 +217,8 @@
         request     : null,
         site        : null,
         plot        : null,
-        orderBy     : 'number',
-        orderDir    : 'asc',
+        orderBy     : 'last_measured_at',
+        orderDir    : 'desc',
       }
     },
 

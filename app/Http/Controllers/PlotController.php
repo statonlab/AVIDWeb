@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Plot;
 use App\Site;
+use App\Measurement;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -21,7 +22,7 @@ class PlotController extends Controller
         $this->authorize('view', $site);
 
         $this->validate($request, [
-            'order_by' => 'nullable|in:number,plants_count',
+            'order_by' => 'nullable|in:number,plants_count,last_measured_at',
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
         ]);

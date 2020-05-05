@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Site;
+use App\Plot;
 
 class SetLastMeasuredAt extends Command
 {
@@ -37,6 +39,23 @@ class SetLastMeasuredAt extends Command
      */
     public function handle()
     {
-        
+        $plots = Plot::cursor();
+
+        foreach ($plots as $plot) {
+            $most_recent = null;
+
+            $plants = $plot->plants()->cursor();
+            foreach ($plants as $plant) {
+                $measurement = $plant->measurements()->orderBy('date', 'desc')->first();
+                if ($measurement === null) continue;
+                if ($most_recent === null || $measurement->date > $most_recent->date) {
+                    $most_recent = $measurement;
+                }
+            }
+
+            if ($most_recent !== null) {
+                $plot->setLastMeasuredAt($most_recent);
+            }
+        }
     }
 }
