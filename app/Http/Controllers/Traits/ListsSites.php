@@ -15,7 +15,7 @@ trait ListsSites
         $request = request();
 
         $this->validate($request, [
-            'order_by' => 'nullable|in:name,plots_count,plants_count',
+            'order_by' => 'nullable|in:name,plots_count,plants_count,last_measured_at',
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
         ]);

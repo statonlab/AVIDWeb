@@ -103,6 +103,8 @@ class MeasurementController extends Controller
             'is_alive' => $request->is_located == 1 ? $request->is_alive == 1 : null,
         ]);
 
+        $measurement->plot->setLastMeasuredAt($measurement);
+
         $this->with($measurement);
 
         return $this->created($measurement);
@@ -151,6 +153,8 @@ class MeasurementController extends Controller
         }
 
         $measurement->save();
+
+        $measurement->plot->setLastMeasuredAt($measurement);
 
         $this->with($measurement);
 
