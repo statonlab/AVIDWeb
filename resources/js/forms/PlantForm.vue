@@ -211,7 +211,7 @@
       async create() {
         this.saving = true
         try {
-          const {data} = await this.form.post(`/web/plots/${this.plot.id}/plants/`)
+          const {data} = await this.form.post(`/web/plots/${this.plot.id}/plants`)
           this.$emit('create', data)
         } catch (e) {
           if (!e.response || e.response.status !== 422) {

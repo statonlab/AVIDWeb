@@ -44,6 +44,7 @@ class PlantController extends Controller
             'quadrant',
             'plant_type_id',
             'plot_id',
+            'user_id',
         ])
             ->join('species', 'plants.species_id', '=', 'species.id')
             ->withCount(['measurements']);
