@@ -2190,53 +2190,13 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Icon */ "./resources/js/components/Icon.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'BetaPlantsView',
-  components: {
-    Icon: _Icon__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
-  props: {
-    plot: {
-      required: true
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/BetaPlotsView.vue?vue&type=script&lang=js&":
-/*!************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/BetaPlotsView.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Icon */ "./resources/js/components/Icon.vue");
-/* harmony import */ var _Tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Tabs */ "./resources/js/components/Tabs.vue");
-/* harmony import */ var _Tab__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Tab */ "./resources/js/components/Tab.vue");
-/* harmony import */ var _BetaPlantsView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./BetaPlantsView */ "./resources/js/components/BetaPlantsView.vue");
+/* harmony import */ var _InlineSpinner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./InlineSpinner */ "./resources/js/components/InlineSpinner.vue");
+/* harmony import */ var _helpers_User__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/User */ "./resources/js/helpers/User.js");
+/* harmony import */ var _forms_PlantForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../forms/PlantForm */ "./resources/js/forms/PlantForm.vue");
+/* harmony import */ var _Pager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Pager */ "./resources/js/components/Pager.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2280,6 +2240,469 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'BetaPlantsView',
+  components: {
+    Pager: _Pager__WEBPACK_IMPORTED_MODULE_5__["default"],
+    PlantForm: _forms_PlantForm__WEBPACK_IMPORTED_MODULE_4__["default"],
+    InlineSpinner: _InlineSpinner__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Icon: _Icon__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  props: {
+    plot: {
+      required: true
+    }
+  },
+  watch: {
+    'plot.id': {
+      handler: function handler() {
+        this.loading = true;
+        this.loadPlants();
+      }
+    },
+    search: function search() {
+      this.loadPlants();
+    }
+  },
+  data: function data() {
+    return {
+      User: _helpers_User__WEBPACK_IMPORTED_MODULE_3__["default"],
+      plants: [],
+      plant: null,
+      showForm: false,
+      lastPage: 1,
+      page: 1,
+      orderBy: 'tag',
+      orderDir: 'asc',
+      request: null,
+      total: 0,
+      deleting: null,
+      loading: true,
+      search: ''
+    };
+  },
+  mounted: function mounted() {
+    this.loadPlants();
+  },
+  methods: {
+    loadPlants: function loadPlants() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _yield$axios$get, data;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (_this.request) {
+                  _this.request();
+                }
+
+                _context.prev = 1;
+                _context.next = 4;
+                return axios.get("/web/plots/".concat(_this.plot.id, "/plants"), {
+                  params: {
+                    search: _this.search,
+                    page: _this.page,
+                    order_by: _this.orderBy,
+                    order_dir: _this.orderDir
+                  },
+                  cancelToken: new axios.CancelToken(function (c) {
+                    return _this.request = c;
+                  })
+                });
+
+              case 4:
+                _yield$axios$get = _context.sent;
+                data = _yield$axios$get.data;
+                _this.plants = data.data;
+                _this.lastPage = data.last_page;
+                _this.total = data.total;
+                _context.next = 14;
+                break;
+
+              case 11:
+                _context.prev = 11;
+                _context.t0 = _context["catch"](1);
+
+                if (!axios.isCancel(_context.t0)) {
+                  console.error(_context.t0);
+
+                  _this.$notify({
+                    text: 'Unable to load plot. Please try refreshing the page.',
+                    type: 'error'
+                  });
+                }
+
+              case 14:
+                _this.loading = false;
+
+              case 15:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[1, 11]]);
+      }))();
+    },
+    goTo: function goTo(page) {
+      this.page = page;
+      this.loadPlants();
+    },
+    created: function created(plant) {
+      this.closeForm();
+      this.loadPlants();
+      this.$notify({
+        text: 'Plant created successfully',
+        type: 'success'
+      });
+    },
+    updated: function updated(plant) {
+      this.closeForm();
+      this.plants = this.plants.map(function (p) {
+        return p.id === plant.id ? plant : p;
+      });
+      this.$notify({
+        text: 'Plant updated successfully',
+        type: 'success'
+      });
+    },
+    closeForm: function closeForm() {
+      this.plant = null;
+      this.showForm = false;
+    },
+    edit: function edit(plant) {
+      this.plant = plant;
+      this.showForm = true;
+    },
+    destroy: function destroy(plant) {
+      var _this2 = this;
+
+      if (this.deleting !== null) {
+        return;
+      }
+
+      this.$confirm({
+        title: "Are you sure you want to delete Plant #".concat(plant.tag, "?"),
+        text: 'This action is permanent!',
+        onConfirm: function () {
+          var _onConfirm = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+              while (1) {
+                switch (_context2.prev = _context2.next) {
+                  case 0:
+                    _this2.deleting = plant.id;
+                    _context2.prev = 1;
+                    _context2.next = 4;
+                    return axios["delete"]("/web/plants/".concat(plant.id));
+
+                  case 4:
+                    _this2.loadPlants();
+
+                    _context2.next = 11;
+                    break;
+
+                  case 7:
+                    _context2.prev = 7;
+                    _context2.t0 = _context2["catch"](1);
+
+                    _this2.$notify({
+                      text: 'Unable to delete plant. Please try refreshing the page.',
+                      type: 'error'
+                    });
+
+                    console.error(_context2.t0);
+
+                  case 11:
+                    _this2.deleting = null;
+
+                  case 12:
+                  case "end":
+                    return _context2.stop();
+                }
+              }
+            }, _callee2, null, [[1, 7]]);
+          }));
+
+          function onConfirm() {
+            return _onConfirm.apply(this, arguments);
+          }
+
+          return onConfirm;
+        }()
+      });
+    },
+    plotUpdated: function plotUpdated(plot) {
+      this.plot = plot;
+      this.editingPlot = false;
+    },
+    sort: function sort(column) {
+      if (column === this.orderBy) {
+        this.orderDir = this.orderDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        this.orderBy = column;
+        this.orderDir = 'asc';
+      }
+
+      this.loadPlants();
+    },
+    sortIcon: function sortIcon(column) {
+      if (column !== this.orderBy) {
+        return 'swap-vertical';
+      }
+
+      if (this.orderDir === 'asc') {
+        return 'arrow-up';
+      }
+
+      return 'arrow-down';
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/BetaPlotsView.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/BetaPlotsView.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Icon */ "./resources/js/components/Icon.vue");
+/* harmony import */ var _Tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Tabs */ "./resources/js/components/Tabs.vue");
+/* harmony import */ var _Tab__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Tab */ "./resources/js/components/Tab.vue");
+/* harmony import */ var _BetaPlantsView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./BetaPlantsView */ "./resources/js/components/BetaPlantsView.vue");
+/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Dropdown */ "./resources/js/components/Dropdown.vue");
+/* harmony import */ var _forms_PlotForm__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../forms/PlotForm */ "./resources/js/forms/PlotForm.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
@@ -2287,6 +2710,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'BetaPlotsView',
   components: {
+    PlotForm: _forms_PlotForm__WEBPACK_IMPORTED_MODULE_6__["default"],
+    Dropdown: _Dropdown__WEBPACK_IMPORTED_MODULE_5__["default"],
     BetaPlantsView: _BetaPlantsView__WEBPACK_IMPORTED_MODULE_4__["default"],
     Tab: _Tab__WEBPACK_IMPORTED_MODULE_3__["default"],
     Tabs: _Tabs__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -2302,12 +2727,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loading: false,
       plots: [],
       plot: null,
+      plotId: null,
       page: 1,
       lastPage: 1,
       search: '',
       orderBy: 'number',
       orderDir: 'asc',
-      request: null
+      request: null,
+      plotOptions: [],
+      showPlotForm: false,
+      editing: null
     };
   },
   watch: {
@@ -2315,6 +2744,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function handler() {
         this.loadPlots();
       }
+    },
+    plotId: function plotId(id) {
+      var plots = this.plots.filter(function (p) {
+        return p.id === id;
+      });
+
+      if (plots.length > 0) {
+        this.plot = plots[0];
+      }
+    },
+    search: function search() {
+      this.loadPlots();
     }
   },
   mounted: function mounted() {
@@ -2325,7 +2766,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var id, _yield$axios$get, data;
+        var _yield$axios$get, data;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
@@ -2336,9 +2777,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 _context.prev = 1;
-                id = _this.$route.params.id;
-                _context.next = 5;
-                return axios.get("/web/sites/".concat(id, "/plots"), {
+                _context.next = 4;
+                return axios.get("/web/sites/".concat(_this.site.id, "/plots"), {
                   params: {
                     page: _this.page,
                     search: _this.search,
@@ -2350,7 +2790,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   })
                 });
 
-              case 5:
+              case 4:
                 _yield$axios$get = _context.sent;
                 data = _yield$axios$get.data;
                 _this.plots = data.data;
@@ -2358,9 +2798,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.loading = false;
                 _this.request = null;
 
-                if (_this.plot === null && _this.plots.length > 0) {
+                if ((_this.plotId === null || _this.plot === null) && _this.plots.length > 0) {
+                  _this.plotId = _this.plots[0].id;
                   _this.plot = _this.plots[0];
                 }
+
+                _this.setOptions();
 
                 _context.next = 17;
                 break;
@@ -2381,6 +2824,53 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee, null, [[1, 14]]);
       }))();
+    },
+    created: function created(plot) {
+      this.plots.push(plot);
+      this.plot = plot;
+      this.plotId = plot.id;
+      this.setOptions();
+      this.closeForm();
+    },
+    updated: function updated(plot) {
+      this.plots = this.plots.map(function (p) {
+        return p.id === plot.id ? plot : p;
+      });
+      this.setOptions();
+      this.closeForm();
+    },
+    setOptions: function setOptions() {
+      this.plotOptions = this.plots.map(function (p) {
+        return {
+          value: p.id,
+          label: "Plot #".concat(p.number)
+        };
+      });
+    },
+    closeForm: function closeForm() {
+      this.showPlotForm = false;
+      this.editing = null;
+    },
+    edit: function edit() {
+      this.editing = this.plot;
+      this.showPlotForm = true;
+    },
+    optional: function optional(value, field) {
+      if (value) {
+        if (Array.isArray(value) && value.length !== 0) {
+          return value.map(function (v) {
+            return v.name;
+          }).join(', ');
+        }
+
+        return value;
+      }
+
+      if (typeof field !== 'undefined') {
+        return "".concat(field, " is not provided");
+      }
+
+      return 'Not provided';
     }
   }
 });
@@ -7311,6 +7801,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/InlineSpinner */ "./resources/js/components/InlineSpinner.vue");
 /* harmony import */ var _components_BetaPlotsView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/BetaPlotsView */ "./resources/js/components/BetaPlotsView.vue");
 /* harmony import */ var _components_Icon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Icon */ "./resources/js/components/Icon.vue");
+/* harmony import */ var _forms_SiteForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../forms/SiteForm */ "./resources/js/forms/SiteForm.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -7345,12 +7836,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'BetaSite',
   components: {
+    SiteForm: _forms_SiteForm__WEBPACK_IMPORTED_MODULE_4__["default"],
     Icon: _components_Icon__WEBPACK_IMPORTED_MODULE_3__["default"],
     BetaPlotsView: _components_BetaPlotsView__WEBPACK_IMPORTED_MODULE_2__["default"],
     InlineSpinner: _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -7363,7 +7861,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loadingPlots: false,
       plotSearch: '',
       plants: [],
-      loadingPlants: false
+      loadingPlants: false,
+      showForm: false
     };
   },
   mounted: function mounted() {
@@ -7411,7 +7910,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, null, [[1, 10]]);
       }))();
     },
-    editSite: function editSite() {}
+    edit: function edit() {
+      this.showForm = true;
+    },
+    updated: function updated(site) {
+      this.site = site;
+    }
   }
 });
 
@@ -78202,38 +78706,328 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "card-header d-flex align-items-center" }, [
-      _vm._m(0),
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "card-header d-flex align-items-center p-2" }, [
+        _c("div", { staticClass: "flex-grow-1" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.search,
+                expression: "search"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "search", placeholder: "Search by tag or species" },
+            domProps: { value: _vm.search },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.search = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-shrink-0 text-muted" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.showForm = true
+                }
+              }
+            },
+            [
+              _c("icon", { attrs: { name: "add" } }),
+              _vm._v(" "),
+              _c("span", [_vm._v("Plant")])
+            ],
+            1
+          )
+        ])
+      ]),
       _vm._v(" "),
-      _c("div", { staticClass: "flex-shrink-0 text-muted" }, [
-        _c(
-          "button",
-          { staticClass: "btn btn-primary" },
-          [
-            _c("icon", { attrs: { name: "add" } }),
-            _vm._v(" "),
-            _c("span", [_vm._v("Plant")])
-          ],
-          1
-        )
-      ])
-    ])
-  ])
+      _c("div", { staticClass: "card-body p-0 table-responsive" }, [
+        _vm.loading
+          ? _c(
+              "div",
+              {
+                staticClass: "d-flex align-items-center justify-content-center"
+              },
+              [_c("inline-spinner", { staticClass: "text-primary" })],
+              1
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.loading && _vm.plants.length === 0
+          ? _c("div", { staticClass: "p-3 text-muted border-top" }, [
+              _vm._v(
+                '\n            No plants found. Please try adjusting your filters or create a new plant using the "+ Plant" button above.\n        '
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.loading && _vm.plants.length > 0
+          ? _c("table", { staticClass: "table mb-0" }, [
+              _c("thead", [
+                _c("tr", [
+                  _c("th", [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "d-flex align-items-center",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.sort("tag")
+                          }
+                        }
+                      },
+                      [
+                        _c("span", { staticClass: "mr-1" }, [_vm._v("Tag")]),
+                        _vm._v(" "),
+                        _c("icon", { attrs: { name: _vm.sortIcon("tag") } })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("th", [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "d-flex align-items-center",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.sort("name")
+                          }
+                        }
+                      },
+                      [
+                        _c("span", { staticClass: "mr-1" }, [
+                          _vm._v("Species")
+                        ]),
+                        _vm._v(" "),
+                        _c("icon", { attrs: { name: _vm.sortIcon("name") } })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("th", [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "d-flex align-items-center",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.sort("quadrant")
+                          }
+                        }
+                      },
+                      [
+                        _c("span", { staticClass: "mr-1" }, [
+                          _vm._v("Quadrant")
+                        ]),
+                        _vm._v(" "),
+                        _c("icon", {
+                          attrs: { name: _vm.sortIcon("quadrant") }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("th", [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "d-flex align-items-center",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.sort("measurements_count")
+                          }
+                        }
+                      },
+                      [
+                        _c("span", { staticClass: "mr-1" }, [
+                          _vm._v("Measurements")
+                        ]),
+                        _vm._v(" "),
+                        _c("icon", {
+                          attrs: { name: _vm.sortIcon("measurements_count") }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("th")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.plants, function(plant) {
+                  return _c(
+                    "tr",
+                    {
+                      class: {
+                        "hover-visible-container": _vm.deleting !== plant.id
+                      }
+                    },
+                    [
+                      _c(
+                        "td",
+                        [
+                          _c(
+                            "router-link",
+                            { attrs: { to: "/app/plants/" + plant.id } },
+                            [
+                              _vm._v(
+                                _vm._s(plant.type.name) +
+                                  " #" +
+                                  _vm._s(plant.tag)
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(plant.species_name))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(plant.quadrant))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(plant.measurements_count))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "d-flex justify-content-end hover-visible"
+                          },
+                          [
+                            _vm.User.owns(plant) || _vm.User.can("update sites")
+                              ? _c(
+                                  "button",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "tooltip",
+                                        rawName: "v-tooltip",
+                                        value: "Edit",
+                                        expression: "'Edit'"
+                                      }
+                                    ],
+                                    staticClass: "btn btn-sm btn-link",
+                                    attrs: { type: "button" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.edit(plant)
+                                      }
+                                    }
+                                  },
+                                  [_c("icon", { attrs: { name: "create" } })],
+                                  1
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.User.owns(plant) || _vm.User.can("delete sites")
+                              ? _c(
+                                  "button",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "tooltip",
+                                        rawName: "v-tooltip",
+                                        value: "Delete",
+                                        expression: "'Delete'"
+                                      }
+                                    ],
+                                    staticClass: "btn btn-sm",
+                                    class:
+                                      _vm.deleting === plant.id
+                                        ? "btn-danger"
+                                        : "btn-link",
+                                    attrs: { type: "button" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.destroy(plant)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm.deleting !== plant.id
+                                      ? _c("icon", { attrs: { name: "trash" } })
+                                      : _c("inline-spinner")
+                                  ],
+                                  1
+                                )
+                              : _vm._e()
+                          ]
+                        )
+                      ])
+                    ]
+                  )
+                }),
+                0
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.lastPage > 1
+          ? _c(
+              "div",
+              { staticClass: "py-2" },
+              [
+                _c("pager", {
+                  attrs: { page: _vm.page, "last-page": _vm.lastPage },
+                  on: {
+                    change: function($event) {
+                      return _vm.goTo($event)
+                    }
+                  }
+                })
+              ],
+              1
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm.showForm
+        ? _c("plant-form", {
+            attrs: { plot: _vm.plot, plant: _vm.plant },
+            on: {
+              close: _vm.closeForm,
+              create: _vm.created,
+              update: _vm.updated
+            }
+          })
+        : _vm._e()
+    ],
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex-grow-1" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "search", placeholder: "Search plants..." }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -78255,64 +79049,339 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-4 col-lg-3" }, [
-        _c("div", { staticClass: "card mb-3" }, [
-          _c("div", { staticClass: "card-header d-flex" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("div", { staticClass: "flex-shrink-0" }, [
-              _c(
-                "button",
-                { staticClass: "btn btn-primary" },
-                [
-                  _c("icon", { attrs: { name: "add" } }),
-                  _vm._v(" "),
-                  _c("span", [_vm._v("Plot")])
-                ],
-                1
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-8 col-lg-9" }, [
-        _c(
-          "div",
-          { staticClass: "card mb-3" },
-          [
-            _c(
-              "tabs",
-              [
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-4 col-lg-3" }, [
+          _c("div", { staticClass: "card mb-3" }, [
+            _c("div", { staticClass: "card-header d-flex border-bottom" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex-shrink-0" }, [
                 _c(
-                  "tab",
-                  { attrs: { name: "Plants", selected: "" } },
-                  [_c("beta-plants-view", { attrs: { plot: _vm.plot } })],
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.showPlotForm = true
+                      }
+                    }
+                  },
+                  [
+                    _c("icon", { attrs: { name: "add" } }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Plot")])
+                  ],
                   1
-                ),
-                _vm._v(" "),
-                _c("tab", { attrs: { name: "Site Info" } }, [
-                  _vm._v(
-                    "\n                        Site info\n                    "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("tab", { attrs: { name: "Plot Info" } }, [
-                  _vm._v(
-                    "\n                        Plot info\n                    "
-                  )
-                ])
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c("dropdown", {
+                  attrs: { autocomplete: "", options: _vm.plotOptions },
+                  on: {
+                    search: function($event) {
+                      _vm.search = $event
+                    }
+                  },
+                  model: {
+                    value: _vm.plotId,
+                    callback: function($$v) {
+                      _vm.plotId = $$v
+                    },
+                    expression: "plotId"
+                  }
+                })
               ],
               1
             )
-          ],
-          1
-        )
-      ])
-    ])
-  ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-8 col-lg-9" }, [
+          _c(
+            "div",
+            { staticClass: "card mb-3" },
+            [
+              _c(
+                "tabs",
+                [
+                  _c(
+                    "tab",
+                    { attrs: { name: "Plants", selected: "" } },
+                    [
+                      _vm.plot
+                        ? _c("beta-plants-view", { attrs: { plot: _vm.plot } })
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("tab", { attrs: { name: "Plot Info" } }, [
+                    _c(
+                      "div",
+                      { staticClass: "card-header border-bottom d-flex" },
+                      [
+                        _c("div", { staticClass: "flex-grow-1" }, [
+                          _c("strong", [_vm._v("Plot Information")])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "flex-shrink-0" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-link",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.edit($event)
+                                }
+                              }
+                            },
+                            [
+                              _c("icon", { attrs: { name: "create" } }),
+                              _vm._v(" "),
+                              _c("span", [_vm._v("Edit Plot")])
+                            ],
+                            1
+                          )
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-body" }, [
+                      _vm.plot
+                        ? _c("dl", { staticClass: "mb-0" }, [
+                            _c("dt", [_vm._v("Basal Area")]),
+                            _vm._v(" "),
+                            _vm.plot.basal_area !== null
+                              ? _c("dd", [_vm._v(_vm._s(_vm.plot.basal_area))])
+                              : _c("dd", [_vm._v("Not Provided")]),
+                            _vm._v(" "),
+                            _c("dt", [_vm._v("Enclosed or Protected")]),
+                            _vm._v(" "),
+                            _vm.plot.is_protected
+                              ? _c("dd", [_vm._v("Yes")])
+                              : _c("dd", [_vm._v("No")]),
+                            _vm._v(" "),
+                            _c("dt", [_vm._v("Protection Period")]),
+                            _vm._v(" "),
+                            _vm.plot.protection_seasons !== null
+                              ? _c("dd", [
+                                  _vm._v(_vm._s(_vm.plot.protection_seasons))
+                                ])
+                              : _c("dd", [_vm._v("Not Provided")]),
+                            _vm._v(" "),
+                            _c("dt", [_vm._v("Ground and Shrub Cover")]),
+                            _vm._v(" "),
+                            _vm.plot.ground_cover !== null
+                              ? _c("dd", [
+                                  _vm._v(_vm._s(_vm.plot.ground_cover))
+                                ])
+                              : _c("dd", [_vm._v("Not Provided")]),
+                            _vm._v(" "),
+                            _c("dt", [_vm._v("Canopy")]),
+                            _vm._v(" "),
+                            _vm.plot.canopy !== null
+                              ? _c("dd", [_vm._v(_vm._s(_vm.plot.canopy))])
+                              : _c("dd", [_vm._v("Not Provided")]),
+                            _vm._v(" "),
+                            _c("dt", [_vm._v("Subcanopy")]),
+                            _vm._v(" "),
+                            _vm.plot.subcanopy !== null
+                              ? _c("dd", [_vm._v(_vm._s(_vm.plot.subcanopy))])
+                              : _c("dd", [_vm._v("Not Provided")]),
+                            _vm._v(" "),
+                            _c("dt", [_vm._v("Recorders")]),
+                            _vm._v(" "),
+                            _vm.plot.recorders !== null
+                              ? _c("dd", [_vm._v(_vm._s(_vm.plot.recorders))])
+                              : _c("dd", [_vm._v("Not Provided")])
+                          ])
+                        : _vm._e()
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tab", { attrs: { name: "Site Info" } }, [
+                    _c(
+                      "div",
+                      { staticClass: "card-header border-bottom d-flex" },
+                      [
+                        _c("div", { staticClass: "flex-grow-1" }, [
+                          _c("strong", [_vm._v("Site Information")])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "flex-shrink-0" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-link",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.$emit("edit-site-request")
+                                }
+                              }
+                            },
+                            [
+                              _c("icon", { attrs: { name: "create" } }),
+                              _vm._v(" "),
+                              _c("span", [_vm._v("Edit Site")])
+                            ],
+                            1
+                          )
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("dl", { staticClass: "mb-0" }, [
+                        _c("dt", [_vm._v("Owner")]),
+                        _vm._v(" "),
+                        _c("dd", { staticClass: "text-muted" }, [
+                          _vm._v(
+                            _vm._s(_vm.optional(_vm.site.owner, "Owner name"))
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("dt", [_vm._v("Contact Info")]),
+                        _vm._v(" "),
+                        _c("dd", { staticClass: "text-muted" }, [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(
+                                _vm.optional(
+                                  _vm.site.owner_contact,
+                                  "Owner contact info"
+                                )
+                              ) +
+                              "\n                                "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("dt", [_vm._v("Overstory Species")]),
+                        _vm._v(" "),
+                        _vm.site.species.length !== 0
+                          ? _c("dd", { staticClass: "text-muted" }, [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(
+                                    _vm.site.species
+                                      .map(function(v) {
+                                        return v.name
+                                      })
+                                      .join(", ")
+                                  ) +
+                                  "\n                                "
+                              )
+                            ])
+                          : _c("dd", { staticClass: "text-muted" }, [
+                              _vm._v("Not provided")
+                            ]),
+                        _vm._v(" "),
+                        _c("dt", [_vm._v("Seedling or Shrub Species")]),
+                        _vm._v(" "),
+                        _vm.site.shrubs.length !== 0
+                          ? _c("dd", { staticClass: "text-muted" }, [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(
+                                    _vm.site.shrubs
+                                      .map(function(v) {
+                                        return v.name
+                                      })
+                                      .join(", ")
+                                  ) +
+                                  "\n                                "
+                              )
+                            ])
+                          : _c("dd", { staticClass: "text-muted" }, [
+                              _vm._v("Not provided")
+                            ]),
+                        _vm._v(" "),
+                        _c("dt", [_vm._v("Basal Area")]),
+                        _vm._v(" "),
+                        _c("dd", { staticClass: "text-muted" }, [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(_vm.optional(_vm.site.basal_area)) +
+                              "\n                                    "
+                          ),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.site.basal_area,
+                                  expression: "site.basal_area"
+                                }
+                              ]
+                            },
+                            [
+                              _vm._v("ft"),
+                              _c("sup", [_vm._v("2")]),
+                              _vm._v("/ac")
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("dt", [_vm._v("Average Overstory Tree Diameter")]),
+                        _vm._v(" "),
+                        _c("dd", { staticClass: "text-muted" }, [
+                          _vm._v(_vm._s(_vm.optional(_vm.site.diameter)) + " "),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.site.diameter,
+                                  expression: "site.diameter"
+                                }
+                              ]
+                            },
+                            [_vm._v("in")]
+                          )
+                        ])
+                      ])
+                    ])
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _vm.showPlotForm
+        ? _c("plot-form", {
+            attrs: { site: _vm.site, plot: _vm.editing },
+            on: {
+              create: function($event) {
+                return _vm.created($event)
+              },
+              update: function($event) {
+                return _vm.updated($event)
+              },
+              close: _vm.closeForm
+            }
+          })
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -83661,30 +84730,28 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "flex-shrink-0" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-link",
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.editSite()
-                    }
-                  }
-                },
-                [
-                  _c("icon", { attrs: { name: "create" } }),
-                  _vm._v(" "),
-                  _c("span", [_vm._v("Edit Site")])
-                ],
-                1
-              )
-            ])
+            _c("div", { staticClass: "flex-shrink-0" })
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.site ? _c("beta-plots-view", { attrs: { site: _vm.site } }) : _vm._e()
+      _vm.site
+        ? _c("beta-plots-view", {
+            attrs: { site: _vm.site },
+            on: { "edit-site-request": _vm.edit }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showForm
+        ? _c("site-form", {
+            attrs: { site: _vm.site },
+            on: {
+              close: function($event) {
+                _vm.showForm = false
+              },
+              update: _vm.updated
+            }
+          })
+        : _vm._e()
     ],
     1
   )

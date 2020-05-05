@@ -13,16 +13,21 @@
                 </p>
             </div>
             <div class="flex-shrink-0">
-                <button class="btn btn-link" @click.prevent="editSite()">
-                    <icon name="create"/>
-                    <span>Edit Site</span>
-                </button>
+
             </div>
         </div>
 
         <beta-plots-view
+                @edit-site-request="edit"
                 v-if="site"
                 :site="site"/>
+
+        <site-form
+                v-if="showForm"
+                :site="site"
+                @close="showForm = false"
+                @update="updated"
+        />
     </div>
 </template>
 
@@ -30,11 +35,12 @@
   import InlineSpinner from '../components/InlineSpinner'
   import BetaPlotsView from '../components/BetaPlotsView'
   import Icon from '../components/Icon'
+  import SiteForm from '../forms/SiteForm'
 
   export default {
     name: 'BetaSite',
 
-    components: {Icon, BetaPlotsView, InlineSpinner},
+    components: {SiteForm, Icon, BetaPlotsView, InlineSpinner},
 
     data() {
       return {
@@ -45,6 +51,7 @@
         plotSearch   : '',
         plants       : [],
         loadingPlants: false,
+        showForm     : false,
       }
     },
 
@@ -66,7 +73,12 @@
         this.loadingSite = false
       },
 
-      editSite() {
+      edit() {
+        this.showForm = true
+      },
+
+      updated(site) {
+        this.site = site
       },
     },
   }
