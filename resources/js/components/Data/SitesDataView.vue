@@ -130,12 +130,8 @@
 
     data() {
       return {
-<<<<<<< HEAD
-        User        : User,
-=======
         moment,
         User: User,
->>>>>>> master
         showSiteForm: false,
         sites       : [],
         loading     : false,
