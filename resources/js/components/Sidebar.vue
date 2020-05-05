@@ -71,6 +71,11 @@
             label: 'My Data',
           },
           {
+            icon : 'notifications-outline',
+            to   : '/app/reminders',
+            label: 'My Reminders',
+          },
+          {
             icon : 'people-outline',
             to   : '/app/groups',
             label: 'User Groups',

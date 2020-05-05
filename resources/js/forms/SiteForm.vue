@@ -1,5 +1,5 @@
 <template>
-    <modal medium>
+    <modal medium @close="$emit('close')">
         <form action="" @submit.prevent="save()">
             <modal-card>
                 <modal-header>
@@ -361,7 +361,6 @@
       },
 
       async submit() {
-        console.log(this.species)
         this.saving = true
         try {
           const {data} = await this.form.post(`/web/sites`)

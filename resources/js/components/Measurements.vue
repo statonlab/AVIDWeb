@@ -201,7 +201,7 @@
         page               : 1,
         lastPage           : 1,
         measurement        : null,
-        deleting           : false,
+        deleting           : null,
         orderBy            : 'date',
         orderDir           : 'desc',
       }
