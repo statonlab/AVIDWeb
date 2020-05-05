@@ -13,7 +13,7 @@ class SetLastMeasuredAt extends Command
      *
      * @var string
      */
-    protected $signature = 'set:lastmeasuredat';
+    protected $signature = 'plots:update-measurements-date';
 
     /**
      * The console command description.

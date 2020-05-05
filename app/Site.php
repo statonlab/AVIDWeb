@@ -25,7 +25,9 @@ class Site extends Model
         'diameter',
         'last_measured_at',
     ];
-
+    protected $casts = [
+        'last_measured_at' => 'date',
+    ];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

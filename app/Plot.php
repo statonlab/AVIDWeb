@@ -27,7 +27,9 @@ class Plot extends Model
         'recorders',
         'last_measured_at',
     ];
-
+    protected $casts = [
+        'last_measured_at' => 'date',
+    ];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -53,13 +55,14 @@ class Plot extends Model
     }
 
     /**
+     * Sets the measured at field for both the current plot and the parent site based on the provided measurement.
      * @param \App\Measurement $measurement
      */
     public function setLastMeasuredAt(Measurement $measurement) {
         if ($this->last_measured_at === null || $this->last_measured_at < $measurement->date) {
             $this->fill(['last_measured_at' => $measurement->date])->save();
 
-            /* @var \App\Site */
+            /** @var \App\Site $site */
             $site = $this->site;
 
             if ($site->last_measured_at === null || $site->last_measured_at < $this->last_measured_at) {
