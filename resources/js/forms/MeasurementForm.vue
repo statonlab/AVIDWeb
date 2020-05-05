@@ -16,6 +16,7 @@
                             <date-picker
                                     v-model="date"
                                     color="green"
+                                    :max-date="new Date()"
                                     :input-props="{
                                         class: 'form-control'+(form.errors.has('date') ? ' is-invalid':''),
                                         placeholder: 'Collection Date',
