@@ -19,13 +19,35 @@
                                 autocomplete
                                 @search="search = $event"
                                 v-model="plotId"
+                                :loading="loading"
                                 :options="plotOptions"/>
                     </div>
                 </div>
             </div>
             <div class="col-md-8 col-lg-9">
                 <div class="card mb-3">
-                    <tabs>
+                    <div class="p-3 d-flex align-items center justify-content-center" v-if="loading">
+                        <inline-spinner class="text-primary"/>
+                    </div>
+                    <div class="card-body d-flex align-items-center justify-content-center flex-column text-center" v-if="!loading && plots.length === 0">
+                        <div class="d-flex align-items-center justify-content-center icon-circle">
+                            <icon name="document-text-outline"/>
+                        </div>
+                        <p class="font-weight-bold mt-4">Welcome to Your Site</p>
+                        <p class="text-muted max-w-700">
+                            In this page, you will be able to create and manage plots for your site.
+                        </p>
+                        <p class="text-muted max-w-700">
+                            Get started by creating a new plot using the button below.
+                        </p>
+                        <button class="btn btn-primary mt-4" @click.prevent="showPlotForm = true">
+                            <icon name="add"/>
+                            <span>
+                                New Plot
+                            </span>
+                        </button>
+                    </div>
+                    <tabs v-if="!loading && plots.length > 0">
                         <tab name="Plants" selected>
                             <beta-plants-view
                                     v-if="plot"
@@ -143,11 +165,12 @@
   import BetaPlantsView from './BetaPlantsView'
   import Dropdown from './Dropdown'
   import PlotForm from '../forms/PlotForm'
+  import InlineSpinner from './InlineSpinner'
 
   export default {
     name: 'BetaPlotsView',
 
-    components: {PlotForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon},
+    components: {InlineSpinner, PlotForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon},
 
     props: {
       site: {required: true},
@@ -155,7 +178,7 @@
 
     data() {
       return {
-        loading     : false,
+        loading     : true,
         plots       : [],
         plot        : null,
         plotId      : null,
