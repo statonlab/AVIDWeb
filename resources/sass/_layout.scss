@@ -1,240 +1,245 @@
-html,body {
-    color: #2D3748;
+html, body {
+  color: #2D3748;
 }
 
 .main-container {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .logo {
-    @include media-breakpoint-up(lg) {
-        width: $sidebar-width;
-    }
+  @include media-breakpoint-up(lg) {
+    width: $sidebar-width;
+  }
 }
 
 dd {
-    @extend .text-muted;
+  @extend .text-muted;
 }
 
 .navbar-nav {
-    .nav-item, .nav-link {
-        @extend .d-flex;
-        @extend .align-items-center;
-        @extend .justify-content-center;
-    }
+  .nav-item, .nav-link {
+    @extend .d-flex;
+    @extend .align-items-center;
+    @extend .justify-content-center;
+  }
 }
 
 .notifications {
-    margin-top: 60px;
-    margin-right: 5px;
+  margin-top: 60px;
+  margin-right: 5px;
 }
 
 .main-content,
 .sidebar {
-    padding-top: 56px;
+  padding-top: 56px;
 }
 
 .fade-enter-active, .fade-leave-active {
-    transition: opacity 250ms ease-in-out;
+  transition: opacity 250ms ease-in-out;
 }
 
 .fade-enter, .fade-leave-to {
-    opacity: 0;
+  opacity: 0;
 }
 
 .mt-navbar {
-    margin-top: 60px;
+  margin-top: 60px;
 }
 
 #toc {
-    position: sticky;
+  position: sticky;
 }
 
 .main-content {
-    height: 100vh;
-    overflow-y: auto;
-    margin-left: $sidebar-width;
-    transition: margin-left .2s ease-in-out;
+  height: 100vh;
+  overflow-y: auto;
+  margin-left: $sidebar-width;
+  transition: margin-left .2s ease-in-out;
 }
 
 .sidebar {
-    position: fixed;
-    z-index: $zindex-fixed - 1;
-    top: 0;
-    left: 0;
-    transition: left .2s ease-in-out;
-    height: 100%;
-    width: $sidebar-width;
-    background-color: $white;
-    overflow-y: auto;
-    border-right: 1px solid $border-color;
+  position: fixed;
+  z-index: $zindex-fixed - 1;
+  top: 0;
+  left: 0;
+  transition: left .2s ease-in-out;
+  height: 100%;
+  width: $sidebar-width;
+  background-color: $white;
+  overflow-y: auto;
+  border-right: 1px solid $border-color;
 }
 
 .w-sidebar {
-    width: $sidebar-width;
+  width: $sidebar-width;
 }
 
 .sidebar-closed {
-    .sidebar {
-        left: -$sidebar-width;
-    }
+  .sidebar {
+    left: -$sidebar-width;
+  }
 
-    .main-content {
-        margin-left: 0;
-    }
+  .main-content {
+    margin-left: 0;
+  }
 }
 
 @include media-breakpoint-down(lg) {
-    .main-content {
-        margin-left: 0;
-    }
+  .main-content {
+    margin-left: 0;
+  }
 
+  .sidebar {
+    left: -$sidebar-width;
+  }
+
+  .sidebar-closed {
     .sidebar {
-        left: -$sidebar-width;
+      left: 0;
     }
-
-    .sidebar-closed {
-        .sidebar {
-            left: 0;
-        }
-    }
+  }
 }
 
 .page-title {
-    @extend .font-weight-bold;
-    font-size: 1rem;
-    margin: 0;
+  @extend .font-weight-bold;
+  font-size: 1rem;
+  margin: 0;
 }
 
 .max-w-700 {
-    max-width: 700px;
+  max-width: 700px;
 }
 
 .bg-lighter {
-    background-color: $gray-100;
+  background-color: $gray-100;
 }
 
 .cursor-pointer {
-    &,
-    > label {
-        cursor: pointer;
-    }
+  &,
+  > label {
+    cursor: pointer;
+  }
 }
 
-.overlay {
-    @extend .d-flex;
-    @extend .align-items-center;
-    @extend .justify-content-center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+.cursor-default {
+  cursor: default!important;
+}
 
-    background-color: rgba($black, .4);
+
+.overlay {
+  @extend .d-flex;
+  @extend .align-items-center;
+  @extend .justify-content-center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background-color: rgba($black, .4);
 }
 
 .no-wrap {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .small-cell {
-    width: 1px;
+  width: 1px;
 }
 
 .ellipsis {
-    @extend .no-wrap;
-    @extend .overflow-hidden;
-    text-overflow: ellipsis;
+  @extend .no-wrap;
+  @extend .overflow-hidden;
+  text-overflow: ellipsis;
 }
 
 .hover-container {
-    .hover-show,
-    .hover-hide {
-        transition: opacity .25s ease-in-out;
-    }
+  .hover-show,
+  .hover-hide {
+    transition: opacity .25s ease-in-out;
+  }
 
+  .hover-show {
+    opacity: 0;
+  }
+
+  &:hover {
     .hover-show {
-        opacity: 0;
+      opacity: 1;
     }
 
-    &:hover {
-        .hover-show {
-            opacity: 1;
-        }
-
-        .hover-hide {
-            display: none;
-        }
+    .hover-hide {
+      display: none;
     }
+  }
 }
 
 .last-no-margin {
-    &:last-of-type {
-        margin-bottom: 0 !important;
-    }
+  &:last-of-type {
+    margin-bottom: 0 !important;
+  }
 }
 
 .navbar-form-control {
-    background-color: rgba(0, 0, 0, .2);
-    color: $white;
-    border: 0 transparent solid;
-    height: calc(#{$input-line-height * 1em} + #{$input-padding-y * 2});
+  background-color: rgba(0, 0, 0, .2);
+  color: $white;
+  border: 0 transparent solid;
+  height: calc(#{$input-line-height * 1em} + #{$input-padding-y * 2});
 
+  &::placeholder {
+    color: rgba(255, 255, 255, .7);
+  }
+
+  &:focus {
     &::placeholder {
-        color: rgba(255, 255, 255, .7);
+      color: rgba(0, 0, 0, .5);
     }
-
-    &:focus {
-        &::placeholder {
-            color: rgba(0, 0, 0, .5);
-        }
-    }
+  }
 }
 
 .navbar-form-control,
 .search-dropdown {
-    @include media-breakpoint-up(lg) {
-        width: 300px !important;
-    }
-    max-height: calc(100vh - 300px);
-    overflow-y: auto;
+  @include media-breakpoint-up(lg) {
+    width: 300px !important;
+  }
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
 
-    .dropdown-item {
-        white-space: normal;
-    }
+  .dropdown-item {
+    white-space: normal;
+  }
 }
 
 .no-width {
-    width: auto !important;
+  width: auto !important;
 }
 
 .map {
-    min-height: 500px;
+  min-height: 500px;
 }
 
 .map-mini {
-    min-height: 300px;
+  min-height: 300px;
 }
 
 .on-hover {
-    .show-on-hover {
-        visibility: hidden;
-    }
+  .show-on-hover {
+    visibility: hidden;
+  }
 
-    &:hover {
-        .show-on-hover {
-            visibility: visible;
-        }
+  &:hover {
+    .show-on-hover {
+      visibility: visible;
     }
+  }
 }
 
 .hover-visible-container {
-    .hover-visible {
-        visibility: hidden;
-    }
+  .hover-visible {
+    visibility: hidden;
+  }
 
-    &:hover .hover-visible {
-        visibility: visible;
-    }
+  &:hover .hover-visible {
+    visibility: visible;
+  }
 }

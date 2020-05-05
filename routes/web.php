@@ -135,5 +135,5 @@ Route::group([
     Route::post('/reminders', 'ReminderController@create');
     Route::get('/reminders/{reminder}', 'ReminderController@show');
     Route::put('/reminders/{reminder}', 'ReminderController@update');
-    Route::delete('/reminders/{reminder}', 'ReminderController@delete');
+    Route::delete('/reminders/{reminder}', 'ReminderController@destroy');
 });

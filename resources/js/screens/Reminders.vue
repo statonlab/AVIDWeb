@@ -57,13 +57,13 @@
                         <td>
                             <div class="d-flex justify-content-end hover-visible">
                                 <button class="btn btn-link"
-                                        v-tooltip="'Edit Reminder'"
+                                        v-tooltip.left="'Edit Reminder'"
                                         type="button"
                                         @click.prevent="edit(reminder)">
                                     <icon name="create"/>
                                 </button>
                                 <button class="btn btn-link"
-                                        v-tooltip="'Delete Reminder'"
+                                        v-tooltip.right="'Delete Reminder'"
                                         type="button"
                                         @click.prevent="destroy(reminder)">
                                     <icon name="trash"/>
@@ -144,10 +144,11 @@
       destroy(reminder) {
         this.$confirm({
           title    : 'Delete Reminder?',
-          text     : `${reminder.days} after last measurement.`,
+          text     : `"${reminder.days} days after last measurement." will be permanently removed.`,
           onConfirm: async () => {
             try {
               await axios.delete(`/web/reminders/${reminder.id}`)
+              this.reminders = this.reminders.filter(r => r.id !== reminder.id)
             } catch (e) {
               console.error(e)
               this.$alert('Unable to delete reminder. Please try refreshing the page.')
