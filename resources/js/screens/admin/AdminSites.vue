@@ -2,7 +2,7 @@
     <div>
         <div class="d-flex mb-3 align-items-center">
             <div class="flex-grow-1">
-                <h1 class="page-title">Admin Date</h1>
+                <h1 class="page-title">Admin Data</h1>
             </div>
             <div class="flex-shrink-0">
                 <div class="text-muted">
