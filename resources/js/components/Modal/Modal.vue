@@ -1,7 +1,12 @@
 <template>
     <transition name="fade">
-        <div class="modal show vh-100 d-block bg-transparent-dark" tabindex="-1" role="dialog">
-            <div :class="['modal-dialog', {'modal-lg': large, 'modal-md': medium}]" role="document" ref="modal">
+        <div class="modal show vh-100 d-block" tabindex="-1" role="dialog">
+            <button class="modal-backdrop border-0 bg-transparent-dark cursor-default" type="button" @click.prevent="$emit('close')"></button>
+            <div class="modal-dialog"
+                 style="z-index: 1060"
+                 :class="{'modal-lg': large, 'modal-md': medium}"
+                 role="document"
+                 ref="modal">
                 <slot></slot>
             </div>
         </div>
@@ -21,31 +26,6 @@
       return {
         mounted: false,
       }
-    },
-
-    mounted() {
-      document.addEventListener('click', this.outClick)
-      setTimeout(() => this.mounted = true, 50)
-    },
-
-    destroyed() {
-      this.mounted = false
-      document.removeEventListener('click', this.outClick)
-    },
-
-    methods: {
-      outClick(e) {
-        if (!this.mounted) {
-          return
-        }
-
-        if (this.$refs.modal === e.target || this.$refs.modal.contains(e.target)) {
-          e.stopPropagation()
-          return
-        }
-
-        this.$emit('close')
-      },
     },
   }
 </script>
