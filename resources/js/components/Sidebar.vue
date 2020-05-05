@@ -1,6 +1,6 @@
 <template>
     <div class="sidebar">
-        <div class="my-4">
+        <div class="my-3">
             <div class="nav nav-pills flex-column">
                 <div class="nav-item" v-for="(item, key) in items" :key="key">
                     <router-link
@@ -69,6 +69,11 @@
             icon : 'file-tray-full-outline',
             to   : '/app/sites',
             label: 'My Data',
+          },
+          {
+            icon : 'folder-outline',
+            to   : '/app/beta/sites',
+            label: 'Beta Data View',
           },
           {
             icon : 'notifications-outline',

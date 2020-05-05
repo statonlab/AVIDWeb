@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="nav nav-custom-tabs">
+        <div class="nav nav-custom-tabs align-items-center">
             <a :class="['nav-link',{'active': tab.isActive}]"
                v-for="tab in tabs"
                :href="tab.href"

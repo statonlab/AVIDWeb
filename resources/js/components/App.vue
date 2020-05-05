@@ -9,7 +9,7 @@
             <sidebar ref="sidebar" @close="smClose"/>
             <div class="main-content">
                 <!-- main content -->
-                <div class="py-4">
+                <div class="py-3">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">

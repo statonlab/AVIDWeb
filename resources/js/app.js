@@ -25,6 +25,8 @@ import Groups from './screens/Groups'
 import Group from './screens/Group'
 import AdminSites from './screens/admin/AdminSites'
 import Reminders from './screens/Reminders'
+import BetaData from './screens/BetaData'
+import BetaSite from './screens/BetaSite'
 
 Vue.use(Alert)
 Vue.use(VueNotification)
@@ -52,7 +54,9 @@ const routes = [
   {path: '/app/groups', component: Groups},
   {path: '/app/groups/:id', component: Group},
   {path: '/app/admin/sites', component: AdminSites},
-  {path: '/app/reminders', component: Reminders}
+  {path: '/app/reminders', component: Reminders},
+  {path: '/app/beta/sites', component: BetaData},
+  {path: '/app/beta/sites/:id', component: BetaSite},
 ]
 
 const router = new VueRouter({
