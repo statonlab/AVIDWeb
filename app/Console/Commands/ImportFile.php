@@ -265,7 +265,7 @@ class ImportFile extends Command
     protected function getSpecies($name)
     {
         return Species::firstOrCreate([
-            'name' => $name,
+            'name' => trim($name),
         ]);
     }
 
@@ -280,9 +280,7 @@ class ImportFile extends Command
         $all = [];
 
         foreach ($items as $item) {
-            $all[] = Species::firstOrCreate([
-                'name' => $item,
-            ]);
+            $all[] = $this->getSpecies($item);
         }
 
         return collect($all);
