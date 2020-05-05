@@ -23,8 +23,11 @@ class Site extends Model
         'owner_contact',
         'basal_area',
         'diameter',
+        'last_measured_at',
     ];
-
+    protected $casts = [
+        'last_measured_at' => 'date',
+    ];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
