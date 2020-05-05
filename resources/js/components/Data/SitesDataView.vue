@@ -55,7 +55,7 @@
                     <tbody>
                     <tr v-for="site in sites" :class="{'on-hover': deleting !== site.id}">
                         <td>
-                            <router-link :to="`/app/sites/${site.id}`">
+                            <router-link :to="`${siteUrlPrefix}/${site.id}`">
                                 <strong>{{ site.name }}</strong>
                             </router-link>
                             <div class="text-muted">
@@ -109,13 +109,14 @@
     components: {Pager, InlineSpinner, SiteForm, Icon},
 
     props: {
-      url      : {required: false, type: String, default: '/web/sites'},
-      showOwner: {required: false, type: Boolean, default: false},
+      url          : {required: false, type: String, default: '/web/sites'},
+      showOwner    : {required: false, type: Boolean, default: false},
+      siteUrlPrefix: {required: false, type: String, default: '/app/sites'},
     },
 
     data() {
       return {
-        User: User,
+        User        : User,
         showSiteForm: false,
         sites       : [],
         loading     : false,

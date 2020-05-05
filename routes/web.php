@@ -28,6 +28,8 @@ Route::group([
     Route::get('/', 'HomeController@data');
     Route::get('/sites', 'HomeController@data');
     Route::get('/sites/{id}', 'HomeController@data');
+    Route::get('/beta/sites', 'HomeController@data');
+    Route::get('/beta/sites/{id}', 'HomeController@data');
     Route::get('/plots/{id}', 'HomeController@data');
     Route::get('/plants/{id}', 'HomeController@data');
     Route::get('/profile', 'HomeController@data');

@@ -24,6 +24,7 @@ class PlotController extends Controller
             'order_by' => 'nullable|in:number,plants_count',
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
+            'limit' => 'nullable|integer|min:20|max:1000'
         ]);
 
         $plots = $site->plots()->with([
@@ -42,7 +43,7 @@ class PlotController extends Controller
         }
 
         $plots = $plots->orderBy($request->order_by ?? 'number', $request->order_dir ?? 'asc')
-            ->paginate(20);
+            ->paginate($request->limit ?? 20);
 
         return $this->success($plots);
     }
