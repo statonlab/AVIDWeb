@@ -243,3 +243,16 @@ dd {
     visibility: visible;
   }
 }
+
+.fc-day-grid-event .fc-content {
+  overflow: auto!important;
+  white-space: normal!important;
+}
+
+.fc-day-grid-event.fc-event {
+  padding: .25rem .5rem!important;
+  border-top-width: 0;
+  border-bottom-width: 0;
+  border-right-width: 0;
+  border-left-width: 3px!important;
+}

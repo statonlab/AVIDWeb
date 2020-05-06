@@ -8,7 +8,7 @@
                 @click="focus()"
                 @keyup.down="focus()"
                 class="font-weight-normal"
-                :class="['btn', 'btn-select', 'd-flex', {'btn-placeholder-effect': value === null, 'btn-select-active': value !== null, 'border-danger': error}]">
+                :class="['btn', 'd-flex', btnClass, {'btn-placeholder-effect': value === null, 'btn-select-active': value !== null, 'border-danger': error}]">
             <span class="text-case-normal">
                 {{ selected }}
             </span>
@@ -62,6 +62,7 @@
       loading     : {required: false, type: Boolean, default: false},
       error       : {required: false, type: Boolean, default: false},
       maxWidth    : {required: false, type: Number, default: 230},
+      btnClass    : {required: false, type: String, default: 'btn-select'},
     },
 
     data() {

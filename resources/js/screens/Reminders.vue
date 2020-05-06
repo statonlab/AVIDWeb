@@ -5,10 +5,19 @@
                 <h1 class="page-title">My Reminders</h1>
                 <p class="mb-0 text-muted">Schedule & manage reminders</p>
             </div>
-            <div class="ml-auto flex-shrink-0 pl-2"></div>
+            <div class="ml-auto flex-shrink-0 pl-2">
+                <button class="btn btn-link" v-if="view === 'calendar'" @click.prevent="view = 'default'">
+                    <icon name="list"/>
+                    <span>List View</span>
+                </button>
+                <button class="btn btn-link" v-if="view === 'default'" @click.prevent="view = 'calendar'">
+                    <icon name="calendar"/>
+                    <span>Calendar View</span>
+                </button>
+            </div>
         </div>
 
-        <div class="card mb-3">
+        <div class="card mb-3" v-if="view === 'default'">
             <div class="d-flex card-header align-items-center">
                 <div class="flex-grow-1">
                     <strong>Reminders</strong>
@@ -53,7 +62,8 @@
                     <!--                    </thead>-->
                     <tbody>
                     <tr v-for="reminder in reminders" class="hover-visible-container">
-                        <td><strong>{{ reminder.days }} days</strong> <span class="text-muted">after last measurement</span></td>
+                        <td><strong>{{ reminder.days }} days</strong>
+                            <span class="text-muted">after last measurement</span></td>
                         <td>
                             <div class="d-flex justify-content-end hover-visible">
                                 <button class="btn btn-link"
@@ -76,6 +86,12 @@
             </div>
         </div>
 
+        <div class="card mb-3" v-if="view === 'calendar'">
+            <div class="card-body">
+                <reminders-calendar/>
+            </div>
+        </div>
+
         <reminder-form
                 v-if="showForm"
                 :reminder="reminder"
@@ -89,11 +105,12 @@
 <script>
   import Icon from '../components/Icon'
   import ReminderForm from '../forms/ReminderForm'
+  import RemindersCalendar from '../components/RemindersCalendar'
 
   export default {
     name: 'Reminders',
 
-    components: {ReminderForm, Icon},
+    components: {RemindersCalendar, ReminderForm, Icon},
 
     data() {
       return {
@@ -101,6 +118,7 @@
         showForm : false,
         reminder : null,
         loading  : true,
+        view     : 'default',
       }
     },
 
