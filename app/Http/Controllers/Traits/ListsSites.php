@@ -28,6 +28,10 @@ trait ListsSites
             'user' => function ($query) {
                 $query->select(['users.id', 'users.name']);
             },
+            'species' => function ($query) {
+            },
+            'shrubs' => function ($query) {
+            },
         ])
             ->withCount(['plants', 'plots'])
             ->when($request->search, function ($query) use ($request) {
