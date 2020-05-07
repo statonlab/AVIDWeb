@@ -39,16 +39,27 @@ class CleanDuplicateSpecies extends Command
      */
     public function handle()
     {
+        $deleted = 0;
+
         foreach (Species::cursor() as $species) {
             $duplicates = Species::where('name', $species->name);
-            if ($duplicates->count > 1) {
-                $duplicates = $duplicates->orderBy('id', 'asc')->get();
+            if ($duplicates->count() > 1) {
+                $duplicates = $duplicates->orderBy('id', 'desc')->get();
                 $original = $duplicates->pop();
                 foreach ($duplicates as $duplicate) {
+                    $plants = $duplicate->plants()->cursor();
+                    foreach ($plants as $plant) {
+                        $plant->fill(['species_id' => $original->id])->save();
+                    }
+
                     DB::table('site_species')->where('species_id', $duplicate->id)->update(['species_id' => $original->id]);
-                    DB::table('plant_species')->where('species_id', $duplicate->id)->update(['species_id' => $original->id]);
+                    DB::table('site_shrubs')->where('species_id', $duplicate->id)->update(['species_id' => $original->id]);
+                    $duplicate->delete();
+                    $deleted++;
                 }
             }
         }
+
+        $this->info("Cleaned $deleted duplicate species.");
     }
 }
