@@ -48,7 +48,8 @@
         }
         axios.get(`/web/species`, {
           params: {
-            cancelToken: new axios.CancelToken(fn => this.request = fn)
+            cancelToken: new axios.CancelToken(fn => this.request = fn),
+            limit: 500
           },
         }).then(response => {
           this.results = response.data.data
