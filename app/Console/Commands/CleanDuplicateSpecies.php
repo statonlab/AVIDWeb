@@ -47,11 +47,7 @@ class CleanDuplicateSpecies extends Command
                 $duplicates = $duplicates->orderBy('id', 'desc')->get();
                 $original = $duplicates->pop();
                 foreach ($duplicates as $duplicate) {
-                    $plants = $duplicate->plants()->cursor();
-                    foreach ($plants as $plant) {
-                        $plant->fill(['species_id' => $original->id])->save();
-                    }
-
+                    DB::table('plants')->where('species_id', $duplicate->id)->update(['species_id' => $original->id]);
                     DB::table('site_species')->where('species_id', $duplicate->id)->update(['species_id' => $original->id]);
                     DB::table('site_shrubs')->where('species_id', $duplicate->id)->update(['species_id' => $original->id]);
                     $duplicate->delete();
