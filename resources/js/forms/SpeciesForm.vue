@@ -31,6 +31,23 @@
                             {{ form.errors.first('name') }}
                         </small>
                     </div>
+                    <div class="form-group">
+                        <label for="plant">
+                            Plant Type
+                            <required/>
+                        </label>
+                        <select id="plant"
+                                name="plant_type_id"
+                                class="form-control"
+                                :class="{'is-invalid': form.errors.has('plant_type_id')}"
+                                v-model="form.plant_type_id"
+                                :disabled="loadingTypes">
+                            <option v-for="type in types" :value="type.id">{{ type.name }}</option>
+                        </select>
+                        <small class="form-text text-danger" v-if="form.errors.has('plant_type_id')">
+                            {{ form.errors.first('plant_type_id') }}
+                        </small>
+                    </div>
                 </modal-body>
                 <modal-footer class="d-flex">
                     <button type="submit" class="btn btn-primary" :disabled="loading">
@@ -60,11 +77,12 @@
   import ModalFooter from '../components/Modal/ModalFooter'
   import Form from './Form'
   import InlineSpinner from '../components/InlineSpinner'
+  import Required from '../components/Required'
 
   export default {
     name: 'SpeciesForm',
 
-    components: {InlineSpinner, ModalFooter, ModalBody, Close, ModalTitle, ModalHeader, Modal, ModalCard},
+    components: {InlineSpinner, ModalFooter, ModalBody, Close, ModalTitle, ModalHeader, Modal, ModalCard, Required},
 
     props: {
       species: {required: false, default: null},
@@ -72,14 +90,20 @@
 
     data() {
       return {
-        loading: false,
+        loading         : false,
+        types           : null,
+        loadingTypes    : false,
+
         form   : new Form({
           name  : '',
+          plant_type_id: null,
         }),
       }
     },
 
-    mounted() {
+    async mounted() {
+      await this.loadTypes()
+
       if (this.species) {
         this.form.setDefault(this.species)
       }
@@ -92,6 +116,18 @@
         } else {
           this.create()
         }
+      },
+
+      async loadTypes() {
+        this.loadingTypes = true
+        try {
+          const {data}            = await axios.get('/web/plant-types')
+          this.types              = data
+          // this.form.plant_type_id = data[0].id
+        } catch (e) {
+          this.$alert('Unable to load form. Please try refreshing the page.')
+        }
+        this.loadingTypes = false
       },
 
       async create() {
