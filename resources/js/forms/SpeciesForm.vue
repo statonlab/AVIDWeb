@@ -34,7 +34,6 @@
                     <div class="form-group">
                         <label for="plant">
                             Plant Type
-                            <required/>
                         </label>
                         <select id="plant"
                                 name="plant_type_id"
@@ -77,12 +76,11 @@
   import ModalFooter from '../components/Modal/ModalFooter'
   import Form from './Form'
   import InlineSpinner from '../components/InlineSpinner'
-  import Required from '../components/Required'
 
   export default {
     name: 'SpeciesForm',
 
-    components: {InlineSpinner, ModalFooter, ModalBody, Close, ModalTitle, ModalHeader, Modal, ModalCard, Required},
+    components: {InlineSpinner, ModalFooter, ModalBody, Close, ModalTitle, ModalHeader, Modal, ModalCard},
 
     props: {
       species: {required: false, default: null},
