@@ -41,6 +41,7 @@ class PlantController extends Controller
             'plants.id as id',
             'plants.tag as tag',
             'species.name as species_name',
+            'species_id',
             'quadrant',
             'plant_type_id',
             'plot_id',
@@ -191,7 +192,10 @@ class PlantController extends Controller
                 $query->with(['site']);
             },
         ]);
+
         $plant->loadCount(['measurements']);
+
+        $plant->species_name = $plant->species->name;
 
         return $this->created($plant);
     }
