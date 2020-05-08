@@ -32,14 +32,6 @@ class SiteControllerTest extends TestCase
                     'state_id',
                     'county_id',
                     'name',
-                    'owner_name',
-                    'owner_contact',
-                    'city',
-                    'basal_area',
-                    'diameter',
-                    'created_at',
-                    'updated_at',
-                    'deleted_at',
                     'last_measured_at',
                     'plants_count',
                     'plots_count',
@@ -78,14 +70,6 @@ class SiteControllerTest extends TestCase
                     'state_id',
                     'county_id',
                     'name',
-                    'owner_name',
-                    'owner_contact',
-                    'city',
-                    'basal_area',
-                    'diameter',
-                    'created_at',
-                    'updated_at',
-                    'deleted_at',
                     'last_measured_at',
                     'plants_count',
                     'plots_count',
@@ -110,14 +94,6 @@ class SiteControllerTest extends TestCase
             'state_id',
             'county_id',
             'name',
-            'owner_name',
-            'owner_contact',
-            'city',
-            'basal_area',
-            'diameter',
-            'created_at',
-            'updated_at',
-            'deleted_at',
             'last_measured_at',
             'plants_count',
             'plots_count',
@@ -176,6 +152,7 @@ class SiteControllerTest extends TestCase
         $user = $this->makeAdmin();
         $this->actingAs($user);
 
+        /** @var Site $site */
         $site = factory(Site::class)->create();
 
         $response = $this->delete("/web/sites/$site->id");
