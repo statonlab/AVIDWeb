@@ -45,4 +45,5 @@ jobs:
         php artisan permissions:cache
         php artisan load:states storage/app/data/us-states.csv
         php artisan load:counties storage/app/data/us-counties.csv
+        php artisan db:seed PlantTypeSeeder
         vendor/bin/phpunit
