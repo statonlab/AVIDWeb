@@ -60,7 +60,7 @@ class SiteControllerTest extends TestCase
             'data' => [
                 [
                     'id',
-                    'user_id',
+                    'user_idf',
                     'state_id',
                     'county_id',
                     'name',
