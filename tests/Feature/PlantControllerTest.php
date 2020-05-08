@@ -63,7 +63,7 @@ class PlantControllerTest extends TestCase
 
         $this->post("/web/plots/$plot->id/plants", [
             'species_id' => factory(\App\Species::class)->create()->id,
-            'plant_type_id' => PlantType::first()->id,
+            'plant_type_id' => factory(\App\PlantType::class)->create()->id,
             'tag' => 1,
             'quadrant' => 'Northeast',
         ])->assertSuccessful();
