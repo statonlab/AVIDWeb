@@ -3,12 +3,15 @@
 namespace Tests\Feature;
 
 use App\Invitation;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class InvitationControllerTest extends TestCase
 {
+    use DatabaseTransactions, WithFaker;
+
     public function testUserCanAcceptInvitation()
     {
         $user = $this->makeMember();
