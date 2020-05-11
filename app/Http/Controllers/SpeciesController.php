@@ -57,7 +57,7 @@ class SpeciesController extends Controller
 
         $this->validate($request, [
             'name' => 'required|max:255|unique:species,name',
-            'plant_type_id' => 'required|exists:plant_types,id',
+            'plant_type_id' => 'nullable|exists:plant_types,id',
         ]);
 
         $species = Species::create([

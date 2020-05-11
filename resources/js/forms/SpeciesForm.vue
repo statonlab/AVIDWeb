@@ -41,6 +41,7 @@
                                 :class="{'is-invalid': form.errors.has('plant_type_id')}"
                                 v-model="form.plant_type_id"
                                 :disabled="loadingTypes">
+                            <option :value=null>None</option>
                             <option v-for="type in types" :value="type.id">{{ type.name }}</option>
                         </select>
                         <small class="form-text text-danger" v-if="form.errors.has('plant_type_id')">
