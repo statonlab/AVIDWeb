@@ -21,6 +21,7 @@ class SpeciesController extends Controller
 
         $this->validate($request, [
             'search' => 'nullable|max:255',
+            'limit' => 'nullable',
         ]);
 
         $species = Species::orderBy('name', 'asc');
@@ -31,7 +32,12 @@ class SpeciesController extends Controller
             });
         }
 
-        $species = $species->paginate(20);
+        if (! empty($request->limit)) {
+            $species = $species->paginate($request->limit);
+        } else {
+            $species = $species->paginate(20);
+        }
+
 
         return $this->success($species);
     }
