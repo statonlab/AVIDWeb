@@ -149,15 +149,12 @@ class SiteControllerTest extends TestCase
 
     public function testUserCannotUpdateSiteFromAnotherUser()
     {
-        $owner = $this->makeMember();
         $user = $this->makeMember();
-
         $this->actingAs($user);
 
         /** @var Site $site */
         $site = factory(Site::class)->create([
             'name' => '__site controller test__',
-            'user_id' => $owner->id,
         ]);
 
         $update = '__site controller testedit__';

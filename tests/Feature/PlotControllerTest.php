@@ -91,15 +91,11 @@ class PlotControllerTest extends TestCase
 
     public function testUserCannotCreatePlotForSiteFromAnotherUser()
     {
-        $owner = $this->makeMember();
         $user = $this->makeMember();
-
         $this->actingAs($user);
 
         /** @var Site $site */
-        $site = factory(Site::class)->create([
-            'user_id' => $owner->id,
-        ]);
+        $site = factory(Site::class)->create();
 
         $this->post("/web/sites/$site->id/plots", [
             'site_id' => $site->id,
@@ -129,14 +125,11 @@ class PlotControllerTest extends TestCase
 
     public function testUserCannotUpdatePlotFromAnotherUser()
     {
-        $owner = $this->makeMember();
         $user = $this->makeMember();
-
         $this->actingAs($user);
 
         /** @var Plot $plot */
         $plot = factory(Plot::class)->create([
-            'user_id' => $owner->id,
             'number' => 1,
         ]);
 
