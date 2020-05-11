@@ -43,7 +43,7 @@ class PlantController extends Controller
             'species.name as species_name',
             'species_id',
             'quadrant',
-            'plant_type_id',
+            'plants.plant_type_id',
             'plot_id',
             'plants.user_id as user_id',
         ])
