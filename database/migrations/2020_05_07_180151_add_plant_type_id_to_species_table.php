@@ -19,7 +19,7 @@ class AddPlantTypeIdToSpeciesTable extends Migration
             $table->foreign('plant_type_id')
                 ->references('id')
                 ->on('plant_types')
-                ->onDelete('cascade');
+                ->onDelete('set null');
         });
     }
 
