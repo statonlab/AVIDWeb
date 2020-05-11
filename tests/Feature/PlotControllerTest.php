@@ -35,6 +35,17 @@ class PlotControllerTest extends TestCase
         ]);
     }
 
+    public function testMemberCannotListPlotsFromAnotherUser()
+    {
+        $user = $this->makeMember();
+        $this->actingAs($user);
+
+        /** @var Plot $plot */
+        $plot = factory(Plot::class)->create();
+
+        $this->get("/web/sites/$plot->site_id/plots")->assertForbidden();
+    }
+
     public function testRetrievingPlot()
     {
         $user = $this->makeAdmin();
@@ -53,17 +64,47 @@ class PlotControllerTest extends TestCase
         ]);
     }
 
+    public function testUserCannotRetrievePlotFromAnotherUser()
+    {
+        $user = $this->makeMember();
+        $this->actingAs($user);
+
+        /** @var Plot $plot */
+        $plot = factory(Plot::class)->create();
+
+        $this->get("/web/plots/$plot->id")->assertForbidden();
+    }
+
     public function testCreatingPlot()
     {
         $user = $this->makeAdmin();
         $this->actingAs($user);
 
+        /** @var Site $site */
         $site = factory(Site::class)->create();
 
         $this->post("/web/sites/$site->id/plots", [
             'site_id' => $site->id,
             'number' => 1,
         ])->assertSuccessful();
+    }
+
+    public function testUserCannotCreatePlotForSiteFromAnotherUser()
+    {
+        $owner = $this->makeMember();
+        $user = $this->makeMember();
+
+        $this->actingAs($user);
+
+        /** @var Site $site */
+        $site = factory(Site::class)->create([
+            'user_id' => $owner->id,
+        ]);
+
+        $this->post("/web/sites/$site->id/plots", [
+            'site_id' => $site->id,
+            'number' => 1,
+        ])->assertForbidden();
     }
 
     public function testUpdatingPlot()
@@ -84,6 +125,25 @@ class PlotControllerTest extends TestCase
         $response->assertSuccessful()->assertJsonFragment([
             'number' => 2,
         ]);
+    }
+
+    public function testUserCannotUpdatePlotFromAnotherUser()
+    {
+        $owner = $this->makeMember();
+        $user = $this->makeMember();
+
+        $this->actingAs($user);
+
+        /** @var Plot $plot */
+        $plot = factory(Plot::class)->create([
+            'user_id' => $owner->id,
+            'number' => 1,
+        ]);
+
+        $this->put("/web/plots/$plot->id", [
+            'site_id' => $plot->site_id,
+            'number' => 2,
+        ])->assertForbidden();
     }
 
     public function testDeletingPlot()

@@ -23,4 +23,20 @@ class InvitationControllerTest extends TestCase
 
         $response->assertStatus(302);
     }
+
+    public function testCreatingInvitation()
+    {
+        $owner = $this->makeMember();
+        $user = $this->makeMember();
+        $this->actingAs($owner);
+
+        $group = factory(\App\Group::class)->create([
+            'user_id' => $owner->id,
+        ]);
+
+        $this->post("/web/groups/$group->id/invitations", [
+            'name' => $user->name,
+            'email' => $user->email,
+        ])->assertSuccessful();
+    }
 }

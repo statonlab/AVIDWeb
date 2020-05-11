@@ -147,6 +147,30 @@ class SiteControllerTest extends TestCase
         ]);
     }
 
+    public function testUserCannotUpdateSiteFromAnotherUser()
+    {
+        $owner = $this->makeMember();
+        $user = $this->makeMember();
+
+        $this->actingAs($user);
+
+        /** @var Site $site */
+        $site = factory(Site::class)->create([
+            'name' => '__site controller test__',
+            'user_id' => $owner->id,
+        ]);
+
+        $update = '__site controller testedit__';
+
+        $response = $this->put("/web/sites/$site->id", [
+            'name' => $update,
+            'state_id' => $site->state_id,
+            'county_id' => $site->county_id,
+        ]);
+
+        $response->assertForbidden();
+    }
+
     public function testDeletingSite()
     {
         $user = $this->makeAdmin();
