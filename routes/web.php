@@ -104,6 +104,7 @@ Route::group([
     Route::get('/groups', 'GroupController@index');
     Route::post('/groups', 'GroupController@create');
     Route::put('/groups/{group}', 'GroupController@update');
+    Route::put('/groups/{group}/permissions', 'GroupController@setPermissions');
     Route::get('/groups/{group}', 'GroupController@show');
     Route::delete('/groups/{group}', 'GroupController@delete');
     Route::get('/groups/{group}/sites', 'GroupController@sites');

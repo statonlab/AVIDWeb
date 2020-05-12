@@ -16,10 +16,13 @@
                 <p class="mb-0 p-4" v-if="loading">
                     <inline-spinner class="text-primary"/>
                 </p>
-                <p class="mb-0 p-4 text-muted" v-if="!loading && sites.length === 0">
+                <p class="mb-0 p-4 text-muted" v-if="unauthorized">
+                    {{unauthorizedMessage}}
+                </p>
+                <p class="mb-0 p-4 text-muted" v-if="!loading && sites.length === 0 && !unauthorized">
                     No results found. Use the "New Site" button above to create a new one.
                 </p>
-                <table class="table mb-0 table-middle table-hover" v-if="!loading && sites.length > 0">
+                <table class="table mb-0 table-middle table-hover" v-if="!loading && sites.length > 0 && !unauthorized">
                     <thead>
                     <tr>
                         <th>
@@ -80,7 +83,6 @@
                         </td>
                         <td class="text-right no-wrap">
                             <button class="show-on-hover btn btn-link btn-sm mr-1"
-                                    v-if="User.owns(site) || User.can('update sites')"
                                     @click.prevent="edit(site)"
                                     v-tooltip="'Edit Site'">
                                 <icon name="create"/>
@@ -105,7 +107,8 @@
                    @close="closeForm"
                    @create="siteCreated($event)"
                    @update="siteUpdated($event)"
-                   :site="site"/>
+                   :site="site"
+                   :groupURL="``"/>
     </div>
 </template>
 
@@ -123,9 +126,10 @@
     components: {Pager, InlineSpinner, SiteForm, Icon},
 
     props: {
-      url          : {required: false, type: String, default: '/web/sites'},
-      showOwner    : {required: false, type: Boolean, default: false},
-      siteUrlPrefix: {required: false, type: String, default: '/app/sites'},
+      url                : {required: false, type: String, default: '/web/sites'},
+      showOwner          : {required: false, type: Boolean, default: false},
+      siteUrlPrefix      : {required: false, type: String, default: '/app/sites'},
+      unauthorizedMessage: {required: false, type: String, default: 'You do not have permission to view sites.'},
     },
 
     data() {
@@ -144,6 +148,7 @@
         _request    : null,
         orderBy     : 'last_measured_at',
         orderDir    : 'desc',
+        unauthorized: false,
       }
     },
 
@@ -182,6 +187,9 @@
           this.$emit('load', data)
         } catch (e) {
           if (!axios.isCancel(e)) {
+            if (e.response && e.response.status === 403) {
+                this.unauthorized = true
+            }
             this.loading = false
             console.error(e)
           }
@@ -194,8 +202,9 @@
       },
 
       siteUpdated(site) {
-        this.closeForm()
+        console.log(site)
         this.sites = this.sites.map(s => s.id === site.id ? site : s)
+        this.closeForm()
       },
 
       closeForm() {

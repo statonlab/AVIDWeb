@@ -38,6 +38,20 @@ class SitePolicy
             return true;
         }
 
+        if ($site->groups()->whereIn('id', $user->groups()
+            ->wherePivot('can_view', 1)->get()
+            ->pluck('id'))->exists()) {
+
+            return true;
+        }
+
+        if ($site->groups()->whereIn('id', $user->groups()
+            ->wherePivot('is_leader', 1)->get()
+            ->pluck('id'))->exists()) {
+
+            return true;
+        }
+
         return $user->hasPermissionTo('view sites');
     }
 
@@ -61,6 +75,20 @@ class SitePolicy
      */
     public function update(User $user, Site $site)
     {
+        if ($site->groups()->whereIn('group_id', $user->groups()
+            ->wherePivot('can_edit', 1)->get()
+            ->pluck('id'))->exists()) {
+
+            return true;
+        }
+
+        if ($site->groups()->whereIn('id', $user->groups()
+            ->wherePivot('is_leader', 1)->get()
+            ->pluck('id'))->exists()) {
+
+            return true;
+        }
+
         return $user->owns($site) || $user->hasPermissionTo('update sites');
     }
 
