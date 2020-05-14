@@ -196,6 +196,13 @@ export default class Form {
     }
   }
 
+  setAsNotFile(field) {
+    this.fileFields = this.fileFields.filter(f => f !== field)
+    if (this.fileFields.length === 0) {
+      this.multipart(false)
+    }
+  }
+
   /**
    * @private
    * @return {Object}
