@@ -32,7 +32,7 @@ class SendEventNotifications extends Command
     public function handle()
     {
         $users = User::cursor();
-        $events = Event::where('notification_date', '<', Carbon::now())->cursor();
+        $events = Event::where('notification_date', '<', Carbon::now())->where('notified', false)->cursor();
 
         foreach ($events as $event) {
             if (!$event->notified) {
