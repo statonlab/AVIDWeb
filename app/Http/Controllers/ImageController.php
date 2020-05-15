@@ -45,6 +45,7 @@ class ImageController extends Controller
             return abort(404);
         }
 
-        return response()->file(storage_path("app/$path"));
+        // Cache the image for 30 days
+        return response()->file(storage_path("app/$path"))->setCache(['max_age' => 1000 * 60 * 60 * 24 * 30]);
     }
 }
