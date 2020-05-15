@@ -10,22 +10,18 @@
             </span>
         </div>
         <div class="card-footer pt-0 d-flex px-2 pb-2 align-items-center">
-            <a href="#" class="btn btn-link">Learn More</a>
+            <button class="btn btn-link"
+                 @click.prevent="update()">
+                <span>Edit Event</span>
+            </button>
             <div class="ml-auto">
                 <button type="button"
                         class="btn btn-link-dark btn-sm"
                         v-tooltip="'Delete'"
                         :disabled="deleting"
-                        @click.prevent="destroy()"
-                >
+                        @click.prevent="destroy()">
                     <inline-spinner v-if="deleting"/>
                     <icon name="trash" v-if="!deleting"/>
-                </button>
-                <button type="button"
-                        class="btn btn-link-dark btn-sm"
-                        v-tooltip="'Edit'"
-                        @click.prevent="update()">
-                    <icon name="create" class="icon-normal"/>
                 </button>
             </div>
         </div>
