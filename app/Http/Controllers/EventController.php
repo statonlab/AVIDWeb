@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Image;
 use App\Event;
 use Illuminate\Http\Request;
@@ -41,6 +42,12 @@ class EventController extends Controller
             if ($event->image !== null) {
                 $event->image->url = $event->image->makeUrl();
             }
+
+            if ($event->notification_date !== null) {
+                $event->notify_at = Carbon::parse($event->notification_date)->format('Y-m-d H:i:s');
+            }
+
+            $event->starts_at = $event->event_start->format('Y-m-d H:i:s');
 
             return $event;
         });
@@ -106,7 +113,7 @@ class EventController extends Controller
             'event_start' => 'required|date_format:Y-m-d H:i',
             'url' => 'nullable|url',
             'image' => 'nullable|image|max:5120',
-            'notification_date' => 'nullable|date',
+            'notification_date' => 'nullable|date_format:Y-m-d'
         ]);
 
         $image = null;
@@ -141,6 +148,12 @@ class EventController extends Controller
         if ($event->image) {
             $event->image->url = $event->image->makeUrl();
         }
+
+        if ($event->notification_date !== null) {
+            $event->notify_at = Carbon::parse($event->notification_date)->format('Y-m-d H:i:s');
+        }
+
+        $event->starts_at = $event->event_start->format('Y-m-d H:i:s');
 
         return $this->created($event);
     }

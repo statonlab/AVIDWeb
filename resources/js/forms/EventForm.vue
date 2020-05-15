@@ -36,7 +36,7 @@
                                     color="green"
                                     :input-props="{
                                         class: 'form-control'+(form.errors.has('date') ? ' is-invalid':''),
-                                        placeholder: 'Event Starting Date',
+                                        placeholder: 'Start Date',
                                     }"/>
                             <p class="mb-0 form-text text-danger" v-if="form.errors.has('date')">
                                 {{ form.errors.first('date') }}
@@ -106,12 +106,11 @@
                         </div>
                         <div class="input-group mb-3" v-if="showFileUpload">
                             <div class="custom-file">
-                                <input
-                                        type="file"
-                                        class="custom-file-input"
-                                        id="imageUpload"
-                                        accept="image/*"
-                                        @change="fileChanged($event)">
+                                <input type="file"
+                                       class="custom-file-input"
+                                       id="imageUpload"
+                                       accept="image/*"
+                                       @change="fileChanged($event)">
                                 <label class="custom-file-label" for="imageUpload">
                                     {{form.image ? form.image.name : 'Choose file'}}
                                 </label>
@@ -135,7 +134,7 @@
                                 :class="['form-control',  {'is-invalid': form.errors.has('link')}]"
                                 name="link"
                                 id="link"
-                                v-model="form.link">
+                                v-model="form.url">
                         <small class="form-text text-danger" v-if="form.errors.has('link')">
                             {{ form.errors.first('link') }}
                         </small>
@@ -210,16 +209,18 @@
     },
 
     mounted() {
+      console.log(this.event)
+
       if (this.event) {
         this.form.setDefault({
           ...this.event,
-          image      : null,
-          event_start: this.event.event_start ? moment.utc(this.event.event_start).format('YYYY-MM-DD h:mm') : null,
+          image            : null,
+          event_start      : this.event.event_start ? moment.utc(this.event.event_start).format('YYYY-MM-DD h:mm') : null,
           notification_date: this.event.notification_date ? moment.utc(this.event.notification_date).format('YYYY-MM-DD') : null
         })
 
-        this.notification_date = this.event.notification_date ? moment.utc(this.event.notification_date).toDate() : null
-        this.date = moment.utc(this.event.event_start).toDate()
+        this.notification_date = this.event.notify_at ? moment(this.event.notify_at).toDate() : null
+        this.date = moment(this.event.starts_at).toDate()
         this.hour = moment.utc(this.event.event_start).format('HH')
         this.minute = moment.utc(this.event.event_start).format('mm')
 
@@ -230,16 +231,15 @@
     },
 
     data() {
-      const date = window.avid.last_entry
       return {
-        date                : date ? moment.utc(date).toDate() : null,
+        date                : null,
         notification_date   : null,
         hour       : '00',
         minute     : '00',
         form          : new Form({
           title      : '',
           description: '',
-          link       : '',
+          url        : '',
           image      : null,
           event_start: null,
           notification_date: null,
@@ -273,7 +273,6 @@
         this.form.event_start = moment.utc(this.date).format('YYYY-MM-DD') + " " + this.hour + ':' + this.minute
         try {
           const {data} = await this.form.post('/web/events')
-          window.avid.last_entry = data.date ? moment.utc(data.date).format('YYYY-MM-DD') : null
           this.$notify({
             text: 'Event created successfully',
             type: 'success',
@@ -298,7 +297,6 @@
         }
         this.form.event_start = moment.utc(this.date).format('YYYY-MM-DD') + " " + this.hour + ':' + this.minute
         try {
-          console.log(this.form.notification_date)
           const {data} = await this.form.post(`/web/events/${this.event.id}/update`)
           this.$notify({
             text: 'Event updated successfully',
