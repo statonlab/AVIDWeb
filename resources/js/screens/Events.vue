@@ -24,7 +24,7 @@
            v-if="events.length === 0">No results found.</p>
 
         <div class="row">
-            <div class="col-lg-4 mb-3" v-for="event in events">
+            <div class="col-lg-4" v-for="event in events">
                 <event-card
                         @update="update(event)"
                         @delete="loadEvents()"

@@ -72,6 +72,7 @@ class EventController extends Controller
             'url' => 'nullable|url',
             'image' => 'nullable|image|max:5120',
             'notification_date' => 'nullable|date',
+            'address' => 'nullable|max:255',
         ]);
 
         $image = null;
@@ -90,6 +91,7 @@ class EventController extends Controller
             'event_start' => $request->event_start,
             'url' => $request->url,
             'notification_date' => $request->notification_date,
+            'address' => $request->address,
         ]);
 
         return $this->created($event);
@@ -113,7 +115,8 @@ class EventController extends Controller
             'event_start' => 'required|date_format:Y-m-d H:i',
             'url' => 'nullable|url',
             'image' => 'nullable|image|max:5120',
-            'notification_date' => 'nullable|date_format:Y-m-d'
+            'notification_date' => 'nullable|date_format:Y-m-d',
+            'address' => 'nullable|max:255',
         ]);
 
         $image = null;
@@ -142,6 +145,7 @@ class EventController extends Controller
             'url' => $request->url,
             'event_start' => $request->event_start,
             'notification_date' => $request->notification_date,
+            'address' => $request->address,
         ])->save();
 
         $event->load(['image']);

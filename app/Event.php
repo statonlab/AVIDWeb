@@ -13,6 +13,7 @@ class Event extends Model
         'image_id',
         'title',
         'description',
+        'address',
         'url',
         'event_start',
         'notification_date',

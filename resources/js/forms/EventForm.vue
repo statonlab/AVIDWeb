@@ -33,6 +33,7 @@
                             </label>
                             <date-picker
                                     v-model="date"
+                                    :popover="{ visibility: 'click' }"
                                     color="green"
                                     :input-props="{
                                         class: 'form-control'+(form.errors.has('date') ? ' is-invalid':''),
@@ -90,6 +91,22 @@
 
                     <div class="form-group">
                         <label>
+                            Address
+                        </label>
+                        <input
+                                type="text"
+                                :class="['form-control',  {'is-invalid': form.errors.has('title')}]"
+                                name="address"
+                                id="address"
+                                v-model="form.address"
+                                autofocus>
+                        <small class="form-text text-danger" v-if="form.errors.has('address')">
+                            {{ form.errors.first('address') }}
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
                             Image Upload
                         </label>
                         <div class="row" v-if="!showFileUpload">
@@ -118,10 +135,10 @@
                         </div>
 
                         <button type="button"
-                                class="btn btn-primary btn-sm"
+                                class="btn btn-link"
                                 v-if="showFileUpload && this.event && this.event.image"
                                 @click="cancel()">
-                            <span>Cancel</span>
+                            <span>Cancel Image Change</span>
                         </button>
                     </div>
 
@@ -149,6 +166,7 @@
                         </p>
                         <date-picker
                                 v-model="notification_date"
+                                :popover="{ placement: 'bottom', visibility: 'click' }"
                                 color="green"
                                 :input-props="{
                                     class: 'form-control'+(form.errors.has('date') ? ' is-invalid':''),
@@ -237,12 +255,13 @@
         hour       : '00',
         minute     : '00',
         form          : new Form({
-          title      : '',
-          description: '',
-          url        : '',
-          image      : null,
-          event_start: null,
+          title            : '',
+          description      : '',
+          url              : '',
+          image            : null,
+          event_start      : null,
           notification_date: null,
+          address          : '',
         }),
         options       : Options,
         loading       : false,

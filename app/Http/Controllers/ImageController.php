@@ -40,8 +40,6 @@ class ImageController extends Controller
      */
     public function serve(Image $image)
     {
-        $this->authorize('view', $image);
-
         $path = $image->path;
         if (! \Storage::exists($path)) {
             return abort(404);

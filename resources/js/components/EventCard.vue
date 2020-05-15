@@ -1,10 +1,11 @@
 <template>
-    <div class="card position-relative">
+    <div class="mb-3 card position-relative">
         <img class="card-img-top"
              :src="event.image ? event.image.url : '/img/placeholder.png'"/>
         <div class="card-body">
             <p class="font-weight-bold mb-1">{{event.title}}</p>
-            <p class="text-muted">{{moment.utc(event.event_start).format('MMM Do, YYYY [at] H:mm')}}</p>
+            <p class="text-muted small mb-0">{{moment.utc(event.event_start).format('MMM Do, YYYY [at] H:mm')}}</p>
+            <p class="text-muted small">{{event.address}}</p>
             <span class="text-muted d-block text-overflow-ellipsis no-wrap" :title="event.description">
                 {{event.description}}
             </span>
