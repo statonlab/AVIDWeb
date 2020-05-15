@@ -10,5 +10,6 @@ $factory->define(Event::class, function (Faker $faker) {
         'event_start' => now()->addWeek(),
         'title' => $faker->word,
         'description' => $faker->paragraph,
+        'notification_date' => now()->addWeek(),
     ];
 });
