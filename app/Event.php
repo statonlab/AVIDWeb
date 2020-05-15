@@ -17,6 +17,7 @@ class Event extends Model
         'url',
         'event_start',
         'notification_date',
+        'notified',
     ];
 
     /**
@@ -25,6 +26,7 @@ class Event extends Model
     protected $casts = [
         'event_start' => 'datetime',
         'notification_date' => 'datetime',
+        'notified' => 'boolean',
     ];
 
     /**
