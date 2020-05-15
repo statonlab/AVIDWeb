@@ -30,6 +30,7 @@
                         <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Type</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -37,7 +38,10 @@
                         <tr v-for="item in species" class="hover-visible-container">
                             <td>
                                 <inline-spinner v-if="destroying.indexOf(item.id) > -1" class="text-primary"/>
-                                <span>{{ item.name}}</span>
+                                <span>{{ item.name }}</span>
+                            </td>
+                            <td>
+                                {{ item.type ? item.type.name : null }}
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">

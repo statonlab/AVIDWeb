@@ -11,6 +11,7 @@ class Species extends Model
      */
     protected $fillable = [
         'name',
+        'plant_type_id',
     ];
 
     /**
@@ -19,5 +20,13 @@ class Species extends Model
     public function plants()
     {
         return $this->hasMany(Plant::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function type()
+    {
+        return $this->belongsTo(PlantType::class, 'plant_type_id', 'id');
     }
 }
