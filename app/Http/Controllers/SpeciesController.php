@@ -21,10 +21,11 @@ class SpeciesController extends Controller
 
         $this->validate($request, [
             'search' => 'nullable|max:255',
-            'plant_type_id' => 'nullable|exists:plants,id'
+            'plant_type_id' => 'nullable|exists:plants,id',
+            'limit' => 'nullable',
         ]);
 
-        $species = Species::orderBy('name', 'asc');
+        $species = Species::with(['type'])->orderBy('name', 'asc');
 
         if (! empty($request->search)) {
             $species->where(function ($query) use ($request) {
@@ -36,11 +37,11 @@ class SpeciesController extends Controller
             $species->where('plant_type_id', $request->plant_type_id);
         }
 
-        $species = $species->paginate(20);
-
-        $species->load([
-            'type'
-        ]);
+        if (! empty($request->limit)) {
+            $species = $species->paginate($request->limit);
+        } else {
+            $species = $species->paginate(20);
+        }
 
         return $this->success($species);
     }

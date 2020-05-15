@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
@@ -22,7 +22,7 @@ Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
  * Views for authenticated users.
  */
 Route::group([
-    'middleware' => ['auth'],
+    'middleware' => ['auth', 'verified'],
     'prefix' => '/app',
 ], function () {
     Route::get('/', 'HomeController@data');
@@ -48,7 +48,7 @@ Route::group([
  * Web API routes for authenticated users.
  */
 Route::group([
-    'middleware' => ['auth'],
+    'middleware' => ['auth', 'verified'],
     'prefix' => '/web',
 ], function () {
     // Search Controller
