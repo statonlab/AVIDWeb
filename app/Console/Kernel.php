@@ -26,7 +26,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // Email users about upcoming events
-        $schedule->command(SendEventNotifications::class)->dailyAt('8:00');
+        // Commented out since we didn't link our mailgun mailing list yet.
+        // $schedule->command(SendEventNotifications::class)->dailyAt('8:00');
     }
 
     /**
