@@ -101,6 +101,11 @@
                 if   : User.can('manage species'),
               },
               {
+                to   : '/app/events',
+                label: 'Manage Events',
+                if   : User.can('manage events'),
+              },
+              {
                 to   : '/app/users',
                 label: 'Manage Users',
                 if   : User.can('view users'),

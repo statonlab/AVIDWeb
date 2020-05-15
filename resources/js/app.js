@@ -25,6 +25,7 @@ import Groups from './screens/Groups'
 import Group from './screens/Group'
 import AdminSites from './screens/admin/AdminSites'
 import Reminders from './screens/Reminders'
+import Events from './screens/Events'
 import BetaData from './screens/BetaData'
 import BetaSite from './screens/BetaSite'
 
@@ -57,6 +58,7 @@ const routes = [
   {path: '/app/reminders', component: Reminders},
   {path: '/app/beta/sites', component: BetaData},
   {path: '/app/beta/sites/:id', component: BetaSite},
+  {path: '/app/events', component: Events},
 ]
 
 const router = new VueRouter({
