@@ -21,10 +21,11 @@ class SpeciesController extends Controller
 
         $this->validate($request, [
             'search' => 'nullable|max:255',
+            'plant_type_id' => 'nullable|exists:plants,id',
             'limit' => 'nullable',
         ]);
 
-        $species = Species::orderBy('name', 'asc');
+        $species = Species::with(['type'])->orderBy('name', 'asc');
 
         if (! empty($request->search)) {
             $species->where(function ($query) use ($request) {
@@ -32,12 +33,15 @@ class SpeciesController extends Controller
             });
         }
 
+        if (! empty($request->plant_type_id)) {
+            $species->where('plant_type_id', $request->plant_type_id);
+        }
+
         if (! empty($request->limit)) {
             $species = $species->paginate($request->limit);
         } else {
             $species = $species->paginate(20);
         }
-
 
         return $this->success($species);
     }
@@ -54,10 +58,17 @@ class SpeciesController extends Controller
 
         $this->validate($request, [
             'name' => 'required|max:255|unique:species,name',
+            'plant_type_id' => 'nullable|exists:plant_types,id',
         ]);
 
         $species = Species::create([
             'name' => $request->name,
+            'plant_type_id' => $request->plant_type_id,
+        ]);
+
+        $species->load([
+            'type' => function ($query) {
+            },
         ]);
 
         return $this->created($species);
@@ -76,6 +87,7 @@ class SpeciesController extends Controller
 
         $rules = [
             'name' => 'required|max:255',
+            'plant_type_id' => 'required|exists:plant_types,id',
         ];
         if ($request->name !== $species->name) {
             $rules['name'] .= '|unique:species,name';
@@ -85,7 +97,13 @@ class SpeciesController extends Controller
 
         $species->fill([
             'name' => $request->name,
+            'plant_type_id' => $request->plant_type_id,
         ])->save();
+
+        $species->load([
+            'type' => function ($query) {
+            },
+        ]);
 
         return $this->created($species);
     }
