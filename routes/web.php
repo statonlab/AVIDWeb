@@ -28,10 +28,13 @@ Route::group([
     Route::get('/', 'HomeController@data');
     Route::get('/sites', 'HomeController@data');
     Route::get('/sites/{id}', 'HomeController@data');
+    Route::get('/groups/{group}/sites/{id}', 'HomeController@data');
     Route::get('/beta/sites', 'HomeController@data');
     Route::get('/beta/sites/{id}', 'HomeController@data');
     Route::get('/plots/{id}', 'HomeController@data');
+    Route::get('/groups/{group}/plots/{id}', 'HomeController@data');
     Route::get('/plants/{id}', 'HomeController@data');
+    Route::get('/groups/{group}/plants/{id}', 'HomeController@data');
     Route::get('/profile', 'HomeController@data');
     Route::get('/roles', 'HomeController@data');
     Route::get('/groups', 'HomeController@data');
@@ -102,6 +105,7 @@ Route::group([
 
     // Group Controller
     Route::get('/groups', 'GroupController@index');
+    Route::get('/groups/{group}/permissions', 'GroupController@getPermissions');
     Route::post('/groups', 'GroupController@create');
     Route::put('/groups/{group}', 'GroupController@update');
     Route::put('/groups/{group}/permissions', 'GroupController@setPermissions');

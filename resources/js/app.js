@@ -12,6 +12,7 @@ import Dashboard from './screens/Dashboard'
 import Sites from './screens/Sites'
 import App from './components/App'
 import Plots from './screens/Plots'
+import GroupPlots from './screens/GroupPlots'
 import VueNotification from 'vue-notification'
 import Profile from './screens/Profile'
 import Alert from './plugins/Alert/Alert'
@@ -19,7 +20,9 @@ import Species from './screens/Species'
 import Users from './screens/Users'
 import User from './screens/User'
 import Plants from './screens/Plants'
+import GroupPlants from './screens/GroupPlants'
 import Measurements from './components/Measurements'
+import GroupMeasurements from './components/GroupMeasurements'
 import Roles from './screens/Roles'
 import Groups from './screens/Groups'
 import Group from './screens/Group'
@@ -44,8 +47,11 @@ const routes = [
   {path: '/app', component: Dashboard},
   {path: '/app/sites', component: Sites},
   {path: '/app/sites/:id', component: Plots},
+  {path: '/app/groups/:group_id/sites/:id', component: GroupPlots},
   {path: '/app/plots/:id', component: Plants},
+  {path: '/app/groups/:group_id/plots/:id', component: GroupPlants},
   {path: '/app/plants/:id', component: Measurements},
+  {path: '/app/groups/:group_id/plants/:id', component: GroupMeasurements},
   {path: '/app/species', component: Species},
   {path: '/app/profile', component: Profile},
   {path: '/app/users', component: Users},

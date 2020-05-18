@@ -34,13 +34,9 @@ class SitePolicy
             return true;
         }
 
-        if($user->isFriendsWith($site->user)) {
-            return true;
-        }
-
-        if ($site->groups()->whereIn('id', $user->groups()
+        if ($site->groups()->whereIn('group_id', $user->groups()
             ->wherePivot('can_view', 1)->get()
-            ->pluck('id'))->exists()) {
+            ->pluck('pivot.group_id'))->exists()) {
 
             return true;
         }

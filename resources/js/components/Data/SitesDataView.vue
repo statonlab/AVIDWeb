@@ -84,6 +84,7 @@
                         <td class="text-right no-wrap">
                             <button class="show-on-hover btn btn-link btn-sm mr-1"
                                     @click.prevent="edit(site)"
+                                    v-if="editable || User.owns(site) || User.can('delete sites')"
                                     v-tooltip="'Edit Site'">
                                 <icon name="create"/>
                             </button>
@@ -127,6 +128,7 @@
 
     props: {
       url                : {required: false, type: String, default: '/web/sites'},
+      editable           : {required: false, type: Boolean, default: false},
       showOwner          : {required: false, type: Boolean, default: false},
       siteUrlPrefix      : {required: false, type: String, default: '/app/sites'},
       unauthorizedMessage: {required: false, type: String, default: 'You do not have permission to view sites.'},
@@ -187,10 +189,11 @@
           this.$emit('load', data)
         } catch (e) {
           if (!axios.isCancel(e)) {
+            this.loading = false
             if (e.response && e.response.status === 403) {
                 this.unauthorized = true
+                return
             }
-            this.loading = false
             console.error(e)
           }
         }
@@ -202,7 +205,6 @@
       },
 
       siteUpdated(site) {
-        console.log(site)
         this.sites = this.sites.map(s => s.id === site.id ? site : s)
         this.closeForm()
       },

@@ -21,6 +21,7 @@
     <script>
       window.avid = {
         user      : null,
+        group     : null,
         csrf      : '{{ csrf_token() }}',
         keys      : {
           maps: '{{ config('services.maps.key') }}',

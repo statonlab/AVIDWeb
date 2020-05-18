@@ -236,4 +236,13 @@ class GroupController extends Controller
 
         return $this->success($user);
     }
+
+    public function getPermissions(Group $group, Request $request)
+    {
+        $user = $request->user();
+
+        $permissions = $group->users()->findOrFail($user->id)->pivot;
+
+        return $this->success($permissions);
+    }
 }

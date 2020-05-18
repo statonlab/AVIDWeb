@@ -106,10 +106,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8" v-if="">
+                <div class="col-md-8">
                     <sites-data-view
-                            :group="group"
+                            :editable="permissions ? Boolean(permissions.can_edit) : false"
                             :url="`/web/groups/${group.id}/sites`"
+                            :site-url-prefix="`/app/groups/${group.id}/sites`"
                             :show-owner="true"
                             :unauthorized-message="'You do not have permission to view sites for this group.'"
                             @load="sitesLoaded($event)"
@@ -170,6 +171,7 @@
         group         : null,
         member        : null,
         loading       : true,
+        permissions   : null,
         showInviteForm: false,
         showGroupForm : false,
         showUserForm  : false,
@@ -182,6 +184,7 @@
 
     mounted() {
       this.loadGroup()
+      this.loadPermissions()
       if (typeof this.$route.query.accepted !== 'undefined') {
         this.accepted = true
         this.$router.replace({
@@ -197,6 +200,18 @@
         try {
           const {data} = await axios.get(`/web/groups/${id}`)
           this.group   = data
+        } catch (e) {
+          console.error(e)
+        }
+        this.loading = false
+      },
+
+      async loadPermissions() {
+        this.loading = true
+        const {id}   = this.$route.params
+        try {
+          const {data}      = await axios.get(`/web/groups/${id}/permissions`)
+          this.permissions  = data
         } catch (e) {
           console.error(e)
         }
