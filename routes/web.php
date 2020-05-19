@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+Auth::routes(['verify' => true]);
+
+Route::get('/web/images/storage/{image}', 'ImageController@serve');
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
@@ -22,7 +24,7 @@ Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
  * Views for authenticated users.
  */
 Route::group([
-    'middleware' => ['auth'],
+    'middleware' => ['auth', 'verified'],
     'prefix' => '/app',
 ], function () {
     Route::get('/', 'HomeController@data');
@@ -45,13 +47,14 @@ Route::group([
     Route::get('/roles', 'HomeController@data');
     Route::get('/admin/sites', 'HomeController@data');
     Route::get('/reminders', 'HomeController@data');
+    Route::get('/events', 'HomeController@data');
 });
 
 /**
  * Web API routes for authenticated users.
  */
 Route::group([
-    'middleware' => ['auth'],
+    'middleware' => ['auth', 'verified'],
     'prefix' => '/web',
 ], function () {
     // Search Controller
@@ -134,6 +137,16 @@ Route::group([
     // Permissions Controller
     Route::get('/permissions', 'PermissionController@index');
     Route::patch('/permissions/{permission}/roles/{role}', 'PermissionController@toggle');
+
+    // Event Controller
+    Route::get('/events', 'EventController@index');
+    Route::get('/events/{event}', 'EventController@show');
+    Route::post('/events', 'EventController@create');
+    Route::post('/events/{event}/update', 'EventController@update');
+    Route::delete('/events/{event}', 'EventController@destroy');
+
+    // Image Controller
+    Route::post('/images', 'ImageController@create');
 
     // Admin Sites
     Route::get('/admin/sites', 'Admin\SiteController@index');

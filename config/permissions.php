@@ -67,4 +67,10 @@ return [
         'description' => 'Allow users to manage roles and permissions. This would give users access to the current page.',
         'default' => [],
     ],
+    [
+        'name' => 'manage events',
+        'title' => 'Manage Events',
+        'description' => 'Allow users to manage events. Users will be allowed to add, update, and delete events.',
+        'default' => [],
+    ],
 ];

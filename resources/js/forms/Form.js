@@ -52,13 +52,11 @@ export default class Form {
    */
   data(override) {
     let data = {}
-
     for (let field in this.originalData) {
       if (this.originalData.hasOwnProperty(field)) {
         data[field] = this[field]
       }
     }
-
     if (override) {
       for (let field in override) {
         if (this.originalData.hasOwnProperty(field)) {
@@ -66,27 +64,23 @@ export default class Form {
         }
       }
     }
-
     if (this._multipart) {
       let form = new FormData()
-
       for (let field in data) {
         if (data.hasOwnProperty(field)) {
           if (this.isFileField(field)) {
             if (FileList && data[field] instanceof FileList) {
-              form.append(field, data[field][0])
+              form.append(field, data[field][0] === null ? '' : data[field][0])
             } else {
-              form.append(field, data[field])
+              form.append(field, data[field] === null ? '' : data[field])
             }
           } else {
-            form.append(field, data[field])
+            form.append(field, data[field] === null ? '' : data[field])
           }
         }
       }
-
       return form
     }
-
     return data
   }
 
@@ -193,6 +187,13 @@ export default class Form {
     if (!this.isFileField(field)) {
       this.multipart(true)
       this.fileFields.push(field)
+    }
+  }
+
+  setAsNotFile(field) {
+    this.fileFields = this.fileFields.filter(f => f !== field)
+    if (this.fileFields.length === 0) {
+      this.multipart(false)
     }
   }
 

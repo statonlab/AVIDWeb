@@ -142,6 +142,11 @@
           this.form.errors.clear('species_id')
         },
       },
+      'form.plant_type_id': {
+        handler() {
+          this.loadSpecies()
+        }
+      }
     },
 
     data() {
@@ -188,7 +193,8 @@
         try {
           const {data} = await axios.get(`/web/species`, {
             params: {
-              search: this.speciesSearch,
+              search        : this.speciesSearch,
+              plant_type_id : this.form.plant_type_id,
             },
           })
           this.species = data.data.map(species => ({

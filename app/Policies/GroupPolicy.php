@@ -54,7 +54,13 @@ class GroupPolicy
             return true;
         }
 
-        $pivot = $user->groups()->find($group->id)->pivot;
+        $group = $user->groups()->find($group->id);
+
+        if (!$group) {
+            return false;
+        }
+
+        $pivot = $group->pivot;
 
         if ($pivot->isLeader || $pivot->can_view) {
             return true;
