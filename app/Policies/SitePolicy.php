@@ -71,7 +71,7 @@ class SitePolicy
      */
     public function update(User $user, Site $site)
     {
-        if ($site->groups()->whereIn('group_id', $user->groups()
+        if ($site->groups()->whereIn('groups.id', $user->groups()
             ->wherePivot('can_edit', 1)->get()
             ->pluck('id'))->exists()) {
 
