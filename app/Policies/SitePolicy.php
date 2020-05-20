@@ -78,7 +78,7 @@ class SitePolicy
             return true;
         }
 
-        if ($site->groups()->whereIn('id', $user->groups()
+        if ($site->groups()->whereIn('groups.id', $user->groups()
             ->wherePivot('is_leader', 1)->get()
             ->pluck('id'))->exists()) {
 
