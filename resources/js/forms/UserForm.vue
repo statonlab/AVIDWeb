@@ -27,7 +27,7 @@
                                :checked="form.can_edit"
                                @change="form.can_edit = $event.target.checked"
                                id="can-edit">
-                        <label class="form-check-label font-weight-normal" for="can-view">
+                        <label class="form-check-label font-weight-normal" for="can-edit">
                             Allow user to edit sites
                         </label>
                     </div>
