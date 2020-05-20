@@ -6,6 +6,8 @@ use App\Http\Controllers\Traits\ListsSites;
 use App\Site;
 use App\User;
 use Illuminate\Http\Request;
+use App\Exports\SiteExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SiteController extends Controller
 {
@@ -172,5 +174,12 @@ class SiteController extends Controller
         $site->delete();
 
         return $this->created('Site deleted successfully');
+    }
+
+    public function export(Site $site)
+    {
+        $this->authorize('view', $site);
+
+        return Excel::download(new SiteExport($site), "$site->name.xlsx");
     }
 }

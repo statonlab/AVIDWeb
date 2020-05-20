@@ -17,6 +17,10 @@
                 </div>
             </div>
             <div class="ml-auto">
+                <a :href="`/web/sites/${site.id}/export`" class="btn btn-link">
+                    <icon name="download"/>
+                    <span>Download Excel</span>
+                </a>
                 <button class="btn btn-link"
                         @click.prevent="editingSite = true"
                         v-if="User.owns(site) || User.can('update sites')">
