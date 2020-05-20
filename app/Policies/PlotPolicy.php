@@ -38,10 +38,6 @@ class PlotPolicy
             return true;
         }
 
-        if ($user->isFriendsWith($plot->user) || $user->isFriendsWith($plot->site->user)) {
-            return true;
-        }
-
         return false;
     }
 

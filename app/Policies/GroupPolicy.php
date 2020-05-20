@@ -30,7 +30,6 @@ class GroupPolicy
      */
     public function view(User $user, Group $group)
     {
-
         if ($user->owns($group)) {
             return true;
         }
@@ -40,6 +39,32 @@ class GroupPolicy
         }
 
         return $user->hasPermissionTo('view groups');
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param \App\User $user
+     * @param \App\Group $group
+     * @return mixed
+     */
+    public function viewSites(User $user, Group $group)
+    {
+        if ($user->owns($group)) {
+            return true;
+        }
+
+        $group = $user->groups()->find($group->id);
+
+        if (!$group) {
+            return false;
+        }
+
+        $pivot = $group->pivot;
+
+        if ($pivot->isLeader || $pivot->can_view) {
+            return true;
+        }
     }
 
     /**

@@ -34,10 +34,6 @@ class PlantPolicy
             return true;
         }
 
-        if ($user->isFriendsWith($plant->user) || $user->isFriendsWith($plant->plot->user) || $user->isFriendsWith($plant->plot->site->user)) {
-            return true;
-        }
-
         return false;
     }
 

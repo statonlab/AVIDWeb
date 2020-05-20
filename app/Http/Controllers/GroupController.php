@@ -203,10 +203,46 @@ class GroupController extends Controller
      */
     public function sites(Group $group)
     {
-        $this->authorize('view', $group);
+        $this->authorize('viewSites', $group);
 
         $sites = $this->getSites($group->sites());
 
         return $this->success($sites->paginate(20));
+    }
+
+    /**
+     * @param \App\Group $group
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function setPermissions(Group $group, Request $request)
+    {
+        $this->authorize('update', $group);
+
+        $this->validate($request, [
+            'user_id' => 'required|exists:users,id',
+            'can_view' => 'required|boolean',
+            'can_edit' => 'required|boolean',
+        ]);
+
+        $group->users()->updateExistingPivot($request->user_id, [
+            'can_view' => $request->can_view,
+            'can_edit' => $request->can_edit,
+        ]);
+
+        $user = $group->users()->where('user_id', $request->user_id)->first();
+
+        return $this->success($user);
+    }
+
+    public function getPermissions(Group $group, Request $request)
+    {
+        $user = $request->user();
+
+        $permissions = $group->users()->findOrFail($user->id)->pivot;
+
+        return $this->success($permissions);
     }
 }
