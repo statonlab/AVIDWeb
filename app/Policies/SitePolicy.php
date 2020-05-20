@@ -36,12 +36,12 @@ class SitePolicy
 
         if ($site->groups()->whereIn('groups.id', $user->groups()
             ->wherePivot('can_view', 1)->get()
-            ->pluck('pivot.group_id'))->exists()) {
+            ->pluck('id'))->exists()) {
 
             return true;
         }
 
-        if ($site->groups()->whereIn('id', $user->groups()
+        if ($site->groups()->whereIn('groups.id', $user->groups()
             ->wherePivot('is_leader', 1)->get()
             ->pluck('id'))->exists()) {
 
