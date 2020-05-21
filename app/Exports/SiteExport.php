@@ -7,30 +7,37 @@ use App\Site;
 use App\Plot;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SiteExport implements FromCollection, WithHeadings
+class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
     protected $user;
 
     protected $site;
 
+    protected $prev_measurements_count;
+
     public function __construct(Site $site)
     {
+        $this->prev_measurements_count = 3;
+
         $this->site = $site;
     }
 
     public function headings(): array
     {
-        return [
-            'Site',
-            'Plot',
-            'Quadrant',
-            'Tag',
-            'Species',
-            'Previous Height',
-            'Date',
-            'Height',
-        ];
+        $header = ['Site', 'Plot', 'Quadrant', 'Tag', 'Species'];
+
+        $year = now()->year;
+
+        for ($i = $this->prev_measurements_count; $i > 0; $i--) {
+            $column_year = $year - $i;
+            array_push($header, "Height ($column_year)");
+        }
+
+        $header = array_merge($header, ['Date', 'Height']);
+
+        return $header;
     }
 
     /**
@@ -46,26 +53,33 @@ class SiteExport implements FromCollection, WithHeadings
 
         foreach ($site->plots as $plot) {
             foreach ($plot->plants as $plant) {
-                $previous_height = null;
-                $last_measurement = $plant->measurements()->orderBy('date', 'desc')->first();
-                if ($last_measurement != null) {
-                    if (!$last_measurement->is_located) {
-                        $previous_height = 'missing';
-                    } else if (!$last_measurement->is_alive) {
-                        $previous_height = 'dead';
-                    } else {
-                        $previous_height = $last_measurement->height;
-                    }
-                }
-
-                $rows->push([
+                $row = [
                     $site->name,
                     $plot->number,
                     $plant->quadrant,
                     $plant->tag,
                     $plant->species->name,
-                    $previous_height,
-                ]);
+                ];
+
+                $measurements = $plant->measurements()->orderBy('date', 'asc')->get();
+
+                for ($i = $this->prev_measurements_count; $i > 0; $i--) {
+                    $previous_height = null;
+                    $last_measurement = $measurements->where('date.year', now()->year - $i)->pop();
+                    if ($last_measurement != null) {
+                        if (!$last_measurement->is_located) {
+                            $previous_height = 'missing';
+                        } else if (!$last_measurement->is_alive) {
+                            $previous_height = 'dead';
+                        } else {
+                            $previous_height = $last_measurement->height;
+                        }
+                    }
+
+                    array_push($row, $previous_height);
+                }
+
+                $rows->push($row);
             }
         }
 

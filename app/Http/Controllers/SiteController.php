@@ -7,6 +7,7 @@ use App\Site;
 use App\User;
 use Illuminate\Http\Request;
 use App\Exports\SiteExport;
+use App\Imports\SiteImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SiteController extends Controller
@@ -181,5 +182,20 @@ class SiteController extends Controller
         $this->authorize('view', $site);
 
         return Excel::download(new SiteExport($site), "$site->name.xlsx");
+    }
+
+    public function import(Site $site, Request $request)
+    {
+        $user = $request->user();
+
+        $this->authorize('create', $site);
+
+        $this->validate($request, [
+            'file' => 'required|file',
+        ]);
+
+        Excel::import(new SiteImport($user, $site), $request->file('file'));
+
+        return $this->success('Measurements uploaded successfully.');
     }
 }

@@ -22,6 +22,14 @@
                     <span>Download Excel</span>
                 </a>
                 <button class="btn btn-link"
+                        @click.prevent="importing = true"
+                        v-if="User.owns(site) || User.can('update sites')">
+                    <icon name="cloud-upload"/>
+                    <span>
+                        Import Measurements
+                    </span>
+                </button>
+                <button class="btn btn-link"
                         @click.prevent="editingSite = true"
                         v-if="User.owns(site) || User.can('update sites')">
                     <icon name="create"/>
@@ -173,6 +181,13 @@
             </div>
         </div>
 
+        <import-form
+                @close="closeImportForm"
+                v-if="importing"
+                :site="site"
+                @create="measurementsCreated()"
+            />
+
         <plot-form
                 @close="closeForm"
                 v-if="site && showPlotForm"
@@ -199,6 +214,7 @@
   import PlotMap from '../components/PlotMap'
   import Dropdown from '../components/Dropdown'
   import SiteForm from '../forms/SiteForm'
+  import ImportForm from '../forms/ImportForm'
   import Pager from '../components/Pager'
   import User from '../helpers/User'
   import moment from 'moment'
@@ -206,7 +222,7 @@
   export default {
     name: 'Plots',
 
-    components: {Pager, SiteForm, Dropdown, PlotMap, PlantForm, Tabs, Tab, PlotForm, Icon, InlineSpinner},
+    components: {Pager, SiteForm, ImportForm, Dropdown, PlotMap, PlantForm, Tabs, Tab, PlotForm, Icon, InlineSpinner},
 
     data() {
       return {
@@ -215,6 +231,7 @@
         search      : '',
         showPlotForm: false,
         editingSite : false,
+        importing   : false,
         plots       : [],
         deleting    : null,
         page        : 1,
@@ -311,6 +328,10 @@
         this.closeForm()
       },
 
+      measurementsCreated() {
+        this.closeImportForm()
+      },
+
       edit(plot) {
         this.plot         = plot
         this.showPlotForm = true
@@ -319,6 +340,10 @@
       closeForm() {
         this.plot         = null
         this.showPlotForm = false
+      },
+
+      closeImportForm() {
+        this.importing = false
       },
 
       destroy(plot) {
