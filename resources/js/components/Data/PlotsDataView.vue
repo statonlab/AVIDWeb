@@ -109,7 +109,7 @@
                                 {{ plot.plants_count | plural('Plant', 'Plants') }}
                             </td>
                             <td>
-                                <span v-if="plot.last_measured_at">{{ moment(plot.last_measured_at).format('MMM Do, YYYY') }}</span>
+                                <span v-if="plot.last_measured_at">{{ moment.utc(plot.last_measured_at).format('MMM Do, YYYY') }}</span>
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">

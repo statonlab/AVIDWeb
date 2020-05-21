@@ -78,7 +78,7 @@
                         <td>{{ site.plants_count | plural('Plant', 'Plants') }}</td>
                         <td>
                             <span v-if="site.last_measured_at">
-                                {{ moment(site.last_measured_at).format('MMM Do, YYYY') }}
+                                {{ moment.utc(site.last_measured_at).format('MMM Do, YYYY') }}
                             </span>
                         </td>
                         <td class="text-right no-wrap">
