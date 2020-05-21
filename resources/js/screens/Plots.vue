@@ -16,20 +16,17 @@
                     </p>
                 </div>
             </div>
-            <div class="ml-auto">
-                <a :href="`/web/sites/${site.id}/export`" class="btn btn-link">
-                    <icon name="download"/>
-                    <span>Download Excel</span>
-                </a>
-                <button class="btn btn-link"
-                        @click.prevent="importing = true"
-                        v-if="User.owns(site) || User.can('update sites')">
-                    <icon name="cloud-upload"/>
-                    <span>
-                        Import Measurements
-                    </span>
-                </button>
-                <button class="btn btn-link"
+            <div class="row ml-auto mb-auto">
+                <div class="dropdown">
+                    <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                        Import / Export
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" @click.prevent="importing = true">Import Spreadsheet</a>
+                        <a class="dropdown-item" :href="`/web/sites/${site.id}/export`">Export Spreadsheet</a>
+                    </div>
+                </div>
+                <button class="btn btn-link mr-3"
                         @click.prevent="editingSite = true"
                         v-if="User.owns(site) || User.can('update sites')">
                     <icon name="create"/>
