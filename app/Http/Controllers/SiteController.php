@@ -35,13 +35,7 @@ class SiteController extends Controller
             'limit' => 'nullable|integer',
         ]);
 
-        $sites = $this->getSites($user->sites())->paginate(20);
-
-        //if ($request->limit) {
-        //    $sites = $sites->take($request->limit)->get();
-        //} else {
-        //    $sites = $sites->paginate(20);
-        //}
+        $sites = $this->getSites($user->sites())->paginate($request->limit ?? 20);
 
         return $this->success($sites);
     }
