@@ -48,24 +48,6 @@
                             </small>
                         </div>
                         <div class="form-group col-6 position-static">
-                            <label for="species">
-                                Species
-                                <required/>
-                            </label>
-                            <dropdown
-                                    id="species"
-                                    :autocomplete="true"
-                                    v-model="form.species_id"
-                                    :lodaing="loadingSpecies"
-                                    :options="species"
-                                    :error="form.errors.has('species_id')"
-                                    @search="speciesSearch = $event"
-                            />
-                            <small class="form-text text-danger" v-if="form.errors.has('species_id')">
-                                {{ form.errors.first('species_id') }}
-                            </small>
-                        </div>
-                        <div class="form-group col-6">
                             <label for="quadrant">
                                 Quadrant
                                 <required/>
@@ -85,7 +67,53 @@
                                 {{ form.errors.first('quadrant') }}
                             </small>
                         </div>
+                        <div class="form-group col-6" v-if="!form.new_species">
+                            <label for="species">
+                                Species
+                                <required/>
+                            </label>
+                            <dropdown
+                                    class="mb-1"
+                                    id="species"
+                                    :autocomplete="true"
+                                    v-model="form.species_id"
+                                    :lodaing="loadingSpecies"
+                                    :options="species"
+                                    :error="form.errors.has('species_id')"
+                                    @search="speciesSearch = $event"
+                            />
+                            <small class="form-text text-danger" v-if="form.errors.has('species_id')">
+                                {{ form.errors.first('species_id') }}
+                            </small>
+                        </div>
+                        <div class="form-group col-6" v-if="form.new_species">
+                            <label for="new-species">
+                                Species
+                                <required/>
+                            </label>
+                            <input type="text"
+                                   id="new-species"
+                                   name="new-species"
+                                   class="form-control"
+                                   :class="{'is-invalid': form.errors.has('new_species_name')}"
+                                   v-model="form.new_species_name"
+                                   placeholder="Species Name">
+                            <small class="form-text text-danger" v-if="form.errors.has('new_species_name')">
+                                {{ form.errors.first('new_species_name') }}
+                            </small>
+                        </div>
                     </div>
+                    <p class="text-muted" v-if="!form.new_species">
+                        If you cannot find the species from the dropdown,
+                        <a href="#" @click.prevent="form.new_species = true"> you can click here to create a new one.</a>
+                    </p>
+                    <button class="btn btn-link"
+                            v-if="form.new_species"
+                            @click.prevent="form.new_species = false">
+                        <span>
+                            Cancel Species Creation
+                        </span>
+                    </button>
                 </modal-body>
                 <modal-footer class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary" :disabled="saving">
@@ -137,6 +165,10 @@
     },
 
     watch: {
+      speciesSearch() {
+        this.loadSpecies()
+      },
+
       'form.species_id': {
         handler() {
           this.form.errors.clear('species_id')
@@ -155,10 +187,12 @@
         saving: false,
 
         form: new Form({
-          plant_type_id: '',
-          tag          : '',
-          species_id   : '',
-          quadrant     : '',
+          new_species       : false,
+          new_species_name  : '',
+          plant_type_id     : '',
+          tag               : '',
+          species_id        : '',
+          quadrant          : '',
         }),
 
         loadingPlants : false,
