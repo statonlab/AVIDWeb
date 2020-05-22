@@ -86,7 +86,7 @@
                                 {{ form.errors.first('species_id') }}
                             </small>
                         </div>
-                        <div class="form-group col-6" v-if="form.new_species">
+                        <div class="form-group col-6 flex-column" v-if="form.new_species">
                             <label for="new-species">
                                 Species
                                 <required/>
@@ -102,13 +102,13 @@
                                 {{ form.errors.first('new_species_name') }}
                             </small>
                         </div>
-                        <button class="btn btn-link mt-1"
-                                v-if="form.new_species"
-                                @click.prevent="form.new_species = false">
-                            <span>
-                                Cancel Species Creation
-                            </span>
-                        </button>
+                            <button class="btn btn-link mt-auto mb-3 ml-3"
+                                    v-if="form.new_species"
+                                    @click.prevent="form.new_species = false">
+                                <span>
+                                    Cancel Species Creation
+                                </span>
+                            </button>
                     </div>
                     <p class="text-muted" v-if="!form.new_species">
                         If you cannot find the species from the dropdown,
