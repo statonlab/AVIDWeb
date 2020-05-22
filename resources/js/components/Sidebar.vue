@@ -76,6 +76,11 @@
             label: 'Beta Data View',
           },
           {
+            icon: 'add-circle-outline',
+            to: '/app/data-entry',
+            label: 'Data Entry'
+          },
+          {
             icon : 'notifications-outline',
             to   : '/app/reminders',
             label: 'My Reminders',

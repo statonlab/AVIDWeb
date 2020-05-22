@@ -1,44 +1,63 @@
 .form-control {
-    border: $input-border;
+  border: $input-border;
 }
 
 label {
-    font-weight: $font-weight-bold;
+  font-weight: $font-weight-bold;
 }
 
 .input-group {
-    position: relative;
+  position: relative;
 
+  .form-control {
+    border-radius: $border-radius !important;
+  }
+
+  &.is-appended {
     .form-control {
-        border-radius: $border-radius!important;
+      padding-right: 60px;
     }
+  }
 
-    &.is-appended {
-        .form-control {
-            padding-right: 60px;
-        }
-    }
-
-    &.is-prepended {
-        padding-left: 30px;
-    }
+  &.is-prepended {
+    padding-left: 30px;
+  }
 }
 
 .input-group-append {
+  border-width: 0;
+  position: absolute;
+  top: 1px;
+  right: 0;
+  z-index: 1000;
+  max-width: 60px;
+
+  > .input-group-text {
+    background-color: transparent;
     border-width: 0;
-    position: absolute;
-    top: 1px;
-    right: 0;
-    z-index: 1000;
-    max-width: 60px;
-    > .input-group-text {
-        background-color: transparent;
-        border-width: 0;
-        font-weight: $font-weight-bold;
-    }
+    font-weight: $font-weight-bold;
+  }
 }
 
 .form-control.disabled {
-    background-color: $gray-200;
-    cursor: not-allowed;
+  background-color: $gray-200;
+  cursor: not-allowed;
+}
+
+.cell-h {
+  height: 49px
+}
+
+.border-primary {
+  border-color: $primary;
+}
+
+.shadow-primary {
+  outline: solid $primary 2px;
+  position: relative;
+  z-index: 1;
+}
+
+.focus-outlined:focus {
+  box-shadow: 0 0 3px rgba($primary, .2) !important;
 }
