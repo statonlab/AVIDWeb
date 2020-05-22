@@ -78,6 +78,8 @@ Route::group([
     Route::get('/sites/{site}', 'SiteController@show');
     Route::put('/sites/{site}', 'SiteController@update');
     Route::delete('/sites/{site}', 'SiteController@destroy');
+    Route::get('/sites/{site}/export', 'SiteController@export');
+    Route::post('/sites/{site}/import', 'SiteController@import');
 
     // Plot Controller
     Route::get('/sites/{site}/plots', 'PlotController@index');
