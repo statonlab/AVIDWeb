@@ -16,8 +16,19 @@
                     </p>
                 </div>
             </div>
-            <div class="ml-auto">
-                <button class="btn btn-link"
+            <div class="row ml-auto mb-auto">
+                <div class="dropdown">
+                    <button v-if="editable || User.owns(site) || User.can('update sites')"
+                            class="btn btn-link dropdown-toggle"
+                            data-toggle="dropdown">
+                        Import / Export
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" @click.prevent="importing = true">Import Spreadsheet</a>
+                        <a class="dropdown-item" :href="`/web/sites/${site.id}/export`">Export Spreadsheet</a>
+                    </div>
+                </div>
+                <button class="btn btn-link mr-3"
                         @click.prevent="editingSite = true"
                         v-if="editable || User.owns(site) || User.can('update sites')">
                     <icon name="create"/>
@@ -177,6 +188,13 @@
             </div>
         </div>
 
+        <import-form
+                @close="closeImportForm"
+                v-if="importing"
+                :site="site"
+                @create="measurementsCreated()"
+        />
+
         <plot-form
                 @close="closeForm"
                 v-if="site && showPlotForm"
@@ -203,6 +221,7 @@
   import PlotMap from '../PlotMap'
   import Dropdown from '../Dropdown'
   import SiteForm from '../../forms/SiteForm'
+  import ImportForm from '../../forms/ImportForm'
   import Pager from '../Pager'
   import User from '../../helpers/User'
   import moment from 'moment'
@@ -210,7 +229,7 @@
   export default {
     name: 'PlotsDataView',
 
-    components: {Pager, SiteForm, Dropdown, PlotMap, PlantForm, Tabs, Tab, PlotForm, Icon, InlineSpinner},
+    components: {Pager, SiteForm, ImportForm, Dropdown, PlotMap, PlantForm, Tabs, Tab, PlotForm, Icon, InlineSpinner},
 
     props: {
       unauthorizedMessage: {required: false, type: String, default: 'You do not have permission to view plots.'},
@@ -226,6 +245,7 @@
         User        : User,
         search      : '',
         showPlotForm: false,
+        importing   : false,
         editingSite : false,
         plots       : [],
         deleting    : null,
@@ -322,6 +342,10 @@
         this.loadPlots()
       },
 
+      measurementsCreated() {
+        this.closeImportForm()
+      },
+
       plotUpdated(plot) {
         this.plots = this.plots.map(p => p.id === plot.id ? plot : p)
         this.closeForm()
@@ -335,6 +359,10 @@
       closeForm() {
         this.plot         = null
         this.showPlotForm = false
+      },
+
+      closeImportForm() {
+        this.importing = false
       },
 
       destroy(plot) {
