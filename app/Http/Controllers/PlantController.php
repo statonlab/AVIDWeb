@@ -112,17 +112,15 @@ class PlantController extends Controller
         $new_species = null;
 
         if ($request->new_species) {
-            $exists = Species::where('name', $request->new_species_name)->exists();
-            if ($exists) {
-                return $this->error('Species already exists', [
-                    'new_species_name' => ['A species with this name already exists. Please select it from the dropdown.'],
+            $species = Species::where('name', $request->new_species_name)->first();
+            if ($species !== null) {
+                $new_species = $species;
+            } else {
+                $new_species = Species::create([
+                    'name' => $request->new_species_name,
+                    'plant_type_id' => $request->plant_type_id,
                 ]);
             }
-
-            $new_species = Species::create([
-                'name' => $request->new_species_name,
-                'plant_type_id' => $request->plant_type_id,
-            ]);
         }
 
         $plant = Plant::create([

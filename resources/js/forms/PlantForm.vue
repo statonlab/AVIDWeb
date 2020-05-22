@@ -102,18 +102,18 @@
                                 {{ form.errors.first('new_species_name') }}
                             </small>
                         </div>
+                        <button class="btn btn-link mt-1"
+                                v-if="form.new_species"
+                                @click.prevent="form.new_species = false">
+                            <span>
+                                Cancel Species Creation
+                            </span>
+                        </button>
                     </div>
                     <p class="text-muted" v-if="!form.new_species">
                         If you cannot find the species from the dropdown,
                         <a href="#" @click.prevent="form.new_species = true"> you can click here to create a new one.</a>
                     </p>
-                    <button class="btn btn-link"
-                            v-if="form.new_species"
-                            @click.prevent="form.new_species = false">
-                        <span>
-                            Cancel Species Creation
-                        </span>
-                    </button>
                 </modal-body>
                 <modal-footer class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary" :disabled="saving">
