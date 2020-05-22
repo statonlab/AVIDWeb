@@ -1,83 +1,114 @@
 <template>
     <div>
-        <div class="mb-3 d-flex">
-            <div>
-                <select class="form-control" v-model="site">
+        <div class="mb-3 d-flex" v-if="!loadingSites">
+            <div class="flex-grow-1">
+                <select class="custom-select w-auto" v-model="site">
                     <option v-for="a_site in sites" :value="a_site.id">
                         {{ a_site.name }}
                     </option>
                 </select>
             </div>
+            <div class="flex-shrink-0">
+                <button class="btn btn-primary">
+                    <icon name="add"/>
+                    <span>Plot</span>
+                </button>
+            </div>
         </div>
-        <div class="bg-white mb-3 table-responsive">
-            <table class="table table-bordered table-middle mb-0">
-                <thead>
-                <tr>
-                    <th>Plot</th>
-                    <th>Plant</th>
-                    <th>Measurement Date</th>
-                    <th>Located</th>
-                    <th>Alive</th>
-                    <th>Height</th>
-                </tr>
-                </thead>
-                <tbody>
-                <template v-for="plot in plots">
+        <div class="d-flex justify-content-center align-items-center" v-if="loadingSites">
+            <inline-spinner class="text-primary"/>
+        </div>
+        <div class="card mb-3 table-responsive position-static" v-if="!loadingSites">
+            <div class="card-header d-flex px-2 border-bottom">
+                <div class="flex-grow-1">
+                    <input type="search" class="form-control" placeholder="Search by plant tag">
+                </div>
+                <div class="flex-shrink-0">
+                    <select name="" id="" class="custom-select">
+                        <option value="">Filter by plot</option>
+                    </select>
+                </div>
+            </div>
+            <div class="p-3 d-flex align-items-center justify-content-center" v-if="loadingPlots">
+                <inline-spinner class="text-primary"/>
+            </div>
+            <div class="p-3 text-muted" v-if="!loadingPlots && plots.length === 0"></div>
+            <div class="table table-bordered mb-0" v-if="!loadingPlots">
+                <div class="tr">
+                    <div class="th text-muted border-bottom">Plot</div>
+                    <div class="th text-muted border-bottom">Plant</div>
+                    <div class="th text-muted border-bottom">Measurement Date</div>
+                    <div class="th text-muted border-bottom">Located</div>
+                    <div class="th text-muted border-bottom">Alive</div>
+                    <div class="th text-muted border-bottom">Height</div>
+                </div>
+                <template v-for="(plot) in plots">
                     <template v-if="plot.plants.length > 0">
                         <template v-for="(plant, plant_index) in plot.plants">
                             <template v-if="plant.measurements.length > 0">
-                                <tr v-for="(measurement, measurement_index) in plant.measurements">
-                                    <th>
-                                        <span v-if="plant_index === 0 && measurement_index === 0">Plot #{{ plot.number }}</span>
-                                    </th>
-                                    <th>
+                                <div class="tr" v-for="(measurement, measurement_index) in plant.measurements">
+                                    <div class="th" :class="{'border-top-0': plant_index > 0 || measurement_index > 0 }">
+                                        <plot-entry-button :plot="plot"
+                                                           v-if="plant_index === 0 && measurement_index === 0"/>
+                                    </div>
+                                    <div class="th" :class="{'border-top-0': measurement_index > 0}">
                                         <span v-if="measurement_index === 0">Plant #{{plant.tag}}</span>
-                                    </th>
-                                    <td>{{ moment(measurement.date).format('MMM Do, YYYY') }}</td>
-                                    <td>{{ measurement.is_located ? 'Yes' : 'No'}}</td>
-                                    <td>{{ measurement.is_alive ? 'Yes' : 'No'}}</td>
-                                    <td>
+                                    </div>
+                                    <div class="td">{{ moment(measurement.date).format('MMM Do, YYYY') }}</div>
+                                    <div class="td">{{ measurement.is_located ? 'Yes' : 'No'}}</div>
+                                    <div class="td">{{ measurement.is_alive ? 'Yes' : 'No'}}</div>
+                                    <div class="td">
                                         <span v-if="measurement.height !== null">
                                             {{measurement.height}} in.
                                         </span>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
                                 <inline-measurement-form :plant="plant"/>
                             </template>
                             <template v-else>
-                                <tr>
-                                    <th>
-                                        <span v-if="plant_index === 0">
-                                            Plot #{{ plot.number }}
-                                        </span>
-                                    </th>
-                                    <th>Plant #{{plant.tag}}</th>
-                                    <td colspan="4">
+                                <div class="tr">
+                                    <div class="th" :class="{'border-top-0': plant_index > 0}">
+                                        <plot-entry-button :plot="plot" v-if="plant_index === 0"/>
+                                    </div>
+                                    <div class="th">Plant #{{plant.tag}}</div>
+                                    <div class="td border-right-0">
                                         <span class="text-muted">No Measurements Found</span>
-                                    </td>
-                                </tr>
+                                    </div>
+                                    <div class="td border-right-0">
+                                    </div>
+                                    <div class="td border-right-0">
+                                    </div>
+                                    <div class="td">
+                                    </div>
+                                </div>
                                 <inline-measurement-form :plant="plant"/>
                             </template>
                         </template>
                     </template>
-                    <tr v-else>
-                        <th>Plot #{{ plot.number }}</th>
-                        <td colspan="5" class="text-muted">No Plants Found</td>
-                    </tr>
+                    <div class="tr" v-else>
+                        <div class="th">
+                            <plot-entry-button :plot="plot"/>
+                        </div>
+                        <div class="td text-muted border-right-0">No Plants Found</div>
+                        <div class="td border-right-0" v-for="i in 3"></div>
+                        <div class="td"></div>
+                    </div>
                 </template>
-                </tbody>
-            </table>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import moment from 'moment'
-    import InlineMeasurementForm from '../components/Data/InlineMeasurementForm'
+  import moment from 'moment'
+  import InlineMeasurementForm from '../components/Data/InlineMeasurementForm'
+  import PlotEntryButton from '../components/Data/PlotEntryButton'
+  import Icon from '../components/Icon'
+  import InlineSpinner from '../components/InlineSpinner'
 
   export default {
-    name: 'DataEntry',
-    components: {InlineMeasurementForm},
+    name      : 'DataEntry',
+    components: {InlineSpinner, Icon, PlotEntryButton, InlineMeasurementForm},
     data() {
       return {
         moment,

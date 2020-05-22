@@ -11157,8 +11157,9 @@ label {
   border-color: #2EB07A;
 }
 
-.shadow-primary {
+.outline-primary {
   outline: solid #2EB07A 2px;
+  outline-offset: -2px;
   position: relative;
   z-index: 1;
 }
@@ -11473,6 +11474,45 @@ body {
   vertical-align: middle;
 }
 
+div.table {
+  display: table;
+  width: 100%;
+}
+
+div.table .tr {
+  display: table-row;
+}
+
+div.table .tr:last-child .th,
+div.table .tr:last-child .td {
+  border-bottom: 1px solid #dee2e6;
+}
+
+div.table .th {
+  font-weight: 600;
+}
+
+div.table .th,
+div.table .td {
+  display: table-cell;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
+}
+
+div.table .th:first-child,
+div.table .td:first-child {
+  border-left: 1px solid #dee2e6;
+}
+
+.vc-popover-content-wrapper.is-interactive {
+  z-index: 999999 !important;
+}
+
+.border-bottom-2 {
+  border-bottom: 2px solid #dee2e6;
+}
+
 .modal-title {
   font-size: 1rem;
   font-weight: 600;
@@ -11485,6 +11525,11 @@ body {
 
 .modal-md {
   max-width: 650px;
+}
+
+.dropdown-menu {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175), 0 0 1px rgba(0, 0, 0, 0.2);
+  border-width: 0;
 }
 
 .dropdown-item {

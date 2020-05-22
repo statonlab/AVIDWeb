@@ -1,8 +1,8 @@
 <template>
-    <tr>
-        <td class="p-0"></td>
-        <td class="p-0"></td>
-        <td class="p-0" :class="{'shadow-primary': focusedCell === 'date'}">
+    <form class="tr" @submit.prevent="save">
+        <div class="td p-0 border-top-0"></div>
+        <div class="td p-0 border-top-0"></div>
+        <div class="td p-0" :class="{'outline-primary': focusedCell === 'date'}">
             <date-picker
                     v-model="date"
                     color="green"
@@ -12,40 +12,49 @@
                     :input-props="{class: 'form-control px-3 border-0 w-100 cell-h', placeholder: 'Measurement Date' }"
                     :popover="{ visibility: 'click' }">
             </date-picker>
-        </td>
-        <td class="p-0" :class="{'shadow-primary': focusedCell === 'located'}">
+        </div>
+        <div class="td p-0" :class="{'outline-primary': focusedCell === 'located'}">
             <select
                     @focusin="focusedCell = 'located'"
                     @focusout="focusedCell = null"
+                    v-model="form.is_located"
                     class="form-control border-0 py-0 cell-h">
                 <option value="">Located?</option>
-                <option value="">Yes</option>
-                <option value="">No</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
             </select>
-        </td>
-        <td class="p-0" :class="{'shadow-primary': focusedCell === 'alive'}">
+        </div>
+        <div class="td p-0" :class="{'outline-primary': focusedCell === 'alive'}">
             <select @focusin="focusedCell = 'alive'"
                     @focusout="focusedCell = null"
+                    v-model="form.is_alive"
                     class="form-control border-0 py-0 cell-h focus-outlined">
                 <option value="">Alive?</option>
-                <option value="">Yes</option>
-                <option value="">No</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
             </select>
-        </td>
-        <td class="p-0" :class="{'shadow-primary': focusedCell === 'height'}">
-            <input class="form-control px-3 border-0 w-100 cell-h focus-outlined"
-                   @focusin="focusedCell = 'height'"
-                   @focusout="focusedCell = null"
-                   type="number"
-                   step="any"
-                   min="0"
-                   placeholder="Height">
-        </td>
-    </tr>
+        </div>
+        <div class="td p-0" :class="{'outline-primary': focusedCell === 'height'}">
+            <div class="d-flex">
+                <input class="form-control px-3 border-0 w-100 cell-h focus-outlined flex-grow-1"
+                       @focusin="focusedCell = 'height'"
+                       @focusout="focusedCell = null"
+                       type="number"
+                       step="any"
+                       min="0"
+                       v-model="form.height"
+                       placeholder="Height">
+                <button class="cell-h btn btn-primary rounded-0" type="submit">
+                    Save
+                </button>
+            </div>
+        </div>
+    </form>
 </template>
 
 <script>
   import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+  import Form from '../../forms/Form'
 
   export default {
     name: 'InlineMeasurementForm',
@@ -55,7 +64,14 @@
     data() {
       return {
         date: null,
-        focusedCell: null
+        focusedCell: null,
+
+        form: new Form({
+          date: '',
+          is_alive: '',
+          is_located: '',
+          height: ''
+        })
       }
     },
 
@@ -66,8 +82,12 @@
     },
 
     methods: {
-      fd() {
-        this.focusedCell = 'date'
+      async save() {
+        this.loading = true
+        try {} catch (e) {
+          console.error(e)
+        }
+        this.loading = false
       }
     }
   }

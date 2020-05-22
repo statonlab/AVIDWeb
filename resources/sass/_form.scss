@@ -52,8 +52,9 @@ label {
   border-color: $primary;
 }
 
-.shadow-primary {
+.outline-primary {
   outline: solid $primary 2px;
+  outline-offset: -2px;
   position: relative;
   z-index: 1;
 }

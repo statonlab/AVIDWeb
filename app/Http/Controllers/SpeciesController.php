@@ -21,7 +21,7 @@ class SpeciesController extends Controller
 
         $this->validate($request, [
             'search' => 'nullable|max:255',
-            'plant_type_id' => 'nullable|exists:plants,id',
+            'plant_type_id' => 'nullable|exists:plant_types,id',
             'limit' => 'nullable',
         ]);
 
