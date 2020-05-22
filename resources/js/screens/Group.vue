@@ -58,6 +58,12 @@
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0 hover-visible" v-if="User.owns(group)">
+                                    <button class="btn btn-link btn-sm mr-0"
+                                            v-tooltip="'Edit Member'"
+                                            v-if="group.owner.id !== user.id"
+                                            @click.prevent="edit(user)">
+                                        <icon name="create"/>
+                                    </button>
                                     <button class="btn btn-link"
                                             v-tooltip="`Remove Member`"
                                             v-if="group.owner.id !== user.id">
@@ -102,8 +108,11 @@
                 </div>
                 <div class="col-md-8">
                     <sites-data-view
+                            :editable="permissions ? Boolean(permissions.can_edit) : false"
                             :url="`/web/groups/${group.id}/sites`"
+                            :site-url-prefix="`/app/groups/${group.id}/sites`"
                             :show-owner="true"
+                            :unauthorized-message="'You do not have permission to view sites for this group.'"
                             @load="sitesLoaded($event)"
                     />
                 </div>
@@ -130,6 +139,14 @@
                 @update="updated($event)"
                 @close="closeForm"
         />
+
+        <user-form
+            v-if="showUserForm"
+            :group="group"
+            :user="member"
+            @update="memberUpdated($event)"
+            @close="closeUserForm"
+        />
     </div>
 </template>
 
@@ -140,20 +157,24 @@
   import InvitationForm from '../forms/InvitationForm'
   import User from '../helpers/User'
   import GroupForm from '../forms/GroupForm'
+  import UserForm from '../forms/UserForm'
   import SitesDataView from '../components/Data/SitesDataView'
 
   export default {
     name: 'Group',
 
-    components: {SitesDataView, GroupForm, InvitationForm, Icon, Avatar, InlineSpinner},
+    components: {SitesDataView, GroupForm, UserForm, InvitationForm, Icon, Avatar, InlineSpinner},
 
     data() {
       return {
         User          : User,
         group         : null,
+        member        : null,
         loading       : true,
+        permissions   : null,
         showInviteForm: false,
         showGroupForm : false,
+        showUserForm  : false,
         accepted      : false,
         page          : 1,
         lastPage      : 1,
@@ -163,6 +184,7 @@
 
     mounted() {
       this.loadGroup()
+      this.loadPermissions()
       if (typeof this.$route.query.accepted !== 'undefined') {
         this.accepted = true
         this.$router.replace({
@@ -184,6 +206,18 @@
         this.loading = false
       },
 
+      async loadPermissions() {
+        this.loading = true
+        const {id}   = this.$route.params
+        try {
+          const {data}      = await axios.get(`/web/groups/${id}/permissions`)
+          this.permissions  = data
+        } catch (e) {
+          console.error(e)
+        }
+        this.loading = false
+      },
+
       invitationCreated(invitation) {
         this.showInviteForm = false
 
@@ -193,12 +227,26 @@
         }
       },
 
+      edit(member) {
+        this.member = member
+        this.showUserForm = true
+      },
+
       updated(group) {
         this.closeForm()
         this.group = {
           ...this.group,
           ...group,
         }
+      },
+
+      memberUpdated(member) {
+        this.closeUserForm()
+        this.group.users = this.group.users.map(u => u.id === member.id ? member : u)
+      },
+
+      closeUserForm() {
+        this.showUserForm = false
       },
 
       closeForm() {

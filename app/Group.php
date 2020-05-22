@@ -34,6 +34,7 @@ class Group extends Model
         return $this->belongsToMany(User::class)->withPivot([
             'is_leader',
             'can_view',
+            'can_edit',
         ]);
     }
 

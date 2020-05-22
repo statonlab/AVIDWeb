@@ -90,7 +90,7 @@ class SiteController extends Controller
         $site->species()->sync($request->species);
         $site->shrubs()->sync($request->shrubs);
 
-        $site->load(['county', 'state']);
+        $site->load(['county', 'state', 'species', 'shrubs']);
         $site->loadCount(['plants', 'plots']);
 
         return $this->created($site);
@@ -155,7 +155,7 @@ class SiteController extends Controller
         $site->species()->sync($request->species);
         $site->shrubs()->sync($request->shrubs);
 
-        $site->load(['county', 'state', 'species', 'shrubs']);
+        $site->load(['user', 'county', 'state', 'species', 'shrubs']);
         $site->loadCount(['plants', 'plots']);
 
         return $this->created($site);
