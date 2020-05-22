@@ -35,9 +35,10 @@ class SiteController extends Controller
             'order_by' => 'nullable|in:name,plots_count,plants_count,last_measured_at',
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
+            'limit' => 'nullable|integer',
         ]);
 
-        $sites = $this->getSites($user->sites())->paginate(20);
+        $sites = $this->getSites($user->sites())->paginate($request->limit ?? 20);
 
         return $this->success($sites);
     }
