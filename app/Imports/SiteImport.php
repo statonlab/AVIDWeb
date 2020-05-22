@@ -13,10 +13,16 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 
 class SiteImport implements ToModel, WithHeadingRow, WithValidation
 {
+    /** @var Site $site */
     protected $site;
 
+    /** @var User $user */
     protected $user;
 
+    /**
+     * @param \App\User $user
+     * @param \App\Site $site
+     */
     public function __construct(User $user, Site $site)
     {
         $this->user = $user;
@@ -30,6 +36,7 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
     */
     public function model(array $row)
     {
+        /** @var Plant $plant */
         $plant = Plant::with(['plot'])->get()
             ->where('plot.number', $row['plot'])
             ->where('tag', $row['tag'])

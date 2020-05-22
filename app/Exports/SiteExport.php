@@ -11,10 +11,13 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
+    /** @var User $user */
     protected $user;
 
+    /** @var Site $site */
     protected $site;
 
+    /** @var int $prev_measurements_count */
     protected $prev_measurements_count;
 
     public function __construct(Site $site)
@@ -24,6 +27,9 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
         $this->site = $site;
     }
 
+    /**
+     * @return array
+     */
     public function headings(): array
     {
         $header = ['Site', 'Plot', 'Quadrant', 'Tag', 'Species'];
