@@ -4,31 +4,50 @@
             <modal-card>
                 <modal-header>
                     <modal-title>
-                        Edit Member
+                        {{ `Editing permissions for ${user.name}` }}
                     </modal-title>
                     <close @click.prevent.stop="$emit('close')"/>
                 </modal-header>
                 <modal-body>
-                    <div class="form-check mb-1">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               value="1"
-                               :checked="form.can_view"
-                               @change="form.can_view = $event.target.checked"
-                               id="can-view">
-                        <label class="form-check-label font-weight-normal" for="can-view">
-                            Allow user to view sites
+                    <div class="custom-control custom-radio">
+                        <input type="radio"
+                               id="radio-no-permissions"
+                               name="no-permissions"
+                               class="custom-control-input"
+                               v-model="permission"
+                               v-on:change="updatePermissions"
+                               :value="'no_permissions'">
+                        <label class="custom-control-label"
+                               for="radio-no-permissions">
+                            {{ 'User can neither view nor edit' }}
                         </label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               value="1"
-                               :checked="form.can_edit"
-                               @change="form.can_edit = $event.target.checked"
-                               id="can-edit">
-                        <label class="form-check-label font-weight-normal" for="can-edit">
-                            Allow user to edit sites
+
+                    <div class="custom-control custom-radio">
+                        <input type="radio"
+                               id="radio-view-only"
+                               name="view-only"
+                               class="custom-control-input"
+                               v-model="permission"
+                               v-on:change="updatePermissions"
+                               :value="'view_only'">
+                        <label class="custom-control-label"
+                               for="radio-view-only">
+                            {{ 'User can view only' }}
+                        </label>
+                    </div>
+
+                    <div class="custom-control custom-radio">
+                        <input type="radio"
+                               id="radio-view-edit"
+                               name="view-edit"
+                               class="custom-control-input"
+                               v-model="permission"
+                               v-on:change="updatePermissions"
+                               :value="'view_edit'">
+                        <label class="custom-control-label"
+                               for="radio-view-edit">
+                            {{ 'User can view and edit' }}
                         </label>
                     </div>
                 </modal-body>
@@ -70,6 +89,7 @@
     data() {
       return {
         loading: false,
+        permission: '',
         form   : new Form({
           user_id  : '',
           can_view : '',
@@ -84,6 +104,7 @@
         can_view : this.user.pivot.can_view,
         can_edit : this.user.pivot.can_edit,
       })
+      this.setPermission()
     },
 
     methods: {
@@ -106,6 +127,33 @@
 
         this.loading = false
       },
+
+      setPermission() {
+        if (this.form.can_view && this.form.can_edit) {
+          this.permission = 'view_edit'
+        } else if (this.form.can_view) {
+          this.permission = 'view_only'
+        } else {
+          this.permission = 'no_permissions'
+        }
+      },
+
+      updatePermissions() {
+        switch (this.permission) {
+          case 'no_permissions':
+            this.form.can_view = 0
+            this.form.can_edit = 0
+            break
+          case 'view_only':
+            this.form.can_view = 1
+            this.form.can_edit = 0
+            break
+          case 'view_edit':
+            this.form.can_view = 1
+            this.form.can_edit = 1
+            break
+        }
+      }
     },
   }
 </script>
