@@ -22,7 +22,7 @@ div.table {
     display: table-row;
     &:last-child {
       .th, .td {
-        border-bottom: 1px solid $border-color;
+        //border-bottom: 1px solid $border-color;
       }
     }
   }
@@ -38,13 +38,17 @@ div.table {
     border-right: 1px solid $border-color;
 
     &:first-child {
-      border-left: 1px solid $border-color;
+      //border-left: 1px solid $border-color;
+    }
+
+    &:last-child {
+      border-right: 0;
     }
   }
 }
 
 .vc-popover-content-wrapper.is-interactive {
-  z-index: 999999!important;
+  z-index: 9999999!important;
 }
 
 .border-bottom-2 {

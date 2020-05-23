@@ -41,4 +41,13 @@ export default class Errors {
   clearAll() {
     this.errors = {}
   }
+
+  toArray() {
+    const errors = []
+    Object.keys(this.errors).forEach(key => {
+      this.errors[key].forEach(error => errors.push(error))
+    })
+
+    return errors
+  }
 }

@@ -6,10 +6,10 @@
             <date-picker
                     v-model="date"
                     color="green"
-                    @popoverDidShow="dateFocused = 'date'"
-                    @popoverDidHide="dateFocused = null"
+                    @popoverWillShow="focusedCell = 'date'"
+                    @popoverWillHide="focusedCell = null"
                     :max-date="new Date()"
-                    :input-props="{class: 'form-control px-3 border-0 w-100 cell-h', placeholder: 'Measurement Date' }"
+                    :input-props="{class: 'form-control px-3 border-0 w-100 cell-h', placeholder: 'mm/dd/yyyy' }"
                     :popover="{ visibility: 'click' }">
             </date-picker>
         </div>
@@ -44,8 +44,9 @@
                        min="0"
                        v-model="form.height"
                        placeholder="Height">
-                <button class="cell-h btn btn-primary rounded-0" type="submit">
-                    Save
+                <button class="cell-h btn btn-primary rounded-0" :class="{'text-transparent': loading}" type="submit" :disabled="loading">
+                    <inline-spinner v-if="loading" class="position-absolute text-white ml-2"/>
+                    <span>Save</span>
                 </button>
             </div>
         </div>
@@ -55,41 +56,59 @@
 <script>
   import DatePicker from 'v-calendar/lib/components/date-picker.umd'
   import Form from '../../forms/Form'
+  import InlineSpinner from '../InlineSpinner'
+  import moment from 'moment'
 
   export default {
     name: 'InlineMeasurementForm',
 
-    components: {DatePicker},
+    components: {InlineSpinner, DatePicker},
+
+    props: {
+      plant: {required: true},
+    },
 
     data() {
       return {
-        date: null,
+        date       : null,
         focusedCell: null,
-
-        form: new Form({
-          date: '',
-          is_alive: '',
+        loading    : false,
+        form       : new Form({
+          date      : '',
+          is_alive  : '',
           is_located: '',
-          height: ''
-        })
-      }
-    },
-
-    watch: {
-      focusedCell() {
-        console.log(this.focusedCell)
+          height    : '',
+        }),
       }
     },
 
     methods: {
       async save() {
         this.loading = true
-        try {} catch (e) {
+        try {
+          this.form.date = this.date ? moment(this.date).format('YYYY-MM-DD') : ''
+          const {data}   = await this.form.post(`/web/plants/${this.plant.id}/measurements`)
+          this.$emit('create', data)
+          this.$notify({
+            type: 'success',
+            text: 'Measurement created successfully',
+          })
+          this.form.reset()
+          this.date = null
+        } catch (e) {
+          if (e.response && e.response.status === 422) {
+            this.$alert({
+              title: 'Please Review The Following',
+              text: this.form.errors.toArray().join(' ')
+            })
+          } else {
+            this.$alert('Unable to create measurement. Please try refreshing the page or report the error to us!')
+          }
           console.error(e)
         }
         this.loading = false
-      }
-    }
+      },
+    },
   }
 </script>
 

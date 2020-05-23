@@ -26,6 +26,7 @@
                        @keydown.down="down()"
                        @keydown.enter="options.length > 0 && select(options[0], 0)">
             </div>
+            <slot name="header"/>
             <a href="#"
                @keydown.up="up(index)"
                v-for="(option, index) in options"
@@ -33,11 +34,13 @@
                @click.prevent="select(option, index)">
                 {{ option.label }}
             </a>
+            <slot/>
             <p v-if="options.length === 0 && emptyMessage.length"
                class="text-center text-muted p-2 mb-0">{{ emptyMessage }}</p>
             <p v-if="endMessage.length" class="text-center text-muted p-2 mb-0">
                 <small>{{ endMessage }}</small>
             </p>
+            <slot name="footer"/>
         </div>
     </div>
 </template>

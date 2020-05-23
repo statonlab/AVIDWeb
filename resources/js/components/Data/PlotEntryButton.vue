@@ -6,7 +6,7 @@
                 <icon name="caret-down"/>
             </a>
             <div class="dropdown-menu">
-                <a href="#" class="dropdown-item pl-2 d-flex align-items-center">
+                <a href="#" class="dropdown-item pl-2 d-flex align-items-center" @click.prevent="$emit('addPlant')">
                     <icon name="add"/>
                     <span>New Plant</span>
                 </a>
