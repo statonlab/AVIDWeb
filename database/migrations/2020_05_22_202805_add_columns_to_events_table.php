@@ -14,11 +14,10 @@ class AddColumnsToEventsTable extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->string('event_type');
-            $table->dateTimeTz('event_end')->nullable();
             $table->text('contact_info')->nullable();
-
-            $table->dateTimeTz('event_start')->change();
+            $table->string('timezone');
+            $table->string('event_type');
+            $table->dateTime('event_end')->nullable();
         });
     }
 
@@ -33,8 +32,7 @@ class AddColumnsToEventsTable extends Migration
             $table->dropColumn('event_type');
             $table->dropColumn('event_end');
             $table->dropColumn('contact_info');
-
-            $table->dateTime('event_start')->change();
+            $table->dropColumn('timezone');
         });
     }
 }

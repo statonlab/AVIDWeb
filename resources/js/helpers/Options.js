@@ -57,8 +57,9 @@ export default {
     ],
 
     timezones: [
-        'Eastern Standard Time (EST)',
-        'Central Standard Time (CST)',
-        ' '
-    ]
+        'EST',
+        'CST',
+        'MST',
+        'PST',
+    ],
 }

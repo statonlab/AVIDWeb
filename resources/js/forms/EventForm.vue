@@ -28,11 +28,11 @@
                     <div class="row position-static">
                         <div class="form-group col-lg-6 position-static">
                             <label>
-                                Date
+                                Event Start
                                 <required/>
                             </label>
                             <date-picker
-                                    v-model="date"
+                                    v-model="start_date"
                                     :popover="{ visibility: 'click' }"
                                     color="green"
                                     :input-props="{
@@ -50,10 +50,10 @@
                                 <required/>
                             </label>
                             <select type="text"
-                                    name="hour"
-                                    id="hour"
+                                    name="start-hour"
+                                    id="start-hour"
                                     class="form-control"
-                                    v-model="hour">
+                                    v-model="start_hour">
                                 <option v-for="hour in options.hours" :value="hour">{{hour}}</option>
                             </select>
                         </div>
@@ -64,11 +64,86 @@
                                 <required/>
                             </label>
                             <select type="text"
-                                    name="minute"
-                                    id="minute"
+                                    name="start-minute"
+                                    id="start-minute"
                                     class="form-control"
-                                    v-model="minute">
+                                    v-model="start_minute">
                                 <option v-for="minute in options.minutes" :value="minute">{{minute}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row position-static">
+                        <div class="form-group col-lg-6 position-static">
+                            <label>
+                                Event End
+                            </label>
+                            <date-picker
+                                    v-model="end_date"
+                                    :popover="{ visibility: 'click' }"
+                                    color="green"
+                                    :input-props="{
+                                        class: 'form-control'+(form.errors.has('date') ? ' is-invalid':''),
+                                        placeholder: 'End Date',
+                                    }"/>
+                            <p class="mb-0 form-text text-danger" v-if="form.errors.has('date')">
+                                {{ form.errors.first('date') }}
+                            </p>
+                        </div>
+
+                        <div class="form-group col-lg-3 position-static">
+                            <label>
+                                Hour
+                            </label>
+                            <select type="text"
+                                    name="end-hour"
+                                    id="end-hour"
+                                    class="form-control"
+                                    v-model="end_hour">
+                                <option v-for="hour in options.hours" :value="hour">{{hour}}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-lg-3 position-static">
+                            <label>
+                                Minute
+                            </label>
+                            <select type="text"
+                                    name="end-minute"
+                                    id="end-minute"
+                                    class="form-control"
+                                    v-model="end_minute">
+                                <option v-for="minute in options.minutes" :value="minute">{{minute}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row position-static">
+                        <div class="form-group col-lg-6 position-static">
+                            <label>
+                                Timezone
+                                <required/>
+                            </label>
+                            <select type="text"
+                                    name="timezone"
+                                    id="timezone"
+                                    class="form-control"
+                                    v-model="form.timezone">
+                                <option v-for="timezone in options.timezones" :value="timezone">{{timezone}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6 position-static">
+                            <label>
+                                Event Type
+                                <required/>
+                            </label>
+                            <select type="text"
+                                    name="event-type"
+                                    id="event-type"
+                                    class="form-control"
+                                    v-model="form.event_type">
+                                <option value="In-Person">In-Person</option>
+                                <option value="Webinar">Webinar</option>
                             </select>
                         </div>
                     </div>
@@ -151,11 +226,26 @@
                                :class="['form-control',  {'is-invalid': form.errors.has('link')}]"
                                name="link"
                                id="link"
-                               placeholder="Address"
+                               placeholder="Link"
                                v-model="form.url">
                         <small class="form-text text-danger" v-if="form.errors.has('link')">
                             {{ form.errors.first('link') }}
                         </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-info">
+                            Contact Information
+                        </label>
+                        <textarea type="text"
+                                  class="form-control"
+                                  id="contact-info"
+                                  name="contact-info"
+                                  v-model="form.contact_info"
+                                  placeholder="Contact information" />
+                        <span class="form-text text-danger" v-if="form.errors.has('contact')">
+                            {{ form.errors.first('contact') }}
+                        </span>
                     </div>
 
                     <div class="form-group">
@@ -235,13 +325,20 @@
           ...this.event,
           image            : null,
           event_start      : this.event.event_start ? moment.utc(this.event.event_start).format('YYYY-MM-DD h:mm') : null,
+          event_end        : this.event.event_start ? moment.utc(this.event.event_end).format('YYYY-MM-DD h:mm') : null,
           notification_date: this.event.notification_date ? moment.utc(this.event.notification_date).format('YYYY-MM-DD') : null
         })
 
         this.notification_date = this.event.notify_at ? moment(this.event.notify_at).toDate() : null
-        this.date = moment(this.event.starts_at).toDate()
-        this.hour = moment.utc(this.event.event_start).format('HH')
-        this.minute = moment.utc(this.event.event_start).format('mm')
+        this.start_date = moment(this.event.starts_at).toDate()
+        this.start_hour = moment.utc(this.event.event_start).format('HH')
+        this.start_minute = moment.utc(this.event.event_start).format('mm')
+
+        if (this.event.event_end) {
+          this.end_date = moment(this.event.ends_at).toDate()
+          this.end_hour = moment.utc(this.event.event_end).format('HH')
+          this.end_minute = moment.utc(this.event.event_end).format('mm')
+        }
 
         if (this.event.image) {
           this.showFileUpload = false
@@ -251,18 +348,25 @@
 
     data() {
       return {
-        date                : null,
-        notification_date   : null,
-        hour       : '00',
-        minute     : '00',
+        notification_date: null,
+        start_date       : null,
+        start_hour       : '00',
+        start_minute     : '00',
+        end_date         : null,
+        end_hour         : '00',
+        end_minute       : '00',
         form          : new Form({
           title            : '',
           description      : '',
           url              : '',
           image            : null,
           event_start      : null,
+          event_end        : null,
           notification_date: null,
+          contact_info     : null,
           address          : '',
+          event_type       : 'In-Person',
+          timezone         : 'EST',
         }),
         options       : Options,
         loading       : false,
@@ -290,7 +394,8 @@
         if (this.form.image) {
           this.form.setAsFile('image')
         }
-        this.form.event_start = moment.utc(this.date).format('YYYY-MM-DD') + " " + this.hour + ':' + this.minute
+        this.form.event_start = moment.utc(this.start_date).format('YYYY-MM-DD') + ' ' + this.start_hour + ':' + this.start_minute
+        this.form.event_end   = moment.utc(this.end_date).format('YYYY-MM-DD')   + ' ' + this.end_hour   + ':' + this.end_minute
         try {
           const {data} = await this.form.post('/web/events')
           this.$notify({
@@ -315,7 +420,8 @@
         if (this.form.image) {
           this.form.setAsFile('image')
         }
-        this.form.event_start = moment.utc(this.date).format('YYYY-MM-DD') + " " + this.hour + ':' + this.minute
+        this.form.event_start = moment.utc(this.start_date).format('YYYY-MM-DD') + " " + this.start_hour + ':' + this.start_minute
+        this.form.event_end   = moment.utc(this.end_date).format('YYYY-MM-DD')   + ' ' + this.end_hour   + ':' + this.end_minute
         try {
           const {data} = await this.form.post(`/web/events/${this.event.id}/update`)
           this.$notify({
