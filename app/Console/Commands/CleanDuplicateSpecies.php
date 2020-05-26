@@ -42,7 +42,8 @@ class CleanDuplicateSpecies extends Command
         $deleted = 0;
 
         foreach (Species::cursor() as $species) {
-            $duplicates = Species::where('name', $species->name);
+            $duplicates = Species::where('name', $species->name)
+                ->where('plant_type_id', $species->plant_type_id);
             if ($duplicates->count() > 1) {
                 $duplicates = $duplicates->orderBy('id', 'desc')->get();
                 $original = $duplicates->pop();
