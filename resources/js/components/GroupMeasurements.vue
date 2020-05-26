@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h1 class="page-title mb-3">Measurements</h1>
-
         <measurements-data-view
             :unauthorized-message="'You do not have permission to view measurements for this group.'"
             :back-url-prefix="`/app/groups/${this.$route.params.group_id}/plots`"
