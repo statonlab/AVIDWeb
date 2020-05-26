@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h1 class="page-title mb-3">Plots</h1>
-
         <plots-data-view
                 :unauthorized-message="'You do not have permission to view plots for this group.'"
                 :editable="permissions ? Boolean(permissions.can_edit) : false"
