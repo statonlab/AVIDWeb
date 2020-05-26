@@ -1,5 +1,6 @@
 <template>
     <div class="card">
+            <h1 class="page-title p-2 ml-1">Sites</h1>
         <div class="card-body p-0 table-responsive">
             <p class="mb-0 p-4" v-if="loading">
                 <inline-spinner class="text-primary"/>
@@ -26,7 +27,6 @@
                             <icon :name="sortIcon('last_measured_at')"/>
                         </a>
                     </th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
