@@ -15,6 +15,7 @@
         </div>
         <div class="td p-0" :class="{'outline-primary': focusedCell === 'located'}">
             <select
+                    title="Has the plant been located?"
                     @focusin="focusedCell = 'located'"
                     @focusout="focusedCell = null"
                     v-model="form.is_located"
@@ -27,6 +28,7 @@
         <div class="td p-0" :class="{'outline-primary': focusedCell === 'alive'}">
             <select @focusin="focusedCell = 'alive'"
                     @focusout="focusedCell = null"
+                    title="Is the plant alive?"
                     v-model="form.is_alive"
                     class="form-control border-0 py-0 cell-h focus-outlined">
                 <option value="">Alive?</option>
@@ -42,9 +44,13 @@
                        type="number"
                        step="any"
                        min="0"
+                       title="Height"
                        v-model="form.height"
                        placeholder="Height">
-                <button class="cell-h btn btn-primary rounded-0" :class="{'text-transparent': loading}" type="submit" :disabled="loading">
+                <button class="cell-h btn btn-primary rounded-0"
+                        :class="{'text-transparent': loading}"
+                        type="submit"
+                        :disabled="loading">
                     <inline-spinner v-if="loading" class="position-absolute text-white ml-2"/>
                     <span>Save</span>
                 </button>
@@ -65,7 +71,8 @@
     components: {InlineSpinner, DatePicker},
 
     props: {
-      plant: {required: true},
+      plant      : {required: true},
+      defaultDate: {required: false, default: null},
     },
 
     data() {
@@ -79,27 +86,49 @@
           is_located: '',
           height    : '',
         }),
+        ready      : true,
       }
+    },
+
+    watch: {
+      date(date) {
+        this.form.date = this.getDate(date)
+
+        if (this.ready) {
+          this.$emit('date', date)
+        }
+      },
+
+      defaultDate: {
+        immediate: true,
+        handler(date) {
+          // Prevent infinite loop
+          this.ready = false
+          this.date  = date
+          this.$nextTick(() => {
+            this.ready = true
+          })
+        },
+      },
     },
 
     methods: {
       async save() {
         this.loading = true
         try {
-          this.form.date = this.date ? moment(this.date).format('YYYY-MM-DD') : ''
-          const {data}   = await this.form.post(`/web/plants/${this.plant.id}/measurements`)
+          const {data} = await this.form.post(`/web/plants/${this.plant.id}/measurements`)
           this.$emit('create', data)
           this.$notify({
             type: 'success',
             text: 'Measurement created successfully',
           })
           this.form.reset()
-          this.date = null
+          this.form.date = this.getDate(this.date)
         } catch (e) {
           if (e.response && e.response.status === 422) {
             this.$alert({
               title: 'Please Review The Following',
-              text: this.form.errors.toArray().join(' ')
+              text : this.form.errors.toArray().join(' '),
             })
           } else {
             this.$alert('Unable to create measurement. Please try refreshing the page or report the error to us!')
@@ -107,6 +136,10 @@
           console.error(e)
         }
         this.loading = false
+      },
+
+      getDate(date) {
+        return date ? moment(date).format('YYYY-MM-DD') : ''
       },
     },
   }
