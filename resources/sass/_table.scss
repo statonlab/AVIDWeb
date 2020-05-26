@@ -1,15 +1,56 @@
 .table > thead > tr > th {
-    color: $gray-600;
+  color: $gray-600;
 }
 
 .table-middle {
-    > thead,
-    > tbody {
-        > tr {
-            > th,
-            > td {
-                vertical-align: middle;
-            }
-        }
+  > thead,
+  > tbody {
+    > tr {
+      > th,
+      > td {
+        vertical-align: middle;
+      }
     }
+  }
+}
+
+div.table {
+  display: table;
+  width: 100%;
+
+  .tr {
+    display: table-row;
+    &:last-child {
+      .th, .td {
+        //border-bottom: 1px solid $border-color;
+      }
+    }
+  }
+
+  .th {
+    font-weight: $font-weight-bold;
+  }
+
+  .th, .td {
+    display: table-cell;
+    padding: .5rem .75rem;
+    border-top: 1px solid $border-color;
+    border-right: 1px solid $border-color;
+
+    &:first-child {
+      //border-left: 1px solid $border-color;
+    }
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+}
+
+.vc-popover-content-wrapper.is-interactive {
+  z-index: 9999999!important;
+}
+
+.border-bottom-2 {
+  border-bottom: 2px solid $border-color;
 }

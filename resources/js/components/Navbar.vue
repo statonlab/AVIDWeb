@@ -5,7 +5,7 @@
                     @click.prevent="$emit('toggle')">
                 <icon name="menu" class="text-lg"/>
             </button>
-            <a class="navbar-brand ml-2" href="#">AVID</a>
+            <a class="navbar-brand ml-2" href="/">AVID</a>
         </div>
 
         <div class="d-flex flex-grow-1">
@@ -55,7 +55,7 @@
                     <a href="#" class="nav-link mr-1 text-decoration-none p-0" data-toggle="dropdown">
                         <avatar :user="user" small translucent :tooltip="false" class="float-left avatar-navbar mr-1"/>
                     </a>
-                    <div class="dropdown-menu dropdown-menu- navbar-dropdown">
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown">
                         <router-link to="/app/profile" class="dropdown-item">
                             <icon name="person"/>
                             <span>Profile</span>

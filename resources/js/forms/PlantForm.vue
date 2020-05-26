@@ -204,7 +204,6 @@
 
     async mounted() {
       await this.loadTypes()
-      await this.loadSpecies()
       if (this.plant) {
         this.form.setDefault(this.plant)
       }
@@ -217,6 +216,7 @@
           const {data}            = await axios.get('/web/plant-types')
           this.plants             = data
           this.form.plant_type_id = data[0].id
+          await this.loadSpecies()
         } catch (e) {
           this.$alert('Unable to load form. Please try refreshing the page.')
         }
