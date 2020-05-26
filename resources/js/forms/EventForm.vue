@@ -99,6 +99,7 @@
                                 name="address"
                                 id="address"
                                 v-model="form.address"
+                                placeholder="Address"
                                 autofocus>
                         <small class="form-text text-danger" v-if="form.errors.has('address')">
                             {{ form.errors.first('address') }}
@@ -146,12 +147,12 @@
                         <label>
                             Link
                         </label>
-                        <input
-                                type="text"
-                                :class="['form-control',  {'is-invalid': form.errors.has('link')}]"
-                                name="link"
-                                id="link"
-                                v-model="form.url">
+                        <input type="text"
+                               :class="['form-control',  {'is-invalid': form.errors.has('link')}]"
+                               name="link"
+                               id="link"
+                               placeholder="Address"
+                               v-model="form.url">
                         <small class="form-text text-danger" v-if="form.errors.has('link')">
                             {{ form.errors.first('link') }}
                         </small>
