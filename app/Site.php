@@ -26,7 +26,7 @@ class Site extends Model
         'last_measured_at',
     ];
     protected $casts = [
-        'last_measured_at' => 'date',
+        'last_measured_at' => 'date:Y-m-d',
     ];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

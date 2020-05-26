@@ -32,7 +32,7 @@ class Plot extends Model
      * @var string[]
      */
     protected $casts = [
-        'last_measured_at' => 'date',
+        'last_measured_at' => 'date:Y-m-d',
     ];
 
     /**

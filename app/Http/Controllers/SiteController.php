@@ -6,6 +6,9 @@ use App\Http\Controllers\Traits\ListsSites;
 use App\Site;
 use App\User;
 use Illuminate\Http\Request;
+use App\Exports\SiteExport;
+use App\Imports\SiteImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SiteController extends Controller
 {
@@ -32,9 +35,10 @@ class SiteController extends Controller
             'order_by' => 'nullable|in:name,plots_count,plants_count,last_measured_at',
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
+            'limit' => 'nullable|integer',
         ]);
 
-        $sites = $this->getSites($user->sites())->paginate(20);
+        $sites = $this->getSites($user->sites())->paginate($request->limit ?? 20);
 
         return $this->success($sites);
     }
@@ -172,5 +176,27 @@ class SiteController extends Controller
         $site->delete();
 
         return $this->created('Site deleted successfully');
+    }
+
+    public function export(Site $site)
+    {
+        $this->authorize('view', $site);
+
+        return Excel::download(new SiteExport($site), "$site->name.xlsx");
+    }
+
+    public function import(Site $site, Request $request)
+    {
+        $user = $request->user();
+
+        $this->authorize('create', $site);
+
+        $this->validate($request, [
+            'file' => 'required|file',
+        ]);
+
+        Excel::import(new SiteImport($user, $site), $request->file('file'));
+
+        return $this->success('Measurements uploaded successfully.');
     }
 }

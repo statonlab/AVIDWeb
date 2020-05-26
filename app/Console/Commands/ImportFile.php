@@ -266,6 +266,7 @@ class ImportFile extends Command
     {
         return Species::firstOrCreate([
             'name' => trim($name),
+            'plant_type_id' => $this->plantType->id,
         ]);
     }
 
