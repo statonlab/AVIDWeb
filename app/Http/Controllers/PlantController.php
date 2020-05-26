@@ -112,7 +112,9 @@ class PlantController extends Controller
         $new_species = null;
 
         if ($request->new_species) {
-            $species = Species::where('name', $request->new_species_name)->first();
+            $species = Species::where('name', $request->new_species_name)
+                ->where('plant_type_id', $request->plant_type_id)
+                ->first();
             if ($species !== null) {
                 $new_species = $species;
             } else {
@@ -188,6 +190,7 @@ class PlantController extends Controller
             'plant_type_id' => 'required|exists:plant_types,id',
             'tag' => 'required|integer',
             'quadrant' => "required|in:$quadrants",
+            'new_species' => 'nullable|boolean'
         ]);
 
         if ($request->tag != $plant->tag) {
@@ -201,9 +204,25 @@ class PlantController extends Controller
             }
         }
 
+        $new_species = null;
+
+        if ($request->new_species) {
+            $species = Species::where('name', $request->new_species_name)
+                ->where('plant_type_id', $request->plant_type_id)
+                ->first();
+            if ($species !== null) {
+                $new_species = $species;
+            } else {
+                $new_species = Species::create([
+                    'name' => $request->new_species_name,
+                    'plant_type_id' => $request->plant_type_id,
+                ]);
+            }
+        }
+
         $plant->fill([
             'plant_type_id' => $request->plant_type_id,
-            'species_id' => $request->species_id,
+            'species_id' => $new_species ? $new_species->id : $request->species_id,
             'tag' => $request->tag,
             'quadrant' => $request->quadrant,
         ])->save();
