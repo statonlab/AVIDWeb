@@ -101,6 +101,11 @@
                                     <td>{{ plant.measurements_count }}</td>
                                     <td>
                                         <div class="d-flex justify-content-end hover-visible">
+                                            <router-link :to="`${siteUrlPrefix}/${plant.id}`"
+                                                         class="btn btn-sm btn-link"
+                                                         v-tooltip="'View Measurements'">
+                                                <icon name="eye"/>
+                                            </router-link>
                                             <button type="button" class="btn btn-sm btn-link"
                                                     v-tooltip="'Edit'"
                                                     v-if="editable || User.owns(plant) || User.can('update sites')"
