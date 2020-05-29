@@ -32,6 +32,7 @@ import Events from './screens/Events'
 import BetaData from './screens/BetaData'
 import BetaSite from './screens/BetaSite'
 import DataEntry from './screens/DataEntry'
+import Statistics from './screens/Statistics'
 
 Vue.use(Alert)
 Vue.use(VueNotification)
@@ -67,6 +68,7 @@ const routes = [
   {path: '/app/beta/sites/:id', component: BetaSite},
   {path: '/app/events', component: Events},
   {path: '/app/data-entry', component: DataEntry},
+  {path: '/app/statistics', component: Statistics},
 ]
 
 const router = new VueRouter({

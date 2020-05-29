@@ -49,6 +49,7 @@ Route::group([
     Route::get('/reminders', 'HomeController@data');
     Route::get('/events', 'HomeController@data');
     Route::get('/data-entry', 'HomeController@data');
+    Route::get('/statistics', 'HomeController@data');
 });
 
 /**
@@ -164,4 +165,7 @@ Route::group([
     // Data Entry
     Route::get('/data-entry/sites', 'DataEntryController@sites');
     Route::get('/data-entry/sites/{site}/plots', 'DataEntryController@plots');
+
+    // Statistics
+    Route::get('/statistics/sites', 'StatisticsController@sites');
 });
