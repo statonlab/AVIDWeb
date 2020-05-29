@@ -81,7 +81,7 @@
                             <span>New Plot</span>
                         </button>
                     </div>
-                    <table class="table table-middle mb-0" v-if="!unauthorized && !loading && plots.length > 0">
+                    <table class="table table-nowrap table-middle mb-0" v-if="!unauthorized && !loading && plots.length > 0">
                         <thead>
                         <tr>
                             <th>
