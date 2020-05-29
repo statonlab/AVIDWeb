@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Measurement;
 use App\Species;
 use App\Plant;
 use App\Plot;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PlantController extends Controller
@@ -87,7 +89,8 @@ class PlantController extends Controller
             'plant_type_id' => 'required|exists:plant_types,id',
             'tag' => 'required|integer',
             'quadrant' => "required|in:$quadrants",
-            'new_species' => 'nullable|boolean'
+            'new_species' => 'nullable|boolean',
+            'new_measurement' => 'nullable|boolean',
         ]);
 
         if ($request->new_species) {
@@ -98,6 +101,20 @@ class PlantController extends Controller
             $this->validate($request, [
                 'species_id' => 'required|exists:species,id',
             ]);
+        }
+
+        if ($request->new_measurement) {
+            $this->validate($request, [
+                'date' => 'required|date_format:Y-m-d',
+                'is_located' => 'required|boolean',
+            ]);
+
+            if ($request->is_located == 1) {
+                $this->validate($request, [
+                    'height' => 'required|numeric',
+                    'is_alive' => 'required|boolean',
+                ]);
+            }
         }
 
         $exists = Plant::where('tag', $request->tag)
@@ -139,6 +156,17 @@ class PlantController extends Controller
             'type',
             'plot',
         ]);
+
+        if ($request->new_measurement) {
+            Measurement::create([
+                'plant_id' => $plant->id,
+                'user_id' => $request->user()->id,
+                'is_located' => $request->is_located == 1,
+                'date' => Carbon::createFromFormat('Y-m-d', $request->date),
+                'height' => $request->is_located == 1 ? $request->height : null,
+                'is_alive' => $request->is_located == 1 ? $request->is_alive == 1 : null,
+            ]);
+        }
 
         $plant->loadCount(['measurements']);
 
