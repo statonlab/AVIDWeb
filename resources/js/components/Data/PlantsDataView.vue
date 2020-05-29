@@ -53,7 +53,7 @@
                             <div class="p-4 text-muted" v-if="plants.length === 0">
                                 No plants found. Please use the add plant button above to add one.
                             </div>
-                            <table class="table mb-0" v-if="plants.length > 0">
+                            <table class="table table-middle table-nowrap mb-0" v-if="plants.length > 0">
                                 <thead>
                                 <tr>
                                     <th>
