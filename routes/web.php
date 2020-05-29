@@ -48,6 +48,7 @@ Route::group([
     Route::get('/admin/sites', 'HomeController@data');
     Route::get('/reminders', 'HomeController@data');
     Route::get('/events', 'HomeController@data');
+    Route::get('/data-entry', 'HomeController@data');
 });
 
 /**
@@ -153,9 +154,14 @@ Route::group([
     // Admin Sites
     Route::get('/admin/sites', 'Admin\SiteController@index');
 
+    // Reminders
     Route::get('/reminders', 'ReminderController@index');
     Route::post('/reminders', 'ReminderController@create');
     Route::get('/reminders/{reminder}', 'ReminderController@show');
     Route::put('/reminders/{reminder}', 'ReminderController@update');
     Route::delete('/reminders/{reminder}', 'ReminderController@destroy');
+
+    // Data Entry
+    Route::get('/data-entry/sites', 'DataEntryController@sites');
+    Route::get('/data-entry/sites/{site}/plots', 'DataEntryController@plots');
 });

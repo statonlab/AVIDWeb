@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h1 class="page-title mb-3">Plants</h1>
-
         <plants-data-view/>
     </div>
 </template>

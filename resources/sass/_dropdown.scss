@@ -1,18 +1,19 @@
 .dropdown-menu {
-    //box-shadow: $box-shadow, 0 0 1px rgba(0,0,0,.2);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175), 0 0 1px rgba(0, 0, 0, .2);
+  border-width: 0;
 }
 
 .dropdown-item {
-    color: $gray-700;
+  color: $gray-700;
 
-    &.active {
-        background-color: rgba($primary, .1);
-        color: darken($primary, 15%);
-    }
+  &.active {
+    background-color: rgba($primary, .1);
+    color: darken($primary, 15%);
+  }
 
-    .icon {
-        width: 24px;
-        margin-right: .5rem;
-        color: $gray-600;
-    }
+  .icon {
+    width: 24px;
+    margin-right: .5rem;
+    color: $gray-600;
+  }
 }

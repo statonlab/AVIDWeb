@@ -318,8 +318,6 @@
     },
 
     mounted() {
-      console.log(this.event)
-
       if (this.event) {
         this.form.setDefault({
           ...this.event,
