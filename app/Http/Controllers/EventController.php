@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Image;
 use App\Event;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Storage;
 
 class EventController extends Controller
@@ -48,6 +49,7 @@ class EventController extends Controller
             }
 
             $event->starts_at = $event->event_start->format('Y-m-d H:i:s');
+            $event->ends_at = $event->event_end->format('Y-m-d H:i:s');
 
             return $event;
         });
@@ -65,15 +67,7 @@ class EventController extends Controller
     {
         $this->authorize('create', Event::class);
 
-        $this->validate($request, [
-            'title' => 'required|max:255',
-            'description' => 'required',
-            'event_start' => 'required|date_format:Y-m-d H:i',
-            'url' => 'nullable|url',
-            'image' => 'nullable|image|max:5120',
-            'notification_date' => 'nullable|date',
-            'address' => 'nullable|max:255',
-        ]);
+        $this->validate($request, $this->validationRules());
 
         $image = null;
 
@@ -89,9 +83,13 @@ class EventController extends Controller
             'image_id' => $image ? $image->id : null,
             'description' => $request->description,
             'event_start' => $request->event_start,
+            'event_end' => $request->event_end,
             'url' => $request->url,
+            'timezone' => $request->timezone,
             'notification_date' => $request->notification_date,
             'address' => $request->address,
+            'event_type' => $request->event_type,
+            'contact_info' => $request->contact_info,
         ]);
 
         return $this->created($event);
@@ -109,15 +107,7 @@ class EventController extends Controller
     {
         $this->authorize('update', $event);
 
-        $this->validate($request, [
-            'title' => 'required|max:255',
-            'description' => 'required',
-            'event_start' => 'required|date_format:Y-m-d H:i',
-            'url' => 'nullable|url',
-            'image' => 'nullable|image|max:5120',
-            'notification_date' => 'nullable|date_format:Y-m-d',
-            'address' => 'nullable|max:255',
-        ]);
+        $this->validate($request, $this->validationRules());
 
         $image = null;
 
@@ -144,8 +134,12 @@ class EventController extends Controller
             'description' => $request->description,
             'url' => $request->url,
             'event_start' => $request->event_start,
+            'event_end' => $request->event_end,
+            'timezone' => $request->timezone,
             'notification_date' => $request->notification_date,
             'address' => $request->address,
+            'event_type' => $request->event_type,
+            'contact_info' => $request->contact_info,
         ])->save();
 
         $event->load(['image']);
@@ -196,5 +190,34 @@ class EventController extends Controller
         $event->delete();
 
         return $this->deleted('Event deleted');
+    }
+
+    /**
+     * Validation rules for `create` and `update` methods.
+     *
+     * @return array
+     */
+    public function validationRules()
+    {
+        $timezones = [
+            'EST',
+            'CST',
+            'MST',
+            'PST',
+        ];
+
+        return [
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'contact_info' => 'nullable',
+            'event_start' => 'required|date_format:Y-m-d H:i',
+            'event_end' => 'required|date_format:Y-m-d H:i',
+            'timezone' => ['required', Rule::in($timezones)],
+            'url' => 'nullable|url',
+            'image' => 'nullable|image|max:5120',
+            'notification_date' => 'nullable|date',
+            'address' => 'nullable|max:255',
+            'event_type' => 'required|max:255',
+        ];
     }
 }

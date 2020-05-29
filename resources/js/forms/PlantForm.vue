@@ -114,6 +114,93 @@
                         If you cannot find the species from the dropdown,
                         <a href="#" @click.prevent="form.new_species = true"> you can click here to create a new one.</a>
                     </p>
+
+                    <button class="btn btn-link"
+                            v-if="!this.plant && !form.new_measurement"
+                            @click.prevent="form.new_measurement = true">
+                        <icon name="add"/>
+                        <span>Add a Measurement</span>
+                    </button>
+
+                    <div class="row position-static" v-if="!this.plant && form.new_measurement">
+                        <div class="form-group col-lg-6 position-static">
+                            <label>
+                                Date
+                                <required/>
+                            </label>
+                            <date-picker
+                                    v-model="date"
+                                    color="green"
+                                    :max-date="new Date()"
+                                    :input-props="{
+                                        class: 'form-control'+(form.errors.has('date') ? ' is-invalid':''),
+                                        placeholder: 'Collection Date',
+                                    }"/>
+                            <p class="mb-0 form-text text-danger" v-if="form.errors.has('date')">
+                                {{ form.errors.first('date') }}
+                            </p>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="located">
+                                Was Plant Located?
+                                <required/>
+                            </label>
+                            <select name="is_located"
+                                    id="located"
+                                    class="form-control"
+                                    :class="{'is-invalid': form.errors.has('is_located')}"
+                                    v-model="form.is_located">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                            <p class="mb-0 form-text text-danger" v-if="form.errors.has('is_located')">
+                                {{ form.errors.first('is_located') }}
+                            </p>
+                        </div>
+                        <div class="form-group col-lg-6" v-if="form.is_located === '1'">
+                            <label for="alive">
+                                Was Plant Alive?
+                                <required/>
+                            </label>
+                            <select name="is_alive"
+                                    id="alive"
+                                    v-model="form.is_alive"
+                                    :class="{'is-invalid': form.errors.has('is_located')}"
+                                    class="form-control">
+                                <option value="">Select One</option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                            <p class="mb-0 form-text text-danger" v-if="form.errors.has('is_alive')">
+                                {{ form.errors.first('is_alive') }}
+                            </p>
+                        </div>
+                        <div class="form-group col-lg-6" v-if="form.is_located === '1'">
+                            <label for="height">
+                                Height (inches)
+                                <required/>
+                            </label>
+                            <div class="input-group input-appended">
+                                <input id="height"
+                                       type="text"
+                                       v-model="form.height"
+                                       class="form-control"
+                                       :class="{'is-invalid': form.errors.has('height')}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">in.</span>
+                                </div>
+                            </div>
+                            <p class="mb-0 form-text text-danger" v-if="form.errors.has('height')">
+                                {{ form.errors.first('height') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-link"
+                            v-if="form.new_measurement"
+                            @click.prevent="form.new_measurement = false">
+                        <span>Cancel Measurement Creation</span>
+                    </button>
                 </modal-body>
                 <modal-footer class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary" :disabled="saving">
@@ -142,11 +229,15 @@
   import Close from '../components/Modal/Close'
   import Dropdown from '../components/Dropdown'
   import InlineSpinner from '../components/InlineSpinner'
+  import Icon from '../components/Icon'
+  import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+  import moment from 'moment'
 
   export default {
     name: 'PlantForm',
 
     components: {
+      DatePicker,
       InlineSpinner,
       Dropdown,
       Close,
@@ -157,6 +248,7 @@
       ModalCard,
       Modal,
       Required,
+      Icon,
     },
 
     props: {
@@ -169,11 +261,16 @@
         this.loadSpecies()
       },
 
+      date(date) {
+        this.form.date = date ? moment(date).format('YYYY-MM-DD') : null
+      },
+
       'form.species_id': {
         handler() {
           this.form.errors.clear('species_id')
         },
       },
+
       'form.plant_type_id': {
         handler() {
           this.loadSpecies()
@@ -182,11 +279,18 @@
     },
 
     data() {
+      const date = window.avid.last_entry
       return {
         plants: [],
         saving: false,
+        date  : date ? moment(date).toDate() : null,
 
         form: new Form({
+          new_measurement   : false,
+          date              : window.avid.last_entry,
+          is_located        : '0',
+          is_alive          : '',
+          height            : '',
           new_species       : false,
           new_species_name  : '',
           plant_type_id     : '',

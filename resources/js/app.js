@@ -75,6 +75,15 @@ const router = new VueRouter({
 })
 
 /**
+ * Hide tooltips before navigating to a new route.
+ */
+router.beforeEach((to, from, next) => {
+  $('[data-original-title]').tooltip('hide')
+
+  next()
+})
+
+/**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.

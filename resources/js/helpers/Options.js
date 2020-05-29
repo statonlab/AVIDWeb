@@ -54,5 +54,12 @@ export default {
         '45',
         '50',
         '55',
-    ]
+    ],
+
+    timezones: [
+        'EST',
+        'CST',
+        'MST',
+        'PST',
+    ],
 }
