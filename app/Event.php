@@ -16,8 +16,12 @@ class Event extends Model
         'address',
         'url',
         'event_start',
+        'event_end',
         'notification_date',
         'notified',
+        'event_type',
+        'contact_info',
+        'timezone',
     ];
 
     /**
@@ -25,6 +29,7 @@ class Event extends Model
      */
     protected $casts = [
         'event_start' => 'datetime',
+        'event_end' => 'datetime',
         'notification_date' => 'datetime',
         'notified' => 'boolean',
     ];
