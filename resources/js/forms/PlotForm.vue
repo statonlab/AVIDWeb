@@ -82,30 +82,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="basal_area">
-                            Basal Area
-                        </label>
-                        <div class="input-group">
-                            <input type="text"
-                                   name="basal_area"
-                                   id="basal_area"
-                                   placeholder="E,g. 36"
-                                   :class="['form-control', {'is-invalid': form.errors.has('basal_area')}]"
-                                   v-model="form.basal_area">
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    ft<sup>2</sup>/ac
-                                </span>
-                            </div>
-                        </div>
-                        <small class="form-text text-danger" v-if="form.errors.has('basal_area')">
-                            {{ form.errors.first('basal_area') }}
-                        </small>
-                    </div>
-
-                    <div class="form-group">
                         <label for="ground_cover">
                             Ground and Shrub Cover
+                            <required/>
                         </label>
                         <div class="input-group">
                             <select type="text"
@@ -127,6 +106,7 @@
                     <div class="form-group">
                         <label for="subcanopy">
                             Subcanopy
+                            <required/>
                         </label>
                         <div class="input-group">
                             <select type="text"
@@ -148,6 +128,7 @@
                     <div class="form-group">
                         <label for="canopy">
                             Canopy
+                            <required/>
                         </label>
                         <div class="input-group">
                             <select type="text"
@@ -169,6 +150,7 @@
                     <div class="form-group">
                         <label for="is_protected">
                             Is plot enclosed or protected from deer?
+                            <required/>
                         </label>
                         <div class="input-group">
                             <select type="text"
@@ -189,6 +171,7 @@
                     <div class="form-group">
                         <label for="protection_seasons">
                             If yes, for how many growing seasons?
+                            <required/>
                         </label>
                         <div class="input-group">
                             <select type="text"
@@ -218,6 +201,28 @@
                         <span class="form-text text-danger" v-if="form.errors.has('owner_contact')">
                             {{ form.errors.first('owner_contact') }}
                         </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="basal_area">
+                            Basal Area
+                        </label>
+                        <div class="input-group">
+                            <input type="text"
+                                   name="basal_area"
+                                   id="basal_area"
+                                   placeholder="E,g. 36"
+                                   :class="['form-control', {'is-invalid': form.errors.has('basal_area')}]"
+                                   v-model="form.basal_area">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    ft<sup>2</sup>/ac
+                                </span>
+                            </div>
+                        </div>
+                        <small class="form-text text-danger" v-if="form.errors.has('basal_area')">
+                            {{ form.errors.first('basal_area') }}
+                        </small>
                     </div>
                 </modal-body>
                 <modal-footer class="d-flex">
@@ -274,8 +279,8 @@
         loading: false,
         form   : new Form({
           number            : '',
-          latitude          : 42.6588992,
-          longitude         : -80.2590355,
+          latitude          : null,
+          longitude         : null,
           basal_area        : '',
           ground_cover      : '',
           subcanopy         : '',
