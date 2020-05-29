@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Site;
+use App\Measurement;
 use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
@@ -22,27 +23,84 @@ class StatisticsController extends Controller
             ->get());
     }
 
-    public function chart(Request $request)
+    public function chart(Site $site, Request $request)
     {
         $this->validate($request, [
-            'site' => 'required|exists:sites,id'
+            'plant_type_id' => 'nullable|exists:plant_types,id'
         ]);
 
-        $years = [];
         $protected = [];
         $unprotected = [];
 
-        $site = Site::with('plots.plants')->findOrFail($request->site);
+        $chart = [
+            'options' => [
+                'chart' => [
+                    'id' => 'sites-chart',
+                    'toolbar' => ['show' => false],
+                ],
+                'xaxis' => [
+                    'labels' => ['show' => false],
+                ],
+                'yaxis' => [
+                    'title' => [
+                        'text' => 'Height (inches)',
+                        'style' => [
+                            'fontSize' => '14px'
+                        ]
+                    ]
+                ],
+                'title' => ['text' => 'Annual Height at ' . $site->name],
+                'noData' => ['text' => 'No measurements found.'],
+            ],
+
+            'series' => [
+                ['name' => 'protected', 'data' => []],
+                ['name' => 'unprotected', 'data' => []],
+            ],
+        ];
+
+        $site = Site::with('plots.plants')->findOrFail($request->site->id);
 
         $measurements = Measurement::orderBy('date', 'asc')->get();
 
         $measurements->transform(function (Measurement $measurement) {
            $measurement->is_protected = $measurement->plot->is_protected;
            $measurement->site_id = $measurement->site->id;
+           $measurement->plant_type_id = $measurement->plant->plant_type_id;
 
            return $measurement;
         });
 
-        $years = range($measurements->first()->date->year, now()->year)
+        $measurements = $measurements->where('site_id', $site->id);
+
+        if ($request->plant_type_id) {
+            $measurements = $measurements->where('plant_type_id', $request->plant_type_id);
+        }
+
+        if ($measurements->isEmpty()) {
+            return $this->success($chart);
+        }
+
+        $years = range($measurements->first()->date->year, now()->year);
+
+        foreach ($years as $year) {
+            $annual = $measurements->where('date.year', $year);
+
+            $protected_average = $annual->where('is_protected', 1)->average('height');
+            $protected_average = number_format($protected_average, 2);
+
+            $unprotected_average = $annual->where('is_protected', 0)->average('height');
+            $unprotected_average = number_format($unprotected_average, 2);
+
+            array_push($protected, $protected_average);
+            array_push($unprotected, $unprotected_average);
+        }
+
+        $chart['options']['xaxis']['labels']['show'] = true;
+        $chart['options']['xaxis']['categories'] = $years;
+        $chart['series'][0]['data'] = $protected;
+        $chart['series'][1]['data'] = $unprotected;
+
+        return $this->success($chart);
     }
 }

@@ -81,11 +81,6 @@
             label: 'Data Entry'
           },
           {
-            icon: 'stats-chart-outline',
-            to: '/app/statistics',
-            label: 'My Statistics'
-          },
-          {
             icon : 'notifications-outline',
             to   : '/app/reminders',
             label: 'My Reminders',
