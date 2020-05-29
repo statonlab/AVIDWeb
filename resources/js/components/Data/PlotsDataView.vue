@@ -124,6 +124,12 @@
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end hover-visible">
+                                    <router-link :to="`${siteUrlPrefix}/${plot.id}`"
+                                                 class="btn btn-sm btn-link"
+                                                 v-tooltip="'View Plants'">
+                                        <icon name="eye"/>
+                                    </router-link>
+
                                     <button class="btn btn-link"
                                             v-if="editable || User.owns(plot) || User.can('update sites')"
                                             @click.prevent="edit(plot)" v-tooltip="'Edit'">
