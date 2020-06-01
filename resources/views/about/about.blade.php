@@ -5,11 +5,11 @@
         @include('components.navbar')
         <div class="container">
             <div class="d-flex">
-                <div class="row justify-content-center">
+                <div class="row">
                     <div class="card col-lg-8">
                         <div class="card-header">
                             <h1 class="page-title mb-2">Assessing Vegetation Impacts from Deer</h1>
-                            <h1 class="page-title mb-0">A Rapid Assessment Method for Evaluating Deer Impacts to Forest Vegetation</h1>
+                            <p class="text-muted mb-0">A Rapid Assessment Method for Evaluating Deer Impacts to Forest Vegetation</p>
                         </div>
                         <div class="card-body">
                             <p>AVID is a project to Assess Vegetation for Impacts from Deer. Plants are monitored each year to evaluate the impact of deer browsing. AVID is a method for volunteers, foresters, landowners and others to measure the effect of deer browse on New York forests. Volunteers are encouraged to use AVID to document this aspect of New York forest health. Participants will learn about forest and woodland ecology, how to identify spring wildflowers and trees, and develop an eye for recognizing signs of deer impacts.</p>

@@ -31,8 +31,8 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="aboutDropdown">
                         <a class="dropdown-item" href="/about">About</a>
-                        <a class="dropdown-item" href="#">Benefits of Using AVID</a>
-                        <a class="dropdown-item" href="#">Who We Are</a>
+                        <a class="dropdown-item" href="/about/benefits">Benefits of Using AVID</a>
+                        <a class="dropdown-item" href="/about/who">Who We Are</a>
                     </div>
                 </li>
                 @auth()

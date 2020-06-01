@@ -18,7 +18,11 @@ Auth::routes(['verify' => true]);
 Route::get('/web/images/storage/{image}', 'ImageController@serve');
 
 Route::get('/', 'HomeController@index')->name('home');
+
 Route::get('/about', 'AboutController@about')->name('about');
+Route::get('/about/benefits', 'AboutController@benefits')->name('benefits');
+Route::get('/about/who', 'AboutController@who')->name('who');
+
 Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
 
 /**
