@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\SiteUpdatedEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,9 +26,18 @@ class Site extends Model
         'diameter',
         'last_measured_at',
     ];
+
+    protected $dispatchesEvents = [
+        'updated' => SiteUpdatedEvent::class
+    ];
+
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'last_measured_at' => 'date:Y-m-d',
     ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

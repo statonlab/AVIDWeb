@@ -2,18 +2,11 @@
     <div>
         <div class="row">
             <div class="col-lg-6">
-                <dashboard-sites-card />
+                <dashboard-sites-card class="mb-3"/>
             </div>
             <div class="col-lg-6">
-                <div class="card mb-3">
-                    <div class="card-body d-flex align-items-center justify-content-center flex-column">
-                        <p class="font-weight-bold">Welcome to AVID!</p>
-                        <p>This page is under construction but you can visit "My Data" to manage your data.</p>
-                        <router-link class="btn btn-outline-primary" to="/app/sites">
-                            <icon name="file-tray-full"/>
-                            <span>My Data</span>
-                        </router-link>
-                    </div>
+                <div class="card mb-3 p-2">
+                    <reminders-calendar/>
                 </div>
             </div>
         </div>
@@ -23,11 +16,12 @@
 <script>
   import Icon from '../components/Icon'
   import DashboardSitesCard from '../components/DashboardSitesCard'
+  import RemindersCalendar from '../components/RemindersCalendar'
 
   export default {
     name      : 'Dashboard',
 
-    components: {Icon, DashboardSitesCard},
+    components: {RemindersCalendar, Icon, DashboardSitesCard},
   }
 </script>
 

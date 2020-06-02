@@ -22,11 +22,24 @@
                                    autofocus/>
                             <span class="ml-1">days after last measurement.</span>
                         </div>
-
                         <small class="form-text text-danger" v-if="form.errors.has('days')">
                             {{ form.errors.first('days') }}
                         </small>
                     </div>
+
+                    <div class="form-group">
+                        <label for="site">
+                            Site
+                            <required/>
+                        </label>
+                        <select name="site" id="site" v-model="form.site_id" class="custom-select">
+                            <option value="">Select a Site</option>
+                            <option v-for="site in sites" :value="site.id">
+                                {{ site.name }}
+                            </option>
+                        </select>
+                    </div>
+
                     <div>
                         <small><strong>Note</strong> that you will receive no more than 3 emails a week for each reminder.</small>
                     </div>
@@ -55,11 +68,12 @@
   import Close from '../components/Modal/Close'
   import Form from './Form'
   import InlineSpinner from '../components/InlineSpinner'
+  import Required from '../components/Required'
 
   export default {
     name: 'ReminderForm',
 
-    components: {InlineSpinner, Close, ModalFooter, ModalBody, ModalTitle, ModalHeader, ModalCard, Modal},
+    components: {Required, InlineSpinner, Close, ModalFooter, ModalBody, ModalTitle, ModalHeader, ModalCard, Modal},
 
     props: {
       reminder: {required: false},
@@ -70,7 +84,9 @@
         loading: false,
         form   : new Form({
           days: '',
+          site_id: '',
         }),
+        sites  : [],
       }
     },
 
@@ -78,9 +94,22 @@
       if (this.reminder) {
         this.form.setDefault(this.reminder)
       }
+
+      this.loadSites()
     },
 
     methods: {
+      async loadSites() {
+        this.loading = true
+        try {
+          const {data} = await axios.get('/web/sites', {params: {limit: 1000}})
+          this.sites   = data.data
+        } catch (e) {
+
+        }
+        this.loading = false
+      },
+
       save() {
         if (this.reminder) {
           this.update()

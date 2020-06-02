@@ -26,8 +26,10 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "@fullcalendar/bootstrap": "^4.4.2",
         "@fullcalendar/core": "^4.4.0",
         "@fullcalendar/daygrid": "^4.4.0",
+        "@fullcalendar/interaction": "^4.4.2",
         "@fullcalendar/list": "^4.4.0",
         "@fullcalendar/vue": "^4.4.0",
         "@ttskch/select2-bootstrap4-theme": "^1.4.0",
