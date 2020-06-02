@@ -27,7 +27,7 @@ class StatisticsController extends Controller
     public function chart(Site $site, Request $request)
     {
         $this->validate($request, [
-            'plant_type_id' => 'nullable|exists:plant_types,id'
+            'plant_type_id' => 'nullable|exists:plant_types,id',
         ]);
 
         $protected = [];
@@ -46,9 +46,9 @@ class StatisticsController extends Controller
                     'title' => [
                         'text' => 'Height (inches)',
                         'style' => [
-                            'fontSize' => '14px'
-                        ]
-                    ]
+                            'fontSize' => '14px',
+                        ],
+                    ],
                 ],
                 //'title' => ['text' => 'Annual Height at ' . $site->name],
                 'noData' => ['text' => 'No measurements found.'],
@@ -62,21 +62,19 @@ class StatisticsController extends Controller
 
         $site = Site::with('plots.plants')->findOrFail($request->site->id);
 
-        $measurements = Measurement::orderBy('date', 'asc')->get();
-
-        $measurements->transform(function (Measurement $measurement) {
-           $measurement->is_protected = $measurement->plot->is_protected;
-           $measurement->site_id = $measurement->site->id;
-           $measurement->plant_type_id = $measurement->plant->plant_type_id;
-
-           return $measurement;
-        });
-
-        $measurements = $measurements->where('site_id', $site->id);
+        $measurements = Measurement::where('site_id', $site->id)
+            ->with(['plot'])
+            ->orderBy('date', 'asc');
 
         if ($request->plant_type_id) {
-            $measurements = $measurements->where('plant_type_id', $request->plant_type_id);
+            $measurements->where(function ($query) use ($request) {
+                $query->whereHas('plant', function ($query) use ($request) {
+                    $query->where('plant_type_id', $request->plant_type_id);
+                });
+            });
         }
+
+        $measurements = $measurements->get();
 
         if ($measurements->isEmpty()) {
             return $this->success($chart);
@@ -87,10 +85,10 @@ class StatisticsController extends Controller
         foreach ($years as $year) {
             $annual = $measurements->where('date.year', $year);
 
-            $protected_average = $annual->where('is_protected', 1)->average('height');
+            $protected_average = $annual->where('plot.is_protected', 1)->average('height');
             $protected_average = number_format($protected_average, 2);
 
-            $unprotected_average = $annual->where('is_protected', 0)->average('height');
+            $unprotected_average = $annual->where('plot.is_protected', 0)->average('height');
             $unprotected_average = number_format($unprotected_average, 2);
 
             array_push($protected, $protected_average);

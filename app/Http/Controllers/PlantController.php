@@ -160,6 +160,8 @@ class PlantController extends Controller
         if ($request->new_measurement) {
             Measurement::create([
                 'plant_id' => $plant->id,
+                'plot_id' => $plant->plot->id,
+                'site_id' => $plant->plot->site_id,
                 'user_id' => $request->user()->id,
                 'is_located' => $request->is_located == 1,
                 'date' => Carbon::createFromFormat('Y-m-d', $request->date),

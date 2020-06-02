@@ -255,6 +255,8 @@ class ImportFile extends Command
             'is_located' => $located,
             'is_alive' => $located ? $is_alive === 'Yes' : null,
             'height' => $located ? empty($height) ? null : floatval($height) : null,
+            'site_id' => $site->id,
+            'plot_id' => $plot->id
         ]);
     }
 
