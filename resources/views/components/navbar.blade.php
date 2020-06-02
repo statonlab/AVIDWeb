@@ -13,14 +13,28 @@
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link font-weight-bold" href="#">User Guides</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle font-weight-bold{{ Route::is('getting-started') ? ' active' : ''}}"
+                       href="#"
+                       id="guidesDropdown"
+                       role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">
+                        User Guides
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="guidesDropdown">
+                        <a class="dropdown-item" href="/user-guides/getting-started">Getting Started</a>
+                        <a class="dropdown-item" href="/user-guides/spring-wildflowers">Spring Wildflowers</a>
+                        <a class="dropdown-item" href="/user-guides/woody-seedlings">Woody Seedlings</a>
+                        <a class="dropdown-item" href="/user-guides/exclosures">Exclosures</a>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link font-weight-bold" href="#">Resources</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle font-weight-bold active{{ Route::is('selection') ? ' active' : ''}}"
+                    <a class="nav-link dropdown-toggle font-weight-bold{{ Route::is('selection') ? ' active' : ''}}"
                        href="#"
                        id="sitesDropdown"
                        role="button"
@@ -39,7 +53,7 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle font-weight-bold active{{ Route::is('impacts') ? ' active' : ''}}"
+                    <a class="nav-link dropdown-toggle font-weight-bold{{ Route::is('impacts') ? ' active' : ''}}"
                        href="#"
                        id="impactsDropdown"
                        role="button"
@@ -56,7 +70,7 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle font-weight-bold active{{ Route::is('about') ? ' active' : ''}}"
+                    <a class="nav-link dropdown-toggle font-weight-bold{{ Route::is('about') ? ' active' : ''}}"
                        href="#"
                        id="aboutDropdown"
                        role="button"
