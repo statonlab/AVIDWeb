@@ -1,0 +1,56 @@
+.fc-day-grid-event .fc-content {
+  overflow: auto!important;
+  white-space: normal!important;
+}
+
+.fc-day-grid-event.fc-event {
+  padding: .25rem .5rem!important;
+  border-top-width: 0;
+  border-bottom-width: 0;
+  border-right-width: 0;
+  border-left-width: 3px!important;
+  cursor: pointer;
+}
+
+.fc-toolbar {
+  .fc-center > h2 {
+    font-size: 1.2rem;
+  }
+}
+
+.fc-button.fc-button-primary {
+  &,
+  .fc-button-group & {
+    background-color: $primary;
+    border-color: darken($primary, 5%);
+    padding: .25rem .5rem;
+    font-size: 1rem;
+    text-transform: capitalize;
+
+    .fc-icon {
+      font-size: 1rem;
+    }
+
+    &.fc-button-active {
+      background-color: darken($primary, 10%);
+      border-color: darken($primary, 5%);
+    }
+
+    &:active,
+    &:focus {
+      outline: none!important;
+      box-shadow: none!important;
+    }
+
+    &:hover,
+    &:active {
+      background-color: darken($primary, 10%);
+      border-color: lighten($primary, 5%);
+    }
+
+    &[disabled] {
+      background-color: lighten($primary, 5%) !important;
+      border-color: lighten($primary, 5%) !important;
+    }
+  }
+}

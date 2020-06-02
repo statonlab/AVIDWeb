@@ -1,6 +1,8 @@
 <template>
     <div class="card">
-            <h1 class="page-title p-2 ml-1">Sites</h1>
+        <div class="card-header">
+            <strong>Sites</strong>
+        </div>
         <div class="card-body p-0 table-responsive">
             <p class="mb-0 p-4" v-if="loading">
                 <inline-spinner class="text-primary"/>
@@ -57,7 +59,7 @@
   import moment from 'moment'
 
   export default {
-    name      : 'DashboardSitesCard',
+    name: 'DashboardSitesCard',
 
     components: {Icon, InlineSpinner},
 
@@ -70,15 +72,15 @@
         moment,
         loading : true,
         sites   : null,
-        orderBy     : 'last_measured_at',
-        orderDir    : 'desc',
+        orderBy : 'last_measured_at',
+        orderDir: 'desc',
       }
     },
 
     methods: {
       async loadSites() {
         try {
-          const {data}  = await axios.get(`/web/sites`, {
+          const {data} = await axios.get(`/web/sites`, {
             params     : {
               order_by : this.orderBy,
               order_dir: this.orderDir,
@@ -86,8 +88,8 @@
             },
             cancelToken: new axios.CancelToken(c => this._request = c),
           })
-          this.sites    = data.data
-          this.loading  = false
+          this.sites   = data.data
+          this.loading = false
         } catch (e) {
           if (!axios.isCancel(e)) {
             this.loading = false
@@ -118,6 +120,6 @@
 
         return 'arrow-down'
       },
-    }
+    },
   }
 </script>
