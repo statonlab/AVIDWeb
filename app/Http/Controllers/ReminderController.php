@@ -20,7 +20,7 @@ class ReminderController extends Controller
         /** @var \App\User $user */
         $user = $request->user();
 
-        return $this->success($user->reminders()->with('site')->get());
+        return $this->success($user->reminders()->with(['site'])->get());
     }
 
     /**
