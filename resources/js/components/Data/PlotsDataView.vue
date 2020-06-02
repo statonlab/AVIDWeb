@@ -25,7 +25,7 @@
                     </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="#" @click.prevent="importing = true">Import Spreadsheet</a>
-                        <a class="dropdown-item" :href="`/web/sites/${site.id}/export`">Export Spreadsheet</a>
+                        <a class="dropdown-item" :href="`/web/sites/${site.id}/export`" target="_blank">Export Spreadsheet</a>
                     </div>
                 </div>
                 <button class="btn btn-link mr-3"
@@ -81,7 +81,7 @@
                             <span>New Plot</span>
                         </button>
                     </div>
-                    <table class="table table-middle mb-0" v-if="!unauthorized && !loading && plots.length > 0">
+                    <table class="table table-nowrap table-middle mb-0" v-if="!unauthorized && !loading && plots.length > 0">
                         <thead>
                         <tr>
                             <th>

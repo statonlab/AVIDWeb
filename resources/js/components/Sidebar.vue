@@ -82,8 +82,17 @@
           },
           {
             icon : 'notifications-outline',
-            to   : '/app/reminders',
             label: 'My Reminders',
+            menu : [
+              {
+                label: 'Manage Reminders',
+                to   : '/app/reminders',
+              },
+              {
+                label: 'Calendar',
+                to   : '/app/calendar',
+              },
+            ],
           },
           {
             icon : 'people-outline',

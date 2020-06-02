@@ -1,7 +1,10 @@
 <template>
     <div class="card">
-        <div class="card-body p-2">
-            <div class="d-flex p-2 mb-1">
+        <div class="card-header d-flex">
+            <div class="flex-grow-1">
+                <strong>Annual Height Chart</strong>
+            </div>
+            <div class="flex-shrink-0 d-flex">
                 <dropdown class="bg-white"
                           :options="sites.map(s => ({label: s.name, value: s.id}))"
                           v-model="site">
@@ -11,6 +14,8 @@
                           v-model="type">
                 </dropdown>
             </div>
+        </div>
+        <div class="card-body p-2">
             <div class="mr-4" v-if="chart">
                 <apex-chart type="bar"
                             :options="chart.options"
@@ -44,6 +49,7 @@
         type        : '',
         plants      : [],
         loadingSites: false,
+        _request    : null,
       }
     },
 
@@ -54,20 +60,20 @@
 
       type() {
         this.loadChart()
-      }
+      },
     },
 
     computed: {
-        plantOptions: function() {
-          return [{label: 'All Plants', value: ''}].concat(this.plants.map(p => ({label: p.name, value: p.id})))
-        }
+      plantOptions: function () {
+        return [{label: 'All Plants', value: ''}].concat(this.plants.map(p => ({label: p.name, value: p.id})))
+      },
     },
 
     methods: {
       async loadTypes() {
         try {
-          const {data}            = await axios.get('/web/plant-types')
-          this.plants             = data
+          const {data} = await axios.get('/web/plant-types')
+          this.plants  = data
         } catch (e) {
           this.$alert('Unable to load plants. Please try refreshing the page.')
         }
@@ -92,40 +98,46 @@
       },
 
       async loadChart() {
+        if (this._request) {
+          this._request()
+        }
+
         try {
           if (this.site) {
             const {data} = await axios.get(`/web/statistics/${this.site}/chart`, {
               params: {
                 plant_type_id: this.type,
-              }
+              },
             })
-            this.chart = data
+            this.chart   = data
           }
         } catch (e) {
-          this.$alert('Unable to load sites. Please try refreshing the page or contact us.')
-          console.error(e)
+          if (!axios.isCancel()) {
+            this.$alert('Unable to load sites. Please try refreshing the page or contact us.')
+            console.error(e)
+          }
         }
       },
 
       setChartDefault() {
         this.chart = {
           options: {
-            chart: {
-              id: 'sites-chart',
+            chart : {
+              id     : 'sites-chart',
               toolbar: {show: false},
             },
-            xaxis: {
+            xaxis : {
               labels: {show: false},
             },
-            title: {text: 'Annual Height'},
+            // title : {text: 'Annual Height'},
             noData: {text: 'No measurements found.'},
           },
-          series: [
+          series : [
             {name: 'protected', data: []},
             {name: 'unprotected', data: []},
           ],
         }
-      }
+      },
     },
   }
 </script>

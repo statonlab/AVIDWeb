@@ -5,19 +5,9 @@
                 <h1 class="page-title">My Reminders</h1>
                 <p class="mb-0 text-muted">Schedule & manage reminders</p>
             </div>
-            <div class="ml-auto flex-shrink-0 pl-2">
-                <button class="btn btn-link" v-if="view === 'calendar'" @click.prevent="view = 'default'">
-                    <icon name="list"/>
-                    <span>List View</span>
-                </button>
-                <button class="btn btn-link" v-if="view === 'default'" @click.prevent="view = 'calendar'">
-                    <icon name="calendar"/>
-                    <span>Calendar View</span>
-                </button>
-            </div>
         </div>
 
-        <div class="card mb-3" v-if="view === 'default'">
+        <div class="card mb-3">
             <div class="d-flex card-header align-items-center">
                 <div class="flex-grow-1">
                     <strong>Reminders</strong>
@@ -53,17 +43,28 @@
                         </button>
                     </div>
                 </div>
-                <table class="table mb-0 table-hover" v-if="!loading && reminders.length > 0">
-                    <!--                    <thead>-->
-                    <!--                    <tr>-->
-                    <!--                        <th>Reminder</th>-->
-                    <!--                        <th></th>-->
-                    <!--                    </tr>-->
-                    <!--                    </thead>-->
+                <table class="table mb-0 table-middle table-nowrap table-hover" v-if="!loading && reminders.length > 0">
+                    <thead>
+                    <tr>
+                        <th>Reminder</th>
+                        <th>Last Measured At</th>
+                        <th></th>
+                    </tr>
+                    </thead>
                     <tbody>
                     <tr v-for="reminder in reminders" class="hover-visible-container">
-                        <td><strong>{{ reminder.days }} days</strong>
-                            <span class="text-muted">after last measurement</span></td>
+                        <td>
+                            <router-link :to="`/app/sites/${reminder.site.id}`">
+                                <strong>{{ reminder.site.name }}</strong>
+                            </router-link>
+                            <div>
+                                <strong>{{ reminder.days }} days</strong>
+                                <span class="text-muted">after last measurement</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span v-if="reminder.site.last_measured_at">{{ moment(reminder.site.last_measured_at).format('MMM Do, YYYY') }}</span>
+                        </td>
                         <td>
                             <div class="d-flex justify-content-end hover-visible">
                                 <button class="btn btn-link"
@@ -86,12 +87,6 @@
             </div>
         </div>
 
-        <div class="card mb-3" v-if="view === 'calendar'">
-            <div class="card-body">
-                <reminders-calendar/>
-            </div>
-        </div>
-
         <reminder-form
                 v-if="showForm"
                 :reminder="reminder"
@@ -105,7 +100,8 @@
 <script>
   import Icon from '../components/Icon'
   import ReminderForm from '../forms/ReminderForm'
-  import RemindersCalendar from '../components/RemindersCalendar'
+  import RemindersCalendar from '../components/Calendar'
+  import moment from 'moment'
 
   export default {
     name: 'Reminders',
@@ -114,11 +110,11 @@
 
     data() {
       return {
+        moment,
         reminders: [],
         showForm : false,
         reminder : null,
         loading  : true,
-        view     : 'default',
       }
     },
 

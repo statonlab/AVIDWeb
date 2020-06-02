@@ -62,7 +62,7 @@ class PlotController extends Controller
         // Is the user allowed to add plots to this site?
         $this->authorize('update', $site);
 
-        $this->validate($request, $this->validationRules());
+        $this->validate($request, $this->validationRules($request));
 
         /** @var \App\User $user */
         $user = $request->user();
@@ -140,7 +140,7 @@ class PlotController extends Controller
     {
         $this->authorize('update', $plot);
 
-        $this->validate($request, $this->validationRules(true));
+        $this->validate($request, $this->validationRules($request));
 
         if ($plot->number != $request->number) {
             $exists = Plot::where([
@@ -199,10 +199,10 @@ class PlotController extends Controller
     /**
      * Validation rules for `create` and `update` methods.
      *
-     * @param bool $is_update Set to true if validating an update request.
+     * @param Request $request
      * @return array
      */
-    public function validationRules(bool $is_update = false)
+    public function validationRules(Request $request)
     {
         $seasons = ['0', '1 to 2', 'Greater than or equal to 3'];
 
@@ -219,17 +219,22 @@ class PlotController extends Controller
             '90-100%',
         ];
 
-        return [
+        $rules = [
             'number' => 'required|integer',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
-            'basal_area' => 'nullable|numeric',
-            'is_protected' => 'nullable|boolean',
-            'protection_seasons' => ['nullable', Rule::in($seasons)],
-            'canopy' => ['nullable', Rule::in($percentages)],
-            'subcanopy' => ['nullable', Rule::in($percentages)],
-            'ground_cover' => ['nullable', Rule::in($percentages)],
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'is_protected' => 'required|boolean',
+            'canopy' => ['required', Rule::in($percentages)],
+            'subcanopy' => ['required', Rule::in($percentages)],
+            'ground_cover' => ['required', Rule::in($percentages)],
             'recorders' => 'nullable',
+            'basal_area' => 'nullable|numeric',
         ];
+
+        if ($request->is_protected) {
+            $rules['protection_seasons'] = ['required', Rule::in($seasons)];
+        }
+
+        return $rules;
     }
 }

@@ -32,6 +32,7 @@ import Events from './screens/Events'
 import BetaData from './screens/BetaData'
 import BetaSite from './screens/BetaSite'
 import DataEntry from './screens/DataEntry'
+import CalendarView from './screens/CalendarView'
 
 Vue.use(Alert)
 Vue.use(VueNotification)
@@ -63,6 +64,7 @@ const routes = [
   {path: '/app/groups/:id', component: Group},
   {path: '/app/admin/sites', component: AdminSites},
   {path: '/app/reminders', component: Reminders},
+  {path: '/app/calendar', component: CalendarView},
   {path: '/app/beta/sites', component: BetaData},
   {path: '/app/beta/sites/:id', component: BetaSite},
   {path: '/app/events', component: Events},
@@ -97,12 +99,15 @@ Vue.directive('tooltip', function (el, binding) {
   if (modifiers.length > 0) {
     placement = modifiers[0]
   }
+
   if (modifiers) {
-    $(el).tooltip({
+    const options = {
       title  : binding.value,
-      ...(placement ? {placement} : null),
+      ...(placement ? {placement} : {}),
       trigger: 'hover',
-    })
+    }
+
+    $(el).tooltip(options)
   }
 })
 

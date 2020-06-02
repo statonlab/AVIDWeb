@@ -13,29 +13,37 @@
       value: {
         required: false,
         type    : Object,
-        default : () => ({latitude: 42.6588992, longitude: -80.2590355}),
+        default : () => ({latitude: 40.354388, longitude: -95.998237}),
       },
     },
 
     mounted() {
+      let start_pos = {latitude: 40.354388, longitude: -95.998237}
+      if (this.value.latitude && this.value.longitude) {
+        start_pos = this.value
+      }
+
       Maps.load(() => {
-        const pos = new google.maps.LatLng(this.value.latitude, this.value.longitude)
+        const pos = new google.maps.LatLng(start_pos.latitude, start_pos.longitude)
         this.map  = new google.maps.Map(this.$refs.map, {
-          zoom  : 6,
+          zoom  : 4,
           center: pos,
         })
 
         this.map.addListener('click', this.selectLocation)
+      })
 
+      if (this.value.latitude && this.value.longitude) {
         this.marker = new google.maps.Marker({
           map     : this.map,
-          position: pos,
+          position: new google.maps.LatLng(start_pos.latitude, start_pos.longitude),
         })
-      })
+      }
     },
 
     data() {
       return {
+        pos   : {latitude: 40.354388, longitude: -95.998237},
         map   : null,
         marker: null,
       }
@@ -43,7 +51,7 @@
 
     watch: {
       'value.latitude' : {
-        handler(v) {
+        handler() {
           this.setMarkerPosition()
         },
       },
@@ -73,6 +81,12 @@
           if(v.latitude !== lat || v.longitude !== lng) {
             this.marker.setPosition(new google.maps.LatLng(v.latitude, v.longitude))
           }
+        } else {
+
+          this.marker = new google.maps.Marker({
+            map     : this.map,
+            position: new google.maps.LatLng(v.latitude, v.longitude),
+          })
         }
       }
     },

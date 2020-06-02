@@ -22,7 +22,8 @@
                 <p class="mb-0 p-4 text-muted" v-if="!loading && sites.length === 0 && !unauthorized">
                     No results found. Use the "New Site" button above to create a new one.
                 </p>
-                <table class="table mb-0 table-middle table-hover" v-if="!loading && sites.length > 0 && !unauthorized">
+                <table class="table mb-0 table-middle table-hover table-nowrap"
+                       v-if="!loading && sites.length > 0 && !unauthorized">
                     <thead>
                     <tr>
                         <th>
@@ -142,7 +143,7 @@
     data() {
       return {
         moment,
-        User: User,
+        User        : User,
         showSiteForm: false,
         sites       : [],
         loading     : false,
@@ -196,8 +197,8 @@
           if (!axios.isCancel(e)) {
             this.loading = false
             if (e.response && e.response.status === 403) {
-                this.unauthorized = true
-                return
+              this.unauthorized = true
+              return
             }
             console.error(e)
           }

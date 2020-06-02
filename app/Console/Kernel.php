@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\UpdateReminderEvents;
+use App\Jobs\SendReminders;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\SendEventNotifications;
@@ -25,9 +27,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Email users about upcoming events
-        // Commented out since we didn't link our mailgun mailing list yet.
-        // $schedule->command(SendEventNotifications::class)->dailyAt('8:00');
+        $schedule->command(UpdateReminderEvents::class)->daily();
+        $schedule->job(SendReminders::class)->dailyAt('4:00');
     }
 
     /**

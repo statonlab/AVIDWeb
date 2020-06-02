@@ -20,6 +20,7 @@ div.table {
 
   .tr {
     display: table-row;
+
     &:last-child {
       .th, .td {
         //border-bottom: 1px solid $border-color;
@@ -48,9 +49,16 @@ div.table {
 }
 
 .vc-popover-content-wrapper.is-interactive {
-  z-index: 9999999!important;
+  z-index: 9999999 !important;
 }
 
 .border-bottom-2 {
   border-bottom: 2px solid $border-color;
+}
+
+.table-nowrap {
+  > thead > tr > th,
+  > thead > tr > td {
+    white-space: nowrap;
+  }
 }

@@ -20,6 +20,7 @@ class StatisticsController extends Controller
         return $this->success($user->sites()
             ->orderBy('name', 'asc')
             ->with('plots')
+            ->select(['sites.id', 'sites.name'])
             ->get());
     }
 
@@ -49,7 +50,7 @@ class StatisticsController extends Controller
                         ]
                     ]
                 ],
-                'title' => ['text' => 'Annual Height at ' . $site->name],
+                //'title' => ['text' => 'Annual Height at ' . $site->name],
                 'noData' => ['text' => 'No measurements found.'],
             ],
 
