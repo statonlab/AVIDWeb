@@ -23,6 +23,18 @@ Route::get('/about', 'AboutController@about')->name('about');
 Route::get('/about/benefits', 'AboutController@benefits')->name('benefits');
 Route::get('/about/who', 'AboutController@who')->name('who');
 
+Route::get('/impacts', 'ImpactsController@impacts')->name('impacts');
+Route::get('/impacts/conditions', 'ImpactsController@conditions')->name('conditions');
+Route::get('/impacts/symptoms', 'ImpactsController@symptoms')->name('symptoms');
+Route::get('/impacts/effects', 'ImpactsController@effects')->name('effects');
+
+Route::get('/site-preparation', 'SitePreparationController@selection')->name('selection');
+Route::get('/site-preparation/key', 'SitePreparationController@key')->name('key');
+Route::get('/site-preparation/equipment', 'SitePreparationController@equipment')->name('equipment');
+Route::get('/site-preparation/plots', 'SitePreparationController@plots')->name('plots');
+Route::get('/site-preparation/quadrants', 'SitePreparationController@quadrants')->name('quadrants');
+Route::get('/site-preparation/data', 'SitePreparationController@data')->name('data');
+
 Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
 
 /**

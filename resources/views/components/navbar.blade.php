@@ -20,6 +20,42 @@
                     <a class="nav-link font-weight-bold" href="#">Resources</a>
                 </li>
                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle font-weight-bold active{{ Route::is('selection') ? ' active' : ''}}"
+                       href="#"
+                       id="sitesDropdown"
+                       role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">
+                        Site Selection
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sitesDropdown">
+                        <a class="dropdown-item" href="/site-preparation">Site Selection</a>
+                        <a class="dropdown-item" href="/site-preparation/key">Key</a>
+                        <a class="dropdown-item" href="/site-preparation/equipment">Equipment</a>
+                        <a class="dropdown-item" href="/site-preparation/plots">Plots</a>
+                        <a class="dropdown-item" href="/site-preparation/quadrants">Quadrants</a>
+                        <a class="dropdown-item" href="/site-preparation/data">Data</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle font-weight-bold active{{ Route::is('impacts') ? ' active' : ''}}"
+                       href="#"
+                       id="impactsDropdown"
+                       role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">
+                        Deer Impacts
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="impactsDropdown">
+                        <a class="dropdown-item" href="/impacts">Deer Impacts</a>
+                        <a class="dropdown-item" href="/impacts/conditions">Woodland Conditions</a>
+                        <a class="dropdown-item" href="/impacts/symptoms">Signs and Symptoms</a>
+                        <a class="dropdown-item" href="/impacts/effects">Forest Health Effects</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle font-weight-bold active{{ Route::is('about') ? ' active' : ''}}"
                        href="#"
                        id="aboutDropdown"

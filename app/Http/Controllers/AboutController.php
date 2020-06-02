@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class AboutController extends Controller
 {
     /**
-     * Show the about page.
+     * Show the About page.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
