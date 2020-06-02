@@ -44,6 +44,19 @@ Route::get('/user-guides/spring-wildflowers', 'UserGuidesController@springWildfl
 Route::get('/user-guides/woody-seedlings', 'UserGuidesController@woodySeedlings')->name('woody-seedlings');
 Route::get('/user-guides/exclosures', 'UserGuidesController@exclosures')->name('exclosures');
 
+// User Guides
+Route::get('/user-guides/getting-started', 'UserGuidesController@gettingStarted')->name('getting-started');
+Route::get('/user-guides/spring-wildflowers', 'UserGuidesController@springWildflowers')->name('spring-wildflowers');
+Route::get('/user-guides/woody-seedlings', 'UserGuidesController@woodySeedlings')->name('woody-seedlings');
+Route::get('/user-guides/exclosures', 'UserGuidesController@exclosures')->name('exclosures');
+
+// Resources
+Route::get('/resources/data-sheets', 'ResourcesController@dataSheets')->name('data-sheets');
+Route::get('/resources/identification', 'ResourcesController@identification')->name('identification');
+Route::get('/resources/manual', 'ResourcesController@manual')->name('manual');
+Route::get('/resources/references', 'ResourcesController@references')->name('references');
+
+
 Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
 
 /**

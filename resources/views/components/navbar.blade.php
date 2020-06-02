@@ -30,8 +30,22 @@
                         <a class="dropdown-item" href="/user-guides/exclosures">Exclosures</a>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link font-weight-bold" href="#">Resources</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle font-weight-bold{{ Route::is('data-sheets') ? ' active' : ''}}"
+                       href="#"
+                       id="resourcesDropdown"
+                       role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">
+                        Resources
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="resourcesDropdown">
+                        <a class="dropdown-item" href="/resources/data-sheets">Data Sheets</a>
+                        <a class="dropdown-item" href="/resources/identification">Identification</a>
+                        <a class="dropdown-item" href="/resources/references">References</a>
+                        <a class="dropdown-item" href="/resources/manual">Manual</a>
+                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle font-weight-bold{{ Route::is('selection') ? ' active' : ''}}"

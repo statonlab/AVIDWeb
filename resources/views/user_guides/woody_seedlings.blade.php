@@ -17,6 +17,16 @@
                             <p>Seedlings need to be vigorous and healthy. The height of 5 or more seedlings in the plot will be recorded and each seedling will be identified with an individually numbered tag. Record the height as “natural height” not extended height, measure straight up from the ground (at the base of the stem main stem) as if measured along a plumb-bob line from the ground to the highest location on a twig (not the tip of a leaf) (Figure 6). Attempt to distribute 2 or 3 seedlings in each quadrant, ideally with some seedlings located close to the center of the plot and others close to the edge of the plot. Record the quadrant and the height, to the nearest 0.5 inch, for each tagged seedling. Additional species can be tagged and measured within a plot if there are at least 5 stems. Additional species can be included, and some participants may choose to monitor several species. Typically one plot will have one or two species that are tagged and measured. You will establish 6 to 10 plots, each with a 6-ft radius. If you plan to implement both the Wildflower method and the Woody Seedling method, the same plots can be used for both provided that an adequate number of seedlings and wildflowers of your target species are present. Otherwise, additional plots should be established as needed.</p>
                             <p>Plots can be clustered or dispersed. Tags may be obtained from <a href="https://www.forestry-suppliers.com/index1.php">www.forestry-suppliers.com</a> (“utility slip on tags” item #79186) or other vendors. You may request tags from Cornell University Department of Natural Resources at <a href="mailto:kls20@cornell.edu">kls20@cornell.edu</a>.</p>
                             <p>In some stands, deer pressure will have been sufficiently severe that a 6-foot radius plot will not include a sufficient number of stems. In these circumstances, increase the number of plots until you have sufficient numbers of stems.</p>
+                            <div class="row">
+                                <div class="col-6">
+                                    <img class="img-fluid mb-2" src="/img/woody-seedlings-1.jpeg" />
+                                    <p class="text-muted">Figure 6. Seedlings should be measured from the ground at the base of the stem (or at that level) to the highest point of woody growth and not the tip of the leaf. Seedlings should not be straightened for measurement.</p>
+                                </div>
+                                <div class="col-6">
+                                    <img class="img-fluid mb-2" src="/img/woody-seedlings-2.jpeg" />
+                                    <p class="text-muted">Each seedling should be identified with an individually numbered tag.</p>
+                                </div>
+                            </div>
                             <table class="table">
                                 <thead>
                                 <th>High Preference Species</th>
@@ -57,6 +67,18 @@
                                 </tr>
                                 <tr>
                                     <td>Maple-leaf viburnum (<i>Viburnum acerifolium</i>)</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Witch-hobble (<i>Viburnum lantanoides</i>)</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Red elderberry (<i>Sambucus racemosa</i>)</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Blackberry and raspberry (<i>Rubus spp.</i>)</td>
                                     <td></td>
                                 </tr>
                                 </tbody>
