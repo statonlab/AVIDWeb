@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg{{ Route::is('home') ? ' navbar-dark' : ' navbar-light navbar-home'}}">
+<nav class="navbar navbar-expand-lg{{ Route::is('home') ? ' navbar-dark' : ' navbar-light bg-white shadow-sm'}}">
     <div class="container">
         <a class="navbar-brand" href="/">AVID</a>
         <button class="navbar-toggler"
@@ -122,10 +122,10 @@
                 @endauth()
             </ul>
             @auth()
-                <a href="/app" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-dark'}}">Dashboard</a>
+                <a href="/app" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-primary'}}">Dashboard</a>
             @endauth()
             @guest()
-                <a href="/register" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-dark'}}">Register</a>
+                <a href="/register" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-primary'}}">Register</a>
             @endguest
         </div>
     </div>
