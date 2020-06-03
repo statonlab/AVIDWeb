@@ -18,6 +18,45 @@ Auth::routes(['verify' => true]);
 Route::get('/web/images/storage/{image}', 'ImageController@serve');
 
 Route::get('/', 'HomeController@index')->name('home');
+
+// About
+Route::get('/about', 'AboutController@about')->name('about');
+Route::get('/about/benefits', 'AboutController@benefits')->name('benefits');
+Route::get('/about/who', 'AboutController@who')->name('who');
+
+// Deer Impacts
+Route::get('/impacts', 'ImpactsController@impacts')->name('impacts');
+Route::get('/impacts/conditions', 'ImpactsController@conditions')->name('conditions');
+Route::get('/impacts/symptoms', 'ImpactsController@symptoms')->name('symptoms');
+Route::get('/impacts/effects', 'ImpactsController@effects')->name('effects');
+
+// Site Preparation
+Route::get('/site-preparation', 'SitePreparationController@selection')->name('selection');
+Route::get('/site-preparation/key', 'SitePreparationController@key')->name('key');
+Route::get('/site-preparation/equipment', 'SitePreparationController@equipment')->name('equipment');
+Route::get('/site-preparation/plots', 'SitePreparationController@plots')->name('plots');
+Route::get('/site-preparation/quadrants', 'SitePreparationController@quadrants')->name('quadrants');
+Route::get('/site-preparation/data', 'SitePreparationController@data')->name('data');
+
+// User Guides
+Route::get('/user-guides/getting-started', 'UserGuidesController@gettingStarted')->name('getting-started');
+Route::get('/user-guides/spring-wildflowers', 'UserGuidesController@springWildflowers')->name('spring-wildflowers');
+Route::get('/user-guides/woody-seedlings', 'UserGuidesController@woodySeedlings')->name('woody-seedlings');
+Route::get('/user-guides/exclosures', 'UserGuidesController@exclosures')->name('exclosures');
+
+// User Guides
+Route::get('/user-guides/getting-started', 'UserGuidesController@gettingStarted')->name('getting-started');
+Route::get('/user-guides/spring-wildflowers', 'UserGuidesController@springWildflowers')->name('spring-wildflowers');
+Route::get('/user-guides/woody-seedlings', 'UserGuidesController@woodySeedlings')->name('woody-seedlings');
+Route::get('/user-guides/exclosures', 'UserGuidesController@exclosures')->name('exclosures');
+
+// Resources
+Route::get('/resources/data-sheets', 'ResourcesController@dataSheets')->name('data-sheets');
+Route::get('/resources/identification', 'ResourcesController@identification')->name('identification');
+Route::get('/resources/manual', 'ResourcesController@manual')->name('manual');
+Route::get('/resources/references', 'ResourcesController@references')->name('references');
+
+
 Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
 
 /**
