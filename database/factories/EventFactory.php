@@ -11,5 +11,9 @@ $factory->define(Event::class, function (Faker $faker) {
         'title' => $faker->word,
         'description' => $faker->paragraph,
         'notification_date' => now()->addWeek(),
+        'timezone' => $faker->randomElement(['EST', 'CST', 'MST', 'PST']),
+        'event_type' => $faker->randomElement(['Webinar', 'In-Person']),
+        'address' => $faker->address,
+        'contact_info' => $faker->text,
     ];
 });
