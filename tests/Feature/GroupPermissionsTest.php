@@ -195,6 +195,13 @@ class GroupPermissionsTest extends TestCase
         $response = $this->put("/web/plots/$plot->id", [
             'site_id' => $plot->site_id,
             'number' => 2,
+            'latitude' => $plot->latitude,
+            'longitude' => $plot->longitude,
+            'is_protected' => $plot->is_protected,
+            'protection_seasons' => $plot->protection_seasons,
+            'canopy' => $plot->canopy,
+            'subcanopy' => $plot->subcanopy,
+            'ground_cover' => $plot->ground_cover,
         ]);
 
         $response->assertForbidden();
@@ -206,6 +213,13 @@ class GroupPermissionsTest extends TestCase
         $response = $this->put("/web/plots/$plot->id", [
             'site_id' => $plot->site_id,
             'number' => 2,
+            'latitude' => $plot->latitude,
+            'longitude' => $plot->longitude,
+            'is_protected' => $plot->is_protected,
+            'protection_seasons' => $plot->protection_seasons,
+            'canopy' => $plot->canopy,
+            'subcanopy' => $plot->subcanopy,
+            'ground_cover' => $plot->ground_cover,
         ]);
 
         $response->assertSuccessful()->assertJsonFragment([
@@ -413,7 +427,9 @@ class GroupPermissionsTest extends TestCase
 
         $measurement = factory(Measurement::class)->create([
             'plant_id' => $plant->id,
-            'is_located' => 1,
+            'site_id' => $site->id,
+            'plot_id' => $plot->id,
+            'is_located' => 0,
         ]);
 
         $group->users()->updateExistingPivot($member->id, [
@@ -422,7 +438,9 @@ class GroupPermissionsTest extends TestCase
 
         $response = $this->put("/web/measurements/$measurement->id", [
             'date' => now()->format('Y-m-d'),
-            'is_located' => 0,
+            'is_located' => 1,
+            'is_alive' => $measurement->is_alive,
+            'height' => $measurement->height,
         ]);
 
         $response->assertForbidden();
@@ -433,11 +451,13 @@ class GroupPermissionsTest extends TestCase
 
         $response = $this->put("/web/measurements/$measurement->id", [
             'date' => now()->format('Y-m-d'),
-            'is_located' => 0,
+            'is_located' => 1,
+            'is_alive' => $measurement->is_alive,
+            'height' => $measurement->height,
         ]);
 
         $response->assertSuccessful()->assertJsonFragment([
-            'is_located' => false,
+            'is_located' => true,
         ]);
     }
 }
