@@ -63,13 +63,13 @@ class SiteController extends Controller
             'county_id' => 'required|exists:counties,id',
             'basal_area' => 'nullable|numeric',
             'diameter' => 'nullable|numeric',
-            'city' => 'nullable|max:255',
+            'city' => 'required|max:255',
             'owner_name' => 'nullable|max:255',
             'owner_contact' => 'nullable',
-            'species' => 'nullable|array',
-            'species.*' => 'nullable|exists:species,id',
-            'shrubs' => 'nullable|array',
-            'shrubs.*' => 'nullable|exists:species,id',
+            'species' => 'required|array',
+            'species.*' => 'required|exists:species,id',
+            'shrubs' => 'required|array',
+            'shrubs.*' => 'required|exists:species,id',
         ]);
 
         $site = Site::create([
@@ -133,13 +133,13 @@ class SiteController extends Controller
             'county_id' => 'required|exists:counties,id',
             'basal_area' => 'nullable|numeric',
             'diameter' => 'nullable|numeric',
-            'city' => 'nullable|max:255',
+            'city' => 'required|max:255',
             'owner_name' => 'nullable|max:255',
             'owner_contact' => 'nullable',
-            'species' => 'nullable|array',
-            'species.*' => 'nullable|exists:species,id',
-            'shrubs' => 'nullable|array',
-            'shrubs.*' => 'nullable|exists:species,id',
+            'species' => 'required|array',
+            'species.*' => 'required|exists:species,id',
+            'shrubs' => 'required|array',
+            'shrubs.*' => 'required|exists:species,id',
         ]);
 
         $site->fill([
