@@ -85,6 +85,12 @@ class PlotControllerTest extends TestCase
 
         $this->post("/web/sites/$site->id/plots", [
             'site_id' => $site->id,
+            'latitude' => 0,
+            'longitude' => 0,
+            'is_protected' => 0,
+            'canopy' => '0-9%',
+            'subcanopy' => '0-9%',
+            'ground_cover' => '0-9%',
             'number' => 1,
         ])->assertSuccessful();
     }
@@ -99,6 +105,12 @@ class PlotControllerTest extends TestCase
 
         $this->post("/web/sites/$site->id/plots", [
             'site_id' => $site->id,
+            'latitude' => 0,
+            'longitude' => 0,
+            'is_protected' => 0,
+            'canopy' => '0-9%',
+            'subcanopy' => '0-9%',
+            'ground_cover' => '0-9%',
             'number' => 1,
         ])->assertForbidden();
     }
@@ -115,6 +127,13 @@ class PlotControllerTest extends TestCase
 
         $response = $this->put("/web/plots/$plot->id", [
             'site_id' => $plot->site_id,
+            'latitude' => $plot->latitude,
+            'longitude' => $plot->longitude,
+            'is_protected' => $plot->is_protected,
+            'protection_seasons' => $plot->protection_seasons,
+            'canopy' => $plot->canopy,
+            'subcanopy' => $plot->subcanopy,
+            'ground_cover' => $plot->ground_cover,
             'number' => 2,
         ]);
 
@@ -135,6 +154,12 @@ class PlotControllerTest extends TestCase
 
         $this->put("/web/plots/$plot->id", [
             'site_id' => $plot->site_id,
+            'latitude' => $plot->latitude,
+            'longitude' => $plot->longitude,
+            'is_protected' => $plot->is_protected,
+            'canopy' => $plot->canopy,
+            'subcanopy' => $plot->subcanopy,
+            'ground_cover' => $plot->ground_cover,
             'number' => 2,
         ])->assertForbidden();
     }

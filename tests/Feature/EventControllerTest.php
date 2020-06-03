@@ -21,6 +21,7 @@ class EventControllerTest extends TestCase
         $event = factory(Event::class)->create();
 
         $response = $this->get("/web/events");
+
         $response->assertSuccessful()->assertJsonStructure([
             'data' => [
                 [
@@ -31,7 +32,6 @@ class EventControllerTest extends TestCase
                     'url',
                     'notification_date',
                     'starts_at',
-                    'notify_at',
                 ]
             ],
         ]);
@@ -56,6 +56,8 @@ class EventControllerTest extends TestCase
             'title' => 'title',
             'description' => 'description',
             'event_start' => now()->format('Y-m-d H:i'),
+            'timezone' => 'EST',
+            'event_type' => 'Webinar',
         ])->assertSuccessful();
     }
 
@@ -73,6 +75,8 @@ class EventControllerTest extends TestCase
             'title' => 'edited',
             'description' => $event->description,
             'event_start' => $event->event_start->format('Y-m-d H:i'),
+            'timezone' => $event->timezone,
+            'event_type' => $event->event_type,
         ])->assertSuccessful();
     }
 

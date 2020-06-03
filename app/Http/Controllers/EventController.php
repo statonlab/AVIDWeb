@@ -49,7 +49,10 @@ class EventController extends Controller
             }
 
             $event->starts_at = $event->event_start->format('Y-m-d H:i:s');
-            $event->ends_at = $event->event_end->format('Y-m-d H:i:s');
+
+            if ($event->ends_at !== null) {
+                $event->ends_at = $event->event_end->format('Y-m-d H:i:s');
+            }
 
             return $event;
         });
@@ -211,7 +214,7 @@ class EventController extends Controller
             'description' => 'required',
             'contact_info' => 'nullable',
             'event_start' => 'required|date_format:Y-m-d H:i',
-            'event_end' => 'required|date_format:Y-m-d H:i',
+            'event_end' => 'nullable|date_format:Y-m-d H:i',
             'timezone' => ['required', Rule::in($timezones)],
             'url' => 'nullable|url',
             'image' => 'nullable|image|max:5120',

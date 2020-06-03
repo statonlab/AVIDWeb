@@ -27,6 +27,8 @@ class AddPlotIdColumnToMeasurementsTable extends Migration
     {
         Schema::table('measurements', function (Blueprint $table) {
             $table->dropForeign(['plot_id']);
+
+            $table->dropColumn('plot_id');
         });
     }
 }

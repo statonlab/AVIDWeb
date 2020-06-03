@@ -259,6 +259,11 @@ export default class Form {
         return
       }
 
+      if (data[field] === null) {
+        this[field] = this.originalData[field] !== null ? this.originalData[field] : null
+        continue
+      }
+
       if (data[field] !== 'undefined') {
         this[field] = data[field]
       }
