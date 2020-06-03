@@ -15,6 +15,8 @@ class Measurement extends Model
     protected $fillable = [
         'user_id',
         'plant_id',
+        'plot_id',
+        'site_id',
         'is_located',
         'is_alive',
         'date',
@@ -36,10 +38,11 @@ class Measurement extends Model
     }
 
     /**
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function plot() {
-        return $this->plant()->first()->plot();
+    public function plot()
+    {
+        return $this->belongsTo(Plot::class);
     }
 
     /**
@@ -53,7 +56,8 @@ class Measurement extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function site() {
-        return $this->plant()->first()->plot()->first()->site();
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
     }
 }

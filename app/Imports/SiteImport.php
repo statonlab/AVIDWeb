@@ -30,14 +30,15 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
     }
 
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
         /** @var Plant $plant */
-        $plant = Plant::with(['plot'])->get()
+        $plant = Plant::with(['plot'])
+            ->get()
             ->where('plot.number', $row['plot'])
             ->where('tag', $row['tag'])
             ->first();
@@ -60,6 +61,8 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
 
         return new Measurement([
             'plant_id' => $plant->id,
+            'plot_id' => $plant->plot->id,
+            'site_id' => $this->site->id,
             'user_id' => $this->user->id,
             'is_located' => $is_located,
             'date' => Carbon::createFromFormat('m-d-Y', $row['date']),
@@ -76,7 +79,7 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
         $quadrants = 'Southwest,Northwest,Southeast,Northeast';
 
         return [
-            'site' => 'required|in:' . $this->site->name,
+            'site' => 'required|in:'.$this->site->name,
             'plot' => 'required|exists:plots,number',
             'quadrant' => "required|in:$quadrants",
             'tag' => 'required|exists:plants,tag',
@@ -85,11 +88,11 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
             'height' => [
                 'required',
                 function ($attribute, $value, $fail) {
-                    if ($value !== 'dead' && $value !== 'missing' && !is_numeric($value)) {
+                    if ($value !== 'dead' && $value !== 'missing' && ! is_numeric($value)) {
                         $fail($attribute.' is invalid.');
                     }
                 },
-            ]
+            ],
         ];
     }
 
