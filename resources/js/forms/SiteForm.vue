@@ -70,7 +70,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="city">City/Town</label>
+                        <label for="city">
+                            Town
+                            <required/>
+                        </label>
                         <input type="text"
                                class="form-control"
                                v-model="form.city"
@@ -108,14 +111,22 @@
                     <div class="form-group">
                         <label for="species">
                             Overstory Species
+                            <required/>
                         </label>
                         <tokens-field id="species" v-model="form.species" />
+                        <span class="form-text text-danger" v-if="form.errors.has('species')">
+                            {{ form.errors.first('species') }}
+                        </span>
                     </div>
                     <div class="form-group">
                         <label for="shrubs">
                             Seedling or Shrub Species
+                            <required/>
                         </label>
                         <tokens-field id="shrubs" v-model="form.shrubs" />
+                        <span class="form-text text-danger" v-if="form.errors.has('shrubs')">
+                            {{ form.errors.first('shrubs') }}
+                        </span>
                     </div>
                     <div class="form-group">
                         <label for="basal-area">
