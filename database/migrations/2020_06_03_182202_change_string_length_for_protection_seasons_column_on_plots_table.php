@@ -26,6 +26,7 @@ class ChangeStringLengthForProtectionSeasonsColumnOnPlotsTable extends Migration
     public function down()
     {
         Schema::table('plots', function (Blueprint $table) {
+            $table->dropIndex(['protection_seasons']);
             $table->string('protection_seasons', 20)->nullable()->change();
         });
     }
