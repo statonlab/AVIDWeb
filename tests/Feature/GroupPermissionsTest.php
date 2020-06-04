@@ -6,6 +6,7 @@ use App\Site;
 use App\Plot;
 use App\Group;
 use App\Plant;
+use App\Species;
 use App\Measurement;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -78,7 +79,7 @@ class GroupPermissionsTest extends TestCase
 
         $group->users()->attach($member->id);
 
-        $site = factory(Site::class)->create([
+        $site = $this->makeSite([
             'user_id' => $leader->id,
             'name' => '__group permissions test__'
         ]);
@@ -95,6 +96,9 @@ class GroupPermissionsTest extends TestCase
             'name' => $update,
             'state_id' => $site->state_id,
             'county_id' => $site->county_id,
+            'city' => $site->city,
+            'species' => $site->species()->pluck('species.id')->toArray(),
+            'shrubs' => $site->shrubs()->pluck('species.id')->toArray(),
         ]);
 
         $response->assertForbidden();
@@ -107,6 +111,9 @@ class GroupPermissionsTest extends TestCase
             'name' => $update,
             'state_id' => $site->state_id,
             'county_id' => $site->county_id,
+            'city' => $site->city,
+            'species' => $site->species()->pluck('species.id')->toArray(),
+            'shrubs' => $site->shrubs()->pluck('species.id')->toArray(),
         ]);
 
         $response->assertSuccessful()->assertJsonFragment([

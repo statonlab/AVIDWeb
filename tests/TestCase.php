@@ -4,8 +4,8 @@ namespace Tests;
 
 use App\User;
 use App\Role;
-use App\State;
-use App\County;
+use App\Site;
+use App\Species;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -51,5 +51,29 @@ abstract class TestCase extends BaseTestCase
     public function makeMember($overrides = [])
     {
         return $this->makeUser('Member', $overrides);
+    }
+
+    /**
+     * @param array $overrides
+     * @return \App\Site
+     */
+    public function makeSite($overrides = [])
+    {
+        $site = factory(Site::class)->create($overrides);
+        $species = [];
+        $shrubs = [];
+
+        for ($i = 0; $i < rand(1, 3); $i++) {
+            $species[] = factory(Species::class)->create()->id;
+        }
+
+        for ($i = 0; $i < rand(1, 3); $i++) {
+            $shrubs[] = factory(Species::class)->create()->id;
+        }
+
+        $site->species()->attach($species);
+        $site->shrubs()->attach($shrubs);
+
+        return $site;
     }
 }
