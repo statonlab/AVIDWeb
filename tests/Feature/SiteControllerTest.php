@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Site;
 use App\State;
 use App\County;
+use App\Species;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -121,6 +122,9 @@ class SiteControllerTest extends TestCase
             'name' => '__site controller test__',
             'state_id' => State::first()->id,
             'county_id' => County::first()->id,
+            'city' => 'town',
+            'species' => [factory(Species::class)->create()->id],
+            'shrubs' => [factory(Species::class)->create()->id],
         ])->assertSuccessful();
     }
 
@@ -130,7 +134,7 @@ class SiteControllerTest extends TestCase
         $this->actingAs($user);
 
         /** @var Site $site */
-        $site = factory(Site::class)->create([
+        $site = $this->makeSite([
             'name' => '__site controller test__'
         ]);
 
@@ -140,6 +144,9 @@ class SiteControllerTest extends TestCase
             'name' => $update,
             'state_id' => $site->state_id,
             'county_id' => $site->county_id,
+            'city' => 'town',
+            'species' => $site->species()->pluck('species.id')->toArray(),
+            'shrubs' => $site->shrubs()->pluck('species.id')->toArray(),
         ]);
 
         $response->assertSuccessful()->assertJsonFragment([
