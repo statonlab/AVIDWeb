@@ -35,14 +35,4 @@ class ImpactsController extends Controller
     {
         return view('impacts.symptoms');
     }
-
-    /**
-     * Show the Forest Health Effects page.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function effects()
-    {
-        return view('impacts.effects');
-    }
 }
