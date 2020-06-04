@@ -27,6 +27,9 @@ import Roles from './screens/Roles'
 import Groups from './screens/Groups'
 import Group from './screens/Group'
 import AdminSites from './screens/admin/AdminSites'
+import AdminPlots from './screens/admin/AdminPlots'
+import AdminPlants from './screens/admin/AdminPlants'
+import AdminMeasurements from './screens/admin/AdminMeasurements'
 import Reminders from './screens/Reminders'
 import Events from './screens/Events'
 import BetaData from './screens/BetaData'
@@ -63,6 +66,9 @@ const routes = [
   {path: '/app/groups', component: Groups},
   {path: '/app/groups/:id', component: Group},
   {path: '/app/admin/sites', component: AdminSites},
+  {path: '/app/admin/sites/:id', component: AdminPlots},
+  {path: '/app/admin/plots/:id', component: AdminPlants},
+  {path: '/app/admin/plants/:id', component: AdminMeasurements},
   {path: '/app/reminders', component: Reminders},
   {path: '/app/calendar', component: CalendarView},
   {path: '/app/beta/sites', component: BetaData},

@@ -85,6 +85,9 @@ Route::group([
     Route::get('/users/{user}', 'HomeController@data');
     Route::get('/roles', 'HomeController@data');
     Route::get('/admin/sites', 'HomeController@data');
+    Route::get('/admin/sites/{id}', 'HomeController@data');
+    Route::get('/admin/plots/{id}', 'HomeController@data');
+    Route::get('/admin/plants/{id}', 'HomeController@data');
     Route::get('/reminders', 'HomeController@data');
     Route::get('/calendar', 'HomeController@data');
     Route::get('/events', 'HomeController@data');

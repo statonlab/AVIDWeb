@@ -14,6 +14,7 @@
         <sites-data-view
                 url="/web/admin/sites"
                 show-owner
+                :site-url-prefix="`/app/admin/sites`"
                 @load="setMeta($event)"
         />
     </div>
