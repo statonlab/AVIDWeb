@@ -25,7 +25,7 @@
                         <a href="#"
                            class="d-flex align-items-center"
                            @click.prevent="sort('last_measured_at')">
-                            <span class="mr-1">Latest Measurement Date</span>
+                            <span class="mr-1">Last Measured</span>
                             <icon :name="sortIcon('last_measured_at')"/>
                         </a>
                     </th>
