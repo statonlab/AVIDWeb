@@ -73,14 +73,9 @@ class StatisticsController extends Controller
             $unprotected_average = number_format($unprotected_average, 2);
             $unprotected_count[] = $unprotected_annual->count();
 
-            array_push($protected, $protected_average);
-            array_push($unprotected, $unprotected_average);
+            $protected[] = $protected_average;
+            $unprotected[] = $unprotected_average;
         }
-
-        $counts = [
-            $protected_count,
-            $unprotected_count,
-        ];
 
         return $this->success([
             'xaxis' => $years,
@@ -94,9 +89,6 @@ class StatisticsController extends Controller
                     'count' => $unprotected_count,
                 ],
             ]
-            //'protected' => $protected,
-            //'unprotected' => $unprotected,
-            //'counts' => $counts,
         ]);
     }
 }
