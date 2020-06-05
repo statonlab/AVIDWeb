@@ -106,15 +106,8 @@ class PlantController extends Controller
         if ($request->new_measurement) {
             $this->validate($request, [
                 'date' => 'required|date_format:Y-m-d',
-                'is_located' => 'required|boolean',
+                'height' => 'required|numeric',
             ]);
-
-            if ($request->is_located == 1) {
-                $this->validate($request, [
-                    'height' => 'required|numeric',
-                    'is_alive' => 'required|boolean',
-                ]);
-            }
         }
 
         $exists = Plant::where('tag', $request->tag)
@@ -163,10 +156,10 @@ class PlantController extends Controller
                 'plot_id' => $plant->plot->id,
                 'site_id' => $plant->plot->site_id,
                 'user_id' => $request->user()->id,
-                'is_located' => $request->is_located == 1,
                 'date' => Carbon::createFromFormat('Y-m-d', $request->date),
-                'height' => $request->is_located == 1 ? $request->height : null,
-                'is_alive' => $request->is_located == 1 ? $request->is_alive == 1 : null,
+                'height' => $request->height,
+                'is_alive' => true,
+                'is_located' => true,
             ]);
         }
 

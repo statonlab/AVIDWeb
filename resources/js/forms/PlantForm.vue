@@ -141,41 +141,6 @@
                             </p>
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="located">
-                                Was Plant Located?
-                                <required/>
-                            </label>
-                            <select name="is_located"
-                                    id="located"
-                                    class="form-control"
-                                    :class="{'is-invalid': form.errors.has('is_located')}"
-                                    v-model="form.is_located">
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
-                            <p class="mb-0 form-text text-danger" v-if="form.errors.has('is_located')">
-                                {{ form.errors.first('is_located') }}
-                            </p>
-                        </div>
-                        <div class="form-group col-lg-6" v-if="form.is_located === '1'">
-                            <label for="alive">
-                                Was Plant Alive?
-                                <required/>
-                            </label>
-                            <select name="is_alive"
-                                    id="alive"
-                                    v-model="form.is_alive"
-                                    :class="{'is-invalid': form.errors.has('is_located')}"
-                                    class="form-control">
-                                <option value="">Select One</option>
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
-                            <p class="mb-0 form-text text-danger" v-if="form.errors.has('is_alive')">
-                                {{ form.errors.first('is_alive') }}
-                            </p>
-                        </div>
-                        <div class="form-group col-lg-6" v-if="form.is_located === '1'">
                             <label for="height">
                                 Height (inches)
                                 <required/>
@@ -288,8 +253,6 @@
         form: new Form({
           new_measurement   : false,
           date              : window.avid.last_entry,
-          is_located        : '0',
-          is_alive          : '',
           height            : '',
           new_species       : false,
           new_species_name  : '',
