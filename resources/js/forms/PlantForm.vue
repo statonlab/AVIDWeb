@@ -150,7 +150,8 @@
                                        type="text"
                                        v-model="form.height"
                                        class="form-control"
-                                       :class="{'is-invalid': form.errors.has('height')}">
+                                       :class="{'is-invalid': form.errors.has('height')}"
+                                       placeholder="Height">
                                 <div class="input-group-append">
                                     <span class="input-group-text">in.</span>
                                 </div>
