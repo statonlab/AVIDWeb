@@ -13,6 +13,11 @@
                           :options="plantOptions"
                           v-model="type">
                 </dropdown>
+                <dropdown class="bg-white ml-2"
+                          :options="speciesOptions"
+                          :disabled="type === ''"
+                          v-model="species">
+                </dropdown>
             </div>
         </div>
         <div class="card-body p-2">
@@ -39,17 +44,21 @@
 
       this.loadSites()
       this.loadTypes()
+
+      this.speciesOptionsClear()
     },
 
     data() {
       return {
-        site        : '',
-        chart       : null,
-        sites       : [],
-        type        : '',
-        plants      : [],
-        loadingSites: false,
-        _request    : null,
+        site            : '',
+        chart           : null,
+        sites           : [],
+        type            : '',
+        species         : '',
+        plants          : [],
+        loadingSites    : false,
+        _request        : null,
+        speciesOptions  : [],
       }
     },
 
@@ -59,6 +68,12 @@
       },
 
       type() {
+        this.speciesOptionsClear()
+        this.loadChart()
+        this.loadSpecies()
+      },
+
+      species() {
         this.loadChart()
       },
     },
@@ -76,6 +91,19 @@
           this.plants  = data
         } catch (e) {
           this.$alert('Unable to load plants. Please try refreshing the page.')
+        }
+      },
+
+      async loadSpecies() {
+        try {
+          const {data} = await axios.get('/web/species', {
+            params: {
+              plant_type_id: this.type,
+            },
+          })
+          this.setSpeciesOptions(data.data)
+        } catch (e) {
+          this.$alert('Unable to load species. Please try refreshing the page.')
         }
       },
 
@@ -106,10 +134,12 @@
           if (this.site) {
             const {data} = await axios.get(`/web/statistics/${this.site}/chart`, {
               params: {
+                species_id   : this.species,
                 plant_type_id: this.type,
               },
             })
-            this.chart   = data
+
+            data.length !== 0 ? this.setChart(data) : this.setChartDefault()
           }
         } catch (e) {
           if (!axios.isCancel()) {
@@ -129,6 +159,14 @@
             xaxis : {
               labels: {show: false},
             },
+            yaxis: {
+              title: {
+                text: 'Annual Height (inches)',
+                style: {
+                  fontSize: 14,
+                }
+              }
+            },
             // title : {text: 'Annual Height'},
             noData: {text: 'No measurements found.'},
           },
@@ -138,6 +176,51 @@
           ],
         }
       },
+
+      setChart(data) {
+        this.chart = {
+          options: {
+            chart : {
+              id     : 'sites-chart',
+              toolbar: {show: false},
+            },
+            xaxis : {
+              labels: {show: true},
+              categories: data.xaxis,
+            },
+            yaxis: {
+              title: {
+                text: 'Annual Height (inches)',
+                style: {
+                  fontSize: 14,
+                }
+              }
+            },
+            dataLabels: {
+              formatter: (val, {seriesIndex, dataPointIndex}) => {
+                return val + ` (N=${data.data[seriesIndex].count[dataPointIndex]})`
+              }
+            },
+            // title : {text: 'Annual Height'},
+            noData: {text: 'No measurements found.'},
+          },
+          series : [
+            {name: 'protected', data: data.data[0].protected},
+            {name: 'unprotected', data: data.data[1].unprotected},
+          ],
+        }
+      },
+
+      speciesOptionsClear() {
+        this.species = ''
+        this.speciesOptions = [{label: 'All Species', value: ''}]
+      },
+
+      setSpeciesOptions(data) {
+        this.speciesOptionsClear()
+        this.speciesOptions = [{label: 'All Species', value: ''}].concat(data.map(s => ({label: s.name, value: s.id})))
+      }
+
     },
   }
 </script>
