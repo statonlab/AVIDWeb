@@ -81,7 +81,7 @@
             label: 'Data Entry'
           },
           {
-            icon: 'add-circle-outline',
+            icon: 'bar-chart-outline',
             to: '/app/statistics',
             label: 'Statistics'
           },
