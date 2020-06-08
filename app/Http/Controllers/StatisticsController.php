@@ -28,37 +28,11 @@ class StatisticsController extends Controller
     {
         $this->validate($request, [
             'plant_type_id' => 'nullable|exists:plant_types,id',
+            'species_id' => 'nullable|exists:species,id',
         ]);
 
         $protected = [];
         $unprotected = [];
-
-        $chart = [
-            'options' => [
-                'chart' => [
-                    'id' => 'sites-chart',
-                    'toolbar' => ['show' => false],
-                ],
-                'xaxis' => [
-                    'labels' => ['show' => false],
-                ],
-                'yaxis' => [
-                    'title' => [
-                        'text' => 'Height (inches)',
-                        'style' => [
-                            'fontSize' => '14px',
-                        ],
-                    ],
-                ],
-                //'title' => ['text' => 'Annual Height at ' . $site->name],
-                'noData' => ['text' => 'No measurements found.'],
-            ],
-
-            'series' => [
-                ['name' => 'protected', 'data' => []],
-                ['name' => 'unprotected', 'data' => []],
-            ],
-        ];
 
         $site = Site::with('plots.plants')->findOrFail($request->site->id);
 
@@ -66,18 +40,21 @@ class StatisticsController extends Controller
             ->with(['plot'])
             ->orderBy('date', 'asc');
 
-        if ($request->plant_type_id) {
-            $measurements->where(function ($query) use ($request) {
-                $query->whereHas('plant', function ($query) use ($request) {
+        $measurements->where(function ($query) use ($request) {
+            $query->whereHas('plant', function ($query) use ($request) {
+                if ($request->plant_type_id) {
                     $query->where('plant_type_id', $request->plant_type_id);
-                });
+                }
+                if ($request->species_id) {
+                    $query->where('species_id', $request->species_id);
+                }
             });
-        }
+        });
 
         $measurements = $measurements->get();
 
         if ($measurements->isEmpty()) {
-            return $this->success($chart);
+            return $this->success([]);
         }
 
         $years = range($measurements->first()->date->year, now()->year);
@@ -85,21 +62,33 @@ class StatisticsController extends Controller
         foreach ($years as $year) {
             $annual = $measurements->where('date.year', $year);
 
-            $protected_average = $annual->where('plot.is_protected', 1)->average('height');
+            $protected_annual = $annual->where('plot.is_protected', 1);
+            $unprotected_annual = $annual->where('plot.is_protected', 0);
+
+            $protected_average = $protected_annual->average('height');
             $protected_average = number_format($protected_average, 2);
+            $protected_count[] = $protected_annual->count();
 
-            $unprotected_average = $annual->where('plot.is_protected', 0)->average('height');
+            $unprotected_average = $unprotected_annual->average('height');
             $unprotected_average = number_format($unprotected_average, 2);
+            $unprotected_count[] = $unprotected_annual->count();
 
-            array_push($protected, $protected_average);
-            array_push($unprotected, $unprotected_average);
+            $protected[] = $protected_average;
+            $unprotected[] = $unprotected_average;
         }
 
-        $chart['options']['xaxis']['labels']['show'] = true;
-        $chart['options']['xaxis']['categories'] = $years;
-        $chart['series'][0]['data'] = $protected;
-        $chart['series'][1]['data'] = $unprotected;
-
-        return $this->success($chart);
+        return $this->success([
+            'xaxis' => $years,
+            'data' => [
+                [
+                    'protected' => $protected,
+                    'count' => $protected_count,
+                ],
+                [
+                    'unprotected' => $unprotected,
+                    'count' => $unprotected_count,
+                ],
+            ]
+        ]);
     }
 }
