@@ -89,6 +89,7 @@ Route::group([
     Route::get('/calendar', 'HomeController@data');
     Route::get('/events', 'HomeController@data');
     Route::get('/data-entry', 'HomeController@data');
+    Route::get('/statistics', 'HomeController@data');
 });
 
 /**

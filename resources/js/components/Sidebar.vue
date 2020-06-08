@@ -81,6 +81,11 @@
             label: 'Data Entry'
           },
           {
+            icon: 'add-circle-outline',
+            to: '/app/statistics',
+            label: 'Statistics'
+          },
+          {
             icon : 'notifications-outline',
             label: 'My Reminders',
             menu : [
