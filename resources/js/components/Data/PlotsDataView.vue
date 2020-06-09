@@ -21,11 +21,11 @@
                     <button v-if="editable || User.owns(site) || User.can('update sites')"
                             class="btn btn-link dropdown-toggle"
                             data-toggle="dropdown">
-                        Import / Export
+                        Spreadsheets
                     </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="#" @click.prevent="importing = true">Import Spreadsheet</a>
-                        <a class="dropdown-item" :href="`/web/sites/${site.id}/export`" target="_blank">Export Spreadsheet</a>
+                        <a class="dropdown-item" :href="`/web/sites/${site.id}/export`" target="_blank">Generate Spreadsheet</a>
                     </div>
                 </div>
                 <button class="btn btn-link mr-3"
@@ -153,6 +153,21 @@
                 <pager :last-page="lastPage" :page="page" @change="goTo($event)"/>
             </div>
             <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="pb-2">
+                            <strong>Actions</strong>
+                        </div>
+                        <a class="btn btn-link" :href="`/web/sites/${site.id}/export`" target="_blank">
+                            <icon name="cloud-download-outline"/>
+                            <span>Download Importable Spreadsheet</span>
+                        </a>
+                        <a class="btn btn-link" href="#" @click.prevent="importing = true">
+                            <icon name="cloud-upload-outline"/>
+                            <span>Import Spreadsheet</span>
+                        </a>
+                    </div>
+                </div>
                 <div class="card mb-3" v-if="site">
                     <div class="card-body">
                         <div class="pb-2">
