@@ -28,7 +28,6 @@ Route::get('/about/who', 'AboutController@who')->name('who');
 Route::get('/impacts', 'ImpactsController@impacts')->name('impacts');
 Route::get('/impacts/conditions', 'ImpactsController@conditions')->name('conditions');
 Route::get('/impacts/symptoms', 'ImpactsController@symptoms')->name('symptoms');
-Route::get('/impacts/effects', 'ImpactsController@effects')->name('effects');
 
 // Site Preparation
 Route::get('/site-preparation', 'SitePreparationController@selection')->name('selection');
