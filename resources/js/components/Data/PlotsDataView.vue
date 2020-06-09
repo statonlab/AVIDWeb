@@ -17,17 +17,6 @@
                 </div>
             </div>
             <div class="row ml-auto mb-auto">
-                <div class="dropdown">
-                    <button v-if="editable || User.owns(site) || User.can('update sites')"
-                            class="btn btn-link dropdown-toggle"
-                            data-toggle="dropdown">
-                        Spreadsheets
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#" @click.prevent="importing = true">Import Spreadsheet</a>
-                        <a class="dropdown-item" :href="`/web/sites/${site.id}/export`" target="_blank">Generate Spreadsheet</a>
-                    </div>
-                </div>
                 <button class="btn btn-link mr-3"
                         @click.prevent="editingSite = true"
                         v-if="editable || User.owns(site) || User.can('update sites')">
