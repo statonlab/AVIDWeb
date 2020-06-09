@@ -79,6 +79,7 @@
 
       updated(site) {
         this.site = site
+        this.showForm = false
       },
     },
   }

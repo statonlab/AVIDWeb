@@ -112,7 +112,7 @@
                             <div class="card-body">
                                 <dl class="mb-0">
                                     <dt>Owner</dt>
-                                    <dd class="text-muted">{{ optional(site.owner, 'Owner name') }}</dd>
+                                    <dd class="text-muted">{{ optional(site.owner_name, 'Owner name') }}</dd>
 
                                     <dt>Contact Info</dt>
                                     <dd class="text-muted">
@@ -262,6 +262,7 @@
       },
 
       updated(plot) {
+        this.plot = plot
         this.plots = this.plots.map(p => p.id === plot.id ? plot : p)
         this.setOptions()
         this.closeForm()
