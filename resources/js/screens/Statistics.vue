@@ -9,24 +9,27 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="sites">
-                                    Sites
-                                </label>
+                                <div class="d-flex">
+                                    <label for="sites" class="flex-grow-1">
+                                        <span>Sites</span>
+                                    </label>
+                                    <div class="form-check flex-shrink-0">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               value="1"
+                                               :checked="allSites"
+                                               @change="allSites = $event.target.checked"
+                                               id="show-all-sites">
+                                        <label class="form-check-label font-weight-normal" for="show-all-sites">
+                                            Show All
+                                        </label>
+                                    </div>
+                                </div>
                                 <tokens-field id="sites"
                                               :options="siteOptions"
                                               :disabled="allSites"
                                               v-model="sites"/>
-                                <div class="form-check">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           value="1"
-                                           :checked="allSites"
-                                           @change="allSites = $event.target.checked"
-                                           id="show-all-sites">
-                                    <label class="form-check-label font-weight-normal" for="show-all-sites">
-                                        Show all sites
-                                    </label>
-                                </div>
+
                             </div>
                             <div class="form-group">
                                 <label for="plots">
@@ -154,7 +157,7 @@
     computed: {
       quadrantOptions() {
         return [
-          'Northeast', 'Northwest', 'Southeast', 'Southwest'
+          'Northeast', 'Northwest', 'Southeast', 'Southwest',
         ]
       },
     },
@@ -200,35 +203,35 @@
 
       allSpecies() {
         this.loadChart()
-      }
+      },
     },
 
     data() {
       return {
-        chart           : null,
-        allSites        : true,
-        allPlots        : true,
-        allQuadrants    : true,
-        allTypes        : true,
-        allSpecies      : true,
-        siteOptions     : [],
-        plotOptions     : [],
-        typeOptions     : [],
-        speciesOptions  : [],
-        sites           : [],
-        plots           : [],
-        quadrants       : [],
-        types           : [],
-        species         : [],
-        _request        : null,
+        chart         : null,
+        allSites      : true,
+        allPlots      : true,
+        allQuadrants  : true,
+        allTypes      : true,
+        allSpecies    : true,
+        siteOptions   : [],
+        plotOptions   : [],
+        typeOptions   : [],
+        speciesOptions: [],
+        sites         : [],
+        plots         : [],
+        quadrants     : [],
+        types         : [],
+        species       : [],
+        _request      : null,
       }
     },
 
     methods: {
       async loadTypes() {
         try {
-          const {data} = await axios.get('/web/plant-types')
-          this.typeOptions  = data.map(({id, name}) => ({id, text: name}))
+          const {data}     = await axios.get('/web/plant-types')
+          this.typeOptions = data.map(({id, name}) => ({id, text: name}))
         } catch (e) {
           this.$alert('Unable to load plants. Please try refreshing the page.')
         }
@@ -237,7 +240,7 @@
       async loadSpecies() {
         this.species = []
         try {
-          const {data} = await axios.get('/web/statistics/species', {
+          const {data}        = await axios.get('/web/statistics/species', {
             params: {
               types: this.types,
             },
@@ -250,8 +253,8 @@
 
       async loadSites() {
         try {
-          const {data} = await axios.get(`/web/statistics/sites`)
-          this.siteOptions   = data.map(({id, name}) => ({id, text: name}))
+          const {data}     = await axios.get(`/web/statistics/sites`)
+          this.siteOptions = data.map(({id, name}) => ({id, text: name}))
         } catch (e) {
           this.$alert('Unable to load sites. Please try refreshing the page or contact us.')
           console.error(e)
@@ -264,7 +267,7 @@
           const {data} = await axios.get('/web/statistics/plots', {
             params: {
               sites: this.allSites ? null : this.sites,
-            }
+            },
           })
           console.log(data)
           this.plotOptions = data.map(({id, name}) => ({id, text: name}))
@@ -282,11 +285,11 @@
         try {
           const {data} = await axios.get(`/web/statistics/chart`, {
             params: {
-              sites     : this.allSites     ? null : this.sites,
-              plots     : this.allPlots     ? null : this.plots,
-              types     : this.allTypes     ? null : this.types,
-              quadrants : this.allQuadrants ? null : this.quadrants,
-              species   : this.allSpecies   ? null : this.species,
+              sites    : this.allSites ? null : this.sites,
+              plots    : this.allPlots ? null : this.plots,
+              types    : this.allTypes ? null : this.types,
+              quadrants: this.allQuadrants ? null : this.quadrants,
+              species  : this.allSpecies ? null : this.species,
             },
           })
 
@@ -309,13 +312,13 @@
             xaxis : {
               labels: {show: false},
             },
-            yaxis: {
+            yaxis : {
               title: {
-                text: 'Annual Height (inches)',
+                text : 'Annual Height (inches)',
                 style: {
                   fontSize: 14,
-                }
-              }
+                },
+              },
             },
             // title : {text: 'Annual Height'},
             noData: {text: 'No measurements found.'},
@@ -330,29 +333,29 @@
       setChart(data) {
         this.chart = {
           options: {
-            chart : {
+            chart     : {
               id     : 'sites-chart',
               toolbar: {show: false},
             },
-            xaxis : {
-              labels: {show: true},
+            xaxis     : {
+              labels    : {show: true},
               categories: data.xaxis,
             },
-            yaxis: {
+            yaxis     : {
               title: {
-                text: 'Annual Height (inches)',
+                text : 'Annual Height (inches)',
                 style: {
                   fontSize: 14,
-                }
-              }
+                },
+              },
             },
             dataLabels: {
               formatter: (val, {seriesIndex, dataPointIndex}) => {
                 return val + ` (N=${data.data[seriesIndex].count[dataPointIndex]})`
-              }
+              },
             },
             // title : {text: 'Annual Height'},
-            noData: {text: 'No measurements found.'},
+            noData    : {text: 'No measurements found.'},
           },
           series : [
             {name: 'protected', data: data.data[0].protected},
@@ -360,7 +363,7 @@
           ],
         }
       },
-    }
+    },
   }
 </script>
 
