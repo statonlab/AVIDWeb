@@ -80,7 +80,6 @@
                         <a class="dropdown-item" href="/impacts">Deer Impacts</a>
                         <a class="dropdown-item" href="/impacts/conditions">Woodland Conditions</a>
                         <a class="dropdown-item" href="/impacts/symptoms">Signs and Symptoms</a>
-                        <a class="dropdown-item" href="/impacts/effects">Forest Health Effects</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
