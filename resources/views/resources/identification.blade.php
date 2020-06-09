@@ -3,14 +3,15 @@
 @section('content')
     <div>
         @include('components.navbar')
-        <div class="container">
-            <div class="d-flex">
-                <div class="row">
-                    <div class="card col-12">
-                        <div class="card-header">
-                            <h1 class="page-title mb-0">Wildflower and Seedling Identification Guides</h1>
-                        </div>
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-4">
+                    @include('resources.resources_sidebar')
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
                         <div class="card-body">
+                            <h1 class="mb-4">Wildflower and Seedling Identification Guides</h1>
                             <div class="row mb-2">
                                 <div class="col-4">
                                     <img class="img-fit img-fluid" src="/img/canada-mayflower.jpeg">
