@@ -4,7 +4,7 @@
             <Select2 :id="`${id}_select`"
                      :options="options"
                      v-model="selects"
-                     placeholder="Search..."
+                     :placeholder="placeholder"
                      :disabled="disabled"
                      :settings="{ multiple: 'true', theme: 'bootstrap4' }"
                      @change="onChange($event)" />
@@ -23,6 +23,7 @@
       id: {required: false, type: String},
       value: {required: false, type: Array},
       disabled: {required: false, type: Boolean, default: false},
+      placeholder: {required: false, type: String, default: 'Search...'}
     },
 
     components: {Select2},

@@ -28,91 +28,104 @@
                                 <tokens-field id="sites"
                                               :options="siteOptions"
                                               :disabled="allSites"
+                                              :placeholder="'Showing all sites'"
                                               v-model="sites"/>
-
                             </div>
+
                             <div class="form-group">
-                                <label for="plots">
-                                    Plots
-                                </label>
+                                <div class="d-flex">
+                                    <label for="plots" class="flex-grow-1">
+                                        Plots
+                                    </label>
+                                    <div class="form-check flex-shrink-0">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               value="1"
+                                               :checked="allPlots"
+                                               @change="allPlots = $event.target.checked"
+                                               id="show-all-plots">
+                                        <label class="form-check-label font-weight-normal" for="show-all-plots">
+                                            Show All
+                                        </label>
+                                    </div>
+                                </div>
                                 <tokens-field id="plots"
                                               :options="plotOptions"
                                               :disabled="allPlots"
+                                              :placeholder="'Showing all plots'"
                                               v-model="plots"/>
-                                <div class="form-check">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           value="1"
-                                           :checked="allPlots"
-                                           @change="allPlots = $event.target.checked"
-                                           id="show-all-plots">
-                                    <label class="form-check-label font-weight-normal" for="show-all-plots">
-                                        Show all plots
-                                    </label>
-                                </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="quadrants">
-                                    Quadrants
-                                </label>
+                                <div class="d-flex">
+                                    <label for="quadrants" class="flex-grow-1">
+                                        Quadrants
+                                    </label>
+                                    <div class="form-check flex-shrink-0">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               value="1"
+                                               :checked="allQuadrants"
+                                               @change="allQuadrants = $event.target.checked"
+                                               id="show-all-quadrants">
+                                        <label class="form-check-label font-weight-normal" for="show-all-plots">
+                                            Show All
+                                        </label>
+                                    </div>
+                                </div>
                                 <tokens-field id="quadrants"
                                               :options="quadrantOptions"
                                               :disabled="allQuadrants"
+                                              :placeholder="'Showing all quadrants'"
                                               v-model="quadrants"/>
-                                <div class="form-check">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           value="1"
-                                           :checked="allQuadrants"
-                                           @change="allQuadrants = $event.target.checked"
-                                           id="show-all-quadrants">
-                                    <label class="form-check-label font-weight-normal" for="show-all-plots">
-                                        Show all quadrants
-                                    </label>
-                                </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="types">
-                                    Plant Types
-                                </label>
+                                <div class="d-flex">
+                                    <label for="types" class="flex-grow-1">
+                                        Plant Types
+                                    </label>
+                                    <div class="form-check flex-shrink-0">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               value="1"
+                                               :checked="allTypes"
+                                               @change="allTypes = $event.target.checked"
+                                               id="show-all-types">
+                                        <label class="form-check-label font-weight-normal" for="show-all-plots">
+                                            Show All
+                                        </label>
+                                    </div>
+                                </div>
                                 <tokens-field id="types"
                                               :options="typeOptions"
                                               :disabled="allTypes"
+                                              :placeholder="'Showing all types'"
                                               v-model="types"/>
-                                <div class="form-check">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           value="1"
-                                           :checked="allTypes"
-                                           @change="allTypes = $event.target.checked"
-                                           id="show-all-types">
-                                    <label class="form-check-label font-weight-normal" for="show-all-plots">
-                                        Show all types
-                                    </label>
-                                </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="species">
-                                    Species
-                                </label>
+                                <div class="d-flex">
+                                    <label for="species" class="flex-grow-1">
+                                        Species
+                                    </label>
+                                    <div class="form-check flex-shrink-0">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               value="1"
+                                               :checked="allSpecies"
+                                               @change="allSpecies = $event.target.checked"
+                                               id="show-all-species">
+                                        <label class="form-check-label font-weight-normal" for="show-all-plots">
+                                            Show All
+                                        </label>
+                                    </div>
+                                </div>
                                 <tokens-field id="species"
                                               :options="speciesOptions"
                                               :disabled="allSpecies"
+                                              :placeholder="'Showing all species'"
                                               v-model="species"/>
-                                <div class="form-check">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           value="1"
-                                           :checked="allSpecies"
-                                           @change="allSpecies = $event.target.checked"
-                                           id="show-all-species">
-                                    <label class="form-check-label font-weight-normal" for="show-all-plots">
-                                        Show all species
-                                    </label>
-                                </div>
                             </div>
                         </div>
                     </div>
