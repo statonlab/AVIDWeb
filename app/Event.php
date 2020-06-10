@@ -14,7 +14,6 @@ class Event extends Model
         'title',
         'description',
         'address',
-        'url',
         'event_start',
         'event_end',
         'notification_date',
@@ -22,6 +21,7 @@ class Event extends Model
         'event_type',
         'contact_info',
         'timezone',
+        'excerpt',
     ];
 
     /**

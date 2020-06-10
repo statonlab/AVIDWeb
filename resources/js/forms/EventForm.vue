@@ -153,12 +153,10 @@
                             Description
                             <required/>
                         </label>
-                        <textarea type="text"
-                                  class="form-control"
-                                  id="description"
-                                  name="description"
-                                  v-model="form.description"
-                                  placeholder="Description" />
+                        <editor ref="editor"
+                                height="200px"
+                                initialEditType="wysiwyg"
+                                :options="editorOptions"/>
                         <span class="form-text text-danger" v-if="form.errors.has('description')">
                             {{ form.errors.first('description') }}
                         </span>
@@ -219,21 +217,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label>
-                            Link
-                        </label>
-                        <input type="text"
-                               :class="['form-control',  {'is-invalid': form.errors.has('link')}]"
-                               name="link"
-                               id="link"
-                               placeholder="Link"
-                               v-model="form.url">
-                        <small class="form-text text-danger" v-if="form.errors.has('link')">
-                            {{ form.errors.first('link') }}
-                        </small>
-                    </div>
-
-                    <div class="form-group">
                         <label for="contact-info">
                             Contact Information
                         </label>
@@ -283,6 +266,8 @@
 </template>
 
 <script>
+  import 'codemirror/lib/codemirror.css';
+  import '@toast-ui/editor/dist/toastui-editor.css';
   import Modal from '../components/Modal/Modal'
   import ModalCard from '../components/Modal/ModalCard'
   import ModalHeader from '../components/Modal/ModalHeader'
@@ -295,6 +280,7 @@
   import Options from '../helpers/Options'
   import InlineSpinner from '../components/InlineSpinner'
   import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+  import { Editor } from '@toast-ui/vue-editor';
   import moment from 'moment'
 
   export default {
@@ -311,10 +297,30 @@
       ModalCard,
       Modal,
       DatePicker,
+      Editor,
     },
 
     props: {
       event: {required: false, default: null, type: Object},
+    },
+
+    computed: {
+      editorOptions() {
+        return {
+          hideModeSwitch: true,
+          useCommandShortcut: false,
+          toolbarItems: [
+            'bold',
+            'italic',
+            'strike',
+            'divider',
+            'ul',
+            'ol',
+            'divider',
+            'link',
+          ],
+        }
+      }
     },
 
     mounted() {
@@ -323,10 +329,11 @@
           ...this.event,
           image            : null,
           event_start      : this.event.event_start ? moment.utc(this.event.event_start).format('YYYY-MM-DD h:mm') : null,
-          event_end        : this.event.event_start ? moment.utc(this.event.event_end).format('YYYY-MM-DD h:mm') : null,
+          event_end        : this.event.event_end ? moment.utc(this.event.event_end).format('YYYY-MM-DD h:mm') : null,
           notification_date: this.event.notification_date ? moment.utc(this.event.notification_date).format('YYYY-MM-DD') : null
         })
 
+        this.$refs.editor.invoke('setHtml', this.event.description)
         this.notification_date = this.event.notify_at ? moment(this.event.notify_at).toDate() : null
         this.start_date = moment(this.event.starts_at).toDate()
         this.start_hour = moment.utc(this.event.event_start).format('HH')
@@ -356,7 +363,6 @@
         form          : new Form({
           title            : '',
           description      : '',
-          url              : '',
           image            : null,
           event_start      : null,
           event_end        : null,
@@ -393,7 +399,10 @@
           this.form.setAsFile('image')
         }
         this.form.event_start = moment.utc(this.start_date).format('YYYY-MM-DD') + ' ' + this.start_hour + ':' + this.start_minute
-        this.form.event_end   = moment.utc(this.end_date).format('YYYY-MM-DD')   + ' ' + this.end_hour   + ':' + this.end_minute
+        if (this.form.event_end) {
+          this.form.event_end   = moment.utc(this.end_date).format('YYYY-MM-DD')   + ' ' + this.end_hour   + ':' + this.end_minute
+        }
+        this.form.description = this.$refs.editor.invoke('getHtml');
         try {
           const {data} = await this.form.post('/web/events')
           this.$notify({
@@ -419,7 +428,10 @@
           this.form.setAsFile('image')
         }
         this.form.event_start = moment.utc(this.start_date).format('YYYY-MM-DD') + " " + this.start_hour + ':' + this.start_minute
-        this.form.event_end   = moment.utc(this.end_date).format('YYYY-MM-DD')   + ' ' + this.end_hour   + ':' + this.end_minute
+        if (this.form.event_end) {
+          this.form.event_end   = moment.utc(this.end_date).format('YYYY-MM-DD')   + ' ' + this.end_hour   + ':' + this.end_minute
+        }
+        this.form.description = this.$refs.editor.invoke('getHtml');
         try {
           const {data} = await this.form.post(`/web/events/${this.event.id}/update`)
           this.$notify({
