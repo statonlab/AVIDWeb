@@ -19,6 +19,9 @@ Route::get('/web/images/storage/{image}', 'ImageController@serve');
 
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('/events', 'EventsViewController@events')->name('events');
+Route::get('/event/{event}', 'EventsViewController@event')->name('event');
+
 // About
 Route::get('/about', 'AboutController@about')->name('about');
 Route::get('/about/benefits', 'AboutController@benefits')->name('benefits');

@@ -14,6 +14,21 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle font-weight-bold{{ Route::is('contact') ? ' active' : ''}}"
+                       href="#"
+                       id="contactDropdown"
+                       role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">
+                        Contact Us
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="contactDropdown">
+                        <a class="dropdown-item" href="#">Contact Form</a>
+                        <a class="dropdown-item" href="/events">Events and Training</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle font-weight-bold{{ Route::is('getting-started') ? ' active' : ''}}"
                        href="#"
                        id="guidesDropdown"
