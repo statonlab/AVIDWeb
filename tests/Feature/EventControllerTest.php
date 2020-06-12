@@ -29,7 +29,6 @@ class EventControllerTest extends TestCase
                     'event_start',
                     'title',
                     'description',
-                    'url',
                     'notification_date',
                     'starts_at',
                 ]

@@ -15,5 +15,6 @@ $factory->define(Event::class, function (Faker $faker) {
         'event_type' => $faker->randomElement(['Webinar', 'In-Person']),
         'address' => $faker->address,
         'contact_info' => $faker->text,
+        'excerpt' => $faker->text,
     ];
 });
