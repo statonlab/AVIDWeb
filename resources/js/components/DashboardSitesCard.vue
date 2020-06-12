@@ -73,7 +73,7 @@
         loading : true,
         sites   : null,
         orderBy : 'last_measured_at',
-        orderDir: 'desc',
+        orderDir: 'asc',
       }
     },
 
