@@ -43,7 +43,7 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
             ->where('tag', $row['tag'])
             ->first();
 
-        $date = Carbon::createFromFormat('m-d-Y', $row['date']);
+        $date = new Carbon(str_replace('-', '/', $row['date']));
 
         $exists = Measurement::where('plant_id', $plant->id)
             ->where('date', $date->format('Y-m-d'))
@@ -65,7 +65,7 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
             'site_id' => $this->site->id,
             'user_id' => $this->user->id,
             'is_located' => $is_located,
-            'date' => Carbon::createFromFormat('m-d-Y', $row['date']),
+            'date' => $date,
             'height' => $height,
             'is_alive' => $is_alive,
         ]);
@@ -84,7 +84,14 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
             'quadrant' => "required|in:$quadrants",
             'tag' => 'required|exists:plants,tag',
             'species' => 'required|exists:species,name',
-            'date' => 'required|date_format:n-j-Y',
+            'date' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (strtotime(str_replace('-', '/', $value)) === false) {
+                        $fail($attribute . ' is invalid.');
+                    }
+                }
+            ],
             'height' => [
                 'required',
                 function ($attribute, $value, $fail) {
@@ -93,16 +100,6 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
                     }
                 },
             ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function customValidationMessages()
-    {
-        return [
-            'date.date_format' => 'Date must be in the format M-D-Y with no trailing zeroes.',
         ];
     }
 }
