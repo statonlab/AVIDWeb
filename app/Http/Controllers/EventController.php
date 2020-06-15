@@ -87,12 +87,12 @@ class EventController extends Controller
             'description' => $request->description,
             'event_start' => $request->event_start,
             'event_end' => $request->event_end,
-            'url' => $request->url,
             'timezone' => $request->timezone,
             'notification_date' => $request->notification_date,
             'address' => $request->address,
             'event_type' => $request->event_type,
             'contact_info' => $request->contact_info,
+            'excerpt' => $this->generateExcerpt($request->description),
         ]);
 
         return $this->created($event);
@@ -135,7 +135,6 @@ class EventController extends Controller
             'title' => $request->title,
             'image_id' => $image ? $image->id : null,
             'description' => $request->description,
-            'url' => $request->url,
             'event_start' => $request->event_start,
             'event_end' => $request->event_end,
             'timezone' => $request->timezone,
@@ -143,6 +142,7 @@ class EventController extends Controller
             'address' => $request->address,
             'event_type' => $request->event_type,
             'contact_info' => $request->contact_info,
+            'excerpt' => $this->generateExcerpt($request->description),
         ])->save();
 
         $event->load(['image']);
@@ -216,11 +216,24 @@ class EventController extends Controller
             'event_start' => 'required|date_format:Y-m-d H:i',
             'event_end' => 'nullable|date_format:Y-m-d H:i',
             'timezone' => ['required', Rule::in($timezones)],
-            'url' => 'nullable|url',
             'image' => 'nullable|image|max:5120',
             'notification_date' => 'nullable|date',
             'address' => 'nullable|max:255',
             'event_type' => 'required|max:255',
         ];
+    }
+
+    /**
+     * Generates an excerpt for the given description.
+     *
+     * @return array
+     */
+    private function generateExcerpt($description)
+    {
+        $excerpt = strip_tags($description);
+        $excerpt = substr($excerpt, 0, 100);
+        $excerpt = str_replace("\n", "", $excerpt);
+
+        return $excerpt;
     }
 }
