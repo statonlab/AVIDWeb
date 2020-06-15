@@ -4,12 +4,6 @@
     <div>
         @include('components.navbar')
         <div class="container py-4">
-            <div class="mb-4">
-                <a href="/events" class="d-flex align-items-center">
-                    <ion-icon class="icon" name="arrow-back-outline"></ion-icon>
-                    <span class="ml-2">Events</span>
-                </a>
-            </div>
             <div class="row flex-column-reverse flex-md-row">
                 <div class="col-md-8">
                     <div class="card">
