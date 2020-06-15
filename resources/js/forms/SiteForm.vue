@@ -113,7 +113,9 @@
                             Overstory Species
                             <required/>
                         </label>
-                        <tokens-field id="species" v-model="form.species" />
+                        <tokens-field id="species"
+                                      :options="speciesOptions"
+                                      v-model="form.species" />
                         <span class="form-text text-danger" v-if="form.errors.has('species')">
                             {{ form.errors.first('species') }}
                         </span>
@@ -123,7 +125,9 @@
                             Seedling or Shrub Species
                             <required/>
                         </label>
-                        <tokens-field id="shrubs" v-model="form.shrubs" />
+                        <tokens-field id="shrubs"
+                                      :options="speciesOptions"
+                                      v-model="form.shrubs" />
                         <span class="form-text text-danger" v-if="form.errors.has('shrubs')">
                             {{ form.errors.first('shrubs') }}
                         </span>
@@ -228,6 +232,7 @@
         counties       : [],
         countySearch   : '',
         species        : [],
+        speciesOptions : [],
         form           : new Form({
           state_id     : null,
           county_id    : null,
@@ -256,6 +261,7 @@
         })
       }
       this.loadStates()
+      this.loadSpecies()
     },
 
     watch: {
@@ -334,6 +340,26 @@
         }
 
         this.countyRequest = null
+      },
+
+      async loadSpecies() {
+        if(this.request) {
+          this.request()
+        }
+        axios.get('/web/species', {
+          params: {
+            cancelToken: new axios.CancelToken(fn => this.request = fn),
+            limit: 500
+          },
+        }).then(response => {
+          this.speciesOptions = response.data.data.map(({id, name}) => ({id, text: name}))
+        }).catch(e => {
+          console.error(e)
+        })
+      },
+
+      onChange(e) {
+        this.$emit('input', e)
       },
 
       selectState(value) {

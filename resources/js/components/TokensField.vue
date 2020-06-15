@@ -2,9 +2,10 @@
     <div>
         <div class="form-group">
             <Select2 :id="`${id}_select`"
-                     :options="results.map(({id, name}) => ({id, text: name}))"
+                     :options="options"
                      v-model="selects"
-                     placeholder="Search..."
+                     :placeholder="placeholder"
+                     :disabled="disabled"
                      :settings="{ multiple: 'true', theme: 'bootstrap4' }"
                      @change="onChange($event)" />
         </div>
@@ -18,21 +19,19 @@
     name: 'TokensField',
 
     props: {
+      options: {required: true, type: Array},
       id: {required: false, type: String},
-      value: {required: false, type: Array}
+      value: {required: false, type: Array},
+      disabled: {required: false, type: Boolean, default: false},
+      placeholder: {required: false, type: String, default: 'Search...'}
     },
 
     components: {Select2},
 
     data() {
       return {
-        results : [],
         selects : [],
       }
-    },
-
-    mounted() {
-      this.loadResults()
     },
 
     watch: {
@@ -42,22 +41,6 @@
     },
 
     methods: {
-      async loadResults() {
-        if(this.request) {
-          this.request()
-        }
-        axios.get(`/web/species`, {
-          params: {
-            cancelToken: new axios.CancelToken(fn => this.request = fn),
-            limit: 500
-          },
-        }).then(response => {
-          this.results = response.data.data
-        }).catch(e => {
-          console.error(e)
-        })
-      },
-
       onChange(e) {
         this.$emit('input', e)
       },
