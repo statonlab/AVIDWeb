@@ -58,6 +58,7 @@ Route::get('/resources/identification', 'ResourcesController@identification')->n
 Route::get('/resources/manual', 'ResourcesController@manual')->name('manual');
 Route::get('/resources/references', 'ResourcesController@references')->name('references');
 
+Route::get('/privacy-policy', 'LegalController@privacyPolicy')->name('privacy-policy');
 
 Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
 
