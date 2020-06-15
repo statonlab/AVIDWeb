@@ -91,6 +91,7 @@ Route::group([
     Route::get('/calendar', 'HomeController@data');
     Route::get('/events', 'HomeController@data');
     Route::get('/data-entry', 'HomeController@data');
+    Route::get('/statistics', 'HomeController@data');
 });
 
 /**
@@ -214,5 +215,8 @@ Route::group([
 
     // Statistics
     Route::get('/statistics/sites', 'StatisticsController@sites');
-    Route::get('/statistics/{site}/chart', 'StatisticsController@chart');
+    Route::get('/statistics/plots', 'StatisticsController@plots');
+    Route::get('/statistics/species', 'StatisticsController@species');
+    Route::get('/statistics/{site}/chart', 'StatisticsController@siteChart');
+    Route::get('/statistics/chart', 'StatisticsController@chart');
 });
