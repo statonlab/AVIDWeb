@@ -8,8 +8,8 @@
                 {{moment.utc(event.event_start).format('MMM Do, YYYY [at] H:mm') + " " + event.timezone}}
             </p>
             <p class="text-muted small">{{event.address}}</p>
-            <span class="text-muted d-block text-overflow-ellipsis no-wrap" :title="event.description">
-                {{event.description}}
+            <span class="text-muted d-block text-overflow-ellipsis no-wrap" :title="event.excerpt">
+                {{event.excerpt}}
             </span>
         </div>
         <div class="card-footer pt-0 d-flex px-2 pb-2 align-items-center">
