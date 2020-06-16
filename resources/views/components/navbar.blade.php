@@ -24,7 +24,7 @@
                         Contact Us
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="contactDropdown">
-                        <a class="dropdown-item" href="#">Contact Form</a>
+                        <a class="dropdown-item" href="/contact-form">Contact Form</a>
                         <a class="dropdown-item" href="/events">Events and Training</a>
                     </div>
                 </li>

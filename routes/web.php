@@ -19,6 +19,8 @@ Route::get('/web/images/storage/{image}', 'ImageController@serve');
 
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('/contact-form', 'ContactController@contactForm')->name('contact-form');
+Route::post('/contact', 'ContactController@send')->name('send');
 Route::get('/events', 'EventsViewController@events')->name('events');
 Route::get('/event/{event}', 'EventsViewController@event')->name('event');
 
