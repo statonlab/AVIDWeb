@@ -4,6 +4,8 @@
     @include('home.header')
 
     @include('home.volunteer')
+
+    @include('components.footer')
 @endsection
 
 @section('scripts')

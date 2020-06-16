@@ -57,6 +57,14 @@ dd {
   transition: margin-left .2s ease-in-out;
 }
 
+.footer-height {
+  height: 350px;
+}
+
+.primary-content {
+  min-height: calc(100vh - 300px);
+}
+
 .sidebar {
   position: fixed;
   z-index: $zindex-fixed - 1;
