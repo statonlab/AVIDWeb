@@ -41,7 +41,7 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
             array_push($header, "Height ($column_year)");
         }
 
-        $header = array_merge($header, ['Date', 'Height']);
+        $header = array_merge($header, ['Date (M-D-Y)', 'Height (inches)']);
 
         return $header;
     }

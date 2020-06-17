@@ -88,7 +88,7 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
                 'required',
                 function ($attribute, $value, $fail) {
                     if (strtotime(str_replace('-', '/', $value)) === false) {
-                        $fail($attribute . ' is invalid.');
+                        $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
                     }
                 }
             ],
