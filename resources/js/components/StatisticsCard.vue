@@ -13,11 +13,6 @@
                           :options="plantOptions"
                           v-model="type">
                 </dropdown>
-                <dropdown class="bg-white ml-2"
-                          :options="speciesOptions"
-                          :disabled="type === ''"
-                          v-model="species">
-                </dropdown>
             </div>
         </div>
         <div class="card-body p-2">
@@ -26,6 +21,9 @@
                             :options="chart.options"
                             :series="chart.series"/>
             </div>
+        </div>
+        <div class="card-footer">
+            <a class="mb-2 btn btn-primary" href="/app/statistics">Visit Statistics Page</a>
         </div>
     </div>
 </template>
@@ -44,8 +42,6 @@
 
       this.loadSites()
       this.loadTypes()
-
-      this.speciesOptionsClear()
     },
 
     data() {
@@ -54,11 +50,9 @@
         chart           : null,
         sites           : [],
         type            : '',
-        species         : '',
         plants          : [],
         loadingSites    : false,
         _request        : null,
-        speciesOptions  : [],
       }
     },
 
@@ -68,12 +62,6 @@
       },
 
       type() {
-        this.speciesOptionsClear()
-        this.loadChart()
-        this.loadSpecies()
-      },
-
-      species() {
         this.loadChart()
       },
     },
@@ -91,19 +79,6 @@
           this.plants  = data
         } catch (e) {
           this.$alert('Unable to load plants. Please try refreshing the page.')
-        }
-      },
-
-      async loadSpecies() {
-        try {
-          const {data} = await axios.get('/web/species', {
-            params: {
-              plant_type_id: this.type,
-            },
-          })
-          this.setSpeciesOptions(data.data)
-        } catch (e) {
-          this.$alert('Unable to load species. Please try refreshing the page.')
         }
       },
 
@@ -134,7 +109,6 @@
           if (this.site) {
             const {data} = await axios.get(`/web/statistics/${this.site}/chart`, {
               params: {
-                species_id   : this.species,
                 plant_type_id: this.type,
               },
             })
@@ -210,17 +184,6 @@
           ],
         }
       },
-
-      speciesOptionsClear() {
-        this.species = ''
-        this.speciesOptions = [{label: 'All Species', value: ''}]
-      },
-
-      setSpeciesOptions(data) {
-        this.speciesOptionsClear()
-        this.speciesOptions = [{label: 'All Species', value: ''}].concat(data.map(s => ({label: s.name, value: s.id})))
-      }
-
     },
   }
 </script>
