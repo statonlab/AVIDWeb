@@ -44,6 +44,9 @@
                 <a href="https://www.utk.edu/">
                     <img class="img-fluid" src="/img/ut3.png"/>
                 </a>
+                <a href="http://www.dec.ny.gov/">
+                    <img class="img-fluid" src="/img/dec-ny-green.png" />
+                </a>
             </div>
         </div>
 
