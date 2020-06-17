@@ -3,26 +3,6 @@
 @section('content')
     <div>
         @include('components.navbar')
-<<<<<<< HEAD
-        <div class="container py-4">
-            <div class="d-flex">
-                <div class="row">
-                    <div class="col-md-4">
-                        @include('about.about_sidebar')
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <h1>Assessing Vegetation Impacts from Deer</h1>
-                                <p class="text-muted mb-4">A Rapid Assessment Method for Evaluating Deer Impacts to Forest Vegetation</p>
-                                <div class="row">
-                                    <div class="col-8">
-                                        <p>AVID is a project for <b>A</b>ssessing <b>V</b>egetation <b>I</b>mpacts from <b>D</b>eer. Project participants evaluate the impact of deer browsing by tagging and measuring tree seedlings and/or wildflowers. Users of the AVID method can measure the impacts of deer browsing on New York forests, and document this aspect of forest health. Participants will learn forest and woodland ecology, how to identify important spring wildflowers and tree species, and develop an eye for recognizing signs of deer impacts.</p>
-                                    </div>
-                                    <div class="col-4">
-                                        <img class="img-fluid mb-1" src="/img/about-deer.jpg" />
-                                        <p class="text-muted">Credit: Haliburton Forest</p>
-=======
         <div class="primary-content">
             <div class="container py-4">
                 <div class="d-flex">
@@ -37,18 +17,12 @@
                                     <p class="text-muted mb-4">A Rapid Assessment Method for Evaluating Deer Impacts to Forest Vegetation</p>
                                     <div class="row">
                                         <div class="col-8">
-                                            <p>AVID is a project to Assess Vegetation for Impacts from Deer. Plants are monitored each year to evaluate the impact of deer browsing. AVID is a method for volunteers, foresters, landowners and others to measure the effect of deer browse on New York forests. Volunteers are encouraged to use AVID to document this aspect of New York forest health. Participants will learn about forest and woodland ecology, how to identify spring wildflowers and trees, and develop an eye for recognizing signs of deer impacts.</p>
-                                            <p>Individuals can use AVID by printing field data sheets and entering the data online here at this web site, or through a smart phone app available for either Apple or Android phones at Apple Store or Google Play Store. Field data collected by individuals and organizations across New York State, and submitted to this central database, will be used to track tree, shrub and wildflower response to deer browsing over time. Knowledge of how deer impacts change through time will help guide deer management decisions at local and state levels. Participants will document changes in forest plants on their own land, or land in their communities, and also will learn:</p>
-                                            <ul>
-                                                <li>To identify important spring wildflower and tree species</li>
-                                                <li>To recognize evidence of deer impacts based on the presence or absence of key wildflower, shrub, and tree indicator species</li>
-                                            </ul>
+                                            <p>AVID is a project for <b>A</b>ssessing <b>V</b>egetation <b>I</b>mpacts from <b>D</b>eer. Project participants evaluate the impact of deer browsing by tagging and measuring tree seedlings and/or wildflowers. Users of the AVID method can measure the impacts of deer browsing on New York forests, and document this aspect of forest health. Participants will learn forest and woodland ecology, how to identify important spring wildflowers and tree species, and develop an eye for recognizing signs of deer impacts.</p>
                                         </div>
                                         <div class="col-4">
                                             <img class="img-fluid mb-1" src="/img/about-deer.jpg" />
                                             <p class="text-muted">Credit: Haliburton Forest</p>
                                         </div>
->>>>>>> master
                                     </div>
                                     <div class="col-12">
                                         <p>These guides describe the procedures to measure vegetation and quantify the impacts deer are having on woodland vegetation. These field methods can be used by volunteers, landowners, land managers, land trusts, foresters, and other natural resource professionals. Individuals will eventually use <b>AVID</b> via smart phone apps for either Apple or Android phones at Apple Store or Google Play Store, or by printing field data sheets and entering the data online at <a href="http://aviddeer.com/">aviddeer.com</a>.</p>
