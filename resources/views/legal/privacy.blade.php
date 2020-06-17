@@ -37,9 +37,9 @@
                                 <p class="mb-1">We use cookies to:</p>
                                 <p>Compile aggregate data about site traffic and site interactions in order to offer better site experiences and tools in the future. We may also use trusted third party services that track this information on our behalf. You can choose to have your computer warn you each time a cookie is being sent, or you can choose to turn off all cookies. You do this through your web browser settings. Each browser is a little different, so look at your browser's Help menu to learn the correct way to modify your cookie settings. If you disable cookies, some features will be disabled It won't affect the users experience that make your site experience more efficient and some of our services will not function properly.</p>
                                 <strong>Can users delete their accounts?</strong>
-                                <p>Yes. Please contact us to using the <a href="/contact-form">contact form</a> to make a removal request.</p>
+                                <p>Yes. Please contact us to using the <a href="/contact">contact form</a> to make a removal request.</p>
                                 <strong>How to contact us with questions</strong>
-                                <p>If you have questions, please visit our <a href="/contact-form">contact form.</a></p>
+                                <p>If you have questions, please visit our <a href="/contact">contact form.</a></p>
                             </div>
                         </div>
                     </div>
