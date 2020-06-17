@@ -16,16 +16,16 @@
                                     <h1 class="mb-4">Equipment Needed</h1>
                                     <ul>
                                         <li>Compass</li>
-                                        <li>2 yardsticks, or a stick or string cut to 2 yards in length</li>
-                                        <li>2 strings cut to 12 feet in length (optional: to help visualize quadrant boundaries)</li>
+                                        <li>2 yardsticks, or a stick or string cut to 6 feet in length</li>
                                         <li>Permanent marker</li>
-                                        <li>Smart phone with app, or data sheets with pen or pencil</li>
-                                        <li>PVC (2-ft x 1-inch), wood, or rebar stakes for marking plot center</li>
-                                        <li>Colored pin flags or additional stakes for marking the 4 cardinal directions along the edge of your plots</li>
+                                        <li>Smart phone with app, or data sheets with pen or pencil and clipboard</li>
+                                        <li>PVC (2-ft x 1-inch), fiberglass, heavy duty plastic (<a href="https://www.forestry-suppliers.com/">www.forestry-suppliers.com</a> or <a href="https://www.berntsen.com/Surveying/Survey-Stakes)">https://www.berntsen.com/Surveying/Survey-Stakes</a>), or wood stakes for marking plot center</li>
                                         <li>Hammer or mallet for pounding stakes into ground</li>
-                                        <li>Brightly colored paint, brightly colored duct tape, or surveyors flagging for marking stakes</li>
+                                        <li>Brightly colored paint, brightly colored duct tape, or surveyors flagging for marking center and edge stakes</li>
+                                        <li>Colored pin flags or additional stakes for marking the 4 cardinal directions along the edge of your plots</li>
                                         <li>GPS unit or phone with GPS capability</li>
-                                        <li>Numbered seedling tags (can be provided by Cornell University Department of Natural Resources, contact Kristi Sullivan at <a href="mailto:KLS20@cornell.edu">kls20@cornell.edu</a>)</li>
+                                        <li>Numbered seedling tags (can be provided by Cornell University Department of Natural Resources, email Kristi Sullivan at <a href="mailto:KLS20@cornell.edu">KLS20@cornell.edu</a>)</li>
+                                        <li>The Field Guide Summary Sheet for Volunteers in Appendix B</li>
                                         <li>A partner! Working with a partner is not necessary but can speed up the process and add to the enjoyment</li>
                                     </ul>
                                 </div>
