@@ -45,7 +45,7 @@
                     <img class="img-fluid" src="/img/ut3.png"/>
                 </a>
                 <a href="http://www.dec.ny.gov/">
-                    <img class="img-fluid" src="/img/dec-ny-green.png" />
+                    <img class="img-fluid" src="/img/dec-ny.png" />
                 </a>
             </div>
         </div>
