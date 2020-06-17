@@ -4,7 +4,7 @@
             <div class="col-12">
                 <h2 class="text-center mb-5" id="how-to-volunteer">How to Volunteer</h2>
                 <div class="mb-4">
-                    <h4>What You Will Do</h4>
+                    <h4>How You Will Benefit</h4>
                 </div>
                 <ul class="mb-4">
                     <li>Collect data in your woods or land in your community and enter it here to track tree, shrub and wildflower response to deer browsing over time.</li>
