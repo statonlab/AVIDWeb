@@ -27,6 +27,16 @@
                 </div>
             </div>
 
+            <div class="col-lg-4">
+                <p class="font-weight-bold mb-2 text-white">Legal</p>
+
+                <div class="mb-1">
+                    <a class="text-white" href="/privacy-policy">
+                        Privacy Policy
+                    </a>
+                </div>
+            </div>
+
             <div class="col-lg-3">
                 <a href="https://www.cornell.edu/">
                     <img class="img-fluid mb-2" src="/img/cornell_logo_white.svg"/>
