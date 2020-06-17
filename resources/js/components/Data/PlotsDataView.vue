@@ -141,7 +141,7 @@
                 </div>
                 <pager :last-page="lastPage" :page="page" @change="goTo($event)"/>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" v-if="site">
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="pb-2">
@@ -157,7 +157,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="card mb-3" v-if="site">
+                <div class="card mb-3">
                     <div class="card-body">
                         <div class="pb-2">
                             <strong>Site Information</strong>
