@@ -113,33 +113,12 @@
                         <a class="dropdown-item" href="/about/who">Who We Are</a>
                     </div>
                 </li>
-                @auth()
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle font-weight-bold"
-                           href="#"
-                           id="navbarDropdown"
-                           role="button"
-                           data-toggle="dropdown"
-                           aria-haspopup="true"
-                           aria-expanded="false">
-                            Account
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/app/data">My Data</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" id="logout-btn">Logout</a>
-                            <form action="/logout" method="post" id="logout-form">
-                                @csrf
-                            </form>
-                        </div>
-                    </li>
-                @endauth()
             </ul>
             @auth()
                 <a href="/app" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-primary'}}">Dashboard</a>
             @endauth()
             @guest()
-                <a href="/register" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-primary'}}">Register</a>
+                <a href="/login" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-primary'}}">Login</a>
             @endguest
         </div>
     </div>
