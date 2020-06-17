@@ -19,6 +19,8 @@ Route::get('/web/images/storage/{image}', 'ImageController@serve');
 
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('/contact-form', 'ContactController@contactForm')->name('contact-form');
+Route::post('/contact', 'ContactController@send')->name('send');
 Route::get('/events', 'EventsViewController@events')->name('events');
 Route::get('/event/{event}', 'EventsViewController@event')->name('event');
 
@@ -58,6 +60,7 @@ Route::get('/resources/identification', 'ResourcesController@identification')->n
 Route::get('/resources/manual', 'ResourcesController@manual')->name('manual');
 Route::get('/resources/references', 'ResourcesController@references')->name('references');
 
+Route::get('/privacy-policy', 'LegalController@privacyPolicy')->name('privacy-policy');
 
 Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
 

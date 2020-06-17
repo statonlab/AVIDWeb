@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="row mb-4">
                                     <div class="col-lg-6">
-                                        <p><b>Low impact –</b> Wildflower species highly preferred by deer are present in the forest, reach greater heights, and flower, or when preferred tree seedlings are able to grow beyond the reach of deer (5-6 feet).</p>
+                                        <p><b>Low impact −</b> Wildflower species highly preferred by deer are present in the forest, reach greater heights, and flower, or when preferred tree seedlings are able to grow beyond the reach of deer (5-6 feet).</p>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="row">
@@ -83,5 +83,6 @@
                 </div>
             </div>
         </div>
+        @include('components.footer')
     </div>
 @endsection

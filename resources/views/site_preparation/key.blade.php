@@ -93,7 +93,6 @@
                                             </div>
                                         </div>
                                         <p class="text-muted ml-4">Pictures showing dense cover of American beech (left) and barberry (right) in the subcanopy and shrub layers of the forest. In these stands, wildflowers are more likely than seedlings to respond to changes in browsing impacts.</p>
-                                        <p class="ml-4">Are there openings between the understory trees and shrubs that allow sunlight to reach more than half of the forest floor in most locations? If yes, you can implement any or all methods at this site.</p>
                                         <strong>Fern, grass, sedge and invasive herb cover</strong>
                                         <p class="ml-4">Do ferns, grasses, sedges, or invasive herbs cover significant amounts of ground within the stand? Wildflowers that occur within fern patches can be selected and measured. Only select woody seedlings if they are taller than the fern patch.</p>
                                     </div>
@@ -104,6 +103,7 @@
                 </div>
             </div>
         </div>
+        @include('components.footer')
     </div>
 
     <style>
