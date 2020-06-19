@@ -102,6 +102,9 @@ class StatisticsController extends Controller
             'types.*' => 'nullable|exists:plant_types,id',
             'species' => 'nullable|array',
             'species.*' => 'nullable|exists:species,id',
+            'state' => 'nullable|exists:states,id',
+            'county' => 'nullable|exists:counties,id',
+            'protection' => 'nullable',
         ]);
 
         $measurements = Measurement::with(['plot'])->orderBy('date', 'asc');
@@ -132,6 +135,17 @@ class StatisticsController extends Controller
             });
         }
 
+        if ($request->state) {
+            $measurements->where(function ($query) use ($request) {
+                $query->whereHas('site', function ($query) use ($request) {
+                    $query->where('state_id', $request->state);
+                    if ($request->county) {
+                        $query->where('county_id', $request->county);
+                    }
+                });
+            });
+        }
+
         $measurements = $measurements->get();
 
         if ($measurements->isEmpty()) {
@@ -139,37 +153,49 @@ class StatisticsController extends Controller
         }
 
         $years = range($measurements->first()->date->year, now()->year);
+        $protected = [];
+        $protected_count = [];
+        $unprotected = [];
+        $unprotected_count = [];
+        $data = [];
 
         foreach ($years as $year) {
             $annual = $measurements->where('date.year', $year);
 
-            $protected_annual = $annual->where('plot.is_protected', 1);
-            $unprotected_annual = $annual->where('plot.is_protected', 0);
+            if ($request->protection === null || $request->protection == 1) {
+                $protected_annual = $annual->where('plot.is_protected', 1);
+                $protected_average = $protected_annual->average('height');
+                $protected_average = number_format($protected_average, 2);
+                $protected_count[] = $protected_annual->count();
+                $protected[] = $protected_average;
+            }
 
-            $protected_average = $protected_annual->average('height');
-            $protected_average = number_format($protected_average, 2);
-            $protected_count[] = $protected_annual->count();
+            if ($request->protection === null || $request->protection == 0) {
+                $unprotected_annual = $annual->where('plot.is_protected', 0);
+                $unprotected_average = $unprotected_annual->average('height');
+                $unprotected_average = number_format($unprotected_average, 2);
+                $unprotected_count[] = $unprotected_annual->count();
+                $unprotected[] = $unprotected_average;
+            }
+        }
 
-            $unprotected_average = $unprotected_annual->average('height');
-            $unprotected_average = number_format($unprotected_average, 2);
-            $unprotected_count[] = $unprotected_annual->count();
+        if ($request->protection === null || $request->protection == 1) {
+            $data[] = [
+                'protected' => $protected,
+                'count' => $protected_count,
+            ];
+        }
 
-            $protected[] = $protected_average;
-            $unprotected[] = $unprotected_average;
+        if ($request->protection === null || $request->protection == 0) {
+            $data[] = [
+                'unprotected' => $unprotected,
+                'count' => $unprotected_count,
+            ];
         }
 
         return $this->success([
             'xaxis' => $years,
-            'data' => [
-                [
-                    'protected' => $protected,
-                    'count' => $protected_count,
-                ],
-                [
-                    'unprotected' => $unprotected,
-                    'count' => $unprotected_count,
-                ],
-            ]
+            'data' => $data,
         ]);
     }
 

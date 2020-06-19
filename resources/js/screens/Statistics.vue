@@ -9,123 +9,105 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <div class="d-flex">
-                                    <label for="sites" class="flex-grow-1">
-                                        <span>Sites</span>
-                                    </label>
-                                    <div class="form-check flex-shrink-0">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="1"
-                                               :checked="allSites"
-                                               @change="allSites = $event.target.checked"
-                                               id="show-all-sites">
-                                        <label class="form-check-label font-weight-normal" for="show-all-sites">
-                                            Show All
-                                        </label>
-                                    </div>
-                                </div>
+                                <label>
+                                    Sites
+                                </label>
                                 <tokens-field id="sites"
                                               :options="siteOptions"
-                                              :disabled="allSites"
                                               :placeholder="'Showing all sites'"
                                               v-model="sites"/>
                             </div>
 
                             <div class="form-group">
-                                <div class="d-flex">
-                                    <label for="plots" class="flex-grow-1">
-                                        Plots
-                                    </label>
-                                    <div class="form-check flex-shrink-0">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="1"
-                                               :checked="allPlots"
-                                               @change="allPlots = $event.target.checked"
-                                               id="show-all-plots">
-                                        <label class="form-check-label font-weight-normal" for="show-all-plots">
-                                            Show All
-                                        </label>
-                                    </div>
-                                </div>
+                                <label>
+                                    Plots
+                                </label>
                                 <tokens-field id="plots"
                                               :options="plotOptions"
-                                              :disabled="allPlots"
                                               :placeholder="'Showing all plots'"
                                               v-model="plots"/>
                             </div>
 
                             <div class="form-group">
-                                <div class="d-flex">
-                                    <label for="quadrants" class="flex-grow-1">
-                                        Quadrants
-                                    </label>
-                                    <div class="form-check flex-shrink-0">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="1"
-                                               :checked="allQuadrants"
-                                               @change="allQuadrants = $event.target.checked"
-                                               id="show-all-quadrants">
-                                        <label class="form-check-label font-weight-normal" for="show-all-plots">
-                                            Show All
-                                        </label>
-                                    </div>
-                                </div>
-                                <tokens-field id="quadrants"
-                                              :options="quadrantOptions"
-                                              :disabled="allQuadrants"
-                                              :placeholder="'Showing all quadrants'"
-                                              v-model="quadrants"/>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="d-flex">
-                                    <label for="types" class="flex-grow-1">
-                                        Plant Types
-                                    </label>
-                                    <div class="form-check flex-shrink-0">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="1"
-                                               :checked="allTypes"
-                                               @change="allTypes = $event.target.checked"
-                                               id="show-all-types">
-                                        <label class="form-check-label font-weight-normal" for="show-all-plots">
-                                            Show All
-                                        </label>
-                                    </div>
-                                </div>
+                                <label>
+                                    Plant Types
+                                </label>
                                 <tokens-field id="types"
                                               :options="typeOptions"
-                                              :disabled="allTypes"
                                               :placeholder="'Showing all types'"
                                               v-model="types"/>
                             </div>
 
                             <div class="form-group">
-                                <div class="d-flex">
-                                    <label for="species" class="flex-grow-1">
-                                        Species
-                                    </label>
-                                    <div class="form-check flex-shrink-0">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="1"
-                                               :checked="allSpecies"
-                                               @change="allSpecies = $event.target.checked"
-                                               id="show-all-species">
-                                        <label class="form-check-label font-weight-normal" for="show-all-plots">
-                                            Show All
-                                        </label>
-                                    </div>
-                                </div>
+                                <label>
+                                    Species
+                                </label>
                                 <tokens-field id="species"
                                               :options="speciesOptions"
-                                              :disabled="allSpecies"
                                               :placeholder="'Showing all species'"
                                               v-model="species"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    State
+                                </label>
+                                <div class="d-flex">
+                                    <dropdown
+                                            class="flex-grow-1"
+                                            autocomplete
+                                            v-model="state"
+                                            @input="selectState($event)"
+                                            :options="stateOptions"
+                                            placeholder="Select a state"
+                                            @search="stateSearch = $event"
+                                            ref="state"
+                                    />
+                                    <a v-if="state !== null"
+                                       href="#"
+                                       class="btn btn-link p-1 ml-2"
+                                       @click.prevent="clearState()">
+                                        Clear
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    County
+                                </label>
+                                <div class="d-flex">
+                                    <dropdown
+                                            class="flex-grow-1"
+                                            autocomplete
+                                            @search="countySearch = $event"
+                                            :placeholder="state === null ? 'Select a state first' : 'Select a County'"
+                                            v-model="county"
+                                            :options="countyOptions"
+                                            :disabled="state === null"
+                                            ref="county"
+                                    />
+                                    <a v-if="county !== null"
+                                       href="#"
+                                       class="btn btn-link p-1 ml-2"
+                                       @click.prevent="$refs.county.clear()">
+                                        Clear
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    Protection
+                                </label>
+                                <select name="protection"
+                                        id="protection"
+                                        v-model="protection"
+                                        class="form-control">
+                                    <option value="">Protected and unprotected</option>
+                                    <option value="unprotected">Unprotected only</option>
+                                    <option value="protected">Protected only</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -136,7 +118,8 @@
                             <h1 class="page-title">Annual Heights</h1>
                         </div>
                         <div class="mr-4 card-body" v-if="chart">
-                            <apex-chart type="bar"
+                            <apex-chart ref="chart"
+                                        type="bar"
                                         :options="chart.options"
                                         :series="chart.series"/>
                         </div>
@@ -149,12 +132,14 @@
 
 <script>
   import TokensField from '../components/TokensField'
+  import Dropdown from '../components/Dropdown'
+  import Icon from '../components/Icon'
   import ApexChart from 'vue-apexcharts'
 
   export default {
     name: 'Statistics',
 
-    components: {ApexChart, TokensField},
+    components: {ApexChart, TokensField, Dropdown, Icon},
 
     mounted() {
       this.setChartDefault()
@@ -163,16 +148,8 @@
       this.loadPlots()
       this.loadTypes()
       this.loadSpecies()
-
+      this.loadStates()
       this.loadChart()
-    },
-
-    computed: {
-      quadrantOptions() {
-        return [
-          'Northeast', 'Northwest', 'Southeast', 'Southwest',
-        ]
-      },
     },
 
     watch: {
@@ -181,23 +158,7 @@
         this.loadPlots()
       },
 
-      allSites() {
-        this.loadChart()
-      },
-
       plots() {
-        this.loadChart()
-      },
-
-      allPlots() {
-        this.loadChart()
-      },
-
-      quadrants() {
-        this.loadChart()
-      },
-
-      allQuadrants() {
         this.loadChart()
       },
 
@@ -206,36 +167,49 @@
         this.loadSpecies()
       },
 
-      allTypes() {
-        this.loadChart()
-      },
-
       species() {
         this.loadChart()
       },
 
-      allSpecies() {
+      state() {
         this.loadChart()
       },
+
+      stateSearch() {
+        this.loadStates()
+      },
+
+      county() {
+        this.loadChart()
+      },
+
+      countySearch() {
+        this.loadCounties()
+      },
+
+      protection() {
+        this.setProtection()
+      }
     },
 
     data() {
       return {
         chart         : null,
-        allSites      : true,
-        allPlots      : true,
-        allQuadrants  : true,
-        allTypes      : true,
-        allSpecies    : true,
         siteOptions   : [],
         plotOptions   : [],
         typeOptions   : [],
         speciesOptions: [],
+        stateOptions  : [],
+        countyOptions : [],
         sites         : [],
         plots         : [],
-        quadrants     : [],
         types         : [],
         species       : [],
+        stateSearch   : '',
+        countySearch  : '',
+        protection    : '',
+        state         : null,
+        county        : null,
         _request      : null,
       }
     },
@@ -274,15 +248,58 @@
         }
       },
 
+      async loadStates() {
+        try {
+          const {data}     = await axios.get(`/web/states`, {
+            params     : {
+              search: this.stateSearch,
+            },
+          })
+          this.stateOptions = data.data.map(s => {
+            return {
+              label : `${s.name} (${s.code})`,
+              value : s.id,
+              search: s.name,
+            }
+          })
+          if (this.state) {
+            this.loadCounties()
+          }
+        } catch (e) {
+          this.$alert('Unable to load states. Please try refreshing the page or contact us.')
+          console.error(e)
+        }
+      },
+
+      async loadCounties() {
+        try {
+          const {data} = await axios.get('/web/counties', {
+            params     : {
+              state_id  : this.state,
+              search    : this.countySearch,
+            },
+          })
+
+          this.countyOptions = data.data.map(c => {
+            return {
+              label: c.name,
+              value: c.id,
+            }
+          })
+        } catch (e) {
+          this.$alert('Unable to load counties. Please try refreshing the page or contact us.')
+          console.error(e)
+        }
+      },
+
       async loadPlots() {
         this.plots = []
         try {
           const {data} = await axios.get('/web/statistics/plots', {
             params: {
-              sites: this.allSites ? null : this.sites,
+              sites: this.sites,
             },
           })
-          console.log(data)
           this.plotOptions = data.map(({id, name}) => ({id, text: name}))
         } catch (e) {
           this.$alert('Unable to load plots. Please try refreshing the page or contact us.')
@@ -298,11 +315,12 @@
         try {
           const {data} = await axios.get(`/web/statistics/chart`, {
             params: {
-              sites    : this.allSites ? null : this.sites,
-              plots    : this.allPlots ? null : this.plots,
-              types    : this.allTypes ? null : this.types,
-              quadrants: this.allQuadrants ? null : this.quadrants,
-              species  : this.allSpecies ? null : this.species,
+              sites     : this.sites,
+              plots     : this.plots,
+              types     : this.types,
+              species   : this.species,
+              state     : this.state,
+              county    : this.county,
             },
           })
 
@@ -344,6 +362,18 @@
       },
 
       setChart(data) {
+        let series = []
+
+        if (data.data[0].unprotected === undefined) {
+          series.push({name: 'protected', data: data.data[0].protected})
+        } else {
+          series.push({name: 'unprotected', data: data.data[0].unprotected})
+        }
+
+        if (data.data.length === 2) {
+          series.push({name: 'unprotected', data: data.data[1].unprotected})
+        }
+
         this.chart = {
           options: {
             chart     : {
@@ -370,12 +400,38 @@
             // title : {text: 'Annual Height'},
             noData    : {text: 'No measurements found.'},
           },
-          series : [
-            {name: 'protected', data: data.data[0].protected},
-            {name: 'unprotected', data: data.data[1].unprotected},
-          ],
+          series : series,
         }
       },
+
+      selectState() {
+        if (this.state) {
+          this.loadCounties()
+        }
+        this.$refs.county.clear()
+      },
+
+      clearState() {
+        this.$refs.county.clear()
+        this.$refs.state.clear()
+      },
+
+      setProtection() {
+        switch (this.protection)
+        {
+          case 'unprotected':
+            this.$refs.chart.showSeries('unprotected')
+            this.$refs.chart.hideSeries('protected')
+            break
+          case 'protected':
+            this.$refs.chart.showSeries('protected')
+            this.$refs.chart.hideSeries('unprotected')
+            break
+          default:
+            this.$refs.chart.showSeries('protected')
+            this.$refs.chart.showSeries('unprotected')
+        }
+      }
     },
   }
 </script>
