@@ -19,6 +19,10 @@ class GroupController extends Controller
      */
     public function index(Request $request)
     {
+        $this->validate($request, [
+            'search' => 'nullable|max:255',
+        ]);
+
         /** @var \App\User $user */
         $user = $request->user();
 
@@ -26,7 +30,13 @@ class GroupController extends Controller
             'owner' => function ($query) {
                 $query->select(['users.id', 'users.name']);
             },
-        ])->withCount([
+        ])->when($request->search, function ($query) use ($request) {
+            $term = $request->search;
+            $query->where(function ($query) use ($term) {
+                /** @var \Illuminate\Database\Eloquent\Builder $query */
+                $query->where('name', 'like', "%$term%");
+            });
+        })->withCount([
             'users',
         ])->orderBy('name', 'asc')->paginate(20);
 

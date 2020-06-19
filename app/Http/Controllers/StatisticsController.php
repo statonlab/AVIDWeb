@@ -104,14 +104,21 @@ class StatisticsController extends Controller
             'species.*' => 'nullable|exists:species,id',
             'state' => 'nullable|exists:states,id',
             'county' => 'nullable|exists:counties,id',
-            'protection' => 'nullable',
+            'data_type' => 'nullable|in:owned,admin',
+            'group' => 'nullable|exists:groups,id',
         ]);
+
+        if ($request->data_type === 'admin') {
+            $this->authorize('viewAny', Site::class);
+        }
 
         $measurements = Measurement::with(['plot'])->orderBy('date', 'asc');
 
         if ($request->sites) {
             $measurements = $measurements->whereIn('site_id', $request->sites);
-        } else {
+        }
+
+        if ($request->data_type === 'owned') {
             $measurements = $measurements->where('user_id', $request->user()->id);
         }
 
@@ -135,12 +142,19 @@ class StatisticsController extends Controller
             });
         }
 
-        if ($request->state) {
+        if ($request->state || $request->group) {
             $measurements->where(function ($query) use ($request) {
                 $query->whereHas('site', function ($query) use ($request) {
-                    $query->where('state_id', $request->state);
+                    if ($request->state) {
+                        $query->where('state_id', $request->state);
+                    }
                     if ($request->county) {
                         $query->where('county_id', $request->county);
+                    }
+                    if ($request->group) {
+                        $query->whereHas('groups', function ($query) use ($request) {
+                            $query->where('group_id', $request->group);
+                        });
                     }
                 });
             });
@@ -157,45 +171,35 @@ class StatisticsController extends Controller
         $protected_count = [];
         $unprotected = [];
         $unprotected_count = [];
-        $data = [];
 
         foreach ($years as $year) {
             $annual = $measurements->where('date.year', $year);
 
-            if ($request->protection === null || $request->protection == 1) {
-                $protected_annual = $annual->where('plot.is_protected', 1);
-                $protected_average = $protected_annual->average('height');
-                $protected_average = number_format($protected_average, 2);
-                $protected_count[] = $protected_annual->count();
-                $protected[] = $protected_average;
-            }
+            $protected_annual = $annual->where('plot.is_protected', 1);
+            $protected_average = $protected_annual->average('height');
+            $protected_average = number_format($protected_average, 2);
+            $protected_count[] = $protected_annual->count();
+            $protected[] = $protected_average;
 
-            if ($request->protection === null || $request->protection == 0) {
-                $unprotected_annual = $annual->where('plot.is_protected', 0);
-                $unprotected_average = $unprotected_annual->average('height');
-                $unprotected_average = number_format($unprotected_average, 2);
-                $unprotected_count[] = $unprotected_annual->count();
-                $unprotected[] = $unprotected_average;
-            }
-        }
-
-        if ($request->protection === null || $request->protection == 1) {
-            $data[] = [
-                'protected' => $protected,
-                'count' => $protected_count,
-            ];
-        }
-
-        if ($request->protection === null || $request->protection == 0) {
-            $data[] = [
-                'unprotected' => $unprotected,
-                'count' => $unprotected_count,
-            ];
+            $unprotected_annual = $annual->where('plot.is_protected', 0);
+            $unprotected_average = $unprotected_annual->average('height');
+            $unprotected_average = number_format($unprotected_average, 2);
+            $unprotected_count[] = $unprotected_annual->count();
+            $unprotected[] = $unprotected_average;
         }
 
         return $this->success([
             'xaxis' => $years,
-            'data' => $data,
+            'data' => [
+                [
+                    'protected' => $protected,
+                    'count' => $protected_count,
+                ],
+                [
+                    'unprotected' => $unprotected,
+                    'count' => $unprotected_count,
+                ]
+            ],
         ]);
     }
 

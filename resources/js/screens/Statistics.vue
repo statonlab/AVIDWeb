@@ -10,6 +10,42 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label>
+                                    Data Type
+                                </label>
+                                <select name="data-type"
+                                        id="data-type"
+                                        v-model="dataType"
+                                        class="form-control">
+                                    <option value="owned">My Sites Only</option>
+                                    <option v-if="User.can('view sites')" value="admin">All Sites</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    Group
+                                </label>
+                                <div class="d-flex">
+                                    <dropdown
+                                            class="flex-grow-1"
+                                            autocomplete
+                                            v-model="group"
+                                            :options="groups"
+                                            placeholder="Select a group"
+                                            @search="groupSearch = $event"
+                                            ref="group"
+                                    />
+                                    <a v-if="group !== null"
+                                       href="#"
+                                       class="btn btn-link p-1 ml-2"
+                                       @click.prevent="$refs.group.clear()">
+                                        Clear
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
                                     Sites
                                 </label>
                                 <tokens-field id="sites"
@@ -134,6 +170,7 @@
   import TokensField from '../components/TokensField'
   import Dropdown from '../components/Dropdown'
   import Icon from '../components/Icon'
+  import User from '../helpers/User'
   import ApexChart from 'vue-apexcharts'
 
   export default {
@@ -150,6 +187,7 @@
       this.loadSpecies()
       this.loadStates()
       this.loadChart()
+      this.loadGroups()
     },
 
     watch: {
@@ -189,11 +227,24 @@
 
       protection() {
         this.setProtection()
+      },
+
+      dataType() {
+        this.loadChart()
+      },
+
+      group() {
+        this.loadChart()
+      },
+
+      groupSearch() {
+        this.loadGroups()
       }
     },
 
     data() {
       return {
+        User,
         chart         : null,
         siteOptions   : [],
         plotOptions   : [],
@@ -201,20 +252,43 @@
         speciesOptions: [],
         stateOptions  : [],
         countyOptions : [],
+        groups        : [],
         sites         : [],
         plots         : [],
         types         : [],
         species       : [],
         stateSearch   : '',
         countySearch  : '',
+        groupSearch   : '',
         protection    : '',
+        dataType      : 'owned',
         state         : null,
         county        : null,
+        group         : null,
         _request      : null,
       }
     },
 
     methods: {
+      async loadGroups() {
+        try {
+          const {data}     = await axios.get(`/web/groups`, {
+            params: {
+              search: this.groupSearch,
+            }
+          })
+          this.groups = data.data.map(g => {
+            return {
+              label: g.name,
+              value: g.id,
+            }
+          })
+        } catch (e) {
+          this.$alert('Unable to load groups. Please try refreshing the page or contact us.')
+          console.error(e)
+        }
+      },
+
       async loadTypes() {
         try {
           const {data}     = await axios.get('/web/plant-types')
@@ -321,6 +395,8 @@
               species   : this.species,
               state     : this.state,
               county    : this.county,
+              data_type : this.dataType,
+              group     : this.group,
             },
           })
 
@@ -392,6 +468,7 @@
                 },
               },
             },
+            colors    : ['#2E93FA', '#2EB07A'],
             dataLabels: {
               formatter: (val, {seriesIndex, dataPointIndex}) => {
                 return val + ` (N=${data.data[seriesIndex].count[dataPointIndex]})`
