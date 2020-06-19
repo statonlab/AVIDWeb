@@ -22,20 +22,24 @@
                             :series="chart.series"/>
             </div>
         </div>
-        <div class="card-footer">
-            <a class="mb-2 btn btn-primary" href="/app/statistics">Visit Statistics Page</a>
+        <div class="card-footer border-top text-right">
+            <a class="mb-2 btn btn-link" href="/app/statistics">
+                <span class="mr-2">Visit Statistics Page</span>
+                <icon name="chevron-forward-outline" />
+            </a>
         </div>
     </div>
 </template>
 
 <script>
   import Dropdown from '../components/Dropdown'
+  import Icon from '../components/Icon'
   import ApexChart from 'vue-apexcharts'
 
   export default {
     name: 'StatisticsCard',
 
-    components: {ApexChart, Dropdown},
+    components: {ApexChart, Dropdown, Icon},
 
     mounted() {
       this.setChartDefault()
