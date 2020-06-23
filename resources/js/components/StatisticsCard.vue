@@ -13,11 +13,6 @@
                           :options="plantOptions"
                           v-model="type">
                 </dropdown>
-                <dropdown class="bg-white ml-2"
-                          :options="speciesOptions"
-                          :disabled="type === ''"
-                          v-model="species">
-                </dropdown>
             </div>
         </div>
         <div class="card-body p-2">
@@ -27,25 +22,30 @@
                             :series="chart.series"/>
             </div>
         </div>
+        <div class="card-footer border-top text-right">
+            <a class="mb-2 btn btn-link" href="/app/statistics">
+                <span class="mr-2">Visit Statistics Page</span>
+                <icon name="chevron-forward-outline" />
+            </a>
+        </div>
     </div>
 </template>
 
 <script>
   import Dropdown from '../components/Dropdown'
+  import Icon from '../components/Icon'
   import ApexChart from 'vue-apexcharts'
 
   export default {
     name: 'StatisticsCard',
 
-    components: {ApexChart, Dropdown},
+    components: {ApexChart, Dropdown, Icon},
 
     mounted() {
       this.setChartDefault()
 
       this.loadSites()
       this.loadTypes()
-
-      this.speciesOptionsClear()
     },
 
     data() {
@@ -54,11 +54,9 @@
         chart           : null,
         sites           : [],
         type            : '',
-        species         : '',
         plants          : [],
         loadingSites    : false,
         _request        : null,
-        speciesOptions  : [],
       }
     },
 
@@ -68,12 +66,6 @@
       },
 
       type() {
-        this.speciesOptionsClear()
-        this.loadChart()
-        this.loadSpecies()
-      },
-
-      species() {
         this.loadChart()
       },
     },
@@ -91,19 +83,6 @@
           this.plants  = data
         } catch (e) {
           this.$alert('Unable to load plants. Please try refreshing the page.')
-        }
-      },
-
-      async loadSpecies() {
-        try {
-          const {data} = await axios.get('/web/species', {
-            params: {
-              plant_type_id: this.type,
-            },
-          })
-          this.setSpeciesOptions(data.data)
-        } catch (e) {
-          this.$alert('Unable to load species. Please try refreshing the page.')
         }
       },
 
@@ -134,7 +113,6 @@
           if (this.site) {
             const {data} = await axios.get(`/web/statistics/${this.site}/chart`, {
               params: {
-                species_id   : this.species,
                 plant_type_id: this.type,
               },
             })
@@ -210,17 +188,6 @@
           ],
         }
       },
-
-      speciesOptionsClear() {
-        this.species = ''
-        this.speciesOptions = [{label: 'All Species', value: ''}]
-      },
-
-      setSpeciesOptions(data) {
-        this.speciesOptionsClear()
-        this.speciesOptions = [{label: 'All Species', value: ''}].concat(data.map(s => ({label: s.name, value: s.id})))
-      }
-
     },
   }
 </script>
