@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request
+from flask import Flask, request, jsonify, make_response
 from shapely.geometry import shape, Point
 
 app = Flask(__name__)
@@ -12,12 +12,12 @@ def find_wmu():
     if 'lat' in request.args:
       latitude = request.args.get('lat', float)
     else:
-      return json.dumps({'results': '', 'error': 'Latitude is required.'})
+      return make_response(jsonify({'results': "", 'error': "lat is required"}), 422)
 
     if 'lng' in request.args:
       longitude = request.args.get('lng', float)
     else:
-      return json.dumps({'results': '', 'error': 'Longitude is required.'})
+      return make_response(jsonify({'results': "", 'error': "lng is required"}), 422)
 
     with open('code/ny_wmu.geojson') as f:
       js = json.load(f)
@@ -27,9 +27,9 @@ def find_wmu():
     for feature in js['features']:
         polygon = shape(feature['geometry'])
         if polygon.contains(point):
-            return json.dumps({'results': feature['properties']['Name'], 'error': ''})
+        	return make_response(jsonify({'results': feature['properties']['Name'], 'error': False}), 200)
 
-    return json.dumps({'results': '', 'error': 'A WMU was not found.'})
+    return make_response(jsonify({'results': '', 'error': False}), 200)
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')
