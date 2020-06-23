@@ -102,13 +102,23 @@ class StatisticsController extends Controller
             'types.*' => 'nullable|exists:plant_types,id',
             'species' => 'nullable|array',
             'species.*' => 'nullable|exists:species,id',
+            'state' => 'nullable|exists:states,id',
+            'county' => 'nullable|exists:counties,id',
+            'data_type' => 'nullable|in:owned,admin',
+            'group' => 'nullable|exists:groups,id',
         ]);
+
+        if ($request->data_type === 'admin') {
+            $this->authorize('viewAny', Site::class);
+        }
 
         $measurements = Measurement::with(['plot'])->orderBy('date', 'asc');
 
         if ($request->sites) {
             $measurements = $measurements->whereIn('site_id', $request->sites);
-        } else {
+        }
+
+        if ($request->data_type === 'owned') {
             $measurements = $measurements->where('user_id', $request->user()->id);
         }
 
@@ -132,6 +142,24 @@ class StatisticsController extends Controller
             });
         }
 
+        if ($request->state || $request->group) {
+            $measurements->where(function ($query) use ($request) {
+                $query->whereHas('site', function ($query) use ($request) {
+                    if ($request->state) {
+                        $query->where('state_id', $request->state);
+                    }
+                    if ($request->county) {
+                        $query->where('county_id', $request->county);
+                    }
+                    if ($request->group) {
+                        $query->whereHas('groups', function ($query) use ($request) {
+                            $query->where('group_id', $request->group);
+                        });
+                    }
+                });
+            });
+        }
+
         $measurements = $measurements->get();
 
         if ($measurements->isEmpty()) {
@@ -139,22 +167,24 @@ class StatisticsController extends Controller
         }
 
         $years = range($measurements->first()->date->year, now()->year);
+        $protected = [];
+        $protected_count = [];
+        $unprotected = [];
+        $unprotected_count = [];
 
         foreach ($years as $year) {
             $annual = $measurements->where('date.year', $year);
 
             $protected_annual = $annual->where('plot.is_protected', 1);
-            $unprotected_annual = $annual->where('plot.is_protected', 0);
-
             $protected_average = $protected_annual->average('height');
             $protected_average = number_format($protected_average, 2);
             $protected_count[] = $protected_annual->count();
+            $protected[] = $protected_average;
 
+            $unprotected_annual = $annual->where('plot.is_protected', 0);
             $unprotected_average = $unprotected_annual->average('height');
             $unprotected_average = number_format($unprotected_average, 2);
             $unprotected_count[] = $unprotected_annual->count();
-
-            $protected[] = $protected_average;
             $unprotected[] = $unprotected_average;
         }
 
@@ -168,8 +198,8 @@ class StatisticsController extends Controller
                 [
                     'unprotected' => $unprotected,
                     'count' => $unprotected_count,
-                ],
-            ]
+                ]
+            ],
         ]);
     }
 
