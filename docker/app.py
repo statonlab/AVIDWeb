@@ -1,14 +1,10 @@
 import json
-
 from flask import Flask, request
 from shapely.geometry import shape, Point
+
 app = Flask(__name__)
 
-@app.route('/')
-def hello_world():
-    return "Hello World!"
-
-@app.route('/wmu', methods=['GET'])
+@app.route('/', methods=['GET'])
 def find_wmu():
     latitude = 0
     longitude = 0
