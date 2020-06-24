@@ -22,7 +22,7 @@ def find_wmu():
     with open('code/ny_wmu.geojson') as f:
       js = json.load(f)
 
-    point = Point(float(latitude), float(longitude))
+    point = Point(float(longitude), float(latitude))
 
     for feature in js['features']:
         polygon = shape(feature['geometry'])

@@ -145,6 +145,19 @@
                                     <option value="protected">Protected only</option>
                                 </select>
                             </div>
+
+                            <div class="form-group">
+                                <label>
+                                    Wildlife Management Unit
+                                </label>
+                                <select name="wmu"
+                                        id="wmu"
+                                        v-model="wmu"
+                                        class="form-control">
+                                    <option value="">Show all units</option>
+                                    <option v-for="wmu in options.wmus" :value="wmu">{{wmu}}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -172,6 +185,7 @@
   import Icon from '../components/Icon'
   import User from '../helpers/User'
   import ApexChart from 'vue-apexcharts'
+  import Options from '../helpers/Options'
 
   export default {
     name: 'Statistics',
@@ -239,6 +253,10 @@
 
       groupSearch() {
         this.loadGroups()
+      },
+
+      wmu() {
+        this.loadChart()
       }
     },
 
@@ -262,10 +280,12 @@
         groupSearch   : '',
         protection    : '',
         dataType      : 'owned',
+        wmu           : '',
         state         : null,
         county        : null,
         group         : null,
         _request      : null,
+        options       : Options,
       }
     },
 
@@ -397,6 +417,7 @@
               county    : this.county,
               data_type : this.dataType,
               group     : this.group,
+              wmu       : this.wmu,
             },
           })
 

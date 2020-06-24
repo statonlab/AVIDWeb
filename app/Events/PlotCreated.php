@@ -18,7 +18,7 @@ class PlotCreated
     /**
      * @var \App\Plot
      */
-    protected $plot;
+    public $plot;
 
     /**
      * Create a new event instance.
