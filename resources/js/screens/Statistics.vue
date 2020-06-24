@@ -66,6 +66,20 @@
 
                             <div class="form-group">
                                 <label>
+                                    Protection
+                                </label>
+                                <select name="protection"
+                                        id="protection"
+                                        v-model="protection"
+                                        class="form-control">
+                                    <option value="">Protected and unprotected</option>
+                                    <option value="unprotected">Unprotected only</option>
+                                    <option value="protected">Protected only</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
                                     Plant Types
                                 </label>
                                 <tokens-field id="types"
@@ -130,20 +144,6 @@
                                         Clear
                                     </a>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>
-                                    Protection
-                                </label>
-                                <select name="protection"
-                                        id="protection"
-                                        v-model="protection"
-                                        class="form-control">
-                                    <option value="">Protected and unprotected</option>
-                                    <option value="unprotected">Unprotected only</option>
-                                    <option value="protected">Protected only</option>
-                                </select>
                             </div>
 
                             <div class="form-group">
