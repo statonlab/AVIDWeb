@@ -29,7 +29,7 @@ class WMURetriever
      */
     public function setWMU()
     {
-        return rescue(function () {
+       rescue(function () {
             $response = Http::get('localhost:5000', [
                 'lat' => $this->plot->latitude,
                 'lng' => $this->plot->longitude,
