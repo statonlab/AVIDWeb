@@ -26,6 +26,7 @@ class Plot extends Model
         'ground_cover',
         'recorders',
         'last_measured_at',
+        'wmu',
     ];
 
     /**

@@ -17,6 +17,18 @@ class StatisticsController extends Controller
         'Northeast',
     ];
 
+    protected static $wmus = [
+        '1A', '1C',
+        '2A',
+        '3A', '3C', '3F', '3G', '3H', '3J', '3K', '3M', '3N', '3P', '3R', '3S',
+        '4A', '4B', '4C', '4F', '4G', '4H', '4J', '4K', '4L', '4O', '4P', '4R', '4S', '4T', '4U', '4W', '4Y', '4Z',
+        '5A', '5C', '5F', '5G', '5H', '5J', '5R', '5S', '5T',
+        '6A', '6C', '6F', '6G', '6H', '6J', '6K', '6N', '6P', '6R', '6S',
+        '7A', '7F', '7H', '7J', '7M', '7P', '7R', '7S',
+        '8A', '8C', '8F', '8G', '8H', '8J', '8M', '8N', '8P', '8R', '8S', '8T', '8W', '8X', '8Y',
+        '9A', '9C', '9F', '9G', '9H', '9J', '9K', '9M', '9N', '9P', '9R',' 9S', '9T', '9W', '9X', '9Y',
+    ];
+
     /**
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
@@ -90,6 +102,7 @@ class StatisticsController extends Controller
     public function chart(Request $request)
     {
         $quadrants = implode(',', static::$quadrants);
+        $wmus = implode(',', static::$wmus);
 
         $this->validate($request, [
             'sites' => 'nullable|array',
@@ -106,6 +119,7 @@ class StatisticsController extends Controller
             'county' => 'nullable|exists:counties,id',
             'data_type' => 'nullable|in:owned,admin',
             'group' => 'nullable|exists:groups,id',
+            'wmu' => "nullable|in:$wmus",
         ]);
 
         if ($request->data_type === 'admin') {
@@ -124,6 +138,14 @@ class StatisticsController extends Controller
 
         if ($request->plots) {
             $measurements->whereIn('plot_id', $request->plots);
+        }
+
+        if ($request->wmu) {
+            $measurements->where(function ($query) use ($request) {
+                $query->whereHas('plot', function ($query) use ($request) {
+                    $query->where('wmu', $request->wmu);
+                });
+            });
         }
 
         if ($request->quadrants || $request->types || $request->species) {

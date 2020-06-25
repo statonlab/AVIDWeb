@@ -174,6 +174,7 @@
                 }
               }
             },
+            colors    : ['#2E93FA', '#2EB07A'],
             dataLabels: {
               formatter: (val, {seriesIndex, dataPointIndex}) => {
                 return val + ` (N=${data.data[seriesIndex].count[dataPointIndex]})`

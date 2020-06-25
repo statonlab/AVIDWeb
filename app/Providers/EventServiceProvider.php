@@ -9,6 +9,7 @@ use App\Events\PlotUpdated;
 use App\Listeners\AttachAddressToPlotListener;
 use App\Listeners\InvitationAcceptedListener;
 use App\Listeners\SendInvitationListener;
+use App\Listeners\AttachWMUToPlotListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,9 +28,11 @@ class EventServiceProvider extends ServiceProvider
         ],
         PlotCreated::class => [
             AttachAddressToPlotListener::class,
+            AttachWMUToPlotListener::class,
         ],
         PlotUpdated::class => [
             AttachAddressToPlotListener::class,
+            AttachWMUToPlotListener::class,
         ],
         InvitationCreated::class => [
             SendInvitationListener::class

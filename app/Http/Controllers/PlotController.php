@@ -7,6 +7,8 @@ use App\Site;
 use App\Measurement;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Events\PlotCreated;
+use App\Events\PlotUpdated;
 
 class PlotController extends Controller
 {
@@ -101,6 +103,8 @@ class PlotController extends Controller
 
         $plot->loadCount(['plants']);
 
+        event(new PlotCreated($plot));
+
         return $this->created($plot);
     }
 
@@ -175,7 +179,10 @@ class PlotController extends Controller
             'site' => function ($query) {
             },
         ]);
+
         $plot->loadCount(['plants']);
+
+        event(new PlotUpdated($plot));
 
         return $this->created($plot);
     }
