@@ -11,13 +11,13 @@
                             <form action="/contact" method="POST">
                                 @csrf
                                 <h1 class="mb-4">Contact Us</h1>
-                                @if (session()->get('success') === true)
+                                @if (isset($success) && $success === true)
                                     <div class="p-4 mb-4 alert-success">
                                         {{'Email sent successfully. We\'ll get back to you as soon as possible.'}}
                                     </div>
-                                @elseif (session()->get('success') === false)
+                                @elseif ($errors->has('recaptcha'))
                                     <div class="p-4 mb-4 alert-danger">
-                                        {{'Something went wrong. Please try again.'}}
+                                        {{ $errors->first('recaptcha') }}
                                     </div>
                                 @endif
                                 <div class="form-group">
