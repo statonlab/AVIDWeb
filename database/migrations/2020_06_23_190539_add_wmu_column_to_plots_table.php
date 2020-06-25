@@ -14,7 +14,7 @@ class AddWmuColumnToPlotsTable extends Migration
     public function up()
     {
         Schema::table('plots', function (Blueprint $table) {
-            $table->string('wmu', 2)->nullable();
+            $table->string('wmu', 2)->index()->nullable();
         });
     }
 

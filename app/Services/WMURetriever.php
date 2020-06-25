@@ -30,17 +30,15 @@ class WMURetriever
     public function setWMU()
     {
        rescue(function () {
-            $response = Http::get('localhost:5000', [
+            $response = Http::get('http://localhost:5000', [
                 'lat' => $this->plot->latitude,
                 'lng' => $this->plot->longitude,
             ]);
 
-            $body = json_decode($response->body());
+            $body = $response->json();
 
             if ($response->status() === 422) {
-                \Log::error('Failed to add WMU to plot id ' . $this->plot->id . ': ' . $body->error);
-
-                return;
+                throw new \Exception('Failed to add WMU to plot id ' . $this->plot->id . ': ' . $body->error);
             }
 
             $wmu = $body->results;
