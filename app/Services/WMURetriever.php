@@ -38,10 +38,10 @@ class WMURetriever
             $body = $response->json();
 
             if ($response->status() === 422) {
-                throw new \Exception('Failed to add WMU to plot id ' . $this->plot->id . ': ' . $body->error);
+                throw new \Exception('Failed to add WMU to plot id ' . $this->plot->id . ': ' . $body['error']);
             }
 
-            $wmu = $body->results;
+            $wmu = $body['results'];
 
             $this->plot->fill(['wmu' => $wmu])->save();
         });
