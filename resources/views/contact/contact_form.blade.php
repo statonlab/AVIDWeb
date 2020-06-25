@@ -11,9 +11,13 @@
                             <form action="/contact" method="POST">
                                 @csrf
                                 <h1 class="mb-4">Contact Us</h1>
-                                @if (session()->get('success'))
+                                @if (session()->get('success') === true)
                                     <div class="p-4 mb-4 alert-success">
                                         {{'Email sent successfully. We\'ll get back to you as soon as possible.'}}
+                                    </div>
+                                @elseif (session()->get('success') === false)
+                                    <div class="p-4 mb-4 alert-danger">
+                                        {{'Something went wrong. Please try again.'}}
                                     </div>
                                 @endif
                                 <div class="form-group">
@@ -80,9 +84,12 @@
                                         </span>
                                     @endif
                                 </div>
+
                                 <button class="btn btn-primary" type="submit">
                                     Send
                                 </button>
+
+                                <input type="hidden" name="recaptcha" id="recaptcha">
                             </form>
                         </div>
                     </div>
