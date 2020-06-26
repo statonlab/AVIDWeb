@@ -43,7 +43,9 @@ class ContactController extends Controller
         $response = $recaptcha->verify($request->recaptcha, $request->ip());
 
         if (!$response->isSuccess() || $response->getScore() < 0.6) {
-            return redirect()->back()->with(['success' => false]);
+            return redirect()->back()
+                ->with(['success' => false])
+                ->withErrors(['recaptcha' => ['Invalid response to spam filters.']]);
         }
 
         Mail::to($this->getSubscribedAdmins())->queue(new ContactRequest((object)$request->all()));
