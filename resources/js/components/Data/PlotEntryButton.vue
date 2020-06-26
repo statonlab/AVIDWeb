@@ -17,6 +17,10 @@
                     <icon name="eye"/>
                     <span>View Plot</span>
                 </router-link>
+                <a href="#" class="dropdown-item pl-2 d-flex align-items-center" @click.prevent="$emit('editPlot')">
+                    <icon name="create"/>
+                    <span>Edit Plot</span>
+                </a>
             </div>
         </div>
     </div>

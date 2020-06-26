@@ -36,6 +36,16 @@
                            title="Search">
                 </div>
                 <div class="flex-shrink-0 d-flex align-items-center">
+                    <select title="Sort Quadrant"
+                            name="quadrant_filter"
+                            id="quadrant-filter"
+                            class="ml-1 custom-select"
+                            v-model="sortOrder">
+                        <option value="tag_asc">Sort by plant tag, ascending</option>
+                        <option value="tag_desc">Sort by plant tag, descending</option>
+                        <option value="quadrant_asc">Sort by quadrant, ascending</option>
+                        <option value="quadrant_desc">Sort by quadrant, descending</option>
+                    </select>
                     <select title="Limit Measurements"
                             name="measurement_filter"
                             id="measurement-filter"
@@ -51,7 +61,7 @@
                             id="plot-filter"
                             class="custom-select ml-1"
                             title="Filter by plot"
-                            v-model="plot">
+                            v-model="plotFilter">
                         <option value="">All Plots</option>
                         <option v-for="plot in allPlots" :value="plot.id">
                             Plot #{{ plot.number }}
@@ -83,19 +93,26 @@
                                          :class="{'border-top-0': plant_index > 0 || measurement_index > 0 }">
                                         <plot-entry-button :plot="plot"
                                                            @addPlant="addPlant(plot)"
+                                                           @editPlot="editPlot(plot)"
                                                            v-if="plant_index === 0 && measurement_index === 0"/>
                                     </div>
                                     <div class="th" :class="{'border-top-0': measurement_index > 0}">
                                         <div v-if="measurement_index === 0">
-                                            {{ plant.type.name }} #{{plant.tag}}
+                                            <plant-entry-button :plant="plant"
+                                                                @editPlant="editPlant(plant)"/>
+                                            <p class="mb-0 text-muted">{{plant.species.name}}</p>
+                                            <p class="mb-0 text-muted">{{plant.quadrant}} Quadrant</p>
                                         </div>
                                     </div>
-                                    <div class="td">{{ moment(measurement.date).format('MMM Do, YYYY') }}</div>
+                                    <div class="td">
+                                        <measurement-entry-button :measurement="measurement"
+                                                                  @editMeasurement="editMeasurement(plant, measurement)"/>
+                                    </div>
                                     <div class="td">{{ measurement.is_located ? 'Yes' : 'No'}}</div>
                                     <div class="td">{{ measurement.is_alive ? 'Yes' : 'No'}}</div>
                                     <div class="td">
                                         <span v-if="measurement.height !== null">
-                                            {{measurement.height}} in.
+                                            {{Number(measurement.height).toFixed(2)}} in.
                                         </span>
                                     </div>
                                 </div>
@@ -112,7 +129,7 @@
                                                            v-if="plant_index === 0"/>
                                     </div>
                                     <div class="th">
-                                        {{ plant.type.name }} #{{plant.tag}}
+                                        <plant-entry-button :plant="plant" />
                                     </div>
                                     <div class="td border-right-0">
                                         <span class="text-muted">No Measurements Found</span>
@@ -145,22 +162,33 @@
 
         <plant-form
                 :plot="plantPlot"
+                :plant="plant"
                 v-if="showPlantForm"
                 @close="hidePlantForm"
                 @create="plantCreated"
+                @update="plantUpdated($event)"
         />
 
         <plot-form
                 :site="plotSite"
+                :plot="plot"
                 v-if="showPlotForm"
                 @close="showPlotForm = false"
                 @create="plotCreated"
+                @update="plotUpdated($event)"
         />
 
         <site-form
                 v-if="showSiteForm"
                 @close="showSiteForm = false"
                 @create="siteCreated"/>
+
+        <measurement-form
+                :plant="plant"
+                :measurement="measurement"
+                v-if="showMeasurementForm"
+                @close="showMeasurementForm = false"
+                @update="measurementUpdated($event)"/>
     </div>
 </template>
 
@@ -168,37 +196,57 @@
   import moment from 'moment'
   import InlineMeasurementForm from '../components/Data/InlineMeasurementForm'
   import PlotEntryButton from '../components/Data/PlotEntryButton'
+  import PlantEntryButton from '../components/Data/PlantEntryButton'
+  import MeasurementEntryButton from '../components/Data/MeasurementEntryButton'
   import Icon from '../components/Icon'
   import InlineSpinner from '../components/InlineSpinner'
   import Dropdown from '../components/Dropdown'
   import PlantForm from '../forms/PlantForm'
   import SiteForm from '../forms/SiteForm'
   import PlotForm from '../forms/PlotForm'
+  import MeasurementForm from '../forms/MeasurementForm'
 
   export default {
     name: 'DataEntry',
 
-    components: {PlotForm, SiteForm, PlantForm, Dropdown, InlineSpinner, Icon, PlotEntryButton, InlineMeasurementForm},
+    components: {
+      PlotForm,
+      SiteForm,
+      PlantForm,
+      MeasurementForm,
+      Dropdown,
+      InlineSpinner,
+      Icon,
+      PlotEntryButton,
+      PlantEntryButton,
+      MeasurementEntryButton,
+      InlineMeasurementForm
+    },
 
     data() {
       return {
         moment,
-        sites        : [],
-        site         : '',
-        allPlots     : [],
-        plots        : [],
-        loadingSites : true,
-        loadingPlots : true,
-        limit        : '',
-        plot         : '',
-        search       : '',
-        showPlantForm: false,
-        showSiteForm : false,
-        showPlotForm : false,
-        plantPlot    : null,
-        plotSite     : null,
-        _request     : null,
-        defaultDate  : null,
+        sites              : [],
+        site               : '',
+        allPlots           : [],
+        plots              : [],
+        loadingSites       : true,
+        loadingPlots       : true,
+        limit              : '',
+        sortOrder          : 'tag_asc',
+        plotFilter         : '',
+        search             : '',
+        showMeasurementForm: false,
+        showPlantForm      : false,
+        showSiteForm       : false,
+        showPlotForm       : false,
+        measurement        : null,
+        plot               : null,
+        plant              : null,
+        plantPlot          : null,
+        plotSite           : null,
+        _request           : null,
+        defaultDate        : null,
       }
     },
 
@@ -208,8 +256,8 @@
 
     watch: {
       site(site) {
-        this.plot   = ''
-        this.search = ''
+        this.plotFilter   = ''
+        this.search       = ''
         const sites = this.sites.filter(s => s.id === site)
         if (sites.length > 0) {
           this.plotSite = sites[0]
@@ -222,11 +270,15 @@
         this.loadPlots()
       },
 
-      plot() {
+      plotFilter() {
         this.loadPlots()
       },
 
       search() {
+        this.loadPlots()
+      },
+
+      sortOrder() {
         this.loadPlots()
       },
     },
@@ -257,9 +309,10 @@
         try {
           const {data} = await axios.get(`/web/data-entry/sites/${this.site}/plots`, {
             params     : {
-              limit : this.limit,
-              plot  : this.plot,
-              search: this.search,
+              limit     : this.limit,
+              plot      : this.plotFilter,
+              search    : this.search,
+              sort_order: this.sortOrder,
             },
             cancelToken: new axios.CancelToken(fn => this._request = fn),
           })
@@ -278,6 +331,47 @@
       addPlant(plot) {
         this.plantPlot     = plot
         this.showPlantForm = true
+      },
+
+      editPlant(plant) {
+        this.plant = plant
+        this.showPlantForm = true
+      },
+
+      editPlot(plot) {
+        this.plot = plot
+        this.showPlotForm = true
+      },
+
+      editMeasurement(plant, measurement) {
+        this.plant               = plant
+        this.measurement         = measurement
+        this.showMeasurementForm = true
+      },
+
+      plotUpdated(plot) {
+        this.showPlotForm = false
+        this.plots = this.plots.map(p => p.id === plot.id ? plot : p)
+      },
+
+      measurementUpdated(measurement) {
+        this.showMeasurementForm = false
+        let plot = this.plots.find(p => p.id === measurement.plot_id)
+        let plant = plot.plants.find(p => p.id === measurement.plant_id)
+        plant.measurements = plant.measurements.map(m => m.id === measurement.id ? measurement : m)
+        plot.plants = plot.plants.map(p => p.id === plant.id ? plant : p)
+        this.plots = this.plots.map(p => p.id === plot.id ? plot : p)
+      },
+
+      plantUpdated(plant) {
+        this.hidePlantForm()
+        let plot = this.plots.find(p => p.id === plant.plot_id)
+        plot.plants = plot.plants.map(p => p.id === plant.id ? plant : p)
+        this.plots = this.plots.map(p => p.id === plot.id ? plot : p)
+        this.$notify({
+          type: 'success',
+          text: 'Plant updated successfully',
+        })
       },
 
       hidePlantForm() {
