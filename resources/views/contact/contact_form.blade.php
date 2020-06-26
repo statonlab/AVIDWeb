@@ -11,9 +11,13 @@
                             <form action="/contact" method="POST">
                                 @csrf
                                 <h1 class="mb-4">Contact Us</h1>
-                                @if (session()->get('success'))
-                                    <div class="p-4 mb-4 alert-success">
+                                @if (isset($success) && $success)
+                                    <div class="mb-4 alert alert-success">
                                         {{'Email sent successfully. We\'ll get back to you as soon as possible.'}}
+                                    </div>
+                                @elseif ($errors->has('recaptcha'))
+                                    <div class="mb-4 alert alert-danger">
+                                        {{ $errors->first('recaptcha') }}
                                     </div>
                                 @endif
                                 <div class="form-group">
@@ -71,6 +75,7 @@
                                     <label for="message">Message</label>
                                     <textarea type="text"
                                               class="form-control{{$errors->has('message') ? ' is-invalid' : ''}}"
+                                              style="min-height:200px"
                                               name="message"
                                               id="message"
                                               placeholder="Message">{{ old('message') }}</textarea>
@@ -80,9 +85,12 @@
                                         </span>
                                     @endif
                                 </div>
+
                                 <button class="btn btn-primary" type="submit">
                                     Send
                                 </button>
+
+                                <input type="hidden" name="recaptcha" id="recaptcha">
                             </form>
                         </div>
                     </div>
