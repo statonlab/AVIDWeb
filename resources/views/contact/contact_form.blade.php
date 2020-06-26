@@ -11,8 +11,8 @@
                             <form action="/contact" method="POST">
                                 @csrf
                                 <h1 class="mb-4">Contact Us</h1>
-                                @if (isset($success) && $success === true)
-                                    <div class="p-4 mb-4 alert-success">
+                                @if (isset($success) && $success)
+                                    <div class="mb-4 alert-success">
                                         {{'Email sent successfully. We\'ll get back to you as soon as possible.'}}
                                     </div>
                                 @elseif ($errors->has('recaptcha'))
