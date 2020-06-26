@@ -12,11 +12,11 @@
                                 @csrf
                                 <h1 class="mb-4">Contact Us</h1>
                                 @if (isset($success) && $success)
-                                    <div class="mb-4 alert-success">
+                                    <div class="mb-4 alert alert-success">
                                         {{'Email sent successfully. We\'ll get back to you as soon as possible.'}}
                                     </div>
                                 @elseif ($errors->has('recaptcha'))
-                                    <div class="p-4 mb-4 alert-danger">
+                                    <div class="mb-4 alert alert-danger">
                                         {{ $errors->first('recaptcha') }}
                                     </div>
                                 @endif
@@ -75,6 +75,7 @@
                                     <label for="message">Message</label>
                                     <textarea type="text"
                                               class="form-control{{$errors->has('message') ? ' is-invalid' : ''}}"
+                                              style="min-height:200px"
                                               name="message"
                                               id="message"
                                               placeholder="Message">{{ old('message') }}</textarea>
