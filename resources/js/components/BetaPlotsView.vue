@@ -23,6 +23,27 @@
                                 :options="plotOptions"/>
                     </div>
                 </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="pb-2">
+                            <strong>Actions</strong>
+                        </div>
+                        <a class="d-flex align-items-center" :href="`/web/sites/${site.id}/export`" target="_blank">
+                            <icon name="cloud-download-outline"/>
+                            <span class="ml-2">Download Spreadsheet</span>
+                        </a>
+                        <div class="mb-2">
+                            <small class="text-muted">The produced spreadsheet can be filled and imported into the site</small>
+                        </div>
+                        <a class="mt-3 d-flex align-items-center" href="#" @click.prevent="importing = true">
+                            <icon name="cloud-upload-outline"/>
+                            <span class="ml-2">Import Spreadsheet</span>
+                        </a>
+                        <div class="mb-2">
+                            <small class="text-muted">Import data recorded in spreadsheet format</small>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-8 col-lg-9">
                 <div class="card mb-3">
@@ -154,6 +175,13 @@
             </div>
         </div>
 
+        <import-form
+                @close="closeImportForm"
+                v-if="importing"
+                :site="site"
+                @create="measurementsCreated()"
+        />
+
         <plot-form
                 :site="site"
                 :plot="editing"
@@ -171,13 +199,14 @@
   import BetaPlantsView from './BetaPlantsView'
   import Dropdown from './Dropdown'
   import PlotForm from '../forms/PlotForm'
+  import ImportForm from '../forms/ImportForm'
   import InlineSpinner from './InlineSpinner'
   import User from '../helpers/User'
 
   export default {
     name: 'BetaPlotsView',
 
-    components: {InlineSpinner, PlotForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon},
+    components: {InlineSpinner, PlotForm, ImportForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon},
 
     props: {
       site          : {required: true},
@@ -201,6 +230,7 @@
         plotOptions : [],
         showPlotForm: false,
         editing     : null,
+        importing   : false,
       }
     },
 
@@ -310,6 +340,14 @@
         }
 
         return 'Not provided'
+      },
+
+      measurementsCreated() {
+        this.closeImportForm()
+      },
+
+      closeImportForm() {
+        this.importing = false
       },
     },
   }
