@@ -1,8 +1,6 @@
 <template>
     <div>
-        <plots-data-view
-                :back="`/app/admin/sites`"
-                :site-url-prefix="`/app/admin/plots`"/>
+        <plots-data-view :site-url-prefix="`/app/admin/plants`"/>
     </div>
 </template>
 

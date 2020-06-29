@@ -60,7 +60,7 @@
                 <tbody>
                 <tr v-for="plant in plants" :class="{'hover-visible-container': deleting !== plant.id}">
                     <td>
-                        <router-link :to="`/app/plants/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
+                        <router-link :to="`${siteUrlPrefix}/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
                     </td>
                     <td>{{ plant.species_name }}</td>
                     <td>{{ plant.quadrant }}</td>
@@ -69,7 +69,7 @@
                         <div class="d-flex justify-content-end hover-visible">
                             <button type="button" class="btn btn-sm btn-link"
                                     v-tooltip="'Edit'"
-                                    v-if="User.owns(plant) || User.can('update sites')"
+                                    v-if="editable || User.owns(plant) || User.can('update sites')"
                                     @click.prevent="edit(plant)">
                                 <icon name="create"/>
                             </button>
@@ -120,7 +120,9 @@
     components: {Pager, PlantForm, InlineSpinner, Icon},
 
     props: {
-      plot: {required: true},
+      plot          : {required: true},
+      editable      : {required: false, type: Boolean, default: true},
+      siteUrlPrefix : {required: false, type: String, default: '/app/plants'},
     },
 
     watch: {

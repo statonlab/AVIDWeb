@@ -50,6 +50,8 @@
                     <tabs v-if="!loading && plots.length > 0">
                         <tab name="Plants" selected>
                             <beta-plants-view
+                                    :site-url-prefix="siteUrlPrefix"
+                                    :editable="editable"
                                     v-if="plot"
                                     :plot="plot"/>
                         </tab>
@@ -59,7 +61,9 @@
                                     <strong>Plot Information</strong>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <button class="btn btn-link" @click.prevent="edit">
+                                    <button class="btn btn-link"
+                                            @click.prevent="edit"
+                                            v-if="editable || User.owns(plot) || User.can('update sites')">
                                         <icon name="create"/>
                                         <span>Edit Plot</span>
                                     </button>
@@ -103,7 +107,9 @@
                                     <strong>Site Information</strong>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <button class="btn btn-link" @click.prevent="$emit('edit-site-request')">
+                                    <button class="btn btn-link"
+                                            @click.prevent="$emit('edit-site-request')"
+                                            v-if="editable || User.owns(site) || User.can('update sites')">
                                         <icon name="create"/>
                                         <span>Edit Site</span>
                                     </button>
@@ -166,6 +172,7 @@
   import Dropdown from './Dropdown'
   import PlotForm from '../forms/PlotForm'
   import InlineSpinner from './InlineSpinner'
+  import User from '../helpers/User'
 
   export default {
     name: 'BetaPlotsView',
@@ -173,11 +180,14 @@
     components: {InlineSpinner, PlotForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon},
 
     props: {
-      site: {required: true},
+      site          : {required: true},
+      siteUrlPrefix : {required: false, type: String, default: '/app/plants'},
+      editable      : {required: false, type: Boolean, default: true},
     },
 
     data() {
       return {
+        User        : User,
         loading     : true,
         plots       : [],
         plot        : null,

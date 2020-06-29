@@ -7,7 +7,7 @@
             <div class="d-flex mb-3">
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0">
-                        <router-link :to="`${backUrlPrefix}/${plant.plot_id}`" class="btn btn-link-dark px-1 ml-n1">
+                        <router-link :to="`${backUrlPrefix}/${plant.plot.site_id}`" class="btn btn-link-dark px-1 ml-n1">
                             <icon name="arrow-back"/>
                         </router-link>
                     </div>
@@ -190,9 +190,10 @@
 
     props: {
       unauthorizedMessage: {required: false, type: String, default: 'You do not have permission to view plots.'},
-      backUrlPrefix      : {required: false, type: String, default: '/app/plots'},
+      backUrlPrefix      : {required: false, type: String, default: '/app/sites'},
       disableCreate      : {required: false, type: Boolean, default: false},
       editable           : {required: false, type: Boolean, default: false},
+      backToSites        : {required: false, type: Boolean, default: false},
     },
 
     data() {
