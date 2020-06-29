@@ -258,6 +258,8 @@ class PlantController extends Controller
             'plot' => function ($query) {
                 $query->with(['site']);
             },
+            'measurements' => function ($query) {
+            },
         ]);
 
         $plant->loadCount(['measurements']);

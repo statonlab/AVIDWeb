@@ -38,6 +38,7 @@ class DataEntryController extends Controller
             'limit' => 'nullable|integer',
             'plot' => 'nullable|exists:plots,id',
             'search' => 'nullable|max:255',
+            'sort_order' => 'nullable|in:tag_asc,tag_desc,quadrant_asc,quadrant_desc'
         ]);
 
         $plots = $site->plots()->when($request->plot, function ($query) use ($request) {
@@ -51,9 +52,26 @@ class DataEntryController extends Controller
                 if ($request->search) {
                     $query->where('plants.tag', $request->search);
                 }
-                $query->orderBy('plants.tag', 'asc');
+                switch ($request->sort_order)
+                {
+                    case 'tag_asc':
+                        $query->orderBy('plants.tag', 'asc');
+                        break;
+                    case 'tag_desc':
+                        $query->orderBy('plants.tag', 'desc');
+                        break;
+                    case 'quadrant_asc':
+                        $query->orderBy('plants.quadrant', 'asc');
+                        break;
+                    case 'quadrant_desc':
+                        $query->orderBy('plants.quadrant', 'desc');
+                        break;
+                }
                 $query->with([
                     'type' => function ($query) {
+
+                    },
+                    'species' => function ($query) {
 
                     },
                     'measurements' => function ($query) {

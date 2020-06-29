@@ -178,6 +178,10 @@ class PlotController extends Controller
             },
             'site' => function ($query) {
             },
+            'plants.measurements' => function ($query) {
+            },
+            'plants.species' => function ($query) {
+            },
         ]);
 
         $plot->loadCount(['plants']);
