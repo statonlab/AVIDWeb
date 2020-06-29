@@ -3,8 +3,7 @@
         <plots-data-view
                 :unauthorized-message="'You do not have permission to view plots for this group.'"
                 :editable="permissions ? Boolean(permissions.can_edit) : false"
-                :back="`/app/groups/${this.$route.params.group_id}`"
-                :site-url-prefix="`/app/groups/${this.$route.params.group_id}/plots`"
+                :site-url-prefix="`/app/groups/${this.$route.params.group_id}/plants`"
                 :disable-create="true"/>
     </div>
 </template>

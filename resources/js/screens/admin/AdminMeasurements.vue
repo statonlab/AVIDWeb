@@ -1,7 +1,7 @@
 <template>
     <div>
         <measurements-data-view
-                :back-url-prefix="`/app/admin/plots`" />
+                :back-url-prefix="`/app/admin/sites`" />
     </div>
 </template>
 

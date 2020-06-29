@@ -70,11 +70,11 @@
             to   : '/app/sites',
             label: 'My Data',
           },
-          {
-            icon : 'folder-outline',
-            to   : '/app/beta/sites',
-            label: 'Beta Data View',
-          },
+          // {
+          //   icon : 'folder-outline',
+          //   to   : '/app/beta/sites',
+          //   label: 'Beta Data View',
+          // },
           {
             icon: 'add-circle-outline',
             to: '/app/data-entry',

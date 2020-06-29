@@ -23,6 +23,27 @@
                                 :options="plotOptions"/>
                     </div>
                 </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="pb-2">
+                            <strong>Actions</strong>
+                        </div>
+                        <a class="d-flex align-items-center" :href="`/web/sites/${site.id}/export`" target="_blank">
+                            <icon name="cloud-download-outline"/>
+                            <span class="ml-2">Download Spreadsheet</span>
+                        </a>
+                        <div class="mb-2">
+                            <small class="text-muted">The produced spreadsheet can be filled and imported into the site</small>
+                        </div>
+                        <a class="mt-3 d-flex align-items-center" href="#" @click.prevent="importing = true">
+                            <icon name="cloud-upload-outline"/>
+                            <span class="ml-2">Import Spreadsheet</span>
+                        </a>
+                        <div class="mb-2">
+                            <small class="text-muted">Import data recorded in spreadsheet format</small>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-8 col-lg-9">
                 <div class="card mb-3">
@@ -50,6 +71,8 @@
                     <tabs v-if="!loading && plots.length > 0">
                         <tab name="Plants" selected>
                             <beta-plants-view
+                                    :site-url-prefix="siteUrlPrefix"
+                                    :editable="editable"
                                     v-if="plot"
                                     :plot="plot"/>
                         </tab>
@@ -59,7 +82,9 @@
                                     <strong>Plot Information</strong>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <button class="btn btn-link" @click.prevent="edit">
+                                    <button class="btn btn-link"
+                                            @click.prevent="edit"
+                                            v-if="editable || User.owns(plot) || User.can('update sites')">
                                         <icon name="create"/>
                                         <span>Edit Plot</span>
                                     </button>
@@ -103,7 +128,9 @@
                                     <strong>Site Information</strong>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <button class="btn btn-link" @click.prevent="$emit('edit-site-request')">
+                                    <button class="btn btn-link"
+                                            @click.prevent="$emit('edit-site-request')"
+                                            v-if="editable || User.owns(site) || User.can('update sites')">
                                         <icon name="create"/>
                                         <span>Edit Site</span>
                                     </button>
@@ -148,6 +175,13 @@
             </div>
         </div>
 
+        <import-form
+                @close="closeImportForm"
+                v-if="importing"
+                :site="site"
+                @create="measurementsCreated()"
+        />
+
         <plot-form
                 :site="site"
                 :plot="editing"
@@ -165,19 +199,24 @@
   import BetaPlantsView from './BetaPlantsView'
   import Dropdown from './Dropdown'
   import PlotForm from '../forms/PlotForm'
+  import ImportForm from '../forms/ImportForm'
   import InlineSpinner from './InlineSpinner'
+  import User from '../helpers/User'
 
   export default {
     name: 'BetaPlotsView',
 
-    components: {InlineSpinner, PlotForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon},
+    components: {InlineSpinner, PlotForm, ImportForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon},
 
     props: {
-      site: {required: true},
+      site          : {required: true},
+      siteUrlPrefix : {required: false, type: String, default: '/app/plants'},
+      editable      : {required: false, type: Boolean, default: true},
     },
 
     data() {
       return {
+        User        : User,
         loading     : true,
         plots       : [],
         plot        : null,
@@ -191,6 +230,7 @@
         plotOptions : [],
         showPlotForm: false,
         editing     : null,
+        importing   : false,
       }
     },
 
@@ -300,6 +340,14 @@
         }
 
         return 'Not provided'
+      },
+
+      measurementsCreated() {
+        this.closeImportForm()
+      },
+
+      closeImportForm() {
+        this.importing = false
       },
     },
   }

@@ -2,7 +2,7 @@
     <div>
         <measurements-data-view
             :unauthorized-message="'You do not have permission to view measurements for this group.'"
-            :back-url-prefix="`/app/groups/${this.$route.params.group_id}/plots`"
+            :back-url-prefix="`/app/groups/${this.$route.params.group_id}/sites`"
             :disable-create="true"
             :editable="permissions ? Boolean(permissions.can_edit) : false"/>
     </div>
