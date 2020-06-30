@@ -69,7 +69,8 @@ class StatisticsController extends Controller
         $plots = $plots->get();
 
         $plots->transform(function (Plot $plot) {
-            $plot->name = 'Plot #' . $plot->number . ' (' . $plot->site->name . ')';
+            $plot->name = 'Plot #' . $plot->number;
+            $plot->name .= $plot->site ? ' (' . $plot->site->name . ')' : '';
 
             return $plot;
         });
