@@ -94,19 +94,22 @@
                                         <plot-entry-button :plot="plot"
                                                            @addPlant="addPlant(plot)"
                                                            @editPlot="editPlot(plot)"
+                                                           @deletePlot="deletePlot(plot)"
                                                            v-if="plant_index === 0 && measurement_index === 0"/>
                                     </div>
                                     <div class="th" :class="{'border-top-0': measurement_index > 0}">
                                         <div v-if="measurement_index === 0">
                                             <plant-entry-button :plant="plant"
-                                                                @editPlant="editPlant(plant)"/>
+                                                                @editPlant="editPlant(plant)"
+                                                                @deletePlant="deletePlant(plant)"/>
                                             <p class="mb-0 text-muted">{{plant.species.name}}</p>
                                             <p class="mb-0 text-muted">{{plant.quadrant}} Quadrant</p>
                                         </div>
                                     </div>
                                     <div class="td">
                                         <measurement-entry-button :measurement="measurement"
-                                                                  @editMeasurement="editMeasurement(plant, measurement)"/>
+                                                                  @editMeasurement="editMeasurement(plant, measurement)"
+                                                                  @deleteMeasurement="deleteMeasurement(measurement)"/>
                                     </div>
                                     <div class="td">{{ measurement.is_located ? 'Yes' : 'No'}}</div>
                                     <div class="td">{{ measurement.is_alive ? 'Yes' : 'No'}}</div>
@@ -124,12 +127,18 @@
                             <template v-else>
                                 <div class="tr">
                                     <div class="th" :class="{'border-top-0': plant_index > 0}">
-                                        <plot-entry-button @addPlant="addPlant(plot)"
-                                                           :plot="plot"
+                                        <plot-entry-button :plot="plot"
+                                                           @addPlant="addPlant(plot)"
+                                                           @editPlot="editPlot(plot)"
+                                                           @deletePlot="deletePlot(plot)"
                                                            v-if="plant_index === 0"/>
                                     </div>
                                     <div class="th">
-                                        <plant-entry-button :plant="plant" />
+                                        <plant-entry-button :plant="plant"
+                                                            @editPlant="editPlant(plant)"
+                                                            @deletePlant="deletePlant(plant)"/>
+                                        <p class="mb-0 text-muted">{{plant.species.name}}</p>
+                                        <p class="mb-0 text-muted">{{plant.quadrant}} Quadrant</p>
                                     </div>
                                     <div class="td border-right-0">
                                         <span class="text-muted">No Measurements Found</span>
@@ -150,7 +159,10 @@
                     </template>
                     <div class="tr" v-else>
                         <div class="th">
-                            <plot-entry-button @addPlant="addPlant(plot)" :plot="plot"/>
+                            <plot-entry-button :plot="plot"
+                                               @addPlant="addPlant(plot)"
+                                               @editPlot="editPlot(plot)"
+                                               @deletePlot="deletePlot(plot)" />
                         </div>
                         <div class="td text-muted border-right-0">No Plants Found</div>
                         <div class="td border-right-0" v-for="i in 3"></div>
@@ -247,6 +259,7 @@
         plotSite           : null,
         _request           : null,
         defaultDate        : null,
+        deleting           : null,
       }
     },
 
@@ -343,6 +356,79 @@
         this.showPlotForm = true
       },
 
+      deletePlot(plot) {
+        if (this.deleting !== null) {
+          return
+        }
+
+        this.$confirm({
+          title    : `Are you sure you want to delete Plot #${plot.number}?`,
+          text     : 'This action is permanent!',
+          onConfirm: async () => {
+            this.deleting = plot.id
+            try {
+              await axios.delete(`/web/plots/${plot.id}`)
+              this.loadPlots()
+            } catch (e) {
+              this.$notify({
+                text: 'Unable to delete plot. Please try refreshing the page.',
+                type: 'error',
+              })
+            }
+            this.deleting = null
+          },
+        })
+      },
+
+      deletePlant(plant) {
+        if (this.deleting !== null) {
+          return
+        }
+
+        this.$confirm({
+          title    : `Are you sure you want to delete Plant #${plant.tag}?`,
+          text     : 'This action is permanent!',
+          onConfirm: async () => {
+            this.deleting = plant.id
+            try {
+              await axios.delete(`/web/plants/${plant.id}`)
+              this.loadPlots()
+            } catch (e) {
+              this.$notify({
+                text: 'Unable to delete plant. Please try refreshing the page.',
+                type: 'error',
+              })
+              console.error(e)
+            }
+            this.deleting = null
+          },
+        })
+      },
+
+      deleteMeasurement(measurement) {
+        if (this.deleting !== null) {
+          return
+        }
+
+        this.$confirm({
+          title    : 'Are you sure you want to delete measurement collected on ' + moment(measurement.date).format('MMM Do, YYYY') + '?',
+          text     : 'This action is permanent.',
+          onConfirm: async () => {
+            this.deleting = measurement.id
+            try {
+              await axios.delete(`/web/measurements/${measurement.id}`)
+              this.loadPlots()
+            } catch (e) {
+              console.error(e)
+              this.$notify({
+                text: 'Unable to delete measurement. Please try refreshing the page.',
+              })
+            }
+            this.deleting = null
+          },
+        })
+      },
+
       editMeasurement(plant, measurement) {
         this.plant               = plant
         this.measurement         = measurement
@@ -377,6 +463,7 @@
       hidePlantForm() {
         this.showPlantForm = false
         this.plantPlot     = null
+        this.plant         = null
       },
 
       plantCreated() {
