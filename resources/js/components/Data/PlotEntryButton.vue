@@ -21,6 +21,10 @@
                     <icon name="create"/>
                     <span>Edit Plot</span>
                 </a>
+                <a href="#" class="dropdown-item pl-2 d-flex align-items-center" @click.prevent="$emit('deletePlot')">
+                    <icon name="trash"/>
+                    <span>Delete Plot</span>
+                </a>
             </div>
         </div>
     </div>

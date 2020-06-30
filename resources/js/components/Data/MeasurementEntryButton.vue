@@ -13,6 +13,10 @@
                     <icon name="create"/>
                     <span>Edit Measurement</span>
                 </a>
+                <a href="#" class="dropdown-item pl-2 d-flex align-items-center" @click.prevent="$emit('deleteMeasurement')">
+                    <icon name="trash"/>
+                    <span>Delete Measurement</span>
+                </a>
             </div>
         </div>
     </div>

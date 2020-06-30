@@ -9,14 +9,18 @@
                 <icon name="caret-down"/>
             </a>
             <div class="dropdown-menu">
-                <a href="#" class="dropdown-item pl-2 d-flex align-items-center" @click.prevent="$emit('editPlant')">
-                    <icon name="create"/>
-                    <span>Edit Plant</span>
-                </a>
                 <router-link :to="`/app/plants/${plant.id}`" class="dropdown-item pl-2 d-flex align-items-center">
                     <icon name="eye"/>
                     <span>View Plant</span>
                 </router-link>
+                <a href="#" class="dropdown-item pl-2 d-flex align-items-center" @click.prevent="$emit('editPlant')">
+                    <icon name="create"/>
+                    <span>Edit Plant</span>
+                </a>
+                <a href="#" class="dropdown-item pl-2 d-flex align-items-center" @click.prevent="$emit('deletePlant')">
+                    <icon name="trash"/>
+                    <span>Delete Plant</span>
+                </a>
             </div>
         </div>
     </div>
