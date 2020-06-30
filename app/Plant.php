@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\PlantDeleted;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -22,6 +23,13 @@ class Plant extends Model
         'collected_at',
         'stems',
         'flowers',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'deleted' => PlantDeleted::class,
     ];
 
     /**

@@ -4,9 +4,15 @@ namespace App\Providers;
 
 use App\Events\InvitationAccepted;
 use App\Events\InvitationCreated;
+use App\Events\SiteDeleted;
 use App\Events\PlotCreated;
 use App\Events\PlotUpdated;
+use App\Events\PlotDeleted;
+use App\Events\PlantDeleted;
 use App\Listeners\AttachAddressToPlotListener;
+use App\Listeners\DeleteAttachedPlotsListener;
+use App\Listeners\DeleteAttachedPlantsListener;
+use App\Listeners\DeleteAttachedMeasurementsListener;
 use App\Listeners\InvitationAcceptedListener;
 use App\Listeners\SendInvitationListener;
 use App\Listeners\AttachWMUToPlotListener;
@@ -26,6 +32,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        SiteDeleted::class => [
+            DeleteAttachedPlotsListener::class,
+        ],
         PlotCreated::class => [
             AttachAddressToPlotListener::class,
             AttachWMUToPlotListener::class,
@@ -33,6 +42,12 @@ class EventServiceProvider extends ServiceProvider
         PlotUpdated::class => [
             AttachAddressToPlotListener::class,
             AttachWMUToPlotListener::class,
+        ],
+        PlotDeleted::class => [
+            DeleteAttachedPlantsListener::class,
+        ],
+        PlantDeleted::class => [
+            DeleteAttachedMeasurementsListener::class,
         ],
         InvitationCreated::class => [
             SendInvitationListener::class
