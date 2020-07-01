@@ -6,7 +6,7 @@
                      v-model="selects"
                      :placeholder="placeholder"
                      :disabled="disabled"
-                     :settings="{ multiple: 'true', theme: 'bootstrap4' }"
+                     :settings="{ multiple: 'true', tags: 'true', theme: 'bootstrap4' }"
                      @change="onChange($event)" />
         </div>
     </div>
