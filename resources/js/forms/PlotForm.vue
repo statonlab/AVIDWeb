@@ -24,34 +24,17 @@
                         </small>
                     </div>
 
-                    <div class="d-flex align-items-center mb-1">
-                        <div>
-                            <p class="mb-0"><strong>GPS Location</strong></p>
-                            <div class="mb-0">
-                                <small class="text-muted">You may use the map to visually select the location.</small>
-                            </div>
-                            <div class="mb-1">
-                                <small class="text-muted">When entering coordinates manually, please verify the location with the map.</small>
-                            </div>
-                        </div>
-                        <div class="ml-auto">
-                            <button class="btn btn-outline-primary"
-                                    type="button"
-                                    @click.prevent="showMap = !showMap">
-                                <icon name="map"/>
-                                <span>{{ showMap ? 'Hide' : 'Use'}} Map</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <clickable-map class="map-mini mb-3"
-                                   v-if="showMap"
-                                   @input="setGpsFromMap($event)"
-                                   :value="{latitude: form.latitude, longitude: form.longitude}"/>
-
                     <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
+                        <div class="col-5">
+                            <div class="d-flex align-items-center mb-1">
+                                <div>
+                                    <p class="mb-0"><strong>GPS Location</strong></p>
+                                    <div class="mb-0">
+                                        <small class="text-muted">You may use the map to visually select the location.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-2 form-group">
                                 <label for="latitude">
                                     Latitude
                                     <required/>
@@ -66,9 +49,7 @@
                                     {{ form.errors.first('latitude') }}
                                 </small>
                             </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
+                            <div class="mb-0 form-group">
                                 <label for="longitude">
                                     Longitude
                                     <required/>
@@ -83,6 +64,14 @@
                                     {{ form.errors.first('longitude') }}
                                 </small>
                             </div>
+                            <div class="form-group">
+                                <small class="text-muted">When entering coordinates manually, please verify the location by clicking the Use Map button above</small>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <clickable-map class="map-height map-mini mb-3"
+                                           @input="setGpsFromMap($event)"
+                                           :value="{latitude: form.latitude, longitude: form.longitude}"/>
                         </div>
                     </div>
 

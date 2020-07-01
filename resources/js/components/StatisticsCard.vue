@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="card-footer border-top text-right">
-            <a class="mb-2 btn btn-link" href="/app/statistics">
+            <a class="btn btn-link" href="/app/statistics">
                 <span class="mr-2">Visit Statistics Page</span>
                 <icon name="chevron-forward-outline" />
             </a>

@@ -1,5 +1,5 @@
 <template>
-    <div ref="map">
+    <div style="height:100px" ref="map">
     </div>
 </template>
 
@@ -53,11 +53,13 @@
       'value.latitude' : {
         handler() {
           this.setMarkerPosition()
+          this.panTo()
         },
       },
       'value.longitude': {
         handler() {
           this.setMarkerPosition()
+          this.panTo()
         },
       },
     },
@@ -87,6 +89,13 @@
             map     : this.map,
             position: new google.maps.LatLng(v.latitude, v.longitude),
           })
+        }
+      },
+
+      panTo() {
+        const v = this.value
+        if (v.latitude && v.longitude) {
+          this.map.panTo(new google.maps.LatLng(v.latitude, v.longitude))
         }
       }
     },
