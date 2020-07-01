@@ -362,6 +362,10 @@
               await axios.delete(`/web/plots/${this.plot.id}`)
               this.plot = null
               this.loadPlots()
+              this.$notify({
+                  text: 'Plot deleted successfully.',
+                  type: 'success',
+              })    
             } catch (e) {
               this.$notify({
                 text: 'Unable to delete plot. Please try refreshing the page.',
@@ -385,6 +389,10 @@
             this.deleting = this.site.id
             try {
               await axios.delete(`/web/sites/${this.site.id}`)
+              this.$notify({
+                  text: 'Site deleted successfully',
+                  type: 'error',
+              })    
               this.$router.replace({
                 path : '/app/sites',
                 query: {},
