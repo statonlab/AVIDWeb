@@ -65,7 +65,7 @@
                                 </small>
                             </div>
                             <div class="form-group">
-                                <small class="text-muted">When entering coordinates manually, please verify the location by clicking the Use Map button above</small>
+                                <small class="text-muted">When entering coordinates manually, please verify the location on the map</small>
                             </div>
                         </div>
                         <div class="col-7">
