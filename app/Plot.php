@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\PlotDeleted;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -27,6 +28,13 @@ class Plot extends Model
         'recorders',
         'last_measured_at',
         'wmu',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'deleted' => PlotDeleted::class,
     ];
 
     /**

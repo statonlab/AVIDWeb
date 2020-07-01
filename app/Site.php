@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\SiteDeleted;
 use App\Events\SiteUpdatedEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,8 +28,12 @@ class Site extends Model
         'last_measured_at',
     ];
 
+    /**
+     * @var array
+     */
     protected $dispatchesEvents = [
-        'updated' => SiteUpdatedEvent::class
+        'updated' => SiteUpdatedEvent::class,
+        'deleted' => SiteDeleted::class,
     ];
 
     /**
