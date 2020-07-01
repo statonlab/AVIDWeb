@@ -88,6 +88,13 @@
                                         <icon name="create"/>
                                         <span>Edit Plot</span>
                                     </button>
+                                    <button class="btn btn-link"
+                                            @click.prevent="deletePlot"
+                                            v-if="User.owns(plot) || User.can('delete sites')">
+                                        <icon name="trash" v-if="deleting !== plot.id"/>
+                                        <inline-spinner v-else/>
+                                        <span>Delete Plot</span>
+                                    </button>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -137,6 +144,15 @@
                                             v-if="editable || User.owns(site) || User.can('update sites')">
                                         <icon name="create"/>
                                         <span>Edit Site</span>
+                                    </button>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <button class="btn btn-link"
+                                            @click.prevent="deleteSite"
+                                            v-if="User.owns(site) || User.can('delete sites')">
+                                        <icon name="trash" v-if="deleting !== site.id"/>
+                                        <inline-spinner v-else/>
+                                        <span>Delete Site</span>
                                     </button>
                                 </div>
                             </div>
@@ -234,6 +250,7 @@
         plotOptions : [],
         showPlotForm: false,
         editing     : null,
+        deleting    : null,
         importing   : false,
       }
     },
@@ -329,6 +346,66 @@
       edit() {
         this.editing      = this.plot
         this.showPlotForm = true
+      },
+
+      deletePlot() {
+        if (this.deleting !== null) {
+          return
+        }
+
+        this.$confirm({
+          title    : `Are you sure you want to delete Plot #${this.plot.number}?`,
+          text     : 'This action is permanent!',
+          onConfirm: async () => {
+            this.deleting = this.plot.id
+            try {
+              await axios.delete(`/web/plots/${this.plot.id}`)
+              this.plot = null
+              this.loadPlots()
+              this.$notify({
+                  text: 'Plot deleted successfully.',
+                  type: 'success',
+              })    
+            } catch (e) {
+              this.$notify({
+                text: 'Unable to delete plot. Please try refreshing the page.',
+                type: 'error',
+              })
+            }
+            this.deleting = null
+          },
+        })
+      },
+
+      deleteSite() {
+        if (this.deleting !== null) {
+          return
+        }
+
+        this.$confirm({
+          title    : `Are you sure you want to delete ${this.site.name}?`,
+          text     : 'This action is permanent!',
+          onConfirm: async () => {
+            this.deleting = this.site.id
+            try {
+              await axios.delete(`/web/sites/${this.site.id}`)
+              this.$notify({
+                  text: 'Site deleted successfully',
+                  type: 'error',
+              })    
+              this.$router.replace({
+                path : '/app/sites',
+                query: {},
+              }).catch(e => {})
+            } catch (e) {
+              this.$notify({
+                text: 'Unable to delete site. Please try refreshing the page.',
+                type: 'error',
+              })
+            }
+            this.deleting = null
+          },
+        })
       },
 
       optional(value, field) {
