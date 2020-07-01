@@ -27,7 +27,12 @@
                     <div class="d-flex align-items-center mb-1">
                         <div>
                             <p class="mb-0"><strong>GPS Location</strong></p>
-                            <small class="mb-0 text-muted">You may use the map to visually select the location</small>
+                            <div class="mb-0">
+                                <small class="text-muted">You may use the map to visually select the location.</small>
+                            </div>
+                            <div class="mb-1">
+                                <small class="text-muted">When entering coordinates manually, please verify the location with the map.</small>
+                            </div>
                         </div>
                         <div class="ml-auto">
                             <button class="btn btn-outline-primary"
