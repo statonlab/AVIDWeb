@@ -85,7 +85,10 @@ class DataEntryController extends Controller
             $plots->transform(function (Plot $plot) use ($request) {
                 $plot->plants->transform(function (Plant $plant) use ($request) {
                     $plant->setRelation('measurements',
-                        $plant->measurements->take($request->limit));
+                        $plant->measurements->sortByDesc('date')
+                            ->take($request->limit)
+                            ->reverse()
+                            ->values());
 
                     return $plant;
                 });
