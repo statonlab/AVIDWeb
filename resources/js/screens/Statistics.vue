@@ -66,15 +66,15 @@
 
                             <div class="form-group">
                                 <label>
-                                    Protection
+                                    Site Protection
                                 </label>
                                 <select name="protection"
                                         id="protection"
                                         v-model="protection"
                                         class="form-control">
-                                    <option value="">Protected and unprotected</option>
-                                    <option value="unprotected">Unprotected only</option>
-                                    <option value="protected">Protected only</option>
+                                    <option value="">All sites</option>
+                                    <option value="both">Sites with protected and unprotected plots</option>
+                                    <option value="unprotected">Sites with unprotected plots only</option>
                                 </select>
                             </div>
 
@@ -240,7 +240,7 @@
       },
 
       protection() {
-        this.setProtection()
+        this.loadChart()
       },
 
       dataType() {
@@ -418,6 +418,7 @@
               data_type : this.dataType,
               group     : this.group,
               wmu       : this.wmu,
+              protection: this.protection,
             },
           })
 
@@ -513,23 +514,6 @@
         this.$refs.county.clear()
         this.$refs.state.clear()
       },
-
-      setProtection() {
-        switch (this.protection)
-        {
-          case 'unprotected':
-            this.$refs.chart.showSeries('unprotected')
-            this.$refs.chart.hideSeries('protected')
-            break
-          case 'protected':
-            this.$refs.chart.showSeries('protected')
-            this.$refs.chart.hideSeries('unprotected')
-            break
-          default:
-            this.$refs.chart.showSeries('protected')
-            this.$refs.chart.showSeries('unprotected')
-        }
-      }
     },
   }
 </script>
