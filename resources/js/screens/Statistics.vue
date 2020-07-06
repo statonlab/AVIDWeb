@@ -66,15 +66,15 @@
 
                             <div class="form-group">
                                 <label>
-                                    Site Protection
+                                    Protection
                                 </label>
                                 <select name="protection"
                                         id="protection"
                                         v-model="protection"
                                         class="form-control">
-                                    <option value="">All sites</option>
-                                    <option value="both">Sites with protected and unprotected plots</option>
-                                    <option value="unprotected">Sites with unprotected plots only</option>
+                                    <option value="">Protected and unprotected</option>
+                                    <option value="unprotected">Unprotected only</option>
+                                    <option value="protected">Protected only</option>
                                 </select>
                             </div>
 
@@ -240,7 +240,7 @@
       },
 
       protection() {
-        this.loadChart()
+        this.setProtection()
       },
 
       dataType() {
@@ -418,7 +418,6 @@
               data_type : this.dataType,
               group     : this.group,
               wmu       : this.wmu,
-              protection: this.protection,
             },
           })
 
@@ -490,11 +489,14 @@
                 },
               },
             },
-            colors    : ['#2E93FA', '#2EB07A'],
+            colors    : ['#54A7FB', '#14CA7E'],
             dataLabels: {
               formatter: (val, {seriesIndex, dataPointIndex}) => {
-                return val + ` (N=${data.data[seriesIndex].count[dataPointIndex]})`
+                return [val, `N=${data.data[seriesIndex].count[dataPointIndex]}`]
               },
+              style: {
+                colors: ['#2D3748']
+              }
             },
             // title : {text: 'Annual Height'},
             noData    : {text: 'No measurements found.'},
@@ -514,6 +516,23 @@
         this.$refs.county.clear()
         this.$refs.state.clear()
       },
+
+      setProtection() {
+        switch (this.protection)
+        {
+          case 'unprotected':
+            this.$refs.chart.showSeries('unprotected')
+            this.$refs.chart.hideSeries('protected')
+            break
+          case 'protected':
+            this.$refs.chart.showSeries('protected')
+            this.$refs.chart.hideSeries('unprotected')
+            break
+          default:
+            this.$refs.chart.showSeries('protected')
+            this.$refs.chart.showSeries('unprotected')
+        }
+      }
     },
   }
 </script>
