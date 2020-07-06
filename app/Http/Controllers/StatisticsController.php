@@ -122,6 +122,7 @@ class StatisticsController extends Controller
             'data_type' => 'nullable|in:owned,admin',
             'group' => 'nullable|exists:groups,id',
             'wmu' => "nullable|in:$wmus",
+            'protection' => 'nullable|in:both,unprotected',
         ]);
 
         if ($request->data_type === 'admin') {
@@ -166,7 +167,7 @@ class StatisticsController extends Controller
             });
         }
 
-        if ($request->state || $request->group) {
+        if ($request->state || $request->group || $request->protection) {
             $measurements->where(function ($query) use ($request) {
                 $query->whereHas('site', function ($query) use ($request) {
                     if ($request->state) {
@@ -179,6 +180,24 @@ class StatisticsController extends Controller
                         $query->whereHas('groups', function ($query) use ($request) {
                             $query->where('group_id', $request->group);
                         });
+                    }
+                    if ($request->protection) {
+                        $query->withCount([
+                            'plots as protected_count' => function ($query) {
+                                $query->where('is_protected', 1);
+                            },
+                            'plots as unprotected_count' => function ($query) {
+                                $query->where('is_protected', 0);
+                            },
+                        ]);
+                        if ($request->protection === 'both') {
+                            $query->having('protected_count', '>', 0)
+                                ->having('unprotected_count', '>', 0);
+                        }
+                        if ($request->protection === 'unprotected') {
+                            $query->having('unprotected_count', '>', 0)
+                                ->having('protected_count', 0);
+                        }
                     }
                 });
             });
