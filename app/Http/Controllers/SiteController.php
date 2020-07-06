@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Traits\ListsSites;
 use App\Site;
 use App\User;
+use App\Species;
 use Illuminate\Http\Request;
 use App\Exports\SiteExport;
 use App\Imports\SiteImport;
@@ -67,9 +68,7 @@ class SiteController extends Controller
             'owner_name' => 'nullable|max:255',
             'owner_contact' => 'nullable',
             'species' => 'required|array',
-            'species.*' => 'required|exists:species,id',
             'shrubs' => 'required|array',
-            'shrubs.*' => 'required|exists:species,id',
         ]);
 
         $site = Site::create([
@@ -88,8 +87,22 @@ class SiteController extends Controller
             $group->sites()->attach($site->id);
         }
 
-        $site->species()->sync($request->species);
-        $site->shrubs()->sync($request->shrubs);
+        $species = array_map(function ($species) {
+            if (Species::find($species) !== null) {
+                return $species;
+            }
+            return Species::create(['name' => $species])->id;
+        }, $request->species);
+
+        $shrubs = array_map(function ($shrub) {
+            if (Species::find($shrub) !== null) {
+                return $shrub;
+            }
+            return Species::create(['name' => $shrub])->id;
+        }, $request->shrubs);
+
+        $site->species()->sync($species);
+        $site->shrubs()->sync($shrubs);
 
         $site->load(['county', 'state', 'species', 'shrubs']);
         $site->loadCount(['plants', 'plots']);
