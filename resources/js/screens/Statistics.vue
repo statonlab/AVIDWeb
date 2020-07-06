@@ -489,11 +489,14 @@
                 },
               },
             },
-            colors    : ['#2E93FA', '#2EB07A'],
+            colors    : ['#54A7FB', '#14CA7E'],
             dataLabels: {
               formatter: (val, {seriesIndex, dataPointIndex}) => {
-                return val + ` (N=${data.data[seriesIndex].count[dataPointIndex]})`
+                return [val, `N=${data.data[seriesIndex].count[dataPointIndex]}`]
               },
+              style: {
+                colors: ['#2D3748']
+              }
             },
             // title : {text: 'Annual Height'},
             noData    : {text: 'No measurements found.'},
