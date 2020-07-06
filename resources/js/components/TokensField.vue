@@ -6,7 +6,7 @@
                      v-model="selects"
                      :placeholder="placeholder"
                      :disabled="disabled"
-                     :settings="{ multiple: 'true', theme: 'bootstrap4' }"
+                     :settings="{ multiple: 'true', tags: tags, theme: 'bootstrap4' }"
                      @change="onChange($event)" />
         </div>
     </div>
@@ -22,6 +22,7 @@
       options: {required: true, type: Array},
       id: {required: false, type: String},
       value: {required: false, type: Array},
+      tags: {required: false, type: Boolean, default: false},
       disabled: {required: false, type: Boolean, default: false},
       placeholder: {required: false, type: String, default: 'Search...'}
     },
