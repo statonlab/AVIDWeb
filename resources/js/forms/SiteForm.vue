@@ -113,6 +113,7 @@
                             <required/>
                         </label>
                         <tokens-field id="species"
+                                      :tags="true"
                                       :options="speciesOptions"
                                       v-model="form.species" />
                         <span class="form-text text-danger" v-if="form.errors.has('species')">
@@ -125,11 +126,17 @@
                             <required/>
                         </label>
                         <tokens-field id="shrubs"
+                                      :tags="true"
                                       :options="speciesOptions"
                                       v-model="form.shrubs" />
                         <span class="form-text text-danger" v-if="form.errors.has('shrubs')">
                             {{ form.errors.first('shrubs') }}
                         </span>
+                    </div>
+                    <div class="form-group">
+                        <p class="text-muted">
+                            If you cannot find the species you are looking for in the dropdown, you can insert a new one by typing the name of the species and pressing the Enter/Return key.
+                        </p>
                     </div>
                     <div class="form-group">
                         <label for="basal-area">

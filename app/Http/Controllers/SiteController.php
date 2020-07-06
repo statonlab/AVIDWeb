@@ -88,11 +88,17 @@ class SiteController extends Controller
         }
 
         $species = array_map(function ($species) {
-            return Species::firstOrCreate(['name' => $species])->id;
+            if (Species::find($species) !== null) {
+                return $species;
+            }
+            return Species::create(['name' => $species])->id;
         }, $request->species);
 
         $shrubs = array_map(function ($shrub) {
-            return Species::firstOrCreate(['name' => $shrub])->id;
+            if (Species::find($shrub) !== null) {
+                return $shrub;
+            }
+            return Species::create(['name' => $shrub])->id;
         }, $request->shrubs);
 
         $site->species()->sync($species);
