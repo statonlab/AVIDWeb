@@ -184,33 +184,44 @@ class StatisticsController extends Controller
             });
         }
 
-        $protected = clone $measurements;
-
-        $protected->whereHas('plot', function ($query) {
-            $query->where('is_protected', 1);
-        })->select(DB::raw('ROUND(AVG(height), 2), COUNT(id)'))
-            ->groupBy(DB::raw('YEAR(date)'))
-            ->get();
-
-        $protected_heights = $protected->pluck('ROUND(AVG(height), 2)')->toArray();
-        $protected_counts = $protected->pluck('COUNT(id)')->toArray();
-
-        $unprotected = clone $measurements;
-
-        $unprotected->whereHas('plot', function ($query) {
-            $query->where('is_protected', 0);
-        })->select(DB::raw('ROUND(AVG(height), 2), COUNT(id)'))
-            ->groupBy(DB::raw('YEAR(date)'))
-            ->get();
-
-        $unprotected_heights = $unprotected->pluck('ROUND(AVG(height), 2)')->toArray();
-        $unprotected_counts = $unprotected->pluck('COUNT(id)')->toArray();
-
         if (!$measurements->exists()) {
             return $this->success([]);
         }
 
+        $unprotected = clone $measurements;
+        $protected = clone $measurements;
+
         $years = range($measurements->orderBy('date', 'asc')->first()->date->year, now()->year);
+
+        $protected->whereHas('plot', function ($query) {
+            $query->where('is_protected', 1);
+        })->select(DB::raw('ROUND(AVG(height), 2) as average, COUNT(id) as count, YEAR(date) as year'))
+            ->groupBy(DB::raw('YEAR(date)'));
+
+        $protected = $protected->get();
+
+        $protected_heights = [];
+        $protected_counts  = [];
+
+        foreach ($years as $year) {
+            $protected_heights[] = $protected->where('year', $year)->first()->average ?? 0;
+            $protected_counts[]  = $protected->where('year', $year)->first()->count ?? 0;
+        }
+
+        $unprotected->whereHas('plot', function ($query) {
+            $query->where('is_protected', 0);
+        })->select(DB::raw('ROUND(AVG(height), 2) as average, COUNT(id) as count, YEAR(date) as year'))
+            ->groupBy(DB::raw('YEAR(date)'));
+
+        $unprotected = $unprotected->get();
+
+        $unprotected_heights = [];
+        $unprotected_counts  = [];
+
+        foreach ($years as $year) {
+            $unprotected_heights[] = $unprotected->where('year', $year)->first()->average ?? 0;
+            $unprotected_counts[]  = $unprotected->where('year', $year)->first()->count ?? 0;
+        }
 
         return $this->success([
             'xaxis' => $years,
