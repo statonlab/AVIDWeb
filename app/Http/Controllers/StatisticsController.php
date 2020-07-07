@@ -49,7 +49,7 @@ class StatisticsController extends Controller
 
         $sites = Site::orderBy('name', 'asc');
 
-        if ($request->data_type === 'owned') {
+        if ($request->data_type !== 'admin') {
             $sites->where('user_id', $user->id);
         }
 
@@ -89,7 +89,7 @@ class StatisticsController extends Controller
 
         $plots = Plot::orderBy('number', 'asc');
 
-        if ($request->data_type === 'owned') {
+        if ($request->data_type !== 'admin') {
             $plots->where('user_id', $user->id);
         }
 
