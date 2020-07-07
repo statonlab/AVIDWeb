@@ -36,14 +36,36 @@ class StatisticsController extends Controller
      */
     public function sites(Request $request)
     {
+        $this->validate($request, [
+            'data_type' => 'nullable|in:owned,admin',
+        ]);
+
+        if ($request->data_type === 'admin') {
+            $this->authorize('viewAny', Site::class);
+        }
+
         /** @var \App\User $user */
         $user = $request->user();
 
-        return $this->success($user->sites()
-            ->orderBy('name', 'asc')
-            ->with('plots')
-            ->select(['sites.id', 'sites.name'])
-            ->get());
+        $sites = Site::orderBy('name', 'asc');
+
+        if ($request->data_type === 'owned') {
+            $sites->where('user_id', $user->id);
+        }
+
+        $sites->with('plots')->select(['sites.id', 'sites.name', 'sites.user_id']);
+
+        $sites = $sites->get();
+
+        if ($request->data_type === 'admin') {
+            $sites->transform(function (Site $site) {
+                $site->name .= $site->user ? ' (' . $site->user->name . ')' : '';
+
+                return $site;
+            });
+        }
+
+        return $this->success($sites);
     }
 
     /**
@@ -53,15 +75,23 @@ class StatisticsController extends Controller
     public function plots(Request $request)
     {
         $this->validate($request, [
+            'data_type' => 'nullable|in:owned,admin',
             'sites' => 'nullable|array',
             'sites.*' => 'nullable|exists:sites,id',
         ]);
 
+        if ($request->data_type === 'admin') {
+            $this->authorize('viewAny', Site::class);
+        }
+
         /** @var \App\User $user */
         $user = $request->user();
 
-        $plots = Plot::where('user_id', $user->id)
-            ->orderBy('number', 'asc');
+        $plots = Plot::orderBy('number', 'asc');
+
+        if ($request->data_type === 'owned') {
+            $plots->where('user_id', $user->id);
+        }
 
         if ($request->sites) {
             $plots = $plots->whereIn('site_id', $request->sites);
