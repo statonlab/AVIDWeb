@@ -244,7 +244,11 @@
       },
 
       dataType() {
+        this.sites = []
+        this.plots = []
         this.loadChart()
+        this.loadSites()
+        this.loadPlots()
       },
 
       group() {
@@ -334,7 +338,11 @@
 
       async loadSites() {
         try {
-          const {data}     = await axios.get(`/web/statistics/sites`)
+          const {data}     = await axios.get(`/web/statistics/sites`, {
+            params: {
+              data_type: this.dataType,
+            },
+          })
           this.siteOptions = data.map(({id, name}) => ({id, text: name}))
         } catch (e) {
           this.$alert('Unable to load sites. Please try refreshing the page or contact us.')
@@ -391,6 +399,7 @@
         try {
           const {data} = await axios.get('/web/statistics/plots', {
             params: {
+              data_type: this.dataType,
               sites: this.sites,
             },
           })
