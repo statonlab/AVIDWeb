@@ -19,21 +19,15 @@ class UserSiteController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Site $site, User $user, Request $request)
+    public function toggleEdit(Site $site, User $user, Request $request)
     {
         $this->authorize('update', $site);
-
-        $this->validate($request, [
-            'viewable' => 'nullable|boolean',
-            'editable' => 'nullable|boolean'
-        ]);
 
         $user_site = UserSite::where('site_id', $site->id)->where('user_id', $user->id)->first();
 
         if ($user_site) {
             $user_site->fill([
-                'viewable' => $request->viewable ?? $user_site->viewable,
-                'editable' => $request->editable ?? $user_site->editable,
+                'editable' => !$user_site->editable,
             ])->save();
         }
 
@@ -86,7 +80,6 @@ class UserSiteController extends Controller
             $user->shared = $user_site !== null;
 
             if ($user->shared) {
-                $user->can_view = $user_site->viewable;
                 $user->can_edit = $user_site->editable;
             }
 

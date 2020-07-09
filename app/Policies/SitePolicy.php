@@ -48,9 +48,7 @@ class SitePolicy
             return true;
         }
 
-        $user_site = $site->userSites()->where('user_id', $user->id)->first();
-
-        if ($user_site !== null && $user_site->viewable) {
+        if ($site->userSites()->where('user_id', $user->id)->exists()) {
             return true;
         }
 

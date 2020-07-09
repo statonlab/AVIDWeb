@@ -47,13 +47,7 @@
                             </button>
                             <div class="dropdown-menu align-items-center">
                                 <a href="#"
-                                   @click.prevent="update(user, 'view')"
-                                   class="dropdown-item">
-                                    <icon :name="user.can_view ? 'eye-off' : 'eye'"/>
-                                    <span>{{user.can_view ? 'Disallow user to view' : 'Allow user to view'}}</span>
-                                </a>
-                                <a href="#"
-                                   @click.prevent="update(user, 'edit')"
+                                   @click.prevent="toggleEdit(user)"
                                    class="dropdown-item">
                                     <icon :name="user.can_edit ? 'close' : 'create'"/>
                                     <span>{{user.can_edit ? 'Disallow user to edit' : 'Allow user to edit'}}</span>
@@ -197,36 +191,10 @@
         }
       },
 
-      async update(user, permission) {
-        let params = {}
-        if (permission === 'view') {
-          params.viewable = !user.can_view
-        } else {
-          params.editable = !user.can_edit
-        }
-        try {
-          const {data} = await axios.put(`/web/user-sites/site/${this.site.id}/user/${user.id}`, params)
-          user.can_view = data.viewable
-          user.can_edit = data.editable
-          this.$notify({
-            type: 'success',
-            text: 'Updated user permissions successfully',
-          })
-        } catch (e) {
-          console.error(e)
-          this.$notify({
-            text: 'Unable to change user permissions. Please try refreshing the page.',
-            type: 'error',
-          })
-        }
-      },
-
       async toggleEdit(user) {
         try {
-          await axios.put(`/web/user-sites/site/${this.site.id}/user/${user.id}`, {
-            editable: !user.can_view
-          })
-          user.can_view = !user.can_view
+          const {data} = await axios.put(`/web/user-sites/site/${this.site.id}/user/${user.id}/toggle-edit`)
+          user.can_edit = data.editable
           this.$notify({
             type: 'success',
             text: 'Updated user permissions successfully',

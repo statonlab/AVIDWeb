@@ -37,7 +37,7 @@ class SiteController extends Controller
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
             'limit' => 'nullable|integer',
-            'site_type' => 'nullable|in:shared,owned',
+            'site_type' => 'nullable|in:all,shared,owned',
         ]);
 
         $sites = null;

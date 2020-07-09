@@ -8,7 +8,7 @@
                 <div class="pl-1 d-flex align-items-center">
                     <div class="flex-shrink-0">
                         <select name="site_type" id="site-type" v-model="siteType" class="custom-select" v-if="showSiteType">
-                            <option value="">All sites</option>
+                            <option value="all">All sites</option>
                             <option value="shared">Shared only</option>
                             <option value="owned">My sites only</option>
                         </select>
@@ -155,7 +155,7 @@
         moment,
         User        : User,
         showSiteForm: false,
-        siteType    : '',
+        siteType    : 'all',
         sites       : [],
         loading     : false,
         page        : 1,

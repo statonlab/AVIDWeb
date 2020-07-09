@@ -134,7 +134,7 @@ Route::group([
 
     // UserSite Controller
     Route::get('/user-sites/users', 'UserSiteController@users');
-    Route::put('/user-sites/site/{site}/user/{user}', 'UserSiteController@update');
+    Route::put('/user-sites/site/{site}/user/{user}/toggle-edit', 'UserSiteController@toggleEdit');
     Route::delete('/user-sites/site/{site}/user/{user}', 'UserSiteController@delete');
 
     // Plot Controller

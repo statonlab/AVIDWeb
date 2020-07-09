@@ -12,7 +12,6 @@ class UserSite extends Model
     protected $fillable = [
         'user_id',
         'site_id',
-        'viewable',
         'editable',
     ];
 

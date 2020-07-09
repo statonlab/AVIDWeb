@@ -20,7 +20,7 @@ trait ListsSites
             'order_by' => 'nullable|in:name,plots_count,plants_count,last_measured_at',
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
-            'site_type' => 'nullable|in:shared,owned'
+            'site_type' => 'nullable|in:all,shared,owned'
         ]);
 
         if ($sites === null) {
@@ -60,19 +60,18 @@ trait ListsSites
                     });
                 });
             })
-            ->where(function ($query) use ($request) {
-                if ($request->site_type !== null) {
-                    switch ($request->site_type)
-                    {
-                        case 'shared':
-                            $query->withShared($request->user());
-                            break;
-                        case 'owned':
-                            $query->where('user_id', $request->user()->id);
-                            break;
-                        default:
-                            $query->withShared($request->user())->orWhere('user_id', $request->user()->id);
-                    }
+            ->when($request->site_type, function ($query) use ($request) {
+                switch ($request->site_type)
+                {
+                    case 'all':
+                        $query->withShared($request->user())->orWhere('user_id', $request->user()->id);
+                        break;
+                    case 'shared':
+                        $query->withShared($request->user());
+                        break;
+                    case 'owned':
+                        $query->where('user_id', $request->user()->id);
+                        break;
                 }
             });
 
