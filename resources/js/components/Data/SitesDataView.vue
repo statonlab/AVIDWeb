@@ -5,11 +5,20 @@
                 <div class="flex-grow-1">
                     <input type="search" class="form-control" placeholder="Search..." v-model="search">
                 </div>
-                <div class="ml-auto flex-shrink-0 pl-1">
-                    <button class="btn btn-primary" @click.prevent="showSiteForm = true">
-                        <icon name="add"/>
-                        <span>New Site</span>
-                    </button>
+                <div class="pl-1 d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <select name="site_type" id="site-type" v-model="siteType" class="custom-select" v-if="showSiteType">
+                            <option value="">All sites</option>
+                            <option value="shared">Shared only</option>
+                            <option value="owned">My sites only</option>
+                        </select>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <button class="ml-2 btn btn-primary" @click.prevent="showSiteForm = true">
+                            <icon name="add"/>
+                            <span>New Site</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="card-body p-0 table-responsive">
@@ -134,6 +143,7 @@
 
     props: {
       url                : {required: false, type: String, default: '/web/sites'},
+      showSiteType       : {required: false, type: Boolean, default: false},
       editable           : {required: false, type: Boolean, default: false},
       showOwner          : {required: false, type: Boolean, default: false},
       siteUrlPrefix      : {required: false, type: String, default: '/app/sites'},
@@ -145,6 +155,7 @@
         moment,
         User        : User,
         showSiteForm: false,
+        siteType    : '',
         sites       : [],
         loading     : false,
         page        : 1,
@@ -170,6 +181,11 @@
         this.page = 1
         this.loadSites()
       },
+
+      siteType() {
+        this.page = 1
+        this.loadSites()
+      }
     },
 
     methods: {
@@ -185,6 +201,7 @@
               page     : this.page,
               order_by : this.orderBy,
               order_dir: this.orderDir,
+              site_type: this.siteType,
             },
             cancelToken: new axios.CancelToken(c => this._request = c),
           })

@@ -48,6 +48,12 @@ class SitePolicy
             return true;
         }
 
+        $user_site = $site->userSites()->where('user_id', $user->id)->first();
+
+        if ($user_site !== null && $user_site->viewable) {
+            return true;
+        }
+
         return $user->hasPermissionTo('view sites');
     }
 
@@ -82,6 +88,12 @@ class SitePolicy
             ->wherePivot('is_leader', 1)->get()
             ->pluck('id'))->exists()) {
 
+            return true;
+        }
+
+        $user_site = $site->userSites()->where('user_id', $user->id)->first();
+
+        if ($user_site !== null && $user_site->editable) {
             return true;
         }
 

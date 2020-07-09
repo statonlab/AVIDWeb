@@ -37,9 +37,12 @@ class SiteController extends Controller
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
             'limit' => 'nullable|integer',
+            'site_type' => 'nullable|in:shared,owned',
         ]);
 
-        $sites = $this->getSites($user->sites())->paginate($request->limit ?? 20);
+        $sites = null;
+
+        $sites = $this->getSites()->paginate($request->limit ?? 20);
 
         return $this->success($sites);
     }
@@ -211,5 +214,11 @@ class SiteController extends Controller
         Excel::import(new SiteImport($user, $site), $request->file('file'));
 
         return $this->success('Measurements uploaded successfully.');
+    }
+
+    public function scopeWithShared($query, User $user) {
+        return $query->whereHas('userSite', function($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->orWhere('user_id', $user->id);
     }
 }
