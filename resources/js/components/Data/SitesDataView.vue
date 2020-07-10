@@ -155,7 +155,7 @@
         moment,
         User        : User,
         showSiteForm: false,
-        siteType    : 'all',
+        siteType    : this.showSiteType ? 'all' : null,
         sites       : [],
         loading     : false,
         page        : 1,
