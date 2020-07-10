@@ -15,6 +15,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use Artisan;
 
 class ImportFile extends Command
 {
@@ -112,6 +113,12 @@ class ImportFile extends Command
         }
 
         $this->info("Processed $i lines");
+
+        $this->info("Updating last measured fields");
+        Artisan::call('plots:update-measurements-date');
+
+        $this->info("Attach WMUs to plots");
+        Artisan::call('attach:wmus');
 
         return 0;
     }
