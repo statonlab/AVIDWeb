@@ -153,6 +153,7 @@ class StatisticsController extends Controller
             'group' => 'nullable|exists:groups,id',
             'wmu' => "nullable|in:$wmus",
             'protection' => 'nullable|in:both,unprotected',
+            'years_filter' => 'nullable|array',
         ]);
 
         if ($request->data_type === 'admin') {
@@ -241,6 +242,10 @@ class StatisticsController extends Controller
         $protected = clone $measurements;
 
         $years = range($measurements->orderBy('date', 'asc')->first()->date->year, now()->year);
+        $years_literal = $years;
+        if ($request->years_filter) {
+            $years = array_values(array_diff($years, $request->years_filter));
+        }
 
         $protected->whereHas('plot', function ($query) {
             $query->where('is_protected', 1);
@@ -284,6 +289,7 @@ class StatisticsController extends Controller
                     'count' => $unprotected_counts,
                 ]
             ],
+            'years' => $years_literal,
         ]);
     }
 
@@ -352,7 +358,7 @@ class StatisticsController extends Controller
                     'unprotected' => $unprotected,
                     'count' => $unprotected_count,
                 ],
-            ]
+            ],
         ]);
     }
 }

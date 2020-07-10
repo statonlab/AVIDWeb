@@ -173,6 +173,27 @@
                                         :series="chart.series"/>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="page-title">Filter by Year</h1>
+                            <p class="text-muted">Unchecked years will be excluded from the chart</p>
+                            <div v-for="(year, index) in years" class="d-flex align-items-center">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox"
+                                           :id="`year-${index}`"
+                                           name="role-select"
+                                           class="custom-control-input"
+                                           :value="year"
+                                           :checked="!yearsFilter.includes(year)"
+                                           v-on:change="filterYear(year)">
+                                    <label class="custom-control-label"
+                                           :for="`year-${index}`">
+                                        {{ year }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -261,6 +282,10 @@
 
       wmu() {
         this.loadChart()
+      },
+
+      yearsFilter() {
+        this.loadChart()
       }
     },
 
@@ -279,6 +304,8 @@
         plots         : [],
         types         : [],
         species       : [],
+        years         : [],
+        yearsFilter   : [],
         stateSearch   : '',
         countySearch  : '',
         groupSearch   : '',
@@ -418,16 +445,17 @@
         try {
           const {data} = await axios.get(`/web/statistics/chart`, {
             params: {
-              sites     : this.sites,
-              plots     : this.plots,
-              types     : this.types,
-              species   : this.species,
-              state     : this.state,
-              county    : this.county,
-              data_type : this.dataType,
-              group     : this.group,
-              wmu       : this.wmu,
-              protection: this.protection,
+              sites         : this.sites,
+              plots         : this.plots,
+              types         : this.types,
+              species       : this.species,
+              state         : this.state,
+              county        : this.county,
+              data_type     : this.dataType,
+              group         : this.group,
+              wmu           : this.wmu,
+              protection    : this.protection,
+              years_filter  : this.yearsFilter,
             },
           })
 
@@ -481,6 +509,9 @@
           series.push({name: 'unprotected', data: data.data[1].unprotected})
         }
 
+        console.log(data.years)
+        this.years = data.years
+
         this.chart = {
           options: {
             chart     : {
@@ -526,6 +557,15 @@
         this.$refs.county.clear()
         this.$refs.state.clear()
       },
+
+      filterYear(year) {
+        if (this.yearsFilter.includes(year)) {
+          this.yearsFilter = this.yearsFilter.filter(y => y !== year)
+        } else {
+          this.yearsFilter.push(year)
+        }
+        console.log(this.yearsFilter)
+      }
     },
   }
 </script>
