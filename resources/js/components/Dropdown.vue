@@ -35,6 +35,10 @@
                 {{ option.label }}
             </a>
             <slot/>
+            <p v-if="options.length < total"
+               class="text-muted text-center p-2 mb-0">
+                {{ `Showing ${options.length} of ${total}. Please search to see more` }}
+            </p>
             <p v-if="options.length === 0 && emptyMessage.length"
                class="text-center text-muted p-2 mb-0">{{ emptyMessage }}</p>
             <p v-if="endMessage.length" class="text-center text-muted p-2 mb-0">
@@ -66,6 +70,7 @@
       error       : {required: false, type: Boolean, default: false},
       maxWidth    : {required: false, type: Number, default: 230},
       btnClass    : {required: false, type: String, default: 'btn-select'},
+      total       : {required: false, type: Number, default: 0}
     },
 
     data() {
@@ -134,6 +139,7 @@
       },
 
       down() {
+        console.log(this.total)
         const first = $(this.$refs.menu).find('.dropdown-item').first()
 
         if (first.length) {

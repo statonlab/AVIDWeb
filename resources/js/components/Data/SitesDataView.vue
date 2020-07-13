@@ -1,5 +1,36 @@
 <template>
     <div>
+        <div class="card mb-3" v-if="invitations.length !== 0">
+            <div class="card-header">
+                <p class="page-title mb-0">Pending Invitations</p>
+                <p class="text-muted">You have been invited to view the following sites</p>
+                <table class="table mb-0 table-middle table-hover table-nowrap">
+                    <thead>
+                    <tr>
+                        <th>Site Name</th>
+                        <th>From</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="invitation in invitations">
+                        <td>{{ invitation.site.name }}</td>
+                        <td>{{ invitation.user.name }}</td>
+                        <td class="text-right no-wrap">
+                            <button class="btn btn-sm btn-outline-primary"
+                                    @click.prevent="acceptInvitation(invitation)">
+                                Accept
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger"
+                                    @click.prevent="rejectInvitation(invitation)">
+                                Reject
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div class="card mb-3">
             <div class="card-header d-flex p-2">
                 <div class="flex-grow-1">
@@ -157,6 +188,7 @@
         showSiteForm: false,
         siteType    : this.showSiteType ? 'all' : null,
         sites       : [],
+        invitations : [],
         loading     : false,
         page        : 1,
         lastPage    : 1,
@@ -174,6 +206,7 @@
     mounted() {
       this.loading = true
       this.loadSites()
+      this.loadInvitations()
     },
 
     watch: {
@@ -220,6 +253,17 @@
             console.error(e)
           }
         }
+      },
+
+      async loadInvitations() {
+        try {
+          const {data} = await axios.get(`/web/site-invitations`)
+          this.invitations = data
+        } catch (e) {
+          console.error(e)
+        }
+
+        this.loading = false
       },
 
       siteCreated() {
@@ -289,6 +333,48 @@
 
         return 'arrow-down'
       },
+
+      async acceptInvitation(invitation) {
+        try {
+          await axios.get(`/site-invitations/${invitation.id}/accept`, {
+            params: {
+              auth: invitation.token,
+            }
+          })
+          this.$notify({
+            text: 'Invitation accepted successfully',
+            type: 'success',
+          })
+          this.invitations = this.invitations.filter(i => i.id !== invitation.id)
+          this.loadSites()
+        } catch (e) {
+          this.$notify({
+            text: 'Unable to accept invitation. Please try refreshing the page.',
+            type: 'error',
+          })
+        }
+      },
+
+      async rejectInvitation(invitation) {
+        try {
+          await axios.get(`/site-invitations/${invitation.id}/reject`, {
+            params: {
+              auth: invitation.token,
+            }
+          })
+          this.$notify({
+            text: 'Invitation rejected successfully',
+            type: 'success',
+          })
+          this.invitations = this.invitations.filter(i => i.id !== invitation.id)
+          this.loadSites()
+        } catch (e) {
+          this.$notify({
+            text: 'Unable to reject invitation. Please try refreshing the page.',
+            type: 'error',
+          })
+        }
+      }
     },
   }
 </script>

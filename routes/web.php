@@ -63,7 +63,9 @@ Route::get('/resources/references', 'ResourcesController@references')->name('ref
 Route::get('/privacy-policy', 'LegalController@privacyPolicy')->name('privacy-policy');
 
 Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
+
 Route::get('/site-invitations/{invitation}/accept', 'SiteInvitationController@accept');
+Route::get('/site-invitations/{invitation}/reject', 'SiteInvitationController@reject');
 
 /**
  * Views for authenticated users.
@@ -134,6 +136,7 @@ Route::group([
 
     // UserSite Controller
     Route::get('/user-sites/users', 'UserSiteController@users');
+    Route::get('/user-sites/shared', 'UserSiteController@sharedUsers');
     Route::put('/user-sites/site/{site}/user/{user}/toggle-edit', 'UserSiteController@toggleEdit');
     Route::delete('/user-sites/site/{site}/user/{user}', 'UserSiteController@delete');
 
@@ -180,8 +183,8 @@ Route::group([
     Route::delete('/invitations/{invitation}', 'InvitationController@delete');
 
     // Site Invitation Controller
-    Route::get('sites/{site}/invitations', 'SiteInvitationController@index');
-    Route::post('sites/{site}/invitations', 'SiteInvitationController@create');
+    Route::get('/site-invitations', 'SiteInvitationController@index');
+    Route::post('/sites/{site}/invitations', 'SiteInvitationController@create');
     Route::delete('/site/invitations/{invitation}', 'SiteInvitationController@delete');
 
     // Species Controller

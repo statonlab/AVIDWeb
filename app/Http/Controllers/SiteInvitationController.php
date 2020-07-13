@@ -11,22 +11,46 @@ use Illuminate\Http\Request;
 class SiteInvitationController extends Controller
 {
     /**
-     * @param \App\Site $site
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function index(Site $site)
+    public function index(Request $request)
     {
-        $this->authorize('viewAny', [SiteInvitation::class, $site]);
+        $this->validate($request, [
+            'site_id' => 'nullable|exists:sites,id'
+        ]);
 
-        $invitations = $site->invitations()
-            ->with(['user', 'recipient'])
-            ->get()
-            ->map(function (SiteInvitation $invitation) {
-                $invitation->expired = $invitation->expires_at->isPast();
+        if ($request->site_id) {
+            $site = Site::findOrFail($request->site_id);
 
-                return $invitation;
-            });
+            $this->authorize('viewAny', [SiteInvitation::class, $site]);
+        }
+
+        $user = $request->user();
+
+        $invitations = SiteInvitation::pending()->with([
+            'user' => function ($query) {
+                $query->select('id', 'name');
+            }
+        ]);
+
+        if ($request->site_id) {
+            $invitations->with([
+                'recipient' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])->where('site_id', $request->site_id);
+        } else {
+            $invitations->with(['site'])->where('recipient_id', $user->id);
+        }
+
+        $invitations = $invitations->get()->map(function (SiteInvitation $invitation) {
+            $invitation->expired = $invitation->expires_at->isPast();
+
+            return $invitation;
+        });
 
         return $this->success($invitations);
     }
@@ -118,6 +142,41 @@ class SiteInvitationController extends Controller
 
             if ($user->id === $invitation->recipient_id) {
                 $invitation->accept($user);
+
+                return redirect()->to('/app/sites');
+            } else {
+                auth()->logout();
+            }
+        }
+
+        session()->put('site_invitation', $invitation->id);
+
+        return redirect('/login');
+    }
+
+    public function reject(SiteInvitation $invitation, Request $request)
+    {
+        if ($invitation->token !== $request->auth) {
+            abort(403);
+
+            return;
+        }
+
+        if ($invitation->expires_at->isPast()) {
+            return view('invitations.expired');
+        }
+
+        if ($invitation->status !== SiteInvitation::PENDING) {
+            return view('invitations.invalid', [
+                'message' => 'This invitation has already been processed.',
+            ]);
+        }
+
+        if (auth()->check()) {
+            $user = auth()->user();
+
+            if ($user->id === $invitation->recipient_id) {
+                $invitation->reject($user);
 
                 return redirect()->to('/app/sites');
             } else {

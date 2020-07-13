@@ -152,5 +152,15 @@ class SiteInvitation extends Model
             'site_id' => $this->site_id,
         ]);
     }
+
+    /**
+     * @param \App\User $user
+     */
+    public function reject(User $user)
+    {
+        $this->fill([
+            'status' => self::REJECTED,
+        ])->save();
+    }
 }
 

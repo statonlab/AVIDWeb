@@ -18,6 +18,7 @@
                               :options="userOptions"
                               placeholder="Find a user"
                               @search="userSearch = $event"
+                              :total="total"
                               ref="user" />
                     <div class="form-text text-danger" v-if="userForm.errors.has('user_id')">
                         {{ userForm.errors.first('user_id') }}
@@ -30,8 +31,7 @@
                 </div>
                 <div v-for="(user, i) in sharedWith"
                      class="d-flex align-items-center hover-visible-container hover-highlight px-4 py-2"
-                     :class="{'mt-2': i !== 0}"
-                     v-if="user.shared">
+                     :class="{'mt-2': i !== 0}">
                     <div class="flex-shrink-0">
                         <avatar :user="user" small/>
                     </div>
@@ -115,6 +115,7 @@
         userOptions : [],
         invitations : [],
         userSearch  : '',
+        total       : 0,
         userForm    : new Form({
           user_id       : '',
         }),
@@ -129,6 +130,7 @@
 
     mounted() {
       this.loadUsers()
+      this.loadSharedUsers()
       this.loadInvitations()
     },
 
@@ -143,14 +145,31 @@
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
 
-          this.users = data
-          this.userOptions = data.map(u => {
+          this.users = data.data
+          this.total = data.total
+          this.userOptions = data.data.map(u => {
             return {
               label : u.name,
               value : u.id,
             }
           })
-          this.sharedWith = this.users.filter(u => u.shared)
+          this.loading  = false
+        } catch (e) {
+          if (!axios.isCancel(e)) {
+            this.loading = false
+            this.request = null
+          }
+        }
+      },
+
+      async loadSharedUsers() {
+        try {
+          const {data} = await axios.get(`/web/user-sites/shared`, {
+            params     : { site_id: this.site.id },
+            cancelToken: new axios.CancelToken(c => this.request = c),
+          })
+
+          this.sharedWith = data
           this.loading  = false
         } catch (e) {
           if (!axios.isCancel(e)) {
@@ -162,7 +181,11 @@
 
       async loadInvitations() {
         try {
-          const {data} = await axios.get(`/web/sites/${this.site.id}/invitations`)
+          const {data} = await axios.get(`/web/site-invitations`, {
+            params: {
+              site_id: this.site.id,
+            }
+          })
           this.invitations = data
         } catch (e) {
           console.error(e)

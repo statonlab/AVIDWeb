@@ -54,6 +54,11 @@ class UserSiteController extends Controller
         return $this->deleted();
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function users(Request $request)
     {
         $user = $request->user();
@@ -63,7 +68,7 @@ class UserSiteController extends Controller
             'search' => 'nullable|max:255',
         ]);
 
-        $users = User::where('id', '!=', $user->id)->orderBy('name', 'asc');
+        $users = User::where('id', '!=', $user->id);
 
         if ($request->search) {
             $term = $request->search;
@@ -73,15 +78,31 @@ class UserSiteController extends Controller
             });
         }
 
+        $users->orderBy('name', 'asc')->select('id', 'name');
+
+        $users = $users->paginate(20);
+
+        return $this->success($users);
+    }
+
+    /**
+     * Get users with whom the site is shared.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
+    public function sharedUsers(Request $request)
+    {
+        $users = User::with('userSites')
+            ->orderBy('name', 'asc')
+            ->whereHas('userSites', function ($query) use ($request) {
+                $query->where('site_id', $request->site_id); })
+            ->select('id', 'name');
+
         $users = $users->get();
 
-        $users->transform(function (User $user) use ($request) {
-            $user_site = UserSite::where('user_id', $user->id)->where('site_id', $request->site_id)->first();
-            $user->shared = $user_site !== null;
-
-            if ($user->shared) {
-                $user->can_edit = $user_site->editable;
-            }
+        $users->transform(function (User $user) {
+            $user->can_edit = $user->userSites->first()->editable;
 
             return $user;
         });
