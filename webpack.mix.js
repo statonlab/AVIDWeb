@@ -13,6 +13,15 @@ const mix = require('laravel-mix')
 
 mix.browserSync('aviddeer.test')
 
+mix.webpackConfig({
+  entry: {
+    app: ['./resources/sass/app.scss'],
+  },
+  output: {
+    chunkFilename: 'partials/[name].js?id=[chunkhash]',
+  },
+})
+
 mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/auth.js', 'public/js')
     .js('resources/js/guest.js', 'public/js')
