@@ -5,14 +5,10 @@
                 <div class="flex-grow-1 pb-2">
                     <strong>Sharing</strong>
                 </div>
-                <button class="flex-shrink-1 btn btn-link" @click.prevent="inviteUser()">
-                    <icon name="add"/>
-                    <span>Invite</span>
-                </button>
             </div>
             <form action="" @submit.prevent="inviteUser()">
-                <div class="mb-4">
-                    <dropdown class="mb-0"
+                <div class="mb-4 d-flex">
+                    <dropdown class="mb-0 mr-2 flex-grow-1"
                               autocomplete
                               v-model="userForm.user_id"
                               :options="userOptions"
@@ -20,6 +16,9 @@
                               @search="userSearch = $event"
                               :total="total"
                               ref="user" />
+                    <button class="flex-shrink-0 btn btn-primary" @click.prevent="inviteUser()">
+                        <span>Invite</span>
+                    </button>
                     <div class="form-text text-danger" v-if="userForm.errors.has('user_id')">
                         {{ userForm.errors.first('user_id') }}
                     </div>
@@ -90,6 +89,7 @@
 </template>
 
 <script>
+  import Errors from '../forms/Errors'
   import Avatar from './Avatar'
   import Icon from './Icon'
   import Dropdown from './Dropdown'
@@ -139,7 +139,7 @@
           const {data} = await axios.get(`/web/user-sites/users`, {
             params     : {
               site_id  : this.site.id,
-              search   : this.userSearch,
+              search   : this.userSearch.length >= 2 ? this.userSearch : null,
             },
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
@@ -154,9 +154,18 @@
           this.loading  = false
         } catch (e) {
           if (!axios.isCancel(e)) {
-            this.loading = false
-            this.request = null
+            if (e.response && e.response.status === 403) {
+              this.$alert('You are not authorized to complete this action.')
+            } else if (e.response && e.response.status === 422) {
+              const errors = new Errors(e.response.data)
+              this.$alert(errors.toArray().join(' '))
+            } else {
+              this.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.')
+            }
+            console.error(e)
           }
+
+          this.loading = false
         }
       },
 
@@ -171,9 +180,18 @@
           this.loading  = false
         } catch (e) {
           if (!axios.isCancel(e)) {
-            this.loading = false
-            this.request = null
+            if (e.response && e.response.status === 403) {
+              this.$alert('You are not authorized to complete this action.')
+            } else if (e.response && e.response.status === 422) {
+              const errors = new Errors(e.response.data)
+              this.$alert(errors.toArray().join(' '))
+            } else {
+              this.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.')
+            }
+            console.error(e)
           }
+
+          this.loading = false
         }
       },
 
@@ -186,6 +204,14 @@
           })
           this.invitations = data
         } catch (e) {
+          if (e.response && e.response.status === 403) {
+            this.$alert('You are not authorized to complete this action.')
+          } else if (e.response && e.response.status === 422) {
+            const errors = new Errors(e.response.data)
+            this.$alert(errors.toArray().join(' '))
+          } else {
+            this.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.')
+          }
           console.error(e)
         }
 
@@ -202,11 +228,13 @@
           this.user = null
           this.loadInvitations()
         } catch (e) {
-          if (e.response && e.response.status !== 422) {
-            this.$notify({
-              text: 'Unable to send invite. Please try refreshing the page.',
-              type: 'error',
-            })
+          if (e.response && e.response.status === 403) {
+            this.$alert('You are not authorized to complete this action.')
+          } else if (e.response && e.response.status === 422) {
+            const errors = new Errors(e.response.data)
+            this.$alert(errors.toArray().join(' '))
+          } else {
+            this.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.')
           }
           console.error(e)
         }
@@ -221,11 +249,21 @@
             text: 'Updated user permissions successfully',
           })
         } catch (e) {
+          if (e.response && e.response.status === 403) {
+            this.$notify({
+              text: 'You are not authorized to complete this action.',
+              type: 'error',
+            })
+          } else if (e.response && e.response.status === 422) {
+            const errors = new Errors(e.response.data)
+            this.$alert(errors.toArray().join(' '))
+          } else {
+            this.$notify({
+              text: 'Unable to change user permissions. Please try refreshing the page.',
+              type: 'error',
+            })
+          }
           console.error(e)
-          this.$notify({
-            text: 'Unable to change user permissions. Please try refreshing the page.',
-            type: 'error',
-          })
         }
       },
 
@@ -242,11 +280,21 @@
                 text: 'Canceled sharing with user successfully',
               })
             } catch (e) {
+              if (e.response && e.response.status === 403) {
+                this.$notify({
+                  text: 'You are not authorized to complete this action.',
+                  type: 'error',
+                })
+              } else if (e.response && e.response.status === 422) {
+                const errors = new Errors(e.response.data)
+                this.$alert(errors.toArray().join(' '))
+              } else {
+                this.$notify({
+                  text: 'Unable to cancel sharing. Please try refreshing the page.',
+                  type: 'error',
+                })
+              }
               console.error(e)
-              this.$notify({
-                text: 'Unable to cancel sharing. Please try refreshing the page.',
-                type: 'error',
-              })
             }
           },
         })
@@ -265,11 +313,21 @@
                 text: 'Invitation deleted successfully',
               })
             } catch (e) {
+              if (e.response && e.response.status === 403) {
+                this.$notify({
+                  text: 'You are not authorized to complete this action.',
+                  type: 'error',
+                })
+              } else if (e.response && e.response.status === 422) {
+                const errors = new Errors(e.response.data)
+                this.$alert(errors.toArray().join(' '))
+              } else {
+                this.$notify({
+                  text: 'Unable to delete invitation. Please try refreshing the page.',
+                  type: 'error',
+                })
+              }
               console.error(e)
-              this.$notify({
-                text: 'Unable to delete invitation. Please try refreshing the page.',
-                type: 'error',
-              })
             }
           },
         })

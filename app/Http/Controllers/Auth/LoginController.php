@@ -63,22 +63,5 @@ class LoginController extends Controller
 
             return redirect()->to('/app/groups/'.$invitation->group_id.'?accepted=1');
         }
-
-        if (session()->has('site_invitation')) {
-            $invitation = SiteInvitation::find(session('site_invitation'));
-            session()->remove('site_invitation');
-
-            if (! $invitation) {
-                return null;
-            }
-
-            if ($invitation->status !== Invitation::PENDING) {
-                return null;
-            }
-
-            $invitation->accept($user);
-
-            return redirect()->to('/app/sites');
-        }
     }
 }

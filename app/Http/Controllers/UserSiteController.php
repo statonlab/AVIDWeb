@@ -68,8 +68,10 @@ class UserSiteController extends Controller
 
         $this->validate($request, [
             'site_id' => 'nullable|exists:sites,id',
-            'search' => 'nullable|max:255',
+            'search' => 'nullable|min:2|max:255',
         ]);
+
+        $this->authorize('viewAny', Site::findOrFail($request->site_id));
 
         $users = User::where('id', '!=', $user->id);
 
@@ -96,6 +98,12 @@ class UserSiteController extends Controller
      */
     public function sharedUsers(Request $request)
     {
+        $this->validate($request, [
+            'site_id' => 'required|exists:sites,id'
+        ]);
+
+        $this->authorize('viewAny', Site::findOrFail($request->site_id));
+
         $users = User::with('userSites')
             ->orderBy('name', 'asc')
             ->whereHas('userSites', function ($query) use ($request) {

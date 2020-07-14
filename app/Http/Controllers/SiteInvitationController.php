@@ -149,8 +149,6 @@ class SiteInvitationController extends Controller
             }
         }
 
-        session()->put('site_invitation', $invitation->id);
-
         return redirect('/login');
     }
 

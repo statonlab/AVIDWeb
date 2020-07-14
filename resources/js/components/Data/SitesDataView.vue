@@ -40,8 +40,8 @@
                     <div class="flex-shrink-0">
                         <select name="site_type" id="site-type" v-model="siteType" class="custom-select" v-if="showSiteType">
                             <option value="all">All sites</option>
-                            <option value="shared">Shared only</option>
-                            <option value="owned">My sites only</option>
+                            <option value="shared">Owned by others</option>
+                            <option value="owned">Owned by me</option>
                         </select>
                     </div>
                     <div class="flex-shrink-0">
