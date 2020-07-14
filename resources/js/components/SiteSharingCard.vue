@@ -111,7 +111,6 @@
         loading     : true,
         user        : null,
         sharedWith  : [],
-        users       : [],
         userOptions : [],
         invitations : [],
         userSearch  : '',
@@ -145,7 +144,6 @@
             cancelToken: new axios.CancelToken(c => this.request = c),
           })
 
-          this.users = data.data
           this.total = data.total
           this.userOptions = data.data.map(u => {
             return {

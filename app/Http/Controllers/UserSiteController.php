@@ -13,21 +13,22 @@ class UserSiteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\UserSite $user_site
+     * @param \App\Site $site
+     * @param \App\User $user
      * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function toggleEdit(Site $site, User $user, Request $request)
+    public function toggleEdit(Site $site, User $user)
     {
         $this->authorize('update', $site);
 
-        $user_site = UserSite::where('site_id', $site->id)->where('user_id', $user->id)->first();
+        $user_site = UserSite::where('site_id', $site->id)
+            ->where('user_id', $user->id)
+            ->first();
 
         if ($user_site) {
             $user_site->fill([
-                'editable' => !$user_site->editable,
+                'editable' => ! $user_site->editable,
             ])->save();
         }
 
@@ -41,11 +42,13 @@ class UserSiteController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function delete(Site $site, User $user, Request $request)
+    public function delete(Site $site, User $user)
     {
         $this->authorize('delete', $site);
 
-        $user_site = UserSite::where('site_id', $site->id)->where('user_id', $user->id)->first();
+        $user_site = UserSite::where('site_id', $site->id)
+            ->where('user_id', $user->id)
+            ->first();
 
         if ($user_site) {
             $user_site->delete();
@@ -96,7 +99,8 @@ class UserSiteController extends Controller
         $users = User::with('userSites')
             ->orderBy('name', 'asc')
             ->whereHas('userSites', function ($query) use ($request) {
-                $query->where('site_id', $request->site_id); })
+                $query->where('site_id', $request->site_id);
+            })
             ->select('id', 'name');
 
         $users = $users->get();
