@@ -572,7 +572,6 @@
         } else {
           this.yearsFilter.push(year)
         }
-        console.log(this.yearsFilter)
       }
     },
   }
