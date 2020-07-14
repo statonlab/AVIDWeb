@@ -15,6 +15,8 @@
                               placeholder="Find a user"
                               @search="userSearch = $event"
                               :total="total"
+                              :length-to-search="2"
+                              :search-message="'Please enter a name or an email to begin searching.'"
                               ref="user" />
                     <button class="flex-shrink-0 btn btn-primary" @click.prevent="inviteUser()">
                         <span>Invite</span>
@@ -123,12 +125,15 @@
 
     watch: {
       userSearch() {
-        this.loadUsers()
+        if (this.userSearch.length >= 2) {
+          this.loadUsers()
+        } else {
+          this.userOptions = []
+        }
       }
     },
 
     mounted() {
-      this.loadUsers()
       this.loadSharedUsers()
       this.loadInvitations()
     },
