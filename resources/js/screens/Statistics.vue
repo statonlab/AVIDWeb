@@ -173,29 +173,27 @@
                                         :options="chart.options"
                                         :series="chart.series"/>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h1 class="page-title">Filter by Year</h1>
-                            <p class="text-muted">Unchecked years will be excluded from the chart</p>
-                            <div class="d-flex flex-wrap">
-                                <div v-for="(year, index) in years" class="align-items-center">
-                                    <div class="mb-2 mr-3 custom-control custom-checkbox">
-                                        <input type="checkbox"
-                                               :id="`year-${index}`"
-                                               name="role-select"
-                                               class="custom-control-input"
-                                               :value="year"
-                                               :checked="!yearsFilter.includes(year)"
-                                               v-on:change="filterYear(year)">
-                                        <label class="custom-control-label"
-                                               :for="`year-${index}`">
-                                            {{ year }}
-                                        </label>
-                                    </div>
-                                </div>
+                      <div class="card-body">
+                        <div><strong>Filter by Year</strong></div>
+                        <p class="text-muted">Unchecked years will be excluded from the chart</p>
+                        <div class="d-flex flex-wrap">
+                          <div v-for="(year, index) in years" class="align-items-center">
+                            <div class="mb-2 mr-3 custom-control custom-checkbox">
+                              <input type="checkbox"
+                                     :id="`year-${index}`"
+                                     name="role-select"
+                                     class="custom-control-input"
+                                     :value="year"
+                                     :checked="!yearsFilter.includes(year)"
+                                     v-on:change="filterYear(year)">
+                              <label class="custom-control-label"
+                                     :for="`year-${index}`">
+                                {{ year }}
+                              </label>
                             </div>
+                          </div>
                         </div>
+                      </div>
                     </div>
                 </div>
             </div>
