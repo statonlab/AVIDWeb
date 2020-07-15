@@ -67,7 +67,8 @@ class SiteInvitationController extends Controller
         $this->authorize('create', [SiteInvitation::class, $site]);
 
         $this->validate($request, [
-            'user_id' => 'nullable|exists:users,id'
+            'user_id' => 'required|exists:users,id',
+            'can_edit' => 'required|boolean',
         ]);
 
         if (UserSite::where('site_id', $site->id)->where('user_id', $request->user_id)->exists()) {
@@ -93,7 +94,7 @@ class SiteInvitationController extends Controller
         /** @var \App\User $user */
         $recipient = User::findOrFail($request->user_id);
 
-        $invitation = SiteInvitation::generate($user, $site, $recipient);
+        $invitation = SiteInvitation::generate($user, $site, $recipient, $request->can_edit);
 
         $invitation->load(['user']);
 

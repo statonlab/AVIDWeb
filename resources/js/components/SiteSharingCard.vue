@@ -2,30 +2,17 @@
     <div class="card mb-3">
         <div class="card-body">
             <div class="mb-2 d-flex align-items-center">
-                <div class="flex-grow-1 pb-2">
+                <div class="flex-grow-1">
                     <strong>Sharing</strong>
                 </div>
-            </div>
-            <form action="" @submit.prevent="inviteUser()">
-                <div class="mb-4 d-flex">
-                    <dropdown class="mb-0 mr-2 flex-grow-1"
-                              autocomplete
-                              v-model="userForm.user_id"
-                              :options="userOptions"
-                              placeholder="Find a user"
-                              @search="userSearch = $event"
-                              :total="total"
-                              :length-to-search="2"
-                              :search-message="'Please enter a name or an email to begin searching.'"
-                              ref="user" />
-                    <button class="flex-shrink-0 btn btn-primary" @click.prevent="inviteUser()">
+                <div class="flex-shrink-0">
+                    <button class="btn btn-link" @click.prevent="showShareForm = true">
+                        <icon name="add" />
                         <span>Invite</span>
                     </button>
-                    <div class="form-text text-danger" v-if="userForm.errors.has('user_id')">
-                        {{ userForm.errors.first('user_id') }}
-                    </div>
                 </div>
-            </form>
+            </div>
+            <p class="text-muted">Click the "+ Invite" button to begin sharing sites with other users.</p>
             <div v-if="sharedWith.length !== 0" class="mb-2">
                 <div class="mb-2">
                     <strong>Shared with</strong>
@@ -87,6 +74,12 @@
                 </div>
             </div>
         </div>
+
+        <site-sharing-form
+                :site="site"
+                v-if="showShareForm"
+                @create="loadInvitations()"
+                @close="showShareForm = false"/>
     </div>
 </template>
 
@@ -97,11 +90,12 @@
   import Dropdown from './Dropdown'
   import User from '../helpers/User'
   import Form from '../forms/Form'
+  import SiteSharingForm from '../forms/SiteSharingForm'
 
   export default {
     name: 'SiteSharingCard',
 
-    components: {Icon, Avatar, Dropdown},
+    components: {Icon, Avatar, Dropdown, SiteSharingForm},
 
     props: {
       site: {required: true},
@@ -113,23 +107,12 @@
         loading     : true,
         user        : null,
         sharedWith  : [],
-        userOptions : [],
         invitations : [],
         userSearch  : '',
-        total       : 0,
         userForm    : new Form({
           user_id       : '',
         }),
-      }
-    },
-
-    watch: {
-      userSearch() {
-        if (this.userSearch.length >= 2) {
-          this.loadUsers()
-        } else {
-          this.userOptions = []
-        }
+        showShareForm: false,
       }
     },
 
@@ -139,41 +122,6 @@
     },
 
     methods: {
-      async loadUsers() {
-        try {
-          const {data} = await axios.get(`/web/user-sites/users`, {
-            params     : {
-              site_id  : this.site.id,
-              search   : this.userSearch.length >= 2 ? this.userSearch : null,
-            },
-            cancelToken: new axios.CancelToken(c => this.request = c),
-          })
-
-          this.total = data.total
-          this.userOptions = data.data.map(u => {
-            return {
-              label : u.name,
-              value : u.id,
-            }
-          })
-          this.loading  = false
-        } catch (e) {
-          if (!axios.isCancel(e)) {
-            if (e.response && e.response.status === 403) {
-              this.$alert('You are not authorized to complete this action.')
-            } else if (e.response && e.response.status === 422) {
-              const errors = new Errors(e.response.data)
-              this.$alert(errors.toArray().join(' '))
-            } else {
-              this.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.')
-            }
-            console.error(e)
-          }
-
-          this.loading = false
-        }
-      },
-
       async loadSharedUsers() {
         try {
           const {data} = await axios.get(`/web/user-sites/shared`, {

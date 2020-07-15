@@ -71,8 +71,6 @@ class UserSiteController extends Controller
             'search' => 'nullable|min:2|max:255',
         ]);
 
-        $this->authorize('viewAny', Site::findOrFail($request->site_id));
-
         $users = User::where('id', '!=', $user->id);
 
         if ($request->search) {

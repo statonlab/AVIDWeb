@@ -38,7 +38,8 @@ class SiteInvitation extends Model
         // pending, accepted, rejected
         'status',
         'token',
-        'expires_at'
+        'expires_at',
+        'user_edit',
     ];
 
     /**
@@ -77,7 +78,7 @@ class SiteInvitation extends Model
      * @param string $email
      * @return mixed
      */
-    public static function generate(User $user, Site $site, User $recipient)
+    public static function generate(User $user, Site $site, User $recipient, $user_edit)
     {
         do {
             $token = Str::random(200);
@@ -90,6 +91,7 @@ class SiteInvitation extends Model
             'token' => $token,
             'status' => self::PENDING,
             'expires_at' => now()->addWeek(),
+            'user_edit' => $user_edit,
         ]);
     }
 
@@ -150,6 +152,7 @@ class SiteInvitation extends Model
         UserSite::create([
             'user_id' => $user->id,
             'site_id' => $this->site_id,
+            'editable' => $this->user_edit,
         ]);
     }
 
