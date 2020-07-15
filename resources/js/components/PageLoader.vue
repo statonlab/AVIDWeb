@@ -6,7 +6,7 @@
   import InlineSpinner from './InlineSpinner'
   export default {
     name: 'PageLoader',
-    components: {InlineSpinner, ModalCard, Modal},
+    components: {InlineSpinner},
   }
 </script>
 
