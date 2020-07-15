@@ -47,36 +47,38 @@
             </div>
             <div class="col-md-8 col-lg-9">
                 <div class="card mb-3">
-                    <div class="p-3 d-flex align-items center justify-content-center" v-if="loading">
-                        <inline-spinner class="text-primary"/>
-                    </div>
-                    <div class="card-body d-flex align-items-center justify-content-center flex-column text-center" v-if="!loading && plots.length === 0">
-                        <div class="d-flex align-items-center justify-content-center icon-circle">
-                            <icon name="document-text-outline"/>
-                        </div>
-                        <p class="font-weight-bold mt-4">Welcome to Your Site</p>
-                        <p class="text-muted max-w-700">
-                            In this page, you will be able to create and manage plots for your site.
-                        </p>
-                        <p class="text-muted max-w-700">
-                            Get started by creating a new plot using the button below.
-                        </p>
-                        <button class="btn btn-primary mt-4" @click.prevent="showPlotForm = true">
-                            <icon name="add"/>
-                            <span>
-                                New Plot
-                            </span>
-                        </button>
-                    </div>
-                    <tabs v-if="!loading && plots.length > 0">
+                    <tabs v-if="!loading">
                         <tab name="Plants" selected>
                             <beta-plants-view
                                     :site-url-prefix="siteUrlPrefix"
                                     :editable="editable"
                                     v-if="plot"
                                     :plot="plot"/>
+                            <div v-else>
+                                <div class="p-3 d-flex align-items center justify-content-center" v-if="loading">
+                                    <inline-spinner class="text-primary"/>
+                                </div>
+                                <div class="card-body d-flex align-items-center justify-content-center flex-column text-center" v-if="!loading && plots.length === 0">
+                                    <div class="d-flex align-items-center justify-content-center icon-circle">
+                                        <icon name="document-text-outline"/>
+                                    </div>
+                                    <p class="font-weight-bold mt-4">Welcome to Your Site</p>
+                                    <p class="text-muted max-w-700">
+                                        In this page, you will be able to create and manage plots for your site.
+                                    </p>
+                                    <p class="text-muted max-w-700">
+                                        Get started by creating a new plot using the button below.
+                                    </p>
+                                    <button class="btn btn-primary mt-4" @click.prevent="showPlotForm = true">
+                                        <icon name="add"/>
+                                        <span>
+                                            New Plot
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
                         </tab>
-                        <tab name="Plot Info">
+                        <tab name="Plot Info" v-if="plot">
                             <div class="card-header border-bottom d-flex">
                                 <div class="flex-grow-1">
                                     <strong>Plot Information</strong>
@@ -320,6 +322,7 @@
         this.plotId = plot.id
         this.setOptions()
         this.closeForm()
+        console.log(this.plots.length)
       },
 
       updated(plot) {
