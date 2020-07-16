@@ -23,6 +23,8 @@
                 </div>
             @endif
         </div>
+
+        @include('components.footer')
     </div>
 
     <style scoped>
