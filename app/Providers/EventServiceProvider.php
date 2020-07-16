@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\InvitationAccepted;
 use App\Events\InvitationCreated;
+use App\Events\SiteCreated;
 use App\Events\SiteDeleted;
 use App\Events\PlotCreated;
 use App\Events\PlotUpdated;
@@ -31,6 +32,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        SiteCreated::class => [
+            GenerateSiteRemindersListener::class,
         ],
         SiteDeleted::class => [
             DeleteAttachedPlotsListener::class,

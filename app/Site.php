@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\SiteCreated;
 use App\Events\SiteDeleted;
 use App\Events\SiteUpdatedEvent;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +33,7 @@ class Site extends Model
      * @var array
      */
     protected $dispatchesEvents = [
+        'created' => SiteCreated::class,
         'updated' => SiteUpdatedEvent::class,
         'deleted' => SiteDeleted::class,
     ];
