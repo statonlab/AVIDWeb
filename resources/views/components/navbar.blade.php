@@ -1,6 +1,9 @@
-<nav class="navbar navbar-expand-lg{{ Route::is('home') ? ' navbar-dark' : ' navbar-light bg-white shadow-sm'}}">
+<nav class="navbar navbar-expand-lg{{ Route::is('home') ? ' navbar-dark' : ' navbar-dark bg-dark'}}">
     <div class="container">
-        <a class="navbar-brand" href="/">AVID</a>
+        <a class="navbar-brand" href="/">
+            <img class="img-fluid" style="height:50px;" src="/img/avid.png" />
+            <span class="ml-2">AVID</span>
+        </a>
         <button class="navbar-toggler"
                 type="button"
                 data-toggle="collapse"
@@ -115,10 +118,10 @@
                 </li>
             </ul>
             @auth()
-                <a href="/app" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-primary'}}">Dashboard</a>
+                <a href="/app" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-light'}}">Dashboard</a>
             @endauth()
             @guest()
-                <a href="/login" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-primary'}}">Login</a>
+                <a href="/login" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-light'}}">Login</a>
             @endguest
         </div>
     </div>
