@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg{{ Route::is('home') ? ' navbar-dark' : ' navbar-dark bg-dark'}}">
+<nav class="navbar navbar-dark navbar-expand-lg{{ Route::is('home') ? '' : ' bg-dark'}}">
     <div class="container">
         <a class="navbar-brand" href="/">
             <img class="img-fluid" style="height:50px;" src="/img/avid.png" />
@@ -118,10 +118,10 @@
                 </li>
             </ul>
             @auth()
-                <a href="/app" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-light'}}">Dashboard</a>
+                <a href="/app" class="btn btn-outline-light ml-1">Dashboard</a>
             @endauth()
             @guest()
-                <a href="/login" class="btn ml-1{{ Route::is('home') ? ' btn-outline-light' : ' btn-outline-light'}}">Login</a>
+                <a href="/login" class="btn btn-outline-light ml-1">Login</a>
             @endguest
         </div>
     </div>
