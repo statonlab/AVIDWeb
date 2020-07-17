@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Site;
+use App\Measurement;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,20 +11,21 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SiteCreated
+class MeasurementCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $site;
+    /** @var \App\Measurement */
+    public $measurement;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Site $site)
+    public function __construct(Measurement $measurement)
     {
-        $this->site = $site;
+        $this->measurement = $measurement;
     }
 
     /**

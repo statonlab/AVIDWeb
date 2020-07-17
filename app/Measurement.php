@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\MeasurementCreated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -27,6 +28,13 @@ class Measurement extends Model
         'is_located' => 'boolean',
         'is_alive' => 'boolean',
         'date' => 'date:Y-m-d',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => MeasurementCreated::class,
     ];
 
     /**
