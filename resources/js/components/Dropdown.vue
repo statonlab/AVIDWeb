@@ -44,7 +44,7 @@
             </p>
             <p v-else-if="options.length === 0 && emptyMessage.length"
                class="text-center text-muted p-2 mb-0">{{ emptyMessage }}</p>
-            <p v-else="endMessage.length" class="text-center text-muted p-2 mb-0">
+            <p v-else-if="endMessage.length" class="text-center text-muted p-2 mb-0">
                 <small>{{ endMessage }}</small>
             </p>
             <slot name="footer"/>

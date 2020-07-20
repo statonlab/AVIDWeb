@@ -258,7 +258,7 @@
       async loadInvitations() {
         try {
           const {data} = await axios.get(`/web/site-invitations`)
-          this.invitations = data
+          this.invitations = data.filter(i => !i.expired)
         } catch (e) {
           console.error(e)
         }
@@ -336,11 +336,7 @@
 
       async acceptInvitation(invitation) {
         try {
-          await axios.get(`/site-invitations/${invitation.id}/accept`, {
-            params: {
-              auth: invitation.token,
-            }
-          })
+          await axios.get(`/site-invitations/${invitation.id}/accept`)
           this.$notify({
             text: 'Invitation accepted successfully',
             type: 'success',
@@ -348,20 +344,23 @@
           this.invitations = this.invitations.filter(i => i.id !== invitation.id)
           this.loadSites()
         } catch (e) {
-          this.$notify({
-            text: 'Unable to accept invitation. Please try refreshing the page.',
-            type: 'error',
-          })
+          if (e.response && e.response.status === 422 && e.response.data.errors.invitation) {
+            this.$notify({
+              text: e.response.data.errors.invitation[0],
+              type: 'error',
+            })
+          } else {
+            this.$notify({
+              text: 'Unable to accept invitation. Please try refreshing the page.',
+              type: 'error',
+            })
+          }
         }
       },
 
       async rejectInvitation(invitation) {
         try {
-          await axios.get(`/site-invitations/${invitation.id}/reject`, {
-            params: {
-              auth: invitation.token,
-            }
-          })
+          await axios.get(`/site-invitations/${invitation.id}/reject`)
           this.$notify({
             text: 'Invitation rejected successfully',
             type: 'success',
@@ -369,10 +368,17 @@
           this.invitations = this.invitations.filter(i => i.id !== invitation.id)
           this.loadSites()
         } catch (e) {
-          this.$notify({
-            text: 'Unable to reject invitation. Please try refreshing the page.',
-            type: 'error',
-          })
+          if (e.response && e.response.status === 422 && e.response.data.errors.invitation) {
+            this.$notify({
+              text: e.response.data.errors.invitation[0],
+              type: 'error',
+            })
+          } else {
+            this.$notify({
+              text: 'Unable to reject invitation. Please try refreshing the page.',
+              type: 'error',
+            })
+          }
         }
       }
     },

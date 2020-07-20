@@ -15,21 +15,10 @@ class CreateUserSitesTable extends Migration
     {
         Schema::create('user_sites', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('site_id')->nullable();
-            $table->boolean('viewable')->default(false);
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('site_id')->nullable()->constrained()->onDelete('cascade');
             $table->boolean('editable')->default(false);
             $table->timestamps();
-
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-
-            $table->foreign('site_id')
-                ->references('id')
-                ->on('sites')
-                ->onDelete('cascade');
         });
     }
 

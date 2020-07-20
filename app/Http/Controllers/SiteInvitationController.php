@@ -118,73 +118,64 @@ class SiteInvitationController extends Controller
     /**
      * @param \App\SiteInvitation $invitation
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View|void
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function accept(SiteInvitation $invitation, Request $request)
     {
-        if ($invitation->token !== $request->auth) {
-            abort(403);
-
-            return;
-        }
-
         if ($invitation->expires_at->isPast()) {
-            return view('invitations.expired');
-        }
-
-        if ($invitation->status !== SiteInvitation::PENDING) {
-            return view('invitations.invalid', [
-                'message' => 'This invitation has already been processed.',
+            return $this->error('Invitation is expired', [
+                'invitation' => ['Invitation has expired. Please try refreshing the page.'],
             ]);
         }
 
-        if (auth()->check()) {
-            $user = auth()->user();
-
-            if ($user->id === $invitation->recipient_id) {
-                $invitation->accept($user);
-
-                return redirect()->to('/app/sites');
-            } else {
-                auth()->logout();
-            }
+        if ($invitation->status !== SiteInvitation::PENDING) {
+            return $this->error('Invitation is processed', [
+                'invitation' => ['Invitation has already been processed. Please try refreshing the page.'],
+            ]);
         }
 
-        return redirect('/login');
+        $user = $request->user();
+
+        if ($user->id === $invitation->recipient_id) {
+            $invitation->accept($user);
+
+            return $this->success($invitation);
+        }
+
+        return $this->error('Invitation belongs to someone else', [
+            'invitation' => ['Invitation does not belong to you. Please try refreshing the page.'],
+        ]);
     }
 
+    /**
+     * @param \App\SiteInvitation $invitation
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
     public function reject(SiteInvitation $invitation, Request $request)
     {
-        if ($invitation->token !== $request->auth) {
-            abort(403);
-
-            return;
-        }
-
         if ($invitation->expires_at->isPast()) {
-            return view('invitations.expired');
-        }
-
-        if ($invitation->status !== SiteInvitation::PENDING) {
-            return view('invitations.invalid', [
-                'message' => 'This invitation has already been processed.',
+            return $this->error('Invitation is expired', [
+                'invitation' => ['Invitation has expired. Please try refreshing the page.'],
             ]);
         }
 
-        if (auth()->check()) {
-            $user = auth()->user();
-
-            if ($user->id === $invitation->recipient_id) {
-                $invitation->reject($user);
-
-                return redirect()->to('/app/sites');
-            } else {
-                auth()->logout();
-            }
+        if ($invitation->status !== SiteInvitation::PENDING) {
+            return $this->error('Invitation is processed', [
+                'invitation' => ['Invitation has already been processed. Please try refreshing the page.'],
+            ]);
         }
 
-        session()->put('site_invitation', $invitation->id);
+        $user = $request->user();
 
-        return redirect('/login');
+        if ($user->id === $invitation->recipient_id) {
+            $invitation->reject($user);
+
+            return $this->success($invitation);
+        }
+
+        return $this->error('Invitation belongs to someone else', [
+            'invitation' => ['Invitation does not belong to you. Please try refreshing the page.'],
+        ]);
     }
 }

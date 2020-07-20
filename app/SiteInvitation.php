@@ -37,9 +37,8 @@ class SiteInvitation extends Model
         'recipient_id',
         // pending, accepted, rejected
         'status',
-        'token',
         'expires_at',
-        'user_edit',
+        'is_editable',
     ];
 
     /**
@@ -71,27 +70,22 @@ class SiteInvitation extends Model
     }
 
     /**
-     * Generate an invitation with a unique token.
+     * Generate an invitation.
      *
      * @param \App\User $user
      * @param \App\Group $group
      * @param string $email
      * @return mixed
      */
-    public static function generate(User $user, Site $site, User $recipient, $user_edit)
+    public static function generate(User $user, Site $site, User $recipient, $is_editable)
     {
-        do {
-            $token = Str::random(200);
-        } while (static::where('token', $token)->exists());
-
         return static::create([
             'user_id' => $user->id,
             'site_id' => $site->id,
             'recipient_id' => $recipient->id,
-            'token' => $token,
             'status' => self::PENDING,
             'expires_at' => now()->addWeek(),
-            'user_edit' => $user_edit,
+            'is_editable' => $is_editable,
         ]);
     }
 
@@ -152,7 +146,7 @@ class SiteInvitation extends Model
         UserSite::create([
             'user_id' => $user->id,
             'site_id' => $this->site_id,
-            'editable' => $this->user_edit,
+            'editable' => $this->is_editable,
         ]);
     }
 

@@ -18,7 +18,7 @@ class CreateSiteInvitationsTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('site_id')->constrained()->onDelete('cascade');
             $table->foreignId('recipient_id')->constrained('users')->onDelete('cascade');
-            $table->string('token')->index();
+            $table->boolean('is_editable')->default(false);
             $table->string('status')->index();
             $table->timestamps();
             $table->timestamp('expires_at')->nullable();
