@@ -40,7 +40,6 @@ class SiteController extends Controller
             'site_type' => 'nullable|in:all,shared,owned',
         ]);
 
-        $sites = null;
 
         $sites = $this->getSites()->paginate($request->limit ?? 20);
 
