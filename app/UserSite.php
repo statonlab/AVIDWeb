@@ -14,7 +14,13 @@ class UserSite extends Model
         'site_id',
         'editable',
     ];
-
+    /**
+     * @var string[]
+     */
+    protected $casts = [
+        'editable' => 'boolean',
+    ];
+    
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
