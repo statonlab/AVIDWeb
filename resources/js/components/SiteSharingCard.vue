@@ -196,7 +196,7 @@
       async toggleEdit(user) {
         try {
           const {data} = await axios.put(`/web/user-sites/site/${this.site.id}/user/${user.id}/toggle-edit`)
-          user.can_edit = data.editable
+          this.sharedWith = this.sharedWith.map(u => u.id === user.id ? {...u, can_edit: data.editable} : u)
           this.$notify({
             type: 'success',
             text: 'Updated user permissions successfully',
@@ -207,9 +207,6 @@
               text: 'You are not authorized to complete this action.',
               type: 'error',
             })
-          } else if (e.response && e.response.status === 422) {
-            const errors = new Errors(e.response.data)
-            this.$alert(errors.toArray().join(' '))
           } else {
             this.$notify({
               text: 'Unable to change user permissions. Please try refreshing the page.',

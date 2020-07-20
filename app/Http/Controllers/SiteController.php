@@ -216,9 +216,4 @@ class SiteController extends Controller
         return $this->success('Measurements uploaded successfully.');
     }
 
-    public function scopeWithShared($query, User $user) {
-        return $query->whereHas('userSite', function($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })->orWhere('user_id', $user->id);
-    }
 }

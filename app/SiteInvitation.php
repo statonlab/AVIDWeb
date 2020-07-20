@@ -64,6 +64,9 @@ class SiteInvitation extends Model
         return $this->belongsTo(Site::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function recipient()
     {
         return $this->belongsTo(User::class);
@@ -160,4 +163,3 @@ class SiteInvitation extends Model
         ])->save();
     }
 }
-

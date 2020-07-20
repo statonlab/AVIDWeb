@@ -144,7 +144,6 @@
       },
 
       down() {
-        console.log(this.total)
         const first = $(this.$refs.menu).find('.dropdown-item').first()
 
         if (first.length) {

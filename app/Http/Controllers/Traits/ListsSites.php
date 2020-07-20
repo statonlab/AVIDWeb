@@ -64,7 +64,10 @@ trait ListsSites
                 switch ($request->site_type)
                 {
                     case 'all':
-                        $query->withShared($request->user())->orWhere('user_id', $request->user()->id);
+                        $query->where(function($query) use ($request) {
+                            $query->withShared($request->user());
+                            $query->orWhere('user_id', $request->user()->id);
+                        });
                         break;
                     case 'shared':
                         $query->withShared($request->user());
