@@ -142,9 +142,7 @@ class SiteInvitationController extends Controller
             return $this->success($invitation);
         }
 
-        return $this->error('Invitation belongs to someone else', [
-            'invitation' => ['Invitation does not belong to you. Please try refreshing the page.'],
-        ]);
+        return $this->unauthorized();
     }
 
     /**
@@ -174,8 +172,6 @@ class SiteInvitationController extends Controller
             return $this->success($invitation);
         }
 
-        return $this->error('Invitation belongs to someone else', [
-            'invitation' => ['Invitation does not belong to you. Please try refreshing the page.'],
-        ]);
+        return $this->unauthorized();
     }
 }
