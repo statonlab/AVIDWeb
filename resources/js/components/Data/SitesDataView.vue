@@ -336,7 +336,7 @@
 
       async acceptInvitation(invitation) {
         try {
-          await axios.get(`/site-invitations/${invitation.id}/accept`)
+          await axios.get(`/web/site-invitations/${invitation.id}/accept`)
           this.$notify({
             text: 'Invitation accepted successfully',
             type: 'success',
@@ -360,7 +360,7 @@
 
       async rejectInvitation(invitation) {
         try {
-          await axios.get(`/site-invitations/${invitation.id}/reject`)
+          await axios.get(`/web/site-invitations/${invitation.id}/reject`)
           this.$notify({
             text: 'Invitation rejected successfully',
             type: 'success',

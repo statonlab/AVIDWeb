@@ -64,9 +64,6 @@ Route::get('/privacy-policy', 'LegalController@privacyPolicy')->name('privacy-po
 
 Route::get('/invitations/{invitation}/accept', 'InvitationController@accept');
 
-Route::get('/site-invitations/{invitation}/accept', 'SiteInvitationController@accept');
-Route::get('/site-invitations/{invitation}/reject', 'SiteInvitationController@reject');
-
 /**
  * Views for authenticated users.
  */
@@ -186,6 +183,8 @@ Route::group([
     Route::get('/site-invitations', 'SiteInvitationController@index');
     Route::post('/sites/{site}/invitations', 'SiteInvitationController@create');
     Route::delete('/site/invitations/{invitation}', 'SiteInvitationController@delete');
+    Route::get('/site-invitations/{invitation}/accept', 'SiteInvitationController@accept');
+    Route::get('/site-invitations/{invitation}/reject', 'SiteInvitationController@reject');
 
     // Species Controller
     Route::post('/species', 'SpeciesController@create');
@@ -227,7 +226,6 @@ Route::group([
     // Reminder Events
     Route::get('/reminder-events', 'ReminderEventController@index');
     Route::get('/reminder-events/{event}', 'ReminderEventController@show');
-
 
     // Data Entry
     Route::get('/data-entry/sites', 'DataEntryController@sites');
