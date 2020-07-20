@@ -1,8 +1,7 @@
 <nav class="navbar navbar-dark navbar-expand-lg{{ Route::is('home') ? '' : ' bg-dark'}}">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <img class="img-fluid" style="height:50px;" src="/img/avid.png" />
-            <span class="ml-2">AVID</span>
+            <img class="img-fluid" style="height:50cd /px;" src="/img/avid.png" />
         </a>
         <button class="navbar-toggler"
                 type="button"
