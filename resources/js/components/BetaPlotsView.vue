@@ -55,7 +55,7 @@
                                     v-if="plot"
                                     :plot="plot"/>
                             <div v-else>
-                                <div class="p-3 d-flex align-items center justify-content-center" v-if="loading">
+                                <div class="p-3 d-flex align-items-center justify-content-center" v-if="loading">
                                     <inline-spinner class="text-primary"/>
                                 </div>
                                 <div class="card-body d-flex align-items-center justify-content-center flex-column text-center" v-if="!loading && plots.length === 0">
