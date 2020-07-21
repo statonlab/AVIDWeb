@@ -30,7 +30,15 @@
           center: pos,
         })
 
-        this.map.addListener('click', this.selectLocation)
+        this.updateTimeout = null
+
+        this.map.addListener('click', (e) => {
+          this.updateTimeout = setTimeout(() => this.selectLocation(e), 200);
+        })
+
+        this.map.addListener('dblclick', () => {
+          clearTimeout(this.updateTimeout)
+        })
       })
 
       if (this.value.latitude && this.value.longitude) {
@@ -46,6 +54,7 @@
         pos   : {latitude: 40.354388, longitude: -95.998237},
         map   : null,
         marker: null,
+        updateTimeout: null,
       }
     },
 

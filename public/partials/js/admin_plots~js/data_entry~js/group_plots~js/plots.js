@@ -48,8 +48,17 @@ __webpack_require__.r(__webpack_exports__);
         zoom: 4,
         center: pos
       });
+      _this.updateTimeout = null;
 
-      _this.map.addListener('click', _this.selectLocation);
+      _this.map.addListener('click', function (e) {
+        _this.updateTimeout = setTimeout(function () {
+          return _this.selectLocation(e);
+        }, 200);
+      });
+
+      _this.map.addListener('dblclick', function () {
+        clearTimeout(_this.updateTimeout);
+      });
     });
 
     if (this.value.latitude && this.value.longitude) {
@@ -66,7 +75,8 @@ __webpack_require__.r(__webpack_exports__);
         longitude: -95.998237
       },
       map: null,
-      marker: null
+      marker: null,
+      updateTimeout: null
     };
   },
   watch: {
