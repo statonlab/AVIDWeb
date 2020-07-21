@@ -7,6 +7,7 @@ use App\Plot;
 use App\Species;
 use App\Measurement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StatisticsController extends Controller
 {
@@ -35,14 +36,36 @@ class StatisticsController extends Controller
      */
     public function sites(Request $request)
     {
+        $this->validate($request, [
+            'data_type' => 'nullable|in:owned,admin',
+        ]);
+
+        if ($request->data_type === 'admin') {
+            $this->authorize('viewAny', Site::class);
+        }
+
         /** @var \App\User $user */
         $user = $request->user();
 
-        return $this->success($user->sites()
-            ->orderBy('name', 'asc')
-            ->with('plots')
-            ->select(['sites.id', 'sites.name'])
-            ->get());
+        $sites = Site::orderBy('name', 'asc');
+
+        if ($request->data_type !== 'admin') {
+            $sites->where('user_id', $user->id);
+        }
+
+        $sites->with('plots')->select(['sites.id', 'sites.name', 'sites.user_id']);
+
+        $sites = $sites->get();
+
+        if ($request->data_type === 'admin') {
+            $sites->transform(function (Site $site) {
+                $site->name .= $site->user ? ' (' . $site->user->name . ')' : '';
+
+                return $site;
+            });
+        }
+
+        return $this->success($sites);
     }
 
     /**
@@ -52,15 +75,23 @@ class StatisticsController extends Controller
     public function plots(Request $request)
     {
         $this->validate($request, [
+            'data_type' => 'nullable|in:owned,admin',
             'sites' => 'nullable|array',
             'sites.*' => 'nullable|exists:sites,id',
         ]);
 
+        if ($request->data_type === 'admin') {
+            $this->authorize('viewAny', Site::class);
+        }
+
         /** @var \App\User $user */
         $user = $request->user();
 
-        $plots = Plot::where('user_id', $user->id)
-            ->orderBy('number', 'asc');
+        $plots = Plot::orderBy('number', 'asc');
+
+        if ($request->data_type !== 'admin') {
+            $plots->where('user_id', $user->id);
+        }
 
         if ($request->sites) {
             $plots = $plots->whereIn('site_id', $request->sites);
@@ -122,13 +153,14 @@ class StatisticsController extends Controller
             'group' => 'nullable|exists:groups,id',
             'wmu' => "nullable|in:$wmus",
             'protection' => 'nullable|in:both,unprotected',
+            'years_filter' => 'nullable|array',
         ]);
 
         if ($request->data_type === 'admin') {
             $this->authorize('viewAny', Site::class);
         }
 
-        $measurements = Measurement::with(['plot'])->orderBy('date', 'asc');
+        $measurements = Measurement::with(['plot']); //->orderBy('date', 'asc');
 
         if ($request->sites) {
             $measurements = $measurements->whereIn('site_id', $request->sites);
@@ -183,11 +215,11 @@ class StatisticsController extends Controller
                     if ($request->protection) {
                         $query->withCount([
                             'plots as protected_count' => function ($query) {
-                           $query->where('is_protected', 1);
-                        },
+                                $query->where('is_protected', 1);
+                            },
                             'plots as unprotected_count' => function ($query) {
-                           $query->where('is_protected', 0);
-                        },
+                                $query->where('is_protected', 0);
+                            },
                         ]);
                         if ($request->protection === 'both') {
                             $query->having('protected_count', '>', 0)
@@ -202,46 +234,62 @@ class StatisticsController extends Controller
             });
         }
 
-        $measurements = $measurements->get();
-
-        if ($measurements->isEmpty()) {
+        if (!$measurements->exists()) {
             return $this->success([]);
         }
 
-        $years = range($measurements->first()->date->year, now()->year);
-        $protected = [];
-        $protected_count = [];
-        $unprotected = [];
-        $unprotected_count = [];
+        $unprotected = clone $measurements;
+        $protected = clone $measurements;
+
+        $years = range($measurements->orderBy('date', 'asc')->first()->date->year, now()->year);
+        $years_literal = $years;
+        if ($request->years_filter) {
+            $years = array_values(array_diff($years, $request->years_filter));
+        }
+
+        $protected->whereHas('plot', function ($query) {
+            $query->where('is_protected', 1);
+        })->select(DB::raw('ROUND(AVG(height), 2) as average, COUNT(id) as count, YEAR(date) as year'))
+            ->groupBy(DB::raw('YEAR(date)'));
+
+        $protected = $protected->get();
+
+        $protected_heights = [];
+        $protected_counts  = [];
 
         foreach ($years as $year) {
-            $annual = $measurements->where('date.year', $year);
+            $protected_heights[] = $protected->where('year', $year)->first()->average ?? 0;
+            $protected_counts[]  = $protected->where('year', $year)->first()->count ?? 0;
+        }
 
-            $protected_annual = $annual->where('plot.is_protected', 1);
-            $protected_average = $protected_annual->average('height');
-            $protected_average = number_format($protected_average, 2);
-            $protected_count[] = $protected_annual->count();
-            $protected[] = $protected_average;
+        $unprotected->whereHas('plot', function ($query) {
+            $query->where('is_protected', 0);
+        })->select(DB::raw('ROUND(AVG(height), 2) as average, COUNT(id) as count, YEAR(date) as year'))
+            ->groupBy(DB::raw('YEAR(date)'));
 
-            $unprotected_annual = $annual->where('plot.is_protected', 0);
-            $unprotected_average = $unprotected_annual->average('height');
-            $unprotected_average = number_format($unprotected_average, 2);
-            $unprotected_count[] = $unprotected_annual->count();
-            $unprotected[] = $unprotected_average;
+        $unprotected = $unprotected->get();
+
+        $unprotected_heights = [];
+        $unprotected_counts  = [];
+
+        foreach ($years as $year) {
+            $unprotected_heights[] = $unprotected->where('year', $year)->first()->average ?? 0;
+            $unprotected_counts[]  = $unprotected->where('year', $year)->first()->count ?? 0;
         }
 
         return $this->success([
             'xaxis' => $years,
             'data' => [
                 [
-                    'protected' => $protected,
-                    'count' => $protected_count,
+                    'protected' => $protected_heights,
+                    'count' => $protected_counts,
                 ],
                 [
-                    'unprotected' => $unprotected,
-                    'count' => $unprotected_count,
+                    'unprotected' => $unprotected_heights,
+                    'count' => $unprotected_counts,
                 ]
             ],
+            'years' => $years_literal,
         ]);
     }
 
@@ -258,8 +306,8 @@ class StatisticsController extends Controller
         $site = Site::with('plots.plants')->findOrFail($request->site->id);
 
         $measurements = Measurement::where('site_id', $site->id)
-            ->with(['plot'])
-            ->orderBy('date', 'asc');
+            ->with(['plot']);
+        //->orderBy('date', 'asc');
 
         if ($request->plant_type_id) {
             $measurements->where(function ($query) use ($request) {
@@ -310,7 +358,7 @@ class StatisticsController extends Controller
                     'unprotected' => $unprotected,
                     'count' => $unprotected_count,
                 ],
-            ]
+            ],
         ]);
     }
 }

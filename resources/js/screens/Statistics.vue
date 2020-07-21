@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-md-4">
                     <div class="card">
@@ -163,8 +163,9 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-header">
-                            <h1 class="page-title">Annual Heights</h1>
+                        <div class="card-header d-flex">
+                            <h1 class="mr-2 page-title">Annual Heights</h1>
+                            <inline-spinner v-if="loading" />
                         </div>
                         <div class="mr-4 card-body" v-if="chart">
                             <apex-chart ref="chart"
@@ -172,6 +173,27 @@
                                         :options="chart.options"
                                         :series="chart.series"/>
                         </div>
+                      <div class="card-body">
+                        <div><strong>Filter by Year</strong></div>
+                        <p class="text-muted">Unchecked years will be excluded from the chart</p>
+                        <div class="d-flex flex-wrap">
+                          <div v-for="(year, index) in years" class="align-items-center">
+                            <div class="mb-2 mr-3 custom-control custom-checkbox">
+                              <input type="checkbox"
+                                     :id="`year-${index}`"
+                                     name="role-select"
+                                     class="custom-control-input"
+                                     :value="year"
+                                     :checked="!yearsFilter.includes(year)"
+                                     v-on:change="filterYear(year)">
+                              <label class="custom-control-label"
+                                     :for="`year-${index}`">
+                                {{ year }}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -181,6 +203,7 @@
 
 <script>
   import TokensField from '../components/TokensField'
+  import InlineSpinner from '../components/InlineSpinner'
   import Dropdown from '../components/Dropdown'
   import Icon from '../components/Icon'
   import User from '../helpers/User'
@@ -190,7 +213,7 @@
   export default {
     name: 'Statistics',
 
-    components: {ApexChart, TokensField, Dropdown, Icon},
+    components: {ApexChart, InlineSpinner, TokensField, Dropdown, Icon},
 
     mounted() {
       this.setChartDefault()
@@ -244,7 +267,11 @@
       },
 
       dataType() {
+        this.sites = []
+        this.plots = []
         this.loadChart()
+        this.loadSites()
+        this.loadPlots()
       },
 
       group() {
@@ -257,6 +284,10 @@
 
       wmu() {
         this.loadChart()
+      },
+
+      yearsFilter() {
+        this.loadChart()
       }
     },
 
@@ -264,6 +295,7 @@
       return {
         User,
         chart         : null,
+        loading       : false,
         siteOptions   : [],
         plotOptions   : [],
         typeOptions   : [],
@@ -275,6 +307,8 @@
         plots         : [],
         types         : [],
         species       : [],
+        years         : [],
+        yearsFilter   : [],
         stateSearch   : '',
         countySearch  : '',
         groupSearch   : '',
@@ -334,7 +368,11 @@
 
       async loadSites() {
         try {
-          const {data}     = await axios.get(`/web/statistics/sites`)
+          const {data}     = await axios.get(`/web/statistics/sites`, {
+            params: {
+              data_type: this.dataType,
+            },
+          })
           this.siteOptions = data.map(({id, name}) => ({id, text: name}))
         } catch (e) {
           this.$alert('Unable to load sites. Please try refreshing the page or contact us.')
@@ -391,6 +429,7 @@
         try {
           const {data} = await axios.get('/web/statistics/plots', {
             params: {
+              data_type: this.dataType,
               sites: this.sites,
             },
           })
@@ -406,19 +445,22 @@
           this._request()
         }
 
+        this.loading = true
+
         try {
           const {data} = await axios.get(`/web/statistics/chart`, {
             params: {
-              sites     : this.sites,
-              plots     : this.plots,
-              types     : this.types,
-              species   : this.species,
-              state     : this.state,
-              county    : this.county,
-              data_type : this.dataType,
-              group     : this.group,
-              wmu       : this.wmu,
-              protection: this.protection,
+              sites         : this.sites,
+              plots         : this.plots,
+              types         : this.types,
+              species       : this.species,
+              state         : this.state,
+              county        : this.county,
+              data_type     : this.dataType,
+              group         : this.group,
+              wmu           : this.wmu,
+              protection    : this.protection,
+              years_filter  : this.yearsFilter,
             },
           })
 
@@ -429,6 +471,8 @@
             console.error(e)
           }
         }
+
+        this.loading = false
       },
 
       setChartDefault() {
@@ -472,6 +516,8 @@
           series.push({name: 'unprotected', data: data.data[1].unprotected})
         }
 
+        this.years = data.years
+
         this.chart = {
           options: {
             chart     : {
@@ -490,11 +536,14 @@
                 },
               },
             },
-            colors    : ['#2E93FA', '#2EB07A'],
+            colors    : ['#54A7FB', '#14CA7E'],
             dataLabels: {
               formatter: (val, {seriesIndex, dataPointIndex}) => {
-                return val + ` (N=${data.data[seriesIndex].count[dataPointIndex]})`
+                return [val, `N=${data.data[seriesIndex].count[dataPointIndex]}`]
               },
+              style: {
+                colors: ['#2D3748']
+              }
             },
             // title : {text: 'Annual Height'},
             noData    : {text: 'No measurements found.'},
@@ -514,6 +563,14 @@
         this.$refs.county.clear()
         this.$refs.state.clear()
       },
+
+      filterYear(year) {
+        if (this.yearsFilter.includes(year)) {
+          this.yearsFilter = this.yearsFilter.filter(y => y !== year)
+        } else {
+          this.yearsFilter.push(year)
+        }
+      }
     },
   }
 </script>
