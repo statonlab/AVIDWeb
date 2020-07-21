@@ -1,15 +1,55 @@
 <template>
     <div>
+        <div class="card mb-3" v-if="invitations.length !== 0">
+            <div class="card-header">
+                <p class="page-title mb-0">Pending Invitations</p>
+                <p class="text-muted">You have been invited to view the following sites</p>
+                <table class="table mb-0 table-middle table-hover table-nowrap">
+                    <thead>
+                    <tr>
+                        <th>Site Name</th>
+                        <th>From</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="invitation in invitations">
+                        <td>{{ invitation.site.name }}</td>
+                        <td>{{ invitation.user.name }}</td>
+                        <td class="text-right no-wrap">
+                            <button class="btn btn-sm btn-outline-primary"
+                                    @click.prevent="acceptInvitation(invitation)">
+                                Accept
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger"
+                                    @click.prevent="rejectInvitation(invitation)">
+                                Reject
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div class="card mb-3">
             <div class="card-header d-flex p-2">
                 <div class="flex-grow-1">
                     <input type="search" class="form-control" placeholder="Search..." v-model="search">
                 </div>
-                <div class="ml-auto flex-shrink-0 pl-1">
-                    <button class="btn btn-primary" @click.prevent="showSiteForm = true">
-                        <icon name="add"/>
-                        <span>New Site</span>
-                    </button>
+                <div class="pl-1 d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <select name="site_type" id="site-type" v-model="siteType" class="custom-select" v-if="showSiteType">
+                            <option value="all">All sites</option>
+                            <option value="shared">Owned by others</option>
+                            <option value="owned">Owned by me</option>
+                        </select>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <button class="ml-2 btn btn-primary" @click.prevent="showSiteForm = true">
+                            <icon name="add"/>
+                            <span>New Site</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="card-body p-0 table-responsive">
@@ -134,6 +174,7 @@
 
     props: {
       url                : {required: false, type: String, default: '/web/sites'},
+      showSiteType       : {required: false, type: Boolean, default: false},
       editable           : {required: false, type: Boolean, default: false},
       showOwner          : {required: false, type: Boolean, default: false},
       siteUrlPrefix      : {required: false, type: String, default: '/app/sites'},
@@ -145,7 +186,9 @@
         moment,
         User        : User,
         showSiteForm: false,
+        siteType    : this.showSiteType ? 'all' : null,
         sites       : [],
+        invitations : [],
         loading     : false,
         page        : 1,
         lastPage    : 1,
@@ -163,6 +206,7 @@
     mounted() {
       this.loading = true
       this.loadSites()
+      this.loadInvitations()
     },
 
     watch: {
@@ -170,6 +214,11 @@
         this.page = 1
         this.loadSites()
       },
+
+      siteType() {
+        this.page = 1
+        this.loadSites()
+      }
     },
 
     methods: {
@@ -185,6 +234,7 @@
               page     : this.page,
               order_by : this.orderBy,
               order_dir: this.orderDir,
+              site_type: this.siteType,
             },
             cancelToken: new axios.CancelToken(c => this._request = c),
           })
@@ -203,6 +253,17 @@
             console.error(e)
           }
         }
+      },
+
+      async loadInvitations() {
+        try {
+          const {data} = await axios.get(`/web/site-invitations`)
+          this.invitations = data.filter(i => !i.expired)
+        } catch (e) {
+          console.error(e)
+        }
+
+        this.loading = false
       },
 
       siteCreated() {
@@ -272,6 +333,54 @@
 
         return 'arrow-down'
       },
+
+      async acceptInvitation(invitation) {
+        try {
+          await axios.get(`/web/site-invitations/${invitation.id}/accept`)
+          this.$notify({
+            text: 'Invitation accepted successfully',
+            type: 'success',
+          })
+          this.invitations = this.invitations.filter(i => i.id !== invitation.id)
+          this.loadSites()
+        } catch (e) {
+          if (e.response && e.response.status === 422 && e.response.data.errors.invitation) {
+            this.$notify({
+              text: e.response.data.errors.invitation[0],
+              type: 'error',
+            })
+          } else {
+            this.$notify({
+              text: 'Unable to accept invitation. Please try refreshing the page.',
+              type: 'error',
+            })
+          }
+        }
+      },
+
+      async rejectInvitation(invitation) {
+        try {
+          await axios.get(`/web/site-invitations/${invitation.id}/reject`)
+          this.$notify({
+            text: 'Invitation rejected successfully',
+            type: 'success',
+          })
+          this.invitations = this.invitations.filter(i => i.id !== invitation.id)
+          this.loadSites()
+        } catch (e) {
+          if (e.response && e.response.status === 422 && e.response.data.errors.invitation) {
+            this.$notify({
+              text: e.response.data.errors.invitation[0],
+              type: 'error',
+            })
+          } else {
+            this.$notify({
+              text: 'Unable to reject invitation. Please try refreshing the page.',
+              type: 'error',
+            })
+          }
+        }
+      }
     },
   }
 </script>

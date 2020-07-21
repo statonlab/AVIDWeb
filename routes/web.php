@@ -131,6 +131,12 @@ Route::group([
     Route::get('/sites/{site}/export', 'SiteController@export');
     Route::post('/sites/{site}/import', 'SiteController@import');
 
+    // UserSite Controller
+    Route::get('/user-sites/users', 'UserSiteController@users');
+    Route::get('/user-sites/shared', 'UserSiteController@sharedUsers');
+    Route::put('/user-sites/site/{site}/user/{user}/toggle-edit', 'UserSiteController@toggleEdit');
+    Route::delete('/user-sites/site/{site}/user/{user}', 'UserSiteController@delete');
+
     // Plot Controller
     Route::get('/sites/{site}/plots', 'PlotController@index');
     Route::post('/sites/{site}/plots', 'PlotController@create');
@@ -173,6 +179,13 @@ Route::group([
     Route::post('groups/{group}/invitations', 'InvitationController@create');
     Route::delete('/invitations/{invitation}', 'InvitationController@delete');
 
+    // Site Invitation Controller
+    Route::get('/site-invitations', 'SiteInvitationController@index');
+    Route::post('/sites/{site}/invitations', 'SiteInvitationController@create');
+    Route::delete('/site/invitations/{invitation}', 'SiteInvitationController@delete');
+    Route::get('/site-invitations/{invitation}/accept', 'SiteInvitationController@accept');
+    Route::get('/site-invitations/{invitation}/reject', 'SiteInvitationController@reject');
+
     // Species Controller
     Route::post('/species', 'SpeciesController@create');
     Route::put('/species/{species}', 'SpeciesController@update');
@@ -213,7 +226,6 @@ Route::group([
     // Reminder Events
     Route::get('/reminder-events', 'ReminderEventController@index');
     Route::get('/reminder-events/{event}', 'ReminderEventController@show');
-
 
     // Data Entry
     Route::get('/data-entry/sites', 'DataEntryController@sites');

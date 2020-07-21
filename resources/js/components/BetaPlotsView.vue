@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-4 col-lg-3">
                 <div class="card mb-3">
-                    <div class="card-header d-flex border-bottom">
+                    <div class="card-header d-flex">
                         <div class="flex-grow-1">
                             <strong>Plots</strong>
                         </div>
@@ -44,6 +44,7 @@
                         </div>
                     </div>
                 </div>
+                <site-sharing-card :site="site" v-if="User.owns(site)" />
             </div>
             <div class="col-md-8 col-lg-9">
                 <div class="card mb-3">
@@ -218,6 +219,7 @@
   import Icon from './Icon'
   import Tabs from './Tabs'
   import Tab from './Tab'
+  import SiteSharingCard from './SiteSharingCard'
   import BetaPlantsView from './BetaPlantsView'
   import Dropdown from './Dropdown'
   import PlotForm from '../forms/PlotForm'
@@ -228,7 +230,7 @@
   export default {
     name: 'BetaPlotsView',
 
-    components: {InlineSpinner, PlotForm, ImportForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon},
+    components: {InlineSpinner, PlotForm, ImportForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon, SiteSharingCard},
 
     props: {
       site          : {required: true},
