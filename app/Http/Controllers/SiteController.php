@@ -37,9 +37,11 @@ class SiteController extends Controller
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
             'limit' => 'nullable|integer',
+            'site_type' => 'nullable|in:all,shared,owned',
         ]);
 
-        $sites = $this->getSites($user->sites())->paginate($request->limit ?? 20);
+
+        $sites = $this->getSites()->paginate($request->limit ?? 20);
 
         return $this->success($sites);
     }
@@ -212,4 +214,5 @@ class SiteController extends Controller
 
         return $this->success('Measurements uploaded successfully.');
     }
+
 }

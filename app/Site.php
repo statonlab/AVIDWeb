@@ -108,4 +108,31 @@ class Site extends Model
         return $this->belongsToMany(Species::class, 'site_shrubs', 'site_id',
             'species_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userSites()
+    {
+        return $this->hasMany(UserSite::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invitations()
+    {
+        return $this->hasMany(SiteInvitation::class);
+    }
+
+    /**
+     * @param $query
+     * @param \App\User $user
+     * @return mixed
+     */
+    public function scopeWithShared($query, User $user) {
+        return $query->whereHas('userSites', function($query) use ($user) {
+            $query->where('user_id', $user->id);
+        });
+    }
 }
