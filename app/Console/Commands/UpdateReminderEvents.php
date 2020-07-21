@@ -47,6 +47,7 @@ class UpdateReminderEvents extends Command
                 /** @var \Illuminate\Database\Eloquent\Builder $query */
                 $query->whereDate('reminder_events.date', '>', $end->format('Y-m-d'));
             })
+            ->where('days', '>', 0)
             ->cursor();
 
         $maker = new ReminderEventMaker();

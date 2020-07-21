@@ -10,6 +10,8 @@ use App\Events\PlotCreated;
 use App\Events\PlotUpdated;
 use App\Events\PlotDeleted;
 use App\Events\PlantDeleted;
+use App\Events\MeasurementCreated;
+use App\Listeners\MeasurementCreatedListener;
 use App\Listeners\AttachAddressToPlotListener;
 use App\Listeners\DeleteAttachedPlotsListener;
 use App\Listeners\DeleteAttachedPlantsListener;
@@ -50,6 +52,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         PlantDeleted::class => [
             DeleteAttachedMeasurementsListener::class,
+        ],
+        MeasurementCreated::class => [
+            MeasurementCreatedListener::class,
         ],
         InvitationCreated::class => [
             SendInvitationListener::class
