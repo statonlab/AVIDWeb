@@ -109,36 +109,43 @@
                                 {{ form.errors.first('owner_contact') }}
                             </span>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-0 form-group">
                             <label for="species">
                                 Overstory Species
                                 <required/>
                             </label>
-                            <tokens-field id="species"
-                                          :options="speciesOptions"
-                                          v-model="form.species" />
+                            <div class="d-flex align-items-center">
+                                <tokens-field id="species"
+                                              class="flex-grow-1"
+                                              :options="speciesOptions"
+                                              v-model="form.species" />
+                                <button class="mb-2 ml-2 btn btn-link flex-shrink-0" @click.prevent="createSpecies = true">
+                                    <icon name="add" />
+                                    <span>New Species</span>
+                                </button>
+                            </div>
                             <span class="form-text text-danger" v-if="form.errors.has('species')">
                                 {{ form.errors.first('species') }}
                             </span>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-0 form-group">
                             <label for="shrubs">
                                 Seedling or Shrub Species
                                 <required/>
                             </label>
-                            <tokens-field id="shrubs"
-                                          :options="speciesOptions"
-                                          v-model="form.shrubs" />
+                            <div class="mb-0 d-flex align-items-center">
+                                <tokens-field id="shrubs"
+                                              class="flex-grow-1"
+                                              :options="speciesOptions"
+                                              v-model="form.shrubs" />
+                                <button class="mb-2 ml-2 btn btn-link flex-shrink-0" @click.prevent="createSpecies = true">
+                                    <icon name="add" />
+                                    <span>New Species</span>
+                                </button>
+                            </div>
                             <span class="form-text text-danger" v-if="form.errors.has('shrubs')">
                                 {{ form.errors.first('shrubs') }}
                             </span>
-                        </div>
-                        <div class="form-group">
-                            <p class="text-muted">
-                                If you cannot find the species you are looking for in the dropdown, you can
-                                <a href="#" @click.prevent="createSpecies = true">click here</a>
-                                to create a new one. After creation, you can select the new species from the dropdown.
-                            </p>
                         </div>
                         <div class="form-group">
                             <label for="basal-area">
@@ -251,6 +258,7 @@
   import Dropdown from '../components/Dropdown'
   import InlineSpinner from '../components/InlineSpinner'
   import TokensField from '../components/TokensField'
+  import Icon from '../components/Icon'
 
   export default {
     name: 'SiteForm',
@@ -268,6 +276,7 @@
       ModalCard,
       Modal,
       TokensField,
+      Icon,
     },
 
     props: {
