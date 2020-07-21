@@ -2,7 +2,7 @@
     <div>
         <h1 class="page-title mb-3">Sites</h1>
 
-        <sites-data-view/>
+        <sites-data-view :show-owner="true" :show-site-type="true" />
     </div>
 </template>
 

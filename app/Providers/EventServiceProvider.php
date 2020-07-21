@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\InvitationAccepted;
 use App\Events\InvitationCreated;
+use App\Events\SiteInvitationCreated;
 use App\Events\SiteDeleted;
 use App\Events\PlotCreated;
 use App\Events\PlotUpdated;
@@ -15,6 +16,7 @@ use App\Listeners\DeleteAttachedPlantsListener;
 use App\Listeners\DeleteAttachedMeasurementsListener;
 use App\Listeners\InvitationAcceptedListener;
 use App\Listeners\SendInvitationListener;
+use App\Listeners\SendSiteInvitationListener;
 use App\Listeners\AttachWMUToPlotListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -54,7 +56,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         InvitationAccepted::class => [
             InvitationAcceptedListener::class
-        ]
+        ],
+        SiteInvitationCreated::class => [
+            SendSiteInvitationListener::class,
+        ],
     ];
 
     /**

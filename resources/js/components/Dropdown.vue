@@ -35,9 +35,16 @@
                 {{ option.label }}
             </a>
             <slot/>
-            <p v-if="options.length === 0 && emptyMessage.length"
+            <p v-if="options.length === 0 && value < lengthToSearch && searchMessage" class="text-center text-muted p-2 mb-0">
+                {{ searchMessage }}
+            </p>
+            <p v-else-if="options.length < total"
+               class="text-muted text-center p-2 mb-0">
+                {{ `Showing ${options.length} of ${total}. Please search to see more` }}
+            </p>
+            <p v-else-if="options.length === 0 && emptyMessage.length"
                class="text-center text-muted p-2 mb-0">{{ emptyMessage }}</p>
-            <p v-if="endMessage.length" class="text-center text-muted p-2 mb-0">
+            <p v-else-if="endMessage.length" class="text-center text-muted p-2 mb-0">
                 <small>{{ endMessage }}</small>
             </p>
             <slot name="footer"/>
@@ -66,6 +73,9 @@
       error       : {required: false, type: Boolean, default: false},
       maxWidth    : {required: false, type: Number, default: 230},
       btnClass    : {required: false, type: String, default: 'btn-select'},
+      total       : {required: false, type: Number, default: 0},
+      lengthToSearch: {required: false, type: Number, default: 0},
+      searchMessage: {required: false, type: String, default: ''},
     },
 
     data() {

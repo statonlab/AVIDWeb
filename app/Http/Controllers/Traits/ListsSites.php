@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Traits;
 
+use App\Site;
+
 trait ListsSites
 {
     /**
@@ -10,7 +12,7 @@ trait ListsSites
      * @param \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Relations\Relation $sites
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function getSites($sites)
+    public function getSites($sites = null)
     {
         $request = request();
 
@@ -18,7 +20,14 @@ trait ListsSites
             'order_by' => 'nullable|in:name,plots_count,plants_count,last_measured_at',
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
+            'site_type' => 'nullable|in:all,shared,owned'
         ]);
+
+        if ($sites === null) {
+            $sites = Site::orderBy($request->order_by ?? 'created_at', $request->order_dir ?? 'desc');
+        } else {
+            $sites = $sites->orderBy($request->order_by ?? 'created_at', $request->order_dir ?? 'desc');
+        }
 
         $sites = $sites->with([
             'state' => function ($query) {
@@ -51,7 +60,23 @@ trait ListsSites
                     });
                 });
             })
-            ->orderBy($request->order_by ?? 'created_at', $request->order_dir ?? 'desc');
+            ->when($request->site_type, function ($query) use ($request) {
+                switch ($request->site_type)
+                {
+                    case 'all':
+                        $query->where(function($query) use ($request) {
+                            $query->withShared($request->user());
+                            $query->orWhere('user_id', $request->user()->id);
+                        });
+                        break;
+                    case 'shared':
+                        $query->withShared($request->user());
+                        break;
+                    case 'owned':
+                        $query->where('user_id', $request->user()->id);
+                        break;
+                }
+            });
 
         return $sites;
     }
