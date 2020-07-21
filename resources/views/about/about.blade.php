@@ -24,13 +24,15 @@
                                             <p class="text-muted">Credit: Haliburton Forest</p>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        <p>These guides describe the procedures to measure vegetation and quantify the impacts deer are having on woodland vegetation. These field methods can be used by volunteers, landowners, land managers, land trusts, foresters, and other natural resource professionals. Individuals will eventually use <b>AVID</b> via smart phone apps for either Apple or Android phones at Apple Store or Google Play Store, or by printing field data sheets and entering the data online at <a href="http://aviddeer.com/">aviddeer.com</a>.</p>
-                                        <p>Field data is being collected by individuals and organizations across New York State, and submitted to a central database to track tree, shrub, and wildflower responses to deer browsing over time. Other states have begun to implement the AVID protocol. Knowledge of how deer impacts change through time will help guide deer management decisions at local and regional levels. Participants will document changes in forest plants on their own land, or land in their communities, and will learn:</p>
-                                        <ul>
-                                            <li>To identify important spring wildflower and tree species</li>
-                                            <li>To recognize evidence of deer impacts based on the presence or absence of key wildflower, shrub, and tree indicator species</li>
-                                        </ul>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p>These guides describe the procedures to measure vegetation and quantify the impacts deer are having on woodland vegetation. These field methods can be used by volunteers, landowners, land managers, land trusts, foresters, and other natural resource professionals. Individuals will eventually use <b>AVID</b> via smart phone apps for either Apple or Android phones at Apple Store or Google Play Store, or by printing field data sheets and entering the data online at <a href="http://aviddeer.com/">aviddeer.com</a>.</p>
+                                            <p>Field data is being collected by individuals and organizations across New York State, and submitted to a central database to track tree, shrub, and wildflower responses to deer browsing over time. Other states have begun to implement the AVID protocol. Knowledge of how deer impacts change through time will help guide deer management decisions at local and regional levels. Participants will document changes in forest plants on their own land, or land in their communities, and will learn:</p>
+                                            <ul>
+                                                <li>To identify important spring wildflower and tree species</li>
+                                                <li>To recognize evidence of deer impacts based on the presence or absence of key wildflower, shrub, and tree indicator species</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
