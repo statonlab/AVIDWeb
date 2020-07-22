@@ -193,6 +193,11 @@ class SiteController extends Controller
         return $this->created('Site deleted successfully');
     }
 
+    /**
+     * @param \App\Site $site
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function export(Site $site)
     {
         $this->authorize('view', $site);
@@ -200,6 +205,13 @@ class SiteController extends Controller
         return Excel::download(new SiteExport($site), "$site->name.xlsx");
     }
 
+    /**
+     * @param \App\Site $site
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function import(Site $site, Request $request)
     {
         $user = $request->user();
@@ -215,4 +227,20 @@ class SiteController extends Controller
         return $this->success('Measurements uploaded successfully.');
     }
 
+    /**
+     * @param \App\Site $site
+     * @param \Illuminate\Http\Request $request
+     */
+    public function toggleReminders(Site $site, Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->id !== $site->user_id) {
+            return $this->unauthorized();
+        }
+
+        $site->fill(['sends_reminders' => !$site->sends_reminders])->save();
+
+        return $this->success($site);
+    }
 }
