@@ -121,6 +121,8 @@
                                 </div>
                                 <inline-measurement-form :plant="plant"
                                                          @create="measurementCreated"
+                                                         @set="formsSet++"
+                                                         @unset="formsSet--"
                                                          :default-date="defaultDate"
                                                          @date="defaultDate = $event"/>
                             </template>
@@ -260,11 +262,14 @@
         _request           : null,
         defaultDate        : null,
         deleting           : null,
+        formsSet           : 0,
       }
     },
 
     mounted() {
       this.loadSites()
+
+      window.onbeforeunload = () => (this.formsSet > 0 ? true : null);
     },
 
     watch: {
@@ -491,6 +496,14 @@
         this.showPlotForm = false
       },
     },
+
+    beforeRouteLeave(to, from, next) {
+      if (this.formsSet > 0) {
+        window.confirm('Do you really want to leave? You have unsaved changes!') ? next() : next(false)
+      } else {
+        next()
+      }
+    }
   }
 </script>
 
