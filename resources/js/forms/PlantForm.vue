@@ -67,7 +67,7 @@
                                 {{ form.errors.first('quadrant') }}
                             </small>
                         </div>
-                        <div class="form-group col-6" v-if="!form.new_species">
+                        <div class="form-group col-6 position-static" v-if="!form.new_species">
                             <label for="species">
                                 Species
                                 <required/>
