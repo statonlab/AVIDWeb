@@ -145,11 +145,8 @@ class UserSiteController extends Controller
     {
         $user = $request->user();
 
-        $user_site = UserSite::where('site_id', $site->id)->where('user_id', $user->id)->first();
+        $user_site = UserSite::where('site_id', $site->id)->where('user_id', $user->id)->firstOrFail();
 
-        if ($user_site === null) {
-            return $this->unauthorized();
-        }
 
         $user_site->fill(['sends_reminders' => !$user_site->sends_reminders])->save();
 

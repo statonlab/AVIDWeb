@@ -475,7 +475,10 @@
             this.sendReminders = data.sends_reminders
           } else {
             const {data} = await axios.put(`/web/user-sites/${this.site.id}/toggle-reminders`)
-            this.userSite.sends_reminders = data.sends_reminders
+            this.userSite= {
+                ...this.userSite,
+                sends_reminders: data.sends_reminders
+            }
             this.sendReminders = data.sends_reminders
           }
           this.$notify({
