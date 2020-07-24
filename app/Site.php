@@ -26,6 +26,7 @@ class Site extends Model
         'basal_area',
         'diameter',
         'last_measured_at',
+        'sends_reminders',
     ];
 
     /**
@@ -41,6 +42,7 @@ class Site extends Model
      */
     protected $casts = [
         'last_measured_at' => 'date:Y-m-d',
+        'sends_reminders' => 'boolean',
     ];
 
     /**
@@ -115,6 +117,14 @@ class Site extends Model
     public function userSites()
     {
         return $this->hasMany(UserSite::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reminders()
+    {
+        return $this->hasMany(Reminder::class);
     }
 
     /**

@@ -39,8 +39,18 @@
                             <icon name="cloud-upload-outline"/>
                             <span class="ml-2">Import Spreadsheet</span>
                         </a>
-                        <div class="mb-2">
+                        <div class="mb-4">
                             <small class="text-muted">Import data recorded in spreadsheet format</small>
+                        </div>
+                        <div class="custom-control custom-switch">
+                            <input class="custom-control-input"
+                                   id="send-notifications"
+                                   type="checkbox"
+                                   :checked="this.sendReminders"
+                                   @change.prevent="toggleReminders()">
+                            <label class="custom-control-label font-weight-normal" for="send-notifications">
+                                Receive reminders to revisit this site
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -256,6 +266,8 @@
         editing     : null,
         deleting    : null,
         importing   : false,
+        userSite    : null,
+        sendReminders: false,
       }
     },
 
@@ -280,6 +292,11 @@
 
     mounted() {
       this.loadPlots()
+      if (! this.User.owns(this.site)) {
+        this.loadUserSite()
+      } else {
+        this.sendReminders = this.site.sends_reminders
+      }
     },
 
     methods: {
@@ -315,6 +332,20 @@
             this.loading = false
             this.request = null
           }
+        }
+      },
+
+      async loadUserSite() {
+        try {
+          const {data} = await axios.get(`/web/user-sites/site/${this.site.id}`)
+          this.userSite = data
+          this.sendReminders = data.sends_reminders
+        } catch (e) {
+          this.$notify({
+            text: 'Unable to load site information. Please try refreshing the page.',
+            type: 'error',
+          })
+          console.error(e)
         }
       },
 
@@ -434,6 +465,33 @@
 
       closeImportForm() {
         this.importing = false
+      },
+
+      async toggleReminders() {
+        try {
+          if (this.User.owns(this.site)) {
+            const {data} = await axios.put(`/web/sites/${this.site.id}/toggle-reminders`)
+            this.site.sends_reminders = data.sends_reminders
+            this.sendReminders = data.sends_reminders
+          } else {
+            const {data} = await axios.put(`/web/user-sites/${this.site.id}/toggle-reminders`)
+            this.userSite= {
+                ...this.userSite,
+                sends_reminders: data.sends_reminders
+            }
+            this.sendReminders = data.sends_reminders
+          }
+          this.$notify({
+            text: 'Reminders updated successfully.',
+            type: 'success',
+          })
+        } catch (e) {
+          console.error(e)
+          this.$notify({
+            text: 'Unable to update reminders. Please try refreshing the page.',
+            type: 'error',
+          })
+        }
       },
     },
   }

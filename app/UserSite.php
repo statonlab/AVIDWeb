@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Events\SiteShared;
+use App\Events\SiteStoppedSharing;
 use Illuminate\Database\Eloquent\Model;
 
 class UserSite extends Model
@@ -13,12 +15,23 @@ class UserSite extends Model
         'user_id',
         'site_id',
         'editable',
+        'sends_reminders',
     ];
+
     /**
      * @var string[]
      */
     protected $casts = [
         'editable' => 'boolean',
+        'sends_reminders' => 'boolean',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => SiteShared::class,
+        'deleting' => SiteStoppedSharing::class,
     ];
     
     /**

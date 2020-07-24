@@ -26,6 +26,10 @@ class MeasurementCreatedListener implements ShouldQueue
             return;
         }
 
+        if ($site->last_measured_at !== null && $measurement->date < $site->last_measured_at) {
+            return;
+        }
+
         /** @var \App\Reminder */
         $reminder = Reminder::firstOrCreate([
             'days' => 0,
