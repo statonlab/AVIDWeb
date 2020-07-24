@@ -12,9 +12,6 @@
                     {{ site.city ? `${site.city}, ` : ''}}{{ site.county.name }}, {{ site.state.name }}
                 </p>
             </div>
-            <div class="flex-shrink-0">
-
-            </div>
         </div>
 
         <beta-plots-view

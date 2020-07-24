@@ -120,8 +120,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isFriendsWith(User $user)
     {
         return $user->groups()->whereHas('users', function ($query) use ($user) {
-                $query->where('users.id', $user->id);
-            })->exists();
+            $query->where('users.id', $user->id);
+        })->exists();
     }
 
     /**
@@ -130,5 +130,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reminders()
     {
         return $this->hasMany(Reminder::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function siteInvitations()
+    {
+        return $this->hasMany(SiteInvitation::class, 'recipient_id', 'id');
     }
 }
