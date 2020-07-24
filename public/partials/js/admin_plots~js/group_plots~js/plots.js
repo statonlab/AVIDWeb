@@ -613,6 +613,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+<<<<<<< HEAD
 //
 //
 //
@@ -623,6 +624,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+=======
+>>>>>>> master
 
 
 
@@ -1119,15 +1122,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'BetaSite',
+  name: 'PlotsDataView',
   components: {
     SiteForm: _forms_SiteForm__WEBPACK_IMPORTED_MODULE_4__["default"],
     Icon: _Icon__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -1332,6 +1332,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+<<<<<<< HEAD
+=======
+//
+//
+>>>>>>> master
 //
 //
 //
@@ -1415,6 +1420,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     Avatar: _Avatar__WEBPACK_IMPORTED_MODULE_2__["default"],
     Dropdown: _Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"],
     SiteSharingForm: _forms_SiteSharingForm__WEBPACK_IMPORTED_MODULE_7__["default"]
+<<<<<<< HEAD
   },
   props: {
     site: {
@@ -2209,6 +2215,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     ModalHeader: _components_Modal_ModalHeader__WEBPACK_IMPORTED_MODULE_3__["default"],
     Modal: _components_Modal_Modal__WEBPACK_IMPORTED_MODULE_2__["default"],
     ModalCard: _components_Modal_ModalCard__WEBPACK_IMPORTED_MODULE_1__["default"]
+=======
+>>>>>>> master
   },
   props: {
     site: {
@@ -2217,6 +2225,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+<<<<<<< HEAD
       total: 0,
       userOptions: [],
       userSearch: '',
@@ -2242,10 +2251,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var errors;
+=======
+      User: _helpers_User__WEBPACK_IMPORTED_MODULE_5__["default"],
+      loading: true,
+      user: null,
+      sharedWith: [],
+      invitations: [],
+      userSearch: '',
+      userForm: new _forms_Form__WEBPACK_IMPORTED_MODULE_6__["default"]({
+        user_id: ''
+      }),
+      showShareForm: false
+    };
+  },
+  mounted: function mounted() {
+    this.loadSharedUsers();
+    this.loadInvitations();
+  },
+  methods: {
+    loadSharedUsers: function loadSharedUsers() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _yield$axios$get, data, errors;
+
+>>>>>>> master
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+<<<<<<< HEAD
                 _this.loading = true;
                 _context.prev = 1;
                 _context.next = 4;
@@ -2276,19 +2311,664 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   _this.$alert(errors.toArray().join(' '));
                 } else {
                   _this.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.');
+=======
+                _context.prev = 0;
+                _context.next = 3;
+                return axios.get("/web/user-sites/shared", {
+                  params: {
+                    site_id: _this.site.id
+                  },
+                  cancelToken: new axios.CancelToken(function (c) {
+                    return _this.request = c;
+                  })
+                });
+
+              case 3:
+                _yield$axios$get = _context.sent;
+                data = _yield$axios$get.data;
+                _this.sharedWith = data;
+                _this.loading = false;
+                _context.next = 13;
+                break;
+
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context["catch"](0);
+
+                if (!axios.isCancel(_context.t0)) {
+                  if (_context.t0.response && _context.t0.response.status === 403) {
+                    _this.$alert('You are not authorized to complete this action.');
+                  } else if (_context.t0.response && _context.t0.response.status === 422) {
+                    errors = new _forms_Errors__WEBPACK_IMPORTED_MODULE_1__["default"](_context.t0.response.data);
+
+                    _this.$alert(errors.toArray().join(' '));
+                  } else {
+                    _this.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.');
+                  }
+
+                  console.error(_context.t0);
+                }
+
+                _this.loading = false;
+
+              case 13:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 9]]);
+      }))();
+    },
+    loadInvitations: function loadInvitations() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var _yield$axios$get2, data, errors;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios.get("/web/site-invitations", {
+                  params: {
+                    site_id: _this2.site.id
+                  }
+                });
+
+              case 3:
+                _yield$axios$get2 = _context2.sent;
+                data = _yield$axios$get2.data;
+                _this2.invitations = data;
+                _context2.next = 12;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](0);
+
+                if (_context2.t0.response && _context2.t0.response.status === 403) {
+                  _this2.$alert('You are not authorized to complete this action.');
+                } else if (_context2.t0.response && _context2.t0.response.status === 422) {
+                  errors = new _forms_Errors__WEBPACK_IMPORTED_MODULE_1__["default"](_context2.t0.response.data);
+
+                  _this2.$alert(errors.toArray().join(' '));
+                } else {
+                  _this2.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.');
+>>>>>>> master
+                }
+
+                console.error(_context2.t0);
+
+<<<<<<< HEAD
+              case 13:
+                _this.loading = false;
+
+              case 14:
+=======
+              case 12:
+                _this2.loading = false;
+
+              case 13:
+>>>>>>> master
+              case "end":
+                return _context2.stop();
+            }
+          }
+<<<<<<< HEAD
+        }, _callee, null, [[1, 9]]);
+=======
+        }, _callee2, null, [[0, 8]]);
+      }))();
+    },
+    inviteUser: function inviteUser() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var errors;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                _context3.next = 3;
+                return _this3.userForm.post("/web/sites/".concat(_this3.site.id, "/invitations"));
+
+              case 3:
+                _this3.$notify({
+                  type: 'success',
+                  text: 'Invitation sent successfully.'
+                });
+
+                _this3.user = null;
+
+                _this3.loadInvitations();
+
+                _context3.next = 12;
+                break;
+
+              case 8:
+                _context3.prev = 8;
+                _context3.t0 = _context3["catch"](0);
+
+                if (_context3.t0.response && _context3.t0.response.status === 403) {
+                  _this3.$alert('You are not authorized to complete this action.');
+                } else if (_context3.t0.response && _context3.t0.response.status === 422) {
+                  errors = new _forms_Errors__WEBPACK_IMPORTED_MODULE_1__["default"](_context3.t0.response.data);
+
+                  _this3.$alert(errors.toArray().join(' '));
+                } else {
+                  _this3.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.');
+                }
+
+                console.error(_context3.t0);
+
+              case 12:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 8]]);
+      }))();
+    },
+    toggleEdit: function toggleEdit(user) {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var _yield$axios$put, data;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+                _context4.next = 3;
+                return axios.put("/web/user-sites/site/".concat(_this4.site.id, "/user/").concat(user.id, "/toggle-edit"));
+
+              case 3:
+                _yield$axios$put = _context4.sent;
+                data = _yield$axios$put.data;
+                _this4.sharedWith = _this4.sharedWith.map(function (u) {
+                  return u.id === user.id ? _objectSpread(_objectSpread({}, u), {}, {
+                    can_edit: data.editable
+                  }) : u;
+                });
+
+                _this4.$notify({
+                  type: 'success',
+                  text: 'Updated user permissions successfully'
+                });
+
+                _context4.next = 13;
+                break;
+
+              case 9:
+                _context4.prev = 9;
+                _context4.t0 = _context4["catch"](0);
+
+                if (_context4.t0.response && _context4.t0.response.status === 403) {
+                  _this4.$notify({
+                    text: 'You are not authorized to complete this action.',
+                    type: 'error'
+                  });
+                } else {
+                  _this4.$notify({
+                    text: 'Unable to change user permissions. Please try refreshing the page.',
+                    type: 'error'
+                  });
+                }
+
+                console.error(_context4.t0);
+
+              case 13:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[0, 9]]);
+      }))();
+    },
+    cancelShare: function cancelShare(user) {
+      var _this5 = this;
+
+      this.$confirm({
+        title: "Cancel sharing with ".concat(user.name),
+        text: 'This action is permanent.',
+        onConfirm: function () {
+          var _onConfirm = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+            var errors;
+            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+              while (1) {
+                switch (_context5.prev = _context5.next) {
+                  case 0:
+                    _context5.prev = 0;
+                    _context5.next = 3;
+                    return axios["delete"]("/web/user-sites/site/".concat(_this5.site.id, "/user/").concat(user.id));
+
+                  case 3:
+                    _this5.sharedWith = _this5.sharedWith.filter(function (u) {
+                      return u.id !== user.id;
+                    });
+
+                    _this5.$notify({
+                      type: 'success',
+                      text: 'Canceled sharing with user successfully'
+                    });
+
+                    _context5.next = 11;
+                    break;
+
+                  case 7:
+                    _context5.prev = 7;
+                    _context5.t0 = _context5["catch"](0);
+
+                    if (_context5.t0.response && _context5.t0.response.status === 403) {
+                      _this5.$notify({
+                        text: 'You are not authorized to complete this action.',
+                        type: 'error'
+                      });
+                    } else if (_context5.t0.response && _context5.t0.response.status === 422) {
+                      errors = new _forms_Errors__WEBPACK_IMPORTED_MODULE_1__["default"](_context5.t0.response.data);
+
+                      _this5.$alert(errors.toArray().join(' '));
+                    } else {
+                      _this5.$notify({
+                        text: 'Unable to cancel sharing. Please try refreshing the page.',
+                        type: 'error'
+                      });
+                    }
+
+                    console.error(_context5.t0);
+
+                  case 11:
+                  case "end":
+                    return _context5.stop();
+                }
+              }
+            }, _callee5, null, [[0, 7]]);
+          }));
+
+          function onConfirm() {
+            return _onConfirm.apply(this, arguments);
+          }
+
+          return onConfirm;
+        }()
+      });
+    },
+    deleteInvite: function deleteInvite(invitation) {
+      var _this6 = this;
+
+      this.$confirm({
+        title: "Delete ".concat(invitation.recipient.name, "'s Invitation"),
+        text: 'This action is permanent.',
+        onConfirm: function () {
+          var _onConfirm2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+            var errors;
+            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+              while (1) {
+                switch (_context6.prev = _context6.next) {
+                  case 0:
+                    _context6.prev = 0;
+                    _context6.next = 3;
+                    return axios["delete"]("/web/site/invitations/".concat(invitation.id));
+
+                  case 3:
+                    _this6.invitations = _this6.invitations.filter(function (i) {
+                      return i.id !== invitation.id;
+                    });
+
+                    _this6.$notify({
+                      type: 'success',
+                      text: 'Invitation deleted successfully'
+                    });
+
+                    _context6.next = 11;
+                    break;
+
+                  case 7:
+                    _context6.prev = 7;
+                    _context6.t0 = _context6["catch"](0);
+
+                    if (_context6.t0.response && _context6.t0.response.status === 403) {
+                      _this6.$notify({
+                        text: 'You are not authorized to complete this action.',
+                        type: 'error'
+                      });
+                    } else if (_context6.t0.response && _context6.t0.response.status === 422) {
+                      errors = new _forms_Errors__WEBPACK_IMPORTED_MODULE_1__["default"](_context6.t0.response.data);
+
+                      _this6.$alert(errors.toArray().join(' '));
+                    } else {
+                      _this6.$notify({
+                        text: 'Unable to delete invitation. Please try refreshing the page.',
+                        type: 'error'
+                      });
+                    }
+
+                    console.error(_context6.t0);
+
+                  case 11:
+                  case "end":
+                    return _context6.stop();
+                }
+              }
+            }, _callee6, null, [[0, 7]]);
+          }));
+
+          function onConfirm() {
+            return _onConfirm2.apply(this, arguments);
+          }
+
+          return onConfirm;
+        }()
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Tab.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Tab.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'Tab',
+  props: {
+    name: {
+      required: true,
+      type: String
+    },
+    selected: {
+      "default": false,
+      type: Boolean
+    },
+    icon: {
+      required: false,
+      type: String,
+      "default": null
+    }
+  },
+  watch: {
+    isActive: function isActive(_isActive) {
+      if (_isActive) {
+        this.$emit('mount');
+      }
+    }
+  },
+  data: function data() {
+    return {
+      isActive: false
+    };
+  },
+  mounted: function mounted() {
+    this.isActive = this.selected;
+  },
+  computed: {
+    href: function href() {
+      return '#' + this.name.toLowerCase().replace(/ /g, '-').replace(/#/g, '');
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Tabs.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Tabs.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Icon */ "./resources/js/components/Icon.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'Tabs',
+  components: {
+    Icon: _Icon__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: {
+    history: {
+      required: false,
+      type: Boolean,
+      "default": true
+    }
+  },
+  data: function data() {
+    return {
+      tabs: []
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.tabs = this.$children.filter(function (child) {
+      return child.$options._componentTag === 'tab';
+    }).map(function (child) {
+      return child;
+    });
+
+    if (this.history) {
+      this.tabs.forEach(function (tab) {
+        if (_this.$route.hash === tab.href) {
+          _this.selectTab(tab);
+        }
+      });
+    }
+  },
+  methods: {
+    selectTab: function selectTab(e, selectedTab) {
+      if (e && !this.history) {
+        e.preventDefault();
+      }
+
+      this.tabs.forEach(function (tab) {
+        if (!tab || !selectedTab) {
+          return;
+        }
+
+        tab.isActive = tab.name === selectedTab.name;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/forms/ImportForm.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/forms/ImportForm.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Modal_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Modal/Modal */ "./resources/js/components/Modal/Modal.vue");
+/* harmony import */ var _components_Modal_ModalCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Modal/ModalCard */ "./resources/js/components/Modal/ModalCard.vue");
+/* harmony import */ var _components_Modal_ModalHeader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Modal/ModalHeader */ "./resources/js/components/Modal/ModalHeader.vue");
+/* harmony import */ var _components_Modal_ModalTitle__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Modal/ModalTitle */ "./resources/js/components/Modal/ModalTitle.vue");
+/* harmony import */ var _components_Modal_ModalBody__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Modal/ModalBody */ "./resources/js/components/Modal/ModalBody.vue");
+/* harmony import */ var _components_Modal_ModalFooter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/Modal/ModalFooter */ "./resources/js/components/Modal/ModalFooter.vue");
+/* harmony import */ var _components_Modal_Close__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/Modal/Close */ "./resources/js/components/Modal/Close.vue");
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Form */ "./resources/js/forms/Form.js");
+/* harmony import */ var _components_Required__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/Required */ "./resources/js/components/Required.vue");
+/* harmony import */ var _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/InlineSpinner */ "./resources/js/components/InlineSpinner.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'SiteForm',
+  components: {
+    InlineSpinner: _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_10__["default"],
+    Required: _components_Required__WEBPACK_IMPORTED_MODULE_9__["default"],
+    Close: _components_Modal_Close__WEBPACK_IMPORTED_MODULE_7__["default"],
+    ModalFooter: _components_Modal_ModalFooter__WEBPACK_IMPORTED_MODULE_6__["default"],
+    ModalBody: _components_Modal_ModalBody__WEBPACK_IMPORTED_MODULE_5__["default"],
+    ModalTitle: _components_Modal_ModalTitle__WEBPACK_IMPORTED_MODULE_4__["default"],
+    ModalHeader: _components_Modal_ModalHeader__WEBPACK_IMPORTED_MODULE_3__["default"],
+    ModalCard: _components_Modal_ModalCard__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Modal: _components_Modal_Modal__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  props: {
+    site: {
+      required: false,
+      "default": null
+    }
+  },
+  data: function data() {
+    return {
+      form: new _Form__WEBPACK_IMPORTED_MODULE_8__["default"]({
+        file: null
+      })
+    };
+  },
+  methods: {
+    submit: function submit() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _yield$_this$form$pos, data;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (_this.form.file) {
+                  _this.form.setAsFile('file');
+                }
+
+                _context.prev = 1;
+                _context.next = 4;
+                return _this.form.post("/web/sites/".concat(_this.site.id, "/import"));
+
+              case 4:
+                _yield$_this$form$pos = _context.sent;
+                data = _yield$_this$form$pos.data;
+
+                _this.$notify({
+                  type: 'success',
+                  text: 'Measurements imported successfully.'
+                });
+
+                _this.$emit('create', data);
+
+                _context.next = 14;
+                break;
+
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](1);
+
+                if (_context.t0.response && _context.t0.response.status !== 422) {
+                  _this.$notify({
+                    text: 'Unable to save site. Please try refreshing the page.',
+                    type: 'error'
+                  });
                 }
 
                 console.error(_context.t0);
-
-              case 13:
-                _this.loading = false;
 
               case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[1, 9]]);
+        }, _callee, null, [[1, 10]]);
+>>>>>>> master
       }))();
     },
     loadUsers: function loadUsers() {
@@ -2352,6 +3032,285 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee2, null, [[0, 10]]);
+      }))();
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/forms/SiteSharingForm.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/forms/SiteSharingForm.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Modal_ModalCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Modal/ModalCard */ "./resources/js/components/Modal/ModalCard.vue");
+/* harmony import */ var _components_Modal_Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Modal/Modal */ "./resources/js/components/Modal/Modal.vue");
+/* harmony import */ var _components_Modal_ModalHeader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Modal/ModalHeader */ "./resources/js/components/Modal/ModalHeader.vue");
+/* harmony import */ var _components_Modal_ModalTitle__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Modal/ModalTitle */ "./resources/js/components/Modal/ModalTitle.vue");
+/* harmony import */ var _components_Modal_Close__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Modal/Close */ "./resources/js/components/Modal/Close.vue");
+/* harmony import */ var _components_Modal_ModalBody__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/Modal/ModalBody */ "./resources/js/components/Modal/ModalBody.vue");
+/* harmony import */ var _components_Modal_ModalFooter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/Modal/ModalFooter */ "./resources/js/components/Modal/ModalFooter.vue");
+/* harmony import */ var _components_Dropdown__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/Dropdown */ "./resources/js/components/Dropdown.vue");
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Form */ "./resources/js/forms/Form.js");
+/* harmony import */ var _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/InlineSpinner */ "./resources/js/components/InlineSpinner.vue");
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Errors */ "./resources/js/forms/Errors.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'SiteSharingForm',
+  components: {
+    InlineSpinner: _components_InlineSpinner__WEBPACK_IMPORTED_MODULE_10__["default"],
+    ModalFooter: _components_Modal_ModalFooter__WEBPACK_IMPORTED_MODULE_7__["default"],
+    ModalBody: _components_Modal_ModalBody__WEBPACK_IMPORTED_MODULE_6__["default"],
+    Dropdown: _components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"],
+    Close: _components_Modal_Close__WEBPACK_IMPORTED_MODULE_5__["default"],
+    ModalTitle: _components_Modal_ModalTitle__WEBPACK_IMPORTED_MODULE_4__["default"],
+    ModalHeader: _components_Modal_ModalHeader__WEBPACK_IMPORTED_MODULE_3__["default"],
+    Modal: _components_Modal_Modal__WEBPACK_IMPORTED_MODULE_2__["default"],
+    ModalCard: _components_Modal_ModalCard__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  props: {
+    site: {
+      required: true,
+      type: Object
+    }
+  },
+  data: function data() {
+    return {
+      total: 0,
+      userOptions: [],
+      userSearch: '',
+      loading: false,
+      form: new _Form__WEBPACK_IMPORTED_MODULE_9__["default"]({
+        user_id: '',
+        can_edit: false
+      }),
+      _timer: null,
+      _request: null
+    };
+  },
+  watch: {
+    userSearch: function userSearch() {
+      var _this = this;
+
+      if (this._timer) {
+        clearTimeout(this._timer);
+      }
+
+      if (this.userSearch.length >= 2) {
+        this._timer = setTimeout(function () {
+          _this.loadUsers();
+        }, 600);
+      } else {
+        this.userOptions = [];
+      }
+    }
+  },
+  methods: {
+    invite: function invite() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var errors;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this2.loading = true;
+                _context.prev = 1;
+                _context.next = 4;
+                return _this2.form.post("/web/sites/".concat(_this2.site.id, "/invitations"));
+
+              case 4:
+                _this2.$emit('create');
+
+                _this2.form.reset();
+
+                _this2.$notify({
+                  text: 'User invited successfully',
+                  type: 'success'
+                });
+
+                _context.next = 13;
+                break;
+
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context["catch"](1);
+
+                if (_context.t0.response && _context.t0.response.status === 403) {
+                  _this2.$alert('You are not authorized to complete this action.');
+                } else if (_context.t0.response && _context.t0.response.status === 422) {
+                  errors = new _Errors__WEBPACK_IMPORTED_MODULE_11__["default"](_context.t0.response.data);
+
+                  _this2.$alert(errors.toArray().join(' '));
+                } else {
+                  _this2.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.');
+                }
+
+                console.error(_context.t0);
+
+              case 13:
+                _this2.loading = false;
+
+              case 14:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[1, 9]]);
+      }))();
+    },
+    loadUsers: function loadUsers() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var _yield$axios$get, data, errors;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (_this3._request) {
+                  _this3._request();
+                }
+
+                _context2.prev = 1;
+                _context2.next = 4;
+                return axios.get("/web/user-sites/users", {
+                  params: {
+                    search: _this3.userSearch.length >= 2 ? _this3.userSearch : null,
+                    site_id: _this3.site.id
+                  },
+                  cancelToken: new axios.CancelToken(function (c) {
+                    return _this3._request = c;
+                  })
+                });
+
+              case 4:
+                _yield$axios$get = _context2.sent;
+                data = _yield$axios$get.data;
+                _this3.total = data.total;
+                _this3.userOptions = data.data.map(function (u) {
+                  return {
+                    label: u.name,
+                    value: u.id
+                  };
+                });
+                _context2.next = 13;
+                break;
+
+              case 10:
+                _context2.prev = 10;
+                _context2.t0 = _context2["catch"](1);
+
+                if (!axios.isCancel(_context2.t0)) {
+                  if (_context2.t0.response && _context2.t0.response.status === 403) {
+                    _this3.$alert('You are not authorized to complete this action.');
+                  } else if (_context2.t0.response && _context2.t0.response.status === 422) {
+                    errors = new _Errors__WEBPACK_IMPORTED_MODULE_11__["default"](_context2.t0.response.data);
+
+                    _this3.$alert(errors.toArray().join(' '));
+                  } else {
+                    _this3.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.');
+                  }
+
+                  console.error(_context2.t0);
+                }
+
+              case 13:
+                _this3.loading = false;
+
+              case 14:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[1, 10]]);
       }))();
     }
   }
@@ -2830,6 +3789,7 @@ var render = function() {
                   1
                 ),
                 _vm._v(" "),
+<<<<<<< HEAD
                 _vm._m(3),
                 _vm._v(" "),
                 _c("div", { staticClass: "custom-control custom-switch" }, [
@@ -2858,6 +3818,9 @@ var render = function() {
                     ]
                   )
                 ])
+=======
+                _vm._m(3)
+>>>>>>> master
               ])
             ]),
             _vm._v(" "),
@@ -3457,9 +4420,7 @@ var render = function() {
                     "\n            "
                 )
               ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "flex-shrink-0" })
+            ])
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -3617,8 +4578,13 @@ var render = function() {
     "div",
     { staticClass: "card mb-3" },
     [
+<<<<<<< HEAD
       _c("div", { staticClass: "card-body" }, [
         _c("div", { staticClass: "mb-2 d-flex align-items-center" }, [
+=======
+      _c("div", { staticClass: "card-body p-0" }, [
+        _c("div", { staticClass: "d-flex align-items-center px-3 pt-3 pb-2" }, [
+>>>>>>> master
           _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "flex-shrink-0" }, [
@@ -3643,16 +4609,27 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
+<<<<<<< HEAD
         _c("p", { staticClass: "text-muted" }, [
           _vm._v(
             'Click the "+ Invite" button to begin sharing sites with other users.'
           )
         ]),
+=======
+        _vm.sharedWith.length === 0 && _vm.invitations.length === 0
+          ? _c("p", { staticClass: "text-muted mb-2 px-3" }, [
+              _vm._v(
+                '\n      Click the "+ Invite" button to begin sharing sites with other users.\n    '
+              )
+            ])
+          : _vm._e(),
+>>>>>>> master
         _vm._v(" "),
         _vm.sharedWith.length !== 0
           ? _c(
               "div",
               { staticClass: "mb-2" },
+<<<<<<< HEAD
               [
                 _vm._m(1),
                 _vm._v(" "),
@@ -3701,11 +4678,92 @@ var render = function() {
                                 _c("icon", {
                                   attrs: { name: "chevron-down-outline" }
                                 })
+=======
+              _vm._l(_vm.sharedWith, function(user, i) {
+                return _c(
+                  "div",
+                  {
+                    staticClass:
+                      "d-flex align-items-center hover-highlight py-2 px-3",
+                    class: { "mt-2": i !== 0 }
+                  },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "flex-shrink-0" },
+                      [_c("avatar", { attrs: { user: user, small: "" } })],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "flex-grow-1 px-2" }, [
+                      _c("div", { staticClass: "mb-n1" }, [
+                        _vm._v(_vm._s(user.name))
+                      ]),
+                      _vm._v(" "),
+                      _c("small", { staticClass: "text-muted" }, [
+                        _vm._v(
+                          _vm._s(
+                            user.can_edit
+                              ? "Allowed to edit"
+                              : "Not allowed to edit"
+                          )
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "flex-shrink-0" }, [
+                      _c("div", { staticClass: "dropdown" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-light px-2",
+                            attrs: { "data-toggle": "dropdown" }
+                          },
+                          [
+                            _c("icon", { attrs: { name: "ellipsis-vertical" } })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "dropdown-menu align-items-center" },
+                          [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.toggleEdit(user)
+                                  }
+                                }
+                              },
+                              [
+                                _c("icon", {
+                                  attrs: {
+                                    name: user.can_edit ? "close" : "create"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      user.can_edit
+                                        ? "Disallow user to edit"
+                                        : "Allow user to edit"
+                                    )
+                                  )
+                                ])
+>>>>>>> master
                               ],
                               1
                             ),
                             _vm._v(" "),
                             _c(
+<<<<<<< HEAD
                               "div",
                               {
                                 staticClass: "dropdown-menu align-items-center"
@@ -3772,6 +4830,34 @@ var render = function() {
                 })
               ],
               2
+=======
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.cancelShare(user)
+                                  }
+                                }
+                              },
+                              [
+                                _c("icon", { attrs: { name: "trash" } }),
+                                _vm._v(" "),
+                                _c("span", [_vm._v("Cancel Sharing")])
+                              ],
+                              1
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+                  ]
+                )
+              }),
+              0
+>>>>>>> master
             )
           : _vm._e(),
         _vm._v(" "),
@@ -3779,7 +4865,11 @@ var render = function() {
           ? _c(
               "div",
               [
+<<<<<<< HEAD
                 _vm._m(2),
+=======
+                _vm._m(1),
+>>>>>>> master
                 _vm._v(" "),
                 _vm._l(_vm.invitations, function(invitation) {
                   return invitation.status === "pending"
@@ -3787,7 +4877,11 @@ var render = function() {
                         "div",
                         {
                           staticClass:
+<<<<<<< HEAD
                             "d-flex align-items-center hover-visible-container hover-highlight px-4 py-2"
+=======
+                            "d-flex align-items-center  hover-highlight py-2 px-3"
+>>>>>>> master
                         },
                         [
                           _c(
@@ -3802,6 +4896,7 @@ var render = function() {
                           ),
                           _vm._v(" "),
                           _c("div", { staticClass: "flex-grow-1 px-2" }, [
+<<<<<<< HEAD
                             _c("div", { staticClass: "font-weight-bold" }, [
                               _vm._v(_vm._s(invitation.recipient.name))
                             ])
@@ -3835,6 +4930,49 @@ var render = function() {
                               )
                             ]
                           )
+=======
+                            _c("div", { staticClass: "mb-n1" }, [
+                              _vm._v(_vm._s(invitation.recipient.name))
+                            ]),
+                            _vm._v(" "),
+                            _c("small", { staticClass: "text-muted" }, [
+                              _vm._v(
+                                "\n            " +
+                                  _vm._s(
+                                    invitation.is_editable
+                                      ? "Allowed to edit"
+                                      : "Not allowed to edit"
+                                  ) +
+                                  "\n          "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "flex-shrink-0" }, [
+                            _c(
+                              "button",
+                              {
+                                directives: [
+                                  {
+                                    name: "tooltip",
+                                    rawName: "v-tooltip",
+                                    value: "Delete Invitation",
+                                    expression: "`Delete Invitation`"
+                                  }
+                                ],
+                                staticClass: "btn btn-light btn-sm px-2",
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.deleteInvite(invitation)
+                                  }
+                                }
+                              },
+                              [_c("icon", { attrs: { name: "trash" } })],
+                              1
+                            )
+                          ])
+>>>>>>> master
                         ]
                       )
                     : _vm._e()
@@ -3875,6 +5013,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+<<<<<<< HEAD
     return _c("div", { staticClass: "mb-2" }, [
       _c("strong", [_vm._v("Shared with")])
     ])
@@ -3885,6 +5024,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "mb-2" }, [
       _c("strong", [_vm._v("Pending")])
+=======
+    return _c("div", { staticClass: "mb-2 text-muted px-3" }, [
+      _c("strong", [_vm._v("Pending Invitations")])
+>>>>>>> master
     ])
   }
 ]
@@ -4187,15 +5330,22 @@ var render = function() {
         [
           _c(
             "modal-card",
+<<<<<<< HEAD
             {
               staticClass: "position-static",
               staticStyle: { "min-height": "400px" }
             },
+=======
+>>>>>>> master
             [
               _c(
                 "modal-header",
                 [
+<<<<<<< HEAD
                   _c("modal-title", [_vm._v("Share Site")]),
+=======
+                  _c("modal-title", [_vm._v("Share " + _vm._s(_vm.site.name))]),
+>>>>>>> master
                   _vm._v(" "),
                   _c("close", {
                     on: {
@@ -4209,6 +5359,7 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
+<<<<<<< HEAD
               _c(
                 "modal-body",
                 [
@@ -4248,6 +5399,57 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
+=======
+              _c("modal-body", { staticClass: "position-static" }, [
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c("label", [
+                      _vm._v("User to Share " + _vm._s(_vm.site.name) + " With")
+                    ]),
+                    _vm._v(" "),
+                    _c("dropdown", {
+                      ref: "user",
+                      staticClass: "mb-4",
+                      attrs: {
+                        autocomplete: "",
+                        options: _vm.userOptions,
+                        placeholder: "Find a user",
+                        total: _vm.total,
+                        "length-to-search": 2,
+                        "search-message":
+                          "Please enter a name or an email to begin searching."
+                      },
+                      on: {
+                        search: function($event) {
+                          _vm.userSearch = $event
+                        }
+                      },
+                      model: {
+                        value: _vm.form.user_id,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "user_id", $$v)
+                        },
+                        expression: "form.user_id"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.form.errors.has("user_id")
+                      ? _c("small", { staticClass: "form-text text-danger" }, [
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(_vm.form.errors.first("user_id")) +
+                              "\n          "
+                          )
+                        ])
+                      : _vm._e()
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group mb-0" }, [
+>>>>>>> master
                   _c("div", { staticClass: "form-check" }, [
                     _c("input", {
                       staticClass: "form-check-input",
@@ -4268,6 +5470,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
+<<<<<<< HEAD
                           "\n                        Allow user to edit this site\n                    "
                         )
                       ]
@@ -4276,6 +5479,21 @@ var render = function() {
                 ],
                 1
               ),
+=======
+                          "\n              Allow user to edit this site\n            "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("small", { staticClass: "form-text text-muted" }, [
+                      _vm._v(
+                        "\n              By checking this box, the user will be allowed to edit existing data and add new data\n            "
+                      )
+                    ])
+                  ])
+                ])
+              ]),
+>>>>>>> master
               _vm._v(" "),
               _c("modal-footer", { staticClass: "d-flex" }, [
                 _c(
@@ -4304,7 +5522,11 @@ var render = function() {
                       }
                     }
                   },
+<<<<<<< HEAD
                   [_vm._v("\n                    Cancel\n                ")]
+=======
+                  [_vm._v("\n          Cancel\n        ")]
+>>>>>>> master
                 )
               ])
             ],

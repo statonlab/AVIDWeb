@@ -89,6 +89,15 @@ class UserSiteController extends Controller
 
         $users = User::where('id', '!=', $user->id);
 
+        if ($request->site_id) {
+            $users->whereDoesntHave('userSites', function ($query) use ($request) {
+                $query->where('user_sites.site_id', $request->site_id);
+            })->whereDoesntHave('siteInvitations', function ($query) use ($request) {
+                $query->where('site_invitations.site_id', $request->site_id);
+                $query->where('site_invitations.status', 'pending');
+            });
+        }
+
         if ($request->search) {
             $term = $request->search;
             $users->where(function (Builder $query) use ($term) {
@@ -97,9 +106,10 @@ class UserSiteController extends Controller
             });
         }
 
-        $users->orderBy('name', 'asc')->select('id', 'name');
-
-        $users = $users->paginate(20);
+        $users = $users->orderBy('name', 'asc')->paginate(20, [
+            'users.id',
+            'users.name',
+        ]);
 
         return $this->success($users);
     }
@@ -109,11 +119,13 @@ class UserSiteController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function sharedUsers(Request $request)
     {
         $this->validate($request, [
-            'site_id' => 'required|exists:sites,id'
+            'site_id' => 'required|exists:sites,id',
         ]);
 
         $this->authorize('viewAny', Site::findOrFail($request->site_id));

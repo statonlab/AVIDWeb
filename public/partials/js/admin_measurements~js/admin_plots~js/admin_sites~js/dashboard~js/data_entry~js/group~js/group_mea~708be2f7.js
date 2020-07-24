@@ -65,6 +65,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+<<<<<<< HEAD
+=======
+//
+>>>>>>> master
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -277,7 +281,11 @@ var render = function() {
       },
       [
         _c("span", { staticClass: "text-case-normal" }, [
+<<<<<<< HEAD
           _vm._v("\n            " + _vm._s(_vm.selected) + "\n        ")
+=======
+          _vm._v("\n      " + _vm._s(_vm.selected) + "\n    ")
+>>>>>>> master
         ]),
         _vm._v(" "),
         _vm.loading
@@ -367,7 +375,11 @@ var render = function() {
                 }
               }
             },
+<<<<<<< HEAD
             [_vm._v("\n            " + _vm._s(option.label) + "\n        ")]
+=======
+            [_vm._v("\n      " + _vm._s(option.label) + "\n    ")]
+>>>>>>> master
           )
         }),
         _vm._v(" "),
@@ -377,14 +389,22 @@ var render = function() {
         _vm.value < _vm.lengthToSearch &&
         _vm.searchMessage
           ? _c("p", { staticClass: "text-center text-muted p-2 mb-0" }, [
+<<<<<<< HEAD
               _vm._v(
                 "\n            " + _vm._s(_vm.searchMessage) + "\n        "
               )
+=======
+              _vm._v("\n      " + _vm._s(_vm.searchMessage) + "\n    ")
+>>>>>>> master
             ])
           : _vm.options.length < _vm.total
           ? _c("p", { staticClass: "text-muted text-center p-2 mb-0" }, [
               _vm._v(
+<<<<<<< HEAD
                 "\n            " +
+=======
+                "\n      " +
+>>>>>>> master
                   _vm._s(
                     "Showing " +
                       _vm.options.length +
@@ -392,7 +412,11 @@ var render = function() {
                       _vm.total +
                       ". Please search to see more"
                   ) +
+<<<<<<< HEAD
                   "\n        "
+=======
+                  "\n    "
+>>>>>>> master
               )
             ])
           : _vm.options.length === 0 && _vm.emptyMessage.length
