@@ -87,6 +87,7 @@
           height    : '',
         }),
         ready      : true,
+        unsavedChanges: false,
       }
     },
 
@@ -96,6 +97,24 @@
 
         if (this.ready) {
           this.$emit('date', date)
+        }
+      },
+
+      'form.is_alive': {
+        handler() {
+          this.emitChanges()
+        }
+      },
+
+      'form.is_located': {
+        handler() {
+          this.emitChanges()
+        }
+      },
+
+      'form.height': {
+        handler() {
+          this.emitChanges()
         }
       },
 
@@ -141,6 +160,22 @@
       getDate(date) {
         return date ? moment(date).format('YYYY-MM-DD') : ''
       },
+
+      isFormEmpty() {
+        return (this.form.is_alive === '' && this.form.is_located === '' && this.form.height === '')
+      },
+
+      emitChanges() {
+        const isEmpty = this.isFormEmpty()
+
+        if (this.unsavedChanges && isEmpty) {
+          this.$emit('unset')
+        } else if (!this.unsavedChanges && !isEmpty) {
+          this.$emit('set')
+        }
+
+        this.unsavedChanges = !isEmpty
+      }
     },
   }
 </script>

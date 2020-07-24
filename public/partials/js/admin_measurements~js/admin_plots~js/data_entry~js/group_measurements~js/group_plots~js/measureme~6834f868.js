@@ -833,7 +833,7 @@ var render = function() {
                       !_vm.form.new_species
                         ? _c(
                             "div",
-                            { staticClass: "form-group col-6" },
+                            { staticClass: "form-group col-6 position-static" },
                             [
                               _c(
                                 "label",

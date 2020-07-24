@@ -67,7 +67,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
+=======
 //
+>>>>>>> master
 >>>>>>> master
 
 
@@ -284,7 +287,11 @@ var render = function() {
 <<<<<<< HEAD
           _vm._v("\n            " + _vm._s(_vm.selected) + "\n        ")
 =======
+<<<<<<< HEAD
+          _vm._v("\n            " + _vm._s(_vm.selected) + "\n        ")
+=======
           _vm._v("\n      " + _vm._s(_vm.selected) + "\n    ")
+>>>>>>> master
 >>>>>>> master
         ]),
         _vm._v(" "),
@@ -378,7 +385,11 @@ var render = function() {
 <<<<<<< HEAD
             [_vm._v("\n            " + _vm._s(option.label) + "\n        ")]
 =======
+<<<<<<< HEAD
+            [_vm._v("\n            " + _vm._s(option.label) + "\n        ")]
+=======
             [_vm._v("\n      " + _vm._s(option.label) + "\n    ")]
+>>>>>>> master
 >>>>>>> master
           )
         }),
@@ -394,7 +405,13 @@ var render = function() {
                 "\n            " + _vm._s(_vm.searchMessage) + "\n        "
               )
 =======
+<<<<<<< HEAD
+              _vm._v(
+                "\n            " + _vm._s(_vm.searchMessage) + "\n        "
+              )
+=======
               _vm._v("\n      " + _vm._s(_vm.searchMessage) + "\n    ")
+>>>>>>> master
 >>>>>>> master
             ])
           : _vm.options.length < _vm.total
@@ -403,7 +420,11 @@ var render = function() {
 <<<<<<< HEAD
                 "\n            " +
 =======
+<<<<<<< HEAD
+                "\n            " +
+=======
                 "\n      " +
+>>>>>>> master
 >>>>>>> master
                   _vm._s(
                     "Showing " +
@@ -415,7 +436,11 @@ var render = function() {
 <<<<<<< HEAD
                   "\n        "
 =======
+<<<<<<< HEAD
+                  "\n        "
+=======
                   "\n    "
+>>>>>>> master
 >>>>>>> master
               )
             ])
