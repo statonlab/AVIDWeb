@@ -2,7 +2,6 @@
     <div class="container">
         <a class="navbar-brand" href="/">
             <img class="img-fluid" style="height:50px;" src="/img/avid.png" />
-            <span class="ml-2">AVID</span>
         </a>
         <button class="navbar-toggler"
                 type="button"
