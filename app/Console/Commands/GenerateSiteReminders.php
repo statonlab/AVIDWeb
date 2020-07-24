@@ -30,10 +30,7 @@ class GenerateSiteReminders extends Command
      */
     public function handle()
     {
-        $sites = Site::whereNotNull('last_measured_at')
-            ->whereHas('user', function ($query) {
-                $query->whereNotNull('email_verified_at');
-            })->cursor();
+        $sites = Site::whereNotNull('last_measured_at')->cursor();
 
         foreach ($sites as $site) {
             /** @var \App\Reminder */
