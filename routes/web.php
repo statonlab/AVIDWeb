@@ -130,11 +130,14 @@ Route::group([
     Route::delete('/sites/{site}', 'SiteController@destroy');
     Route::get('/sites/{site}/export', 'SiteController@export');
     Route::post('/sites/{site}/import', 'SiteController@import');
+    Route::put('/sites/{site}/toggle-reminders', 'SiteController@toggleReminders');
 
     // UserSite Controller
     Route::get('/user-sites/users', 'UserSiteController@users');
+    Route::get('/user-sites/site/{site}', 'UserSiteController@show');
     Route::get('/user-sites/shared', 'UserSiteController@sharedUsers');
     Route::put('/user-sites/site/{site}/user/{user}/toggle-edit', 'UserSiteController@toggleEdit');
+    Route::put('/user-sites/{site}/toggle-reminders', 'UserSiteController@toggleReminders');
     Route::delete('/user-sites/site/{site}/user/{user}', 'UserSiteController@delete');
 
     // Plot Controller

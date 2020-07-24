@@ -35,6 +35,16 @@ class SendReminders implements ShouldQueue
             $attachment = $this->makeSheet($event);
             $event->reminder->user->notify(new ReminderNotification($event->reminder,
                 $attachment));
+
+            $exists = $event->reminder->events()->where('date', '>', now())->exists();
+            if (! $exists) {
+                ReminderEvent::create([
+                    'reminder_id' => $event->reminder_id,
+                    'site_id' => $event->site_id,
+                    'date' => $event->date->addWeek(),
+                ]);
+            }
+
             $event->reminder->fill(['sent_at' => now()]);
             if($attachment) {
                 \Storage::delete($attachment);

@@ -11,6 +11,8 @@ use App\Events\PlotUpdated;
 use App\Events\PlotDeleted;
 use App\Events\PlantDeleted;
 use App\Events\MeasurementCreated;
+use App\Events\SiteShared;
+use App\Events\SiteStoppedSharing;
 use App\Listeners\MeasurementCreatedListener;
 use App\Listeners\AttachAddressToPlotListener;
 use App\Listeners\DeleteAttachedPlotsListener;
@@ -20,6 +22,9 @@ use App\Listeners\InvitationAcceptedListener;
 use App\Listeners\SendInvitationListener;
 use App\Listeners\SendSiteInvitationListener;
 use App\Listeners\AttachWMUToPlotListener;
+use App\Listeners\SiteSharedListener;
+use App\Listeners\DeleteSiteReminders;
+use App\Listeners\DeleteSharedSiteReminders;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -38,6 +43,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         SiteDeleted::class => [
             DeleteAttachedPlotsListener::class,
+            DeleteSiteReminders::class,
         ],
         PlotCreated::class => [
             AttachAddressToPlotListener::class,
@@ -64,6 +70,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         SiteInvitationCreated::class => [
             SendSiteInvitationListener::class,
+        ],
+        SiteShared::class => [
+            SiteSharedListener::class,
+        ],
+        SiteStoppedSharing::class => [
+            DeleteSharedSiteReminders::class,
         ],
     ];
 
