@@ -37,7 +37,7 @@
                 Allow user to edit this site
               </label>
               <small class="form-text text-muted">
-                By checking this bix, the user will be allowed to edit existing data and add new data
+                By checking this box, the user will be allowed to edit existing data and add new data
               </small>
             </div>
           </div>

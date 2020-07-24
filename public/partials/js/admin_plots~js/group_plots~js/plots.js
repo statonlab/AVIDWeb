@@ -3515,7 +3515,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _vm.sharedWith.length === 0 && _vm.invitations.length === 0
-          ? _c("p", { staticClass: "text-muted mb-0 px-3" }, [
+          ? _c("p", { staticClass: "text-muted mb-2 px-3" }, [
               _vm._v(
                 '\n      Click the "+ Invite" button to begin sharing sites with other users.\n    '
               )
@@ -4144,7 +4144,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("small", { staticClass: "form-text text-muted" }, [
                       _vm._v(
-                        "\n              By checking this bix, the user will be allowed to edit existing data and add new data\n            "
+                        "\n              By checking this box, the user will be allowed to edit existing data and add new data\n            "
                       )
                     ])
                   ])

@@ -12,7 +12,7 @@
           </button>
         </div>
       </div>
-      <p class="text-muted mb-0 px-3" v-if="sharedWith.length === 0 && invitations.length === 0">
+      <p class="text-muted mb-2 px-3" v-if="sharedWith.length === 0 && invitations.length === 0">
         Click the "+ Invite" button to begin sharing sites with other users.
       </p>
       <div v-if="sharedWith.length !== 0" class="mb-2">
