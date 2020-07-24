@@ -499,7 +499,11 @@
 
     beforeRouteLeave(to, from, next) {
       if (this.formsSet > 0) {
-        window.confirm('Do you really want to leave? You have unsaved changes!') ? next() : next(false)
+        this.$confirm({
+            title: 'Unsaved Changes!',
+            text: 'Do you really want to leave? You have unsaved changes!',
+            onConfirm: next,
+        })
       } else {
         next()
       }
