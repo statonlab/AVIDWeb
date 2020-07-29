@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="card mb-3" v-if="invitations.length !== 0">
+        <div class="card mb-3" v-if="showInvitations && invitations.length !== 0">
             <div class="card-header">
                 <p class="page-title mb-0">Pending Invitations</p>
                 <p class="text-muted">You have been invited to view the following sites</p>
@@ -177,6 +177,7 @@
       showSiteType       : {required: false, type: Boolean, default: false},
       editable           : {required: false, type: Boolean, default: false},
       showOwner          : {required: false, type: Boolean, default: false},
+      showInvitations    : {required: false, type: Boolean, default: false},
       siteUrlPrefix      : {required: false, type: String, default: '/app/sites'},
       unauthorizedMessage: {required: false, type: String, default: 'You do not have permission to view sites.'},
     },

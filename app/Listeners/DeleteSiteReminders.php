@@ -14,6 +14,6 @@ class DeleteSiteReminders implements ShouldQueue
      */
     public function handle($event)
     {
-        $event->site->reminders()->delete;
+        $event->site->reminders()->delete();
     }
 }

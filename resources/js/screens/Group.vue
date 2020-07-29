@@ -88,11 +88,8 @@
                                          v-if="!invitation.expired && invitation.status === 'pending'">
                                         Pending
                                     </div>
-                                    <div class="text-danger" v-else-if="invitation.expired">
+                                    <div class="text-danger" v-else-if="invitation.expired && invitation.status === 'pending'">
                                         Expired
-                                    </div>
-                                    <div class="text-danger" v-else>
-                                        Rejected
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0 hover-visible">
