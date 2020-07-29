@@ -43,7 +43,11 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
             ->where('tag', $row['tag'])
             ->first();
 
-        $date = new Carbon(str_replace('-', '/', $row['date']));
+        if ($plant === null) {
+            return null;
+        }
+
+        $date = new Carbon(str_replace('-', '/', $row['date_mm_dd_yyyy']));
 
         $exists = Measurement::where('plant_id', $plant->id)
             ->where('date', $date->format('Y-m-d'))
@@ -53,7 +57,7 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
             return null;
         }
 
-        $col_height = $row['height'];
+        $col_height = $row['height_inches'];
 
         $is_located = $col_height !== 'missing';
         $is_alive = $is_located == 1 ? $col_height !== 'dead' : null;
@@ -84,7 +88,7 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
             'quadrant' => "required|in:$quadrants",
             'tag' => 'required|exists:plants,tag',
             'species' => 'required|exists:species,name',
-            'date' => [
+            'date_mm_dd_yyyy' => [
                 'required',
                 function ($attribute, $value, $fail) {
                     if (strtotime(str_replace('-', '/', $value)) === false) {
@@ -92,7 +96,7 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
                     }
                 }
             ],
-            'height' => [
+            'height_inches' => [
                 'required',
                 function ($attribute, $value, $fail) {
                     if ($value !== 'dead' && $value !== 'missing' && ! is_numeric($value)) {
