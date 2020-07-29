@@ -27,9 +27,6 @@ class SendReminders implements ShouldQueue
             ->whereDoesntHave('reminder', function ($query) {
                 $query->whereDate('sent_at', now());
             })
-            ->whereHas('site', function ($query) {
-                $query->where('sends_reminders', 1);
-            })
             ->with(['reminder'])
             ->cursor();
 
