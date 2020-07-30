@@ -42,7 +42,7 @@
                         <div class="mb-4">
                             <small class="text-muted">Import data recorded in spreadsheet format</small>
                         </div>
-                        <div class="custom-control custom-switch">
+                        <div class="custom-control custom-checkbox">
                             <input class="custom-control-input"
                                    id="send-notifications"
                                    type="checkbox"
