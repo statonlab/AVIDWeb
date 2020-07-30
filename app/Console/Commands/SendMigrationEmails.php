@@ -14,7 +14,7 @@ class SendMigrationEmails extends Command
      *
      * @var string
      */
-    protected $signature = 'migration:send-mail';
+    protected $signature = 'migration:send-mail {--T|test}';
 
     /**
      * The console command description.
@@ -40,9 +40,15 @@ class SendMigrationEmails extends Command
      */
     public function handle()
     {
-        $users = User::orderBy('id', 'asc')->whereHas('role', function ($query) {
-            $query->where('roles.name', 'Admin');
-        })->cursor();
+        $users = User::orderBy('id', 'asc');
+
+        if ($this->option('test')) {
+            $users->whereHas('role', function ($query) {
+                $query->where('roles.name', 'Admin');
+            });
+        }
+
+        $users = $users->cursor();
 
         foreach ($users as $user) {
             \Mail::send(new MigrationMail($user));
