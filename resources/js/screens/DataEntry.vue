@@ -271,7 +271,7 @@ export default {
   mounted() {
     this.loadSites()
 
-    window.onbeforeunload = () => (this.formsSet > 0 ? true : null)
+    window.addEventListener('beforeunload', this.beforeUnload)
   },
 
   watch: {
@@ -497,6 +497,12 @@ export default {
       this.loadPlots()
       this.showPlotForm = false
     },
+
+    beforeUnload(e) {
+      if (this.formsSet > 0) {
+        e.returnValue = true
+      }
+    },
   },
 
   beforeRouteLeave(to, from, next) {
@@ -504,7 +510,10 @@ export default {
       this.$confirm({
         title    : 'Unsaved Changes!',
         text     : 'Do you really want to leave? You have unsaved changes!',
-        onConfirm: next,
+        onConfirm: () => {
+          window.removeEventListener('beforeunload', this.beforeUnload)
+          next()
+        },
       })
     } else {
       next()
