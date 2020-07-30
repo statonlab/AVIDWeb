@@ -64,6 +64,9 @@ class GroupController extends Controller
             'name' => $request->name,
         ]);
 
+        $sites = $user->sites()->select(['sites.id'])->get()->pluck('id');
+        $group->sites()->syncWithoutDetaching($sites);
+
         $group->users()->attach($user->id);
 
         return $this->created($group);
