@@ -128,12 +128,12 @@ class UserSiteController extends Controller
             'site_id' => 'required|exists:sites,id',
         ]);
 
-        $this->authorize('viewAny', Site::findOrFail($request->site_id));
+        $this->authorize('view', Site::findOrFail($request->site_id));
 
         $users = User::with('userSites')
             ->orderBy('name', 'asc')
             ->whereHas('userSites', function ($query) use ($request) {
-                $query->where('site_id', $request->site_id);
+                $query->where('site_id', $request->site_id)->where('is_shared', true);
             })
             ->select('id', 'name');
 
@@ -155,10 +155,23 @@ class UserSiteController extends Controller
      */
     public function toggleReminders(Site $site, Request $request)
     {
+        $this->authorize('update', $site);
+
         $user = $request->user();
 
-        $user_site = UserSite::where('site_id', $site->id)->where('user_id', $user->id)->firstOrFail();
+        $user_site = UserSite::where('site_id', $site->id)->where('user_id', $user->id)->first();
 
+        if ($user_site === null) {
+          $user_site = UserSite::create([
+              'user_id' => $user->id,
+              'site_id' => $site->id,
+              'editable' => false,
+              'sends_reminders' => true,
+              'is_shared' => false,
+          ]);
+
+          return $this->success($user_site);
+        }
 
         $user_site->fill(['sends_reminders' => !$user_site->sends_reminders])->save();
 

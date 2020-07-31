@@ -341,11 +341,15 @@
           this.userSite = data
           this.sendReminders = data.sends_reminders
         } catch (e) {
-          this.$notify({
-            text: 'Unable to load site information. Please try refreshing the page.',
-            type: 'error',
-          })
-          console.error(e)
+          if (e.response && e.response.status === 403) {
+            this.sends_reminders = false
+          } else {
+            this.$notify({
+              text: 'Unable to load site information. Please try refreshing the page.',
+              type: 'error',
+            })
+            console.error(e)
+          }
         }
       },
 
@@ -475,7 +479,7 @@
             this.sendReminders = data.sends_reminders
           } else {
             const {data} = await axios.put(`/web/user-sites/${this.site.id}/toggle-reminders`)
-            this.userSite= {
+            this.userSite = {
                 ...this.userSite,
                 sends_reminders: data.sends_reminders
             }
