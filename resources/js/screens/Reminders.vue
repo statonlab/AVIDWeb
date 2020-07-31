@@ -52,7 +52,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="reminder in reminders" class="hover-visible-container">
+                    <tr v-for="reminder in reminders">
                         <td>
                             <router-link :to="`/app/sites/${reminder.site.id}`">
                                 <strong>{{ reminder.site.name }}</strong>
@@ -66,7 +66,7 @@
                             <span v-if="reminder.site.last_measured_at">{{ moment(reminder.site.last_measured_at).format('MMM Do, YYYY') }}</span>
                         </td>
                         <td>
-                            <div class="d-flex justify-content-end hover-visible">
+                            <div class="d-flex justify-content-end">
                                 <button class="btn btn-link"
                                         v-tooltip.left="'Edit Reminder'"
                                         type="button"
