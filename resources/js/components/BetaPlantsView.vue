@@ -58,7 +58,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="plant in plants" :class="{'hover-visible-container': deleting !== plant.id}">
+                <tr v-for="plant in plants">
                     <td>
                         <router-link :to="`${siteUrlPrefix}/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
                     </td>
@@ -66,7 +66,7 @@
                     <td>{{ plant.quadrant }}</td>
                     <td>{{ plant.measurements_count }}</td>
                     <td>
-                        <div class="d-flex justify-content-end hover-visible">
+                        <div class="d-flex justify-content-end">
                             <button type="button" class="btn btn-sm btn-link"
                                     v-tooltip="'Edit'"
                                     v-if="editable || User.owns(plant) || User.can('update sites')"

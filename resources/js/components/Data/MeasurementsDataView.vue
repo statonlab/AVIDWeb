@@ -82,8 +82,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="measurement in measurements"
-                                    :class="{'hover-visible-container': deleting !== measurement.id}">
+                                <tr v-for="measurement in measurements">
                                     <td>{{ moment(measurement.date).format('MMM Do, YYYY') }}</td>
                                     <td>{{ measurement.is_located ? 'Yes' : 'No'}}</td>
                                     <td>
@@ -97,7 +96,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <div class="d-flex justify-content-end hover-visible">
+                                        <div class="d-flex justify-content-end">
                                             <button type="button"
                                                     class="btn btn-link btn-sm"
                                                     v-tooltip="'Edit'"

@@ -17,7 +17,7 @@
       </p>
       <div v-if="sharedWith.length !== 0" class="mb-2">
         <div v-for="(user, i) in sharedWith"
-             class="d-flex align-items-center hover-highlight py-2 px-3"
+             class="d-flex align-items-center py-2 px-3"
              :class="{'mt-2': i !== 0}">
           <div class="flex-shrink-0">
             <avatar :user="user" small/>
@@ -54,7 +54,7 @@
         <div class="mb-2 text-muted px-3">
           <strong>Pending Invitations</strong>
         </div>
-        <div class="d-flex align-items-center  hover-highlight py-2 px-3"
+        <div class="d-flex align-items-center py-2 px-3"
              v-for="invitation in invitations"
              v-if="invitation.status === 'pending'">
           <div class="flex-shrink-0">

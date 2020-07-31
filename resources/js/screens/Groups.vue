@@ -46,7 +46,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="group in groups" class="hover-visible-container">
+                        <tr v-for="group in groups">
                             <td>
                                 <router-link :to="`/app/groups/${group.id}`" class="font-weight-bold">
                                     {{ group.name }}
@@ -57,7 +57,7 @@
                             </td>
                             <td>{{ group.users_count }}</td>
                             <td>
-                                <div class="d-flex justify-content-end hover-visible" v-if="User.owns(group) || User.can(['update groups', 'delete groups'])">
+                                <div class="d-flex justify-content-end" v-if="User.owns(group) || User.can(['update groups', 'delete groups'])">
                                     <button class="btn btn-link mr-1"
                                             v-tooltip="'Edit Group'"
                                             v-if="User.can('update groups')"
