@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\UserSite;
 use App\Exports\SiteExport;
 use App\Notifications\ReminderNotification;
 use App\ReminderEvent;
@@ -27,16 +28,27 @@ class SendReminders implements ShouldQueue
             ->whereDoesntHave('reminder', function ($query) {
                 $query->whereDate('sent_at', now());
             })
-            ->where(function ($query) {
-              $query->whereHas('site', function ($query) {
-                $query->where('sends_reminders', 1);
-                $query->orWhereHas('userSites', function ($query) {
-                  $query->where('sends_reminders', 1);
-                });
-              });
-            })
             ->with(['reminder'])
             ->cursor();
+
+        $events = $events->filter(function ($event) {
+          if ($event->site->user_id === $event->reminder->user_id) {
+            if ($event->site->sends_reminders) {
+              return true;
+            }
+          } else {
+            $user_site = UserSite::where('user_id', $event->reminder->user_id)
+                ->where('site_id', $event->site_id)
+                ->first();
+            if ($user_site !== null) {
+              if ($user_site->sends_reminders) {
+                return true;
+              }
+            }
+          }
+
+          return false;
+        });
 
         /** @var ReminderEvent $event */
         foreach ($events as $event) {
