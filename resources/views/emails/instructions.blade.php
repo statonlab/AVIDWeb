@@ -1,7 +1,8 @@
 @component('mail::message')
 Hello {{ explode(' ', $user->name)[0] }},
 
-In a previous email, we shared the exciting news about our new website. The following are instructions to help you get started.
+In a previous email, we shared the exciting news about our new website.
+The following are instructions to help you get started.
 
 ## How To Access The New Website
 
