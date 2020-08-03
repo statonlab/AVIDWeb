@@ -42,12 +42,14 @@ class UserSiteController extends Controller
      */
     public function show(Site $site, Request $request)
     {
+        $this->authorize('view', $site);
+
         $user = $request->user();
 
         $user_site = UserSite::where('user_id', $user->id)->where('site_id', $site->id)->first();
 
         if ($user_site === null) {
-            return $this->unauthorized();
+            return $this->notFound();
         }
 
         return $this->success($user_site);

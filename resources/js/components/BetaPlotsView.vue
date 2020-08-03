@@ -341,7 +341,7 @@
           this.userSite = data
           this.sendReminders = data.sends_reminders
         } catch (e) {
-          if (e.response && e.response.status === 403) {
+          if (e.response && e.response.status === 404) {
             this.sends_reminders = false
           } else {
             this.$notify({
