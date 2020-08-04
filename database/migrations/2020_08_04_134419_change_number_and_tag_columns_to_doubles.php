@@ -18,7 +18,7 @@ class ChangeNumberAndTagColumnsToDoubles extends Migration
         });
 
         Schema::table('plants', function (Blueprint $table) {
-            $table->float('tag')->nullable()->change();
+            $table->float('tag')->nullable(false)->change();
         });
     }
 
