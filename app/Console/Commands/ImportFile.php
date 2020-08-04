@@ -225,7 +225,7 @@ class ImportFile extends Command
         $plot = Plot::updateOrCreate([
             'user_id' => $user->id,
             'site_id' => $site->id,
-            'number' => intval($plot_number),
+            'number' => floatval($plot_number),
         ], [
             'latitude' => empty($latitude) ? null : floatval($latitude),
             'longitude' => empty($longitude) ? null : floatval($longitude),
@@ -246,7 +246,7 @@ class ImportFile extends Command
             'plot_id' => $plot->id,
             'plant_type_id' => $this->plantType->id,
             'species_id' => $species->id,
-            'tag' => intval($tag),
+            'tag' => floatval($tag),
         ], [
             'quadrant' => ucwords($quadrant),
             'collected_at' => now(),
