@@ -30,7 +30,7 @@ class UserSiteController extends Controller
             ])->save();
         }
 
-        return $this->success($user_site);
+        return $this->created($user_site);
     }
 
     /**
@@ -140,7 +140,7 @@ class UserSiteController extends Controller
 
         $users = $users->get();
 
-        $users->transform(function (User $user) use ($request) {
+        $users->transform(function (User $user) {
             $user->can_edit = $user->userSites->first()->editable;
 
             return $user;
