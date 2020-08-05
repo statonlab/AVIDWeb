@@ -73,4 +73,10 @@ return [
         'description' => 'Allow users to manage events. Users will be allowed to add, update, and delete events.',
         'default' => [],
     ],
+    [
+        'name' => 'share sites',
+        'title' => 'Share Any Site',
+        'description' => 'Allow users to send invites to share any site, including those belonging to other users.',
+        'default' => [],
+    ],
 ];

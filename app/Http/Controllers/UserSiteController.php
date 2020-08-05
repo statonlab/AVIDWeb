@@ -30,7 +30,7 @@ class UserSiteController extends Controller
             ])->save();
         }
 
-        return $this->created($user_site);
+        return $this->success($user_site);
     }
 
     /**
@@ -128,8 +128,6 @@ class UserSiteController extends Controller
             'site_id' => 'required|exists:sites,id',
         ]);
 
-        $this->authorize('viewAny', Site::findOrFail($request->site_id));
-
         $users = User::with('userSites')
             ->orderBy('name', 'asc')
             ->whereHas('userSites', function ($query) use ($request) {
@@ -140,7 +138,7 @@ class UserSiteController extends Controller
         $users = $users->get();
 
         $users->transform(function (User $user) {
-            $user->can_edit = $user->userSites->first()->editable;
+            $user->can_edit = $user->userSites()->first()->editable;
 
             return $user;
         });
