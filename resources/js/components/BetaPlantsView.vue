@@ -19,7 +19,7 @@
                 No plants found. Please try adjusting your filters or create a new plant using the "+ Plant" button above.
             </div>
 
-            <table class="table mb-0" v-if="!loading && plants.length > 0">
+            <table class="table table-middle mb-0" v-if="!loading && plants.length > 0">
                 <thead>
                 <tr>
                     <th>
@@ -61,6 +61,7 @@
                 <tr v-for="plant in plants">
                     <td>
                         <router-link :to="`${siteUrlPrefix}/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
+                        <p class="mb-0 text-muted" v-if="plant.old_tag">{{`Previously ${plant.old_tag}`}}</p>
                     </td>
                     <td>{{ plant.species_name }}</td>
                     <td>{{ plant.quadrant }}</td>

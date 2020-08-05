@@ -23,6 +23,7 @@ class Plant extends Model
         'collected_at',
         'stems',
         'flowers',
+        'old_tag',
     ];
 
     /**
