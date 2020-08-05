@@ -188,10 +188,6 @@ class ImportFile extends Command
         array_walk($line, 'trim');
         $username = strtolower($username);
 
-        if ($plant_old_tag) {
-          $this->info('Old tag: ' . $plant_old_tag);
-        }
-
         // Find the user
         /** @var \App\User|null $user */
         $user = $this->userIndex[$username] ?? null;
