@@ -128,8 +128,11 @@ class UserSiteController extends Controller
             'site_id' => 'required|exists:sites,id',
         ]);
 
-        $users = User::with('userSites')
-            ->orderBy('name', 'asc')
+        $users = User::with([
+            'userSites' => function ($query) use ($request) {
+                $query->where('site_id', $request->site_id);
+            }
+          ])->orderBy('name', 'asc')
             ->whereHas('userSites', function ($query) use ($request) {
                 $query->where('site_id', $request->site_id);
             })
@@ -138,10 +141,7 @@ class UserSiteController extends Controller
         $users = $users->get();
 
         $users->transform(function (User $user) use ($request) {
-            $user->can_edit = $user->userSites()
-                ->where('site_id', $request->site_id)
-                ->first()
-                ->editable;
+            $user->can_edit = $user->userSites->first()->editable;
 
             return $user;
         });
