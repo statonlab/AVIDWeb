@@ -105,7 +105,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="site in sites" :class="{'on-hover': deleting !== site.id}">
+                    <tr v-for="site in sites">
                         <td>
                             <router-link :to="`${siteUrlPrefix}/${site.id}`">
                                 <strong>{{ site.name }}</strong>
@@ -124,17 +124,17 @@
                         </td>
                         <td class="text-right no-wrap">
                             <router-link :to="`${siteUrlPrefix}/${site.id}`"
-                                         class="show-on-hover btn btn-link btn-sm"
+                                         class="btn btn-link btn-sm"
                                          v-tooltip="'View Plots'">
                                 <icon name="eye"/>
                             </router-link>
-                            <button class="show-on-hover btn btn-link btn-sm mr-1"
+                            <button class="btn btn-link btn-sm mr-1"
                                     @click.prevent="edit(site)"
                                     v-if="editable || User.owns(site) || User.can('delete sites')"
                                     v-tooltip="'Edit Site'">
                                 <icon name="create"/>
                             </button>
-                            <button class="show-on-hover btn btn-link btn-sm"
+                            <button class="btn btn-link btn-sm"
                                     v-tooltip="'Delete Site'"
                                     v-if="User.owns(site) || User.can('delete sites')"
                                     @click.prevent="destroy(site)">
