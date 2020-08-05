@@ -150,6 +150,7 @@ class SiteInvitation extends Model
             'user_id' => $user->id,
             'site_id' => $this->site_id,
             'editable' => $this->is_editable,
+            'is_shared' => true,
         ]);
     }
 

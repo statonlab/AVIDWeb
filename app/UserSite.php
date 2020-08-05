@@ -16,6 +16,7 @@ class UserSite extends Model
         'site_id',
         'editable',
         'sends_reminders',
+        'is_shared',
     ];
 
     /**
@@ -24,6 +25,7 @@ class UserSite extends Model
     protected $casts = [
         'editable' => 'boolean',
         'sends_reminders' => 'boolean',
+        'is_shared' => 'boolean',
     ];
 
     /**

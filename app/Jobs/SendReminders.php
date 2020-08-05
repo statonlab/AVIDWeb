@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\UserSite;
 use App\Exports\SiteExport;
 use App\Notifications\ReminderNotification;
 use App\ReminderEvent;
@@ -29,6 +30,25 @@ class SendReminders implements ShouldQueue
             })
             ->with(['reminder'])
             ->cursor();
+
+        $events = $events->filter(function ($event) {
+          if ($event->site->user_id === $event->reminder->user_id) {
+            if ($event->site->sends_reminders) {
+              return true;
+            }
+          } else {
+            $user_site = UserSite::where('user_id', $event->reminder->user_id)
+                ->where('site_id', $event->site_id)
+                ->first();
+            if ($user_site !== null) {
+              if ($user_site->sends_reminders) {
+                return true;
+              }
+            }
+          }
+
+          return false;
+        });
 
         /** @var ReminderEvent $event */
         foreach ($events as $event) {
