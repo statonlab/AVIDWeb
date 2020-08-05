@@ -137,8 +137,11 @@ class UserSiteController extends Controller
 
         $users = $users->get();
 
-        $users->transform(function (User $user) {
-            $user->can_edit = $user->userSites()->first()->editable;
+        $users->transform(function (User $user) use ($request) {
+            $user->can_edit = $user->userSites()
+                ->where('site_id', $request->site_id)
+                ->first()
+                ->editable;
 
             return $user;
         });
@@ -156,7 +159,6 @@ class UserSiteController extends Controller
         $user = $request->user();
 
         $user_site = UserSite::where('site_id', $site->id)->where('user_id', $user->id)->firstOrFail();
-
 
         $user_site->fill(['sends_reminders' => !$user_site->sends_reminders])->save();
 
