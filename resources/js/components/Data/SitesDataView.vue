@@ -130,7 +130,7 @@
                             </router-link>
                             <button class="btn btn-link btn-sm mr-1"
                                     @click.prevent="edit(site)"
-                                    v-if="editable || User.owns(site) || User.can('delete sites')"
+                                    v-if="editable || User.owns(site) || User.can('edit sites')"
                                     v-tooltip="'Edit Site'">
                                 <icon name="create"/>
                             </button>
@@ -270,11 +270,21 @@
       siteCreated() {
         this.loadSites()
         this.closeForm()
+
+        this.$notify({
+          text: 'Created site successfully',
+          type: 'success',
+        })
       },
 
       siteUpdated(site) {
         this.sites = this.sites.map(s => s.id === site.id ? site : s)
         this.closeForm()
+
+        this.$notify({
+          text: 'Updated site successfully',
+          type: 'success',
+        })
       },
 
       closeForm() {
