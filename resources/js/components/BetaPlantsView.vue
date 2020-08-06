@@ -4,7 +4,7 @@
             <div class="flex-grow-1">
                 <input type="search" class="form-control" placeholder="Search by tag or species" v-model="search">
             </div>
-            <div class="flex-shrink-0 text-muted">
+            <div class="flex-shrink-0 text-muted" v-if="editable || User.owns(plot) || User.can('update sites')">
                 <button class="btn btn-primary" @click.prevent="showForm = true">
                     <icon name="add"/>
                     <span>Plant</span>
@@ -122,7 +122,7 @@
 
     props: {
       plot          : {required: true},
-      editable      : {required: false, type: Boolean, default: true},
+      editable      : {required: false, type: Boolean, default: false},
       siteUrlPrefix : {required: false, type: String, default: '/app/plants'},
     },
 

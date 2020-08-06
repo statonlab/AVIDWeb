@@ -43,7 +43,7 @@
 
     props: {
       siteUrlPrefix      : {required: false, type: String, default: '/app/plants'},
-      editable           : {required: false, type: Boolean, default: true},
+      editable           : {required: false, type: Boolean, default: false},
     },
 
     data() {
