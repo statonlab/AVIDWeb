@@ -20,7 +20,7 @@ class SiteInvitationPolicy
      */
     public function viewAny(User $user, Site $site)
     {
-        return $user->owns($site);
+        return $user->isAdmin() || $user->owns($site);
     }
 
     /**
@@ -32,7 +32,7 @@ class SiteInvitationPolicy
      */
     public function view(User $user, SiteInvitation $invitation)
     {
-        return $user->owns($invitation->site);
+        return $user->isAdmin() || $user->owns($invitation->site);
     }
 
     /**
@@ -43,7 +43,7 @@ class SiteInvitationPolicy
      */
     public function create(User $user, Site $site)
     {
-        return $user->owns($site);
+        return $user->hasPermissionTo('share sites') || $user->owns($site);
     }
 
     /**
@@ -55,7 +55,7 @@ class SiteInvitationPolicy
      */
     public function update(User $user, SiteInvitation $invitation)
     {
-        return $user->owns($invitation->site);
+        return $user->hasPermissionTo('share sites') || $user->owns($invitation->site);
     }
 
     /**
@@ -67,7 +67,7 @@ class SiteInvitationPolicy
      */
     public function delete(User $user, SiteInvitation $invitation)
     {
-        return $user->owns($invitation->site);
+        return $user->hasPermissionTo('share sites') || $user->owns($invitation->site);
     }
 
     /**
@@ -79,7 +79,7 @@ class SiteInvitationPolicy
      */
     public function restore(User $user, SiteInvitation $invitation)
     {
-        return $user->owns($invitation->site);
+        return $user->hasPermissionTo('share sites') || $user->owns($invitation->site);
     }
 
     /**
@@ -91,6 +91,6 @@ class SiteInvitationPolicy
      */
     public function forceDelete(User $user, SiteInvitation $invitation)
     {
-        return $user->owns($invitation->site);
+        return $user->hasPermissionTo('share sites') || $user->owns($invitation->site);
     }
 }

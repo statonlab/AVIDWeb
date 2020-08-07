@@ -130,10 +130,13 @@ class UserSiteController extends Controller
             'site_id' => 'required|exists:sites,id',
         ]);
 
-        $this->authorize('view', Site::findOrFail($request->site_id));
+        $this->authorize('viewShared', Site::findOrFail($request->site_id));
 
-        $users = User::with('userSites')
-            ->orderBy('name', 'asc')
+        $users = User::with([
+            'userSites' => function ($query) use ($request) {
+                $query->where('site_id', $request->site_id);
+            }
+          ])->orderBy('name', 'asc')
             ->whereHas('userSites', function ($query) use ($request) {
                 $query->where('site_id', $request->site_id)->where('is_shared', true);
             })

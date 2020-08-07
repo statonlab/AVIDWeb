@@ -56,6 +56,18 @@ class SitePolicy
     }
 
     /**
+     * Determine whether the user can view the model.
+     *
+     * @param \App\User $user
+     * @param \App\UserSite $user_site
+     * @return mixed
+     */
+    public function viewShared(User $user, Site $site)
+    {
+        return $user->isAdmin() || $user->owns($site);
+    }
+
+    /**
      * Determine whether the user can create sites.
      *
      * @param \App\User $user

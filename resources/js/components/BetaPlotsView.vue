@@ -54,7 +54,7 @@
                         </div>
                     </div>
                 </div>
-                <site-sharing-card :site="site" v-if="User.owns(site)" />
+                <site-sharing-card :site="site" v-if="User.can('share sites') || User.owns(site)" />
             </div>
             <div class="col-md-8 col-lg-9">
                 <div class="card mb-3">

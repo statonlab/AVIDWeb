@@ -19,6 +19,6 @@ class UserSitePolicy
      */
     public function delete(User $user, UserSite $user_site)
     {
-        return $user->owns($user_site->site);
+        return $user->hasPermissionTo('share sites') || $user->owns($user_site->site);
     }
 }
