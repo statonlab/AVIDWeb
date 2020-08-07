@@ -142,7 +142,7 @@ class Site extends Model
      */
     public function scopeWithShared($query, User $user) {
         return $query->whereHas('userSites', function($query) use ($user) {
-            $query->where('user_id', $user->id);
+            $query->where('user_id', $user->id)->where('is_shared', true);
         });
     }
 }

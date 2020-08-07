@@ -7,7 +7,7 @@
                         <div class="flex-grow-1">
                             <strong>Plots</strong>
                         </div>
-                        <div class="flex-shrink-0">
+                        <div class="flex-shrink-0" v-if="editable || User.owns(plot) || User.can('update sites')">
                             <button class="btn btn-primary" @click.prevent="showPlotForm = true">
                                 <icon name="add"/>
                                 <span>Plot</span>
@@ -245,7 +245,7 @@
     props: {
       site          : {required: true},
       siteUrlPrefix : {required: false, type: String, default: '/app/plants'},
-      editable      : {required: false, type: Boolean, default: true},
+      editable      : {required: false, type: Boolean, default: false},
     },
 
     data() {
@@ -341,11 +341,15 @@
           this.userSite = data
           this.sendReminders = data.sends_reminders
         } catch (e) {
-          this.$notify({
-            text: 'Unable to load site information. Please try refreshing the page.',
-            type: 'error',
-          })
-          console.error(e)
+          if (e.response && e.response.status === 404) {
+            this.sends_reminders = false
+          } else {
+            this.$notify({
+              text: 'Unable to load site information. Please try refreshing the page.',
+              type: 'error',
+            })
+            console.error(e)
+          }
         }
       },
 
@@ -475,7 +479,7 @@
             this.sendReminders = data.sends_reminders
           } else {
             const {data} = await axios.put(`/web/user-sites/${this.site.id}/toggle-reminders`)
-            this.userSite= {
+            this.userSite = {
                 ...this.userSite,
                 sends_reminders: data.sends_reminders
             }

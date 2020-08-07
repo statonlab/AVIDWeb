@@ -183,6 +183,7 @@ class ImportFile extends Command
             $plot_canopy,
             $username,
             $url,
+            $plant_old_tag,
         ] = $line;
         array_walk($line, 'trim');
         $username = strtolower($username);
@@ -225,7 +226,7 @@ class ImportFile extends Command
         $plot = Plot::updateOrCreate([
             'user_id' => $user->id,
             'site_id' => $site->id,
-            'number' => intval($plot_number),
+            'number' => floatval($plot_number),
         ], [
             'latitude' => empty($latitude) ? null : floatval($latitude),
             'longitude' => empty($longitude) ? null : floatval($longitude),
@@ -241,12 +242,13 @@ class ImportFile extends Command
         $species = $this->getSpecies($species_name);
 
         // Find the plant. If does not exist, create one
-        $plant = Plant::firstOrCreate([
+        $plant = Plant::updateOrCreate([
             'user_id' => $user->id,
             'plot_id' => $plot->id,
             'plant_type_id' => $this->plantType->id,
             'species_id' => $species->id,
-            'tag' => intval($tag),
+            'tag' => floatval($tag),
+            'old_tag' => !empty(trim($plant_old_tag)) ? trim($plant_old_tag) : null,
         ], [
             'quadrant' => ucwords($quadrant),
             'collected_at' => now(),

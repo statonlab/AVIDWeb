@@ -4,7 +4,7 @@
             <div class="flex-grow-1">
                 <input type="search" class="form-control" placeholder="Search by tag or species" v-model="search">
             </div>
-            <div class="flex-shrink-0 text-muted">
+            <div class="flex-shrink-0 text-muted" v-if="editable || User.owns(plot) || User.can('update sites')">
                 <button class="btn btn-primary" @click.prevent="showForm = true">
                     <icon name="add"/>
                     <span>Plant</span>
@@ -19,7 +19,7 @@
                 No plants found. Please try adjusting your filters or create a new plant using the "+ Plant" button above.
             </div>
 
-            <table class="table mb-0" v-if="!loading && plants.length > 0">
+            <table class="table table-middle mb-0" v-if="!loading && plants.length > 0">
                 <thead>
                 <tr>
                     <th>
@@ -61,6 +61,7 @@
                 <tr v-for="plant in plants">
                     <td>
                         <router-link :to="`${siteUrlPrefix}/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
+                        <p class="mb-0 text-muted" v-if="plant.old_tag">{{`Previously ${plant.old_tag}`}}</p>
                     </td>
                     <td>{{ plant.species_name }}</td>
                     <td>{{ plant.quadrant }}</td>
@@ -121,7 +122,7 @@
 
     props: {
       plot          : {required: true},
-      editable      : {required: false, type: Boolean, default: true},
+      editable      : {required: false, type: Boolean, default: false},
       siteUrlPrefix : {required: false, type: String, default: '/app/plants'},
     },
 

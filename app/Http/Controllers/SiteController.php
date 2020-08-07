@@ -27,9 +27,6 @@ class SiteController extends Controller
         // If given a user then we want to view sites for the given user only
         if ($user !== null) {
             $this->authorize('viewSites', $user);
-        } else {
-            /** @var \App\User $user */
-            $user = $request->user();
         }
 
         $this->validate($request, [
@@ -40,10 +37,9 @@ class SiteController extends Controller
             'site_type' => 'nullable|in:all,shared,owned',
         ]);
 
+        $sites = $this->getSites($user !== null ? $user->sites() : null);
 
-        $sites = $this->getSites()->paginate($request->limit ?? 20);
-
-        return $this->success($sites);
+        return $this->success($sites->paginate($request->limit ?? 20));
     }
 
     /**
