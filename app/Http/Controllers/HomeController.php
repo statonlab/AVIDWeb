@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Event;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -13,7 +14,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $events = Event::orderBy('event_start', 'desc')->take(3)->get();
+
+        $events->transform(function (Event $event) {
+          if ($event->image !== null) {
+            $event->image->url = $event->image->makeUrl();
+          }
+
+          return $event;
+        });
+
+        return view('home', ['events' => $events]);
     }
 
     /**
