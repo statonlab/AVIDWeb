@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $events = Event::take(3)->get();
+        $events = Event::orderBy('event_start', 'desc')->take(3)->get();
 
         $events->transform(function (Event $event) {
           if ($event->image !== null) {
