@@ -107,13 +107,9 @@ export default {
     return {
       User         : User,
       loading      : true,
-      user         : null,
       sharedWith   : [],
       invitations  : [],
       userSearch   : '',
-      userForm     : new Form({
-        user_id: '',
-      }),
       showShareForm: false,
     }
   },
@@ -171,28 +167,6 @@ export default {
       }
 
       this.loading = false
-    },
-
-    async inviteUser() {
-      try {
-        await this.userForm.post(`/web/sites/${this.site.id}/invitations`)
-        this.$notify({
-          type: 'success',
-          text: 'Invitation sent successfully.',
-        })
-        this.user = null
-        this.loadInvitations()
-      } catch (e) {
-        if (e.response && e.response.status === 403) {
-          this.$alert('You are not authorized to complete this action.')
-        } else if (e.response && e.response.status === 422) {
-          const errors = new Errors(e.response.data)
-          this.$alert(errors.toArray().join(' '))
-        } else {
-          this.$alert('Unable to process your request at this time. Please try refreshing the page or contact us.')
-        }
-        console.error(e)
-      }
     },
 
     async toggleEdit(user) {
