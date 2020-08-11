@@ -7,7 +7,7 @@
                         <div class="flex-grow-1">
                             <strong>Plots</strong>
                         </div>
-                        <div class="flex-shrink-0" v-if="editable || User.owns(plot) || User.can('update sites')">
+                        <div class="flex-shrink-0" v-if="editable || User.owns(site) || User.can('update sites')">
                             <button class="btn btn-primary" @click.prevent="showPlotForm = true">
                                 <icon name="add"/>
                                 <span>Plot</span>
