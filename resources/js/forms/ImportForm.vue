@@ -30,7 +30,8 @@
                     </div>
                 </modal-body>
                 <modal-footer class="d-flex">
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary" type="submit" :disabled="loading">
+                        <inline-spinner v-if="loading" />
                         <span>Import</span>
                     </button>
                     <button class="btn btn-light ml-auto"
@@ -77,6 +78,7 @@
 
     data() {
       return {
+        loading        : false,
         form           : new Form({
           file         : null,
         }),
@@ -85,6 +87,7 @@
 
     methods: {
       async submit() {
+        this.loading = true
         if (this.form.file) {
           this.form.setAsFile('file')
         }
@@ -104,6 +107,8 @@
           }
           console.error(e)
         }
+
+        this.loading = false
       },
 
       fileChanged(event) {

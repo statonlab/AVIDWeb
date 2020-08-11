@@ -212,7 +212,7 @@ class SiteController extends Controller
     {
         $user = $request->user();
 
-        $this->authorize('create', $site);
+        $this->authorize('update', $site);
 
         $this->validate($request, [
             'file' => 'required|file',
