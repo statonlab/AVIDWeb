@@ -19,6 +19,9 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
     /** @var User $user */
     protected $user;
 
+    /** @var int */
+    const MINIMUM_TIMESTAMP = 40000;
+
     /**
      * @param \App\User $user
      * @param \App\Site $site
@@ -92,6 +95,10 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
                 'required',
                 function ($attribute, $value, $fail) {
                     if (strtotime(str_replace('-', '/', $value)) === false) {
+                        $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
+                    }
+
+                    if (is_int($value) && $value > self::MINIMUM_TIMESTAMP) {
                         $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
                     }
                 }
