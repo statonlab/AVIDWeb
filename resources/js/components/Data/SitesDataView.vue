@@ -134,7 +134,7 @@
                                     v-tooltip="'Edit Site'">
                                 <icon name="create"/>
                             </button>
-                            <button class="btn btn-link btn-sm"
+                            <button class="btn btn-link"
                                     v-tooltip="'Delete Site'"
                                     v-if="User.owns(site) || User.can('delete sites')"
                                     @click.prevent="destroy(site)">
