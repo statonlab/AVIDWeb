@@ -50,7 +50,14 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
             return null;
         }
 
-        $date = new Carbon(str_replace('-', '/', $row['date_mm_dd_yyyy']));
+        $date = null;
+
+        if (! is_int($row['date_mm_dd_yyyy'])) {
+            $date = new Carbon(str_replace('-', '/', $row['date_mm_dd_yyyy']));
+        } else {
+            /** @see http://www.cpearson.com/excel/datetime.htm#SerialDates */
+            $date = (new Carbon('Dec 31 1899'))->addDays($row['date_mm_dd_yyyy'] - 1);
+        }
 
         $exists = Measurement::where('plant_id', $plant->id)
             ->where('date', $date->format('Y-m-d'))
@@ -94,13 +101,13 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
             'date_mm_dd_yyyy' => [
                 'required',
                 function ($attribute, $value, $fail) {
-                    if (strtotime(str_replace('-', '/', $value)) === false) {
+                    if (is_int($value) && $value < self::MINIMUM_TIMESTAMP) {
                         $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
                     }
 
-                    if (is_int($value) && $value > self::MINIMUM_TIMESTAMP) {
-                        $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
-                    }
+                    //if (strtotime(str_replace('-', '/', $value)) === false) {
+                    //    $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
+                    //}
                 }
             ],
             'height_inches' => [
