@@ -70,11 +70,6 @@
             to   : '/app/sites',
             label: 'My Data',
           },
-          // {
-          //   icon : 'folder-outline',
-          //   to   : '/app/beta/sites',
-          //   label: 'Beta Data View',
-          // },
           {
             icon: 'add-circle-outline',
             to: '/app/data-entry',
@@ -84,6 +79,11 @@
             icon: 'bar-chart-outline',
             to: '/app/statistics',
             label: 'Statistics'
+          },
+          {
+            icon: 'bar-chart-outline',
+            to  : '/app/quarantine',
+            label: 'Data Quarantine',
           },
           {
             icon : 'notifications-outline',
