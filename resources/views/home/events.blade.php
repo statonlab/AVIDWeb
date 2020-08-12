@@ -6,12 +6,12 @@
                 <div class="row">
                     @each('components.event_card', $events, 'event')
                 </div>
-                <div class="mt-2 text-right">
-                    <a class="text-right btn btn-link" href="/events">
-                        <span class="mr-2">See all events</span>
-                        <ion-icon class="icon" name="chevron-forward-outline"></ion-icon>
-                    </a>
-                </div>
+            </div>
+            <div class="mt-2 text-right">
+                <a class="text-right btn btn-link" href="/events">
+                    <span class="mr-2">See all events</span>
+                    <ion-icon class="icon" name="chevron-forward-outline"></ion-icon>
+                </a>
             </div>
         @else
             <h1 class="text-center text-muted">There are no upcoming events.</h1>

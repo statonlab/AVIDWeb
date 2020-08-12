@@ -14,7 +14,7 @@ class EventsViewController extends Controller
      */
     public function events()
     {
-        $events = Event::orderBy('event_start', 'desc')->take(3)->get();
+        $events = Event::orderBy('event_start', 'desc')->get();
 
         $events->transform(function (Event $event) {
             if ($event->image !== null) {
