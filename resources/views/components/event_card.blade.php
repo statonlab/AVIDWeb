@@ -23,3 +23,17 @@
         </div>
     </div>
 </div>
+
+<style scoped>
+    .text-overflow-ellipsis {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .card-img-top {
+        object-fit: cover;
+        width: 100%;
+        height: 200px;
+    }
+</style>
