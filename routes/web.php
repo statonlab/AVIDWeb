@@ -98,7 +98,6 @@ Route::group([
     Route::get('/events', 'HomeController@data');
     Route::get('/data-entry', 'HomeController@data');
     Route::get('/statistics', 'HomeController@data');
-    Route::get('/quarantine', 'HomeController@data');
 });
 
 /**
@@ -126,6 +125,7 @@ Route::group([
     Route::get('/sites', 'SiteController@index');
     Route::get('/user/{user}/sites', 'SiteController@index');
     Route::post('/sites', 'SiteController@create');
+    Route::post('/sites/{site}/change-owner', 'SiteController@changeOwner');
     Route::get('/sites/{site}', 'SiteController@show');
     Route::put('/sites/{site}', 'SiteController@update');
     Route::delete('/sites/{site}', 'SiteController@destroy');

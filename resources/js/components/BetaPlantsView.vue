@@ -4,7 +4,7 @@
             <div class="flex-grow-1">
                 <input type="search" class="form-control" placeholder="Search by tag or species" v-model="search">
             </div>
-            <div class="flex-shrink-0 text-muted" v-if="editable || User.owns(plot) || User.can('update sites')">
+            <div class="flex-shrink-0 text-muted" v-if="editable || User.owns(plot) || User.owns(site) || User.can('update sites')">
                 <button class="btn btn-primary" @click.prevent="showForm = true">
                     <icon name="add"/>
                     <span>Plant</span>
@@ -70,12 +70,12 @@
                         <div class="d-flex justify-content-end">
                             <button type="button" class="btn btn-sm btn-link"
                                     v-tooltip="'Edit'"
-                                    v-if="editable || User.owns(plant) || User.can('update sites')"
+                                    v-if="editable || User.owns(plant) || User.owns(site) || User.can('update sites')"
                                     @click.prevent="edit(plant)">
                                 <icon name="create"/>
                             </button>
                             <button type="button"
-                                    v-if="User.owns(plant) || User.can('delete sites')"
+                                    v-if="User.owns(plant) || User.owns(site) || User.can('delete sites')"
                                     @click="destroy(plant)"
                                     class="btn btn-sm"
                                     :class="deleting === plant.id ? 'btn-danger': 'btn-link'"
@@ -121,6 +121,7 @@
     components: {Pager, PlantForm, InlineSpinner, Icon},
 
     props: {
+      site          : {required: true},
       plot          : {required: true},
       editable      : {required: false, type: Boolean, default: false},
       siteUrlPrefix : {required: false, type: String, default: '/app/plants'},

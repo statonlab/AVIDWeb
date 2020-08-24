@@ -145,4 +145,15 @@ class SitePolicy
     {
         return $user->owns($site) || $user->hasPermissionTo('delete sites');
     }
+
+    /**
+     * Determine whether the user can change the owner of the site.
+     *
+     * @param \App\User $user
+     * @return mixed
+     */
+    public function changeOwner(User $user)
+    {
+        return $user->isAdmin();
+    }
 }

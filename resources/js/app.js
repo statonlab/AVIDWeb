@@ -132,10 +132,6 @@ const routes = [
     path     : '/app/statistics',
     component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/Statistics')),
   },
-  {
-    path     : '/app/quarantine',
-    component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/DataQuarantine')),
-  },
 ]
 
 const router = new VueRouter({
