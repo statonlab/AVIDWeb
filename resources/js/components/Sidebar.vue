@@ -80,11 +80,11 @@
             to: '/app/statistics',
             label: 'Statistics'
           },
-          {
-            icon: 'bar-chart-outline',
-            to  : '/app/quarantine',
-            label: 'Data Quarantine',
-          },
+          // {
+          //   icon: 'bar-chart-outline',
+          //   to  : '/app/quarantine',
+          //   label: 'Data Quarantine',
+          // },
           {
             icon : 'notifications-outline',
             label: 'My Reminders',
