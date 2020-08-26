@@ -240,6 +240,10 @@
             try {
               await axios.delete(`/web/plants/${plant.id}`)
               this.loadPlants()
+              this.$notify({
+                text: 'Plant deleted successfully',
+                type: 'success',
+              })
             } catch (e) {
               this.$notify({
                 text: 'Unable to delete plant. Please try refreshing the page.',

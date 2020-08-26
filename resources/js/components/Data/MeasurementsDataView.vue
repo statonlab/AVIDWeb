@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="ml-auto">
-                    <button class="btn btn-link" v-if="editable || User.owns(plant) || User.can('update sites')" @click.prevent="editingPlant = true">
+                    <button class="btn btn-link" v-if="editable || User.owns(plant) || User.owns(plant.site) || User.can('update sites')" @click.prevent="editingPlant = true">
                         <icon name="create"/>
                         <span>Edit Plant</span>
                     </button>
@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="card">
-                        <div class="card-header d-flex p-2" v-if="User.owns(plant) || User.can('update sites')">
+                        <div class="card-header d-flex p-2" v-if="User.owns(plant) || User.owns(plant.site) || User.can('update sites')">
                             <div class="ml-auto flex-shrink-0 pl-1">
                                 <button class="btn btn-primary" :disabled="disableCreate" @click.prevent="add">
                                     <icon name="add"/>
@@ -100,14 +100,14 @@
                                             <button type="button"
                                                     class="btn btn-link btn-sm"
                                                     v-tooltip="'Edit'"
-                                                    v-if="editable || User.owns(measurement) || User.can('update sites')"
+                                                    v-if="editable || User.owns(measurement) || User.owns(plant.site) || User.can('update sites')"
                                                     @click.prevent="edit(measurement)">
                                                 <icon name="create"/>
                                             </button>
                                             <button type="button"
                                                     class="btn btn-sm"
                                                     v-tooltip="'Delete'"
-                                                    v-if="User.owns(measurement) || User.can('delete sites')"
+                                                    v-if="User.owns(measurement) || User.owns(plant.site) || User.can('delete sites')"
                                                     @click.prevent="destroy(measurement)"
                                                     :class="deleting !== measurement.id ? 'btn-link' : 'btn-danger'"
                                                     :disabled="deleting === measurement.id">
@@ -299,11 +299,19 @@
       updated(measurement) {
         this.closeForm()
         this.measurements = this.measurements.map(m => m.id === measurement.id ? measurement : m)
+        this.$notify({
+          text: 'Measurement updated successfully',
+          type: 'success',
+        })
       },
 
       created(measurement) {
         this.closeForm()
         this.loadMeasurements()
+        this.$notify({
+          text: 'Measurement created successfully',
+          type: 'success',
+        })
       },
 
       destroy(measurement) {
@@ -323,6 +331,7 @@
               console.error(e)
               this.$notify({
                 text: 'Unable to delete measurement. Please try refreshing the page.',
+                type: 'error',
               })
             }
             this.deleting = null
