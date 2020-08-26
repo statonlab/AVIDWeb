@@ -61,10 +61,6 @@ class PlotPolicy
      */
     public function update(User $user, Plot $plot)
     {
-        if ($user->owns($plot->site)) {
-            return true;
-        }
-
         if ($user->owns($plot) || $user->can('update', $plot->site)) {
             return true;
         }

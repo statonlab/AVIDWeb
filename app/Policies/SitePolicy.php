@@ -154,6 +154,6 @@ class SitePolicy
      */
     public function changeOwner(User $user)
     {
-        return $user->isAdmin();
+        return $user->hasPermissionTo('change owner');
     }
 }
