@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Plant;
+use App\PlantType;
 use App\Site;
 use App\Species;
 use Illuminate\Http\Request;
@@ -22,10 +23,12 @@ class SpeciesController extends Controller
         $this->validate($request, [
             'search' => 'nullable|max:255',
             'plant_type_id' => 'nullable|exists:plant_types,id',
-            'limit' => 'nullable',
+            'limit' => 'nullable|integer|min:20|max:100',
         ]);
 
-        $species = Species::with(['type'])->orderBy('name', 'asc');
+        $species = Species::with(['type'])
+            ->withCount(['plants', 'sites', 'shrubs'])
+            ->orderBy('name', 'asc');
 
         if (! empty($request->search)) {
             $species->where(function ($query) use ($request) {
@@ -135,7 +138,7 @@ class SpeciesController extends Controller
                 'species' => [
                     'This species is used in multiple resources and cannot be deleted
                      until all sites (common trees and shrubs) and plants are no longer
-                     associated with this species.'
+                     associated with this species.',
                 ],
             ]);
         }
@@ -143,5 +146,81 @@ class SpeciesController extends Controller
         $species->delete();
 
         return $this->deleted();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function getMergeOptions(Request $request)
+    {
+        $this->authorize('merge', Species::class);
+
+        $this->validate($request, [
+            'species' => 'required|array',
+            'species.*' => 'required|exists:species,id',
+        ]);
+
+        return $this->success([
+            'types' => PlantType::orderBy('id', 'asc')->get(),
+            'species' => Species::with('type')
+                ->whereIn('id', $request->input('species'))
+                ->get(),
+        ]);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function mergeSpecies(Request $request)
+    {
+        $this->authorize('merge', Species::class);
+
+        // Allow application to take its time
+
+        $this->validate($request, [
+            'species' => 'required|array',
+            'species.*' => 'required|exists:species,id',
+            'type' => 'required|exists:plant_types,id',
+        ]);
+
+        $species = Species::with('type')
+            ->whereIn('id', $request->input('species'))
+            ->get();
+
+        if ($species->count() < 2) {
+            return $this->error('Invalid species', [
+                'species' => ['Please select at least 2 species'],
+            ]);
+        }
+
+        $original = $species->shift();
+
+        $original->fill([
+            'plant_type_id' => $request->type,
+        ])->save();
+
+        foreach ($species as $item) {
+            Plant::where('species_id', $item->id)->update([
+                'species_id' => $original->id,
+            ]);
+
+            \DB::table('site_shrubs')->where('species_id', $item->id)->update([
+                'species_id' => $original->id,
+            ]);
+
+            \DB::table('site_species')->where('species_id', $item->id)->update([
+                'species_id' => $original->id,
+            ]);
+
+            $item->delete();
+        }
+
+        return $this->created('Merged successfully');
     }
 }

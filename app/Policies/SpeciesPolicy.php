@@ -91,4 +91,14 @@ class SpeciesPolicy
     {
         return $user->hasPermissionTo('manage species');
     }
+
+    /**
+     * @param \App\User $user
+     * @param \App\Species $species
+     * @return bool
+     */
+    public function merge(User $user)
+    {
+        return $user->isAdmin();
+    }
 }

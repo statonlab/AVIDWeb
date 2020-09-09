@@ -98,8 +98,7 @@ class Site extends Model
      */
     public function species()
     {
-        return $this->belongsToMany(Species::class, 'site_species', 'site_id',
-            'species_id');
+        return $this->belongsToMany(Species::class);
     }
 
     /**
