@@ -259,4 +259,6 @@ Route::group([
     Route::get('/statistics/species', 'StatisticsController@species');
     Route::get('/statistics/{site}/chart', 'StatisticsController@siteChart');
     Route::get('/statistics/chart', 'StatisticsController@chart');
+
+    Route::get('/admin-exports/plots', 'ExportPlotsController@index');
 });
