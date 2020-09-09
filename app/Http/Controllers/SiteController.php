@@ -239,4 +239,22 @@ class SiteController extends Controller
 
         return $this->success($site);
     }
+
+    /**
+     * @param \App\Site $site
+     * @param \App\User $user
+     * @param \Illuminate\Http\Request $request
+     */
+    public function changeOwner(Site $site, Request $request)
+    {
+        $this->authorize('changeOwner', Site::class);
+
+        $this->validate($request, [
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        $site->fill(['user_id' => $request->user_id])->save();
+
+        return $this->success($site);
+    }
 }

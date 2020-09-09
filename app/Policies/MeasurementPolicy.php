@@ -73,6 +73,10 @@ class MeasurementPolicy
      */
     public function delete(User $user, Measurement $measurement)
     {
+        if ($user->can('update', $measurement->site)) {
+            return true;
+        }
+
         return $user->id === $measurement->user_id || $user->hasPermissionTo('delete sites');
     }
 

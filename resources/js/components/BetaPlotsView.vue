@@ -28,19 +28,30 @@
                         <div class="pb-2">
                             <strong>Actions</strong>
                         </div>
-                        <a class="d-flex align-items-center" :href="`/web/sites/${site.id}/export`" target="_blank">
-                            <icon name="cloud-download-outline"/>
-                            <span class="ml-2">Download Spreadsheet</span>
-                        </a>
-                        <div class="mb-2">
-                            <small class="text-muted">The produced spreadsheet can be filled and imported into the site</small>
-                        </div>
-                        <a class="mt-3 d-flex align-items-center" href="#" @click.prevent="importing = true">
-                            <icon name="cloud-upload-outline"/>
-                            <span class="ml-2">Import Spreadsheet</span>
-                        </a>
                         <div class="mb-4">
-                            <small class="text-muted">Import data recorded in spreadsheet format</small>
+                            <a class="d-flex align-items-center" :href="`/web/sites/${site.id}/export`" target="_blank">
+                              <icon name="cloud-download-outline"/>
+                              <span class="ml-2">Download Spreadsheet</span>
+                            </a>
+                            <div class="mb-2">
+                              <small class="text-muted">The produced spreadsheet can be filled and imported into the site</small>
+                            </div>
+                            <a class="mt-3 d-flex align-items-center" href="#" @click.prevent="importing = true">
+                              <icon name="cloud-upload-outline"/>
+                              <span class="ml-2">Import Spreadsheet</span>
+                            </a>
+                            <div class="mb-2">
+                              <small class="text-muted">Import data recorded in spreadsheet format</small>
+                            </div>
+                            <div v-if="User.can('change owner')">
+                              <a class="mt-3 d-flex align-items-center" href="#" @click.prevent="showOwnerForm = true">
+                                <icon name="people-outline"/>
+                                <span class="ml-2">Transfer Ownership</span>
+                              </a>
+                              <div class="mb-4">
+                                <small class="text-muted">Transfer ownership of this site to another user</small>
+                              </div>
+                            </div>
                         </div>
                         <div class="custom-control custom-checkbox">
                             <input class="custom-control-input"
@@ -64,7 +75,8 @@
                                     :site-url-prefix="siteUrlPrefix"
                                     :editable="editable"
                                     v-if="plot"
-                                    :plot="plot"/>
+                                    :plot="plot"
+                                    :site="site"/>
                             <div v-else>
                                 <div class="p-3 d-flex align-items-center justify-content-center" v-if="loading">
                                     <inline-spinner class="text-primary"/>
@@ -97,13 +109,13 @@
                                 <div class="flex-shrink-0">
                                     <button class="btn btn-link"
                                             @click.prevent="edit"
-                                            v-if="editable || User.owns(plot) || User.can('update sites')">
+                                            v-if="editable || User.owns(plot) || User.owns(site) || User.can('update sites')">
                                         <icon name="create"/>
                                         <span>Edit Plot</span>
                                     </button>
                                     <button class="btn btn-link"
                                             @click.prevent="deletePlot"
-                                            v-if="User.owns(plot) || User.can('delete sites')">
+                                            v-if="User.owns(plot) || User.owns(site) || User.can('delete sites')">
                                         <icon name="trash" v-if="deleting !== plot.id"/>
                                         <inline-spinner v-else/>
                                         <span>Delete Plot</span>
@@ -222,6 +234,11 @@
                 @create="created($event)"
                 @update="updated($event)"
                 @close="closeForm"/>
+
+        <owner-form
+                :site="site"
+                v-if="showOwnerForm"
+                @close="showOwnerForm = false"/>
     </div>
 </template>
 
@@ -234,13 +251,14 @@
   import Dropdown from './Dropdown'
   import PlotForm from '../forms/PlotForm'
   import ImportForm from '../forms/ImportForm'
+  import OwnerForm from '../forms/OwnerForm'
   import InlineSpinner from './InlineSpinner'
   import User from '../helpers/User'
 
   export default {
     name: 'BetaPlotsView',
 
-    components: {InlineSpinner, PlotForm, ImportForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon, SiteSharingCard},
+    components: {InlineSpinner, PlotForm, ImportForm, OwnerForm, Dropdown, BetaPlantsView, Tab, Tabs, Icon, SiteSharingCard},
 
     props: {
       site          : {required: true},
@@ -250,24 +268,25 @@
 
     data() {
       return {
-        User        : User,
-        loading     : true,
-        plots       : [],
-        plot        : null,
-        plotId      : null,
-        page        : 1,
-        lastPage    : 1,
-        search      : '',
-        orderBy     : 'number',
-        orderDir    : 'asc',
-        request     : null,
-        plotOptions : [],
-        showPlotForm: false,
-        editing     : null,
-        deleting    : null,
-        importing   : false,
-        userSite    : null,
-        sendReminders: false,
+        User          : User,
+        loading       : true,
+        plots         : [],
+        plot          : null,
+        plotId        : null,
+        page          : 1,
+        lastPage      : 1,
+        search        : '',
+        orderBy       : 'number',
+        orderDir      : 'asc',
+        request       : null,
+        plotOptions   : [],
+        showPlotForm  : false,
+        showOwnerForm : false,
+        editing       : null,
+        deleting      : null,
+        importing     : false,
+        userSite      : null,
+        sendReminders : false,
       }
     },
 

@@ -79,4 +79,10 @@ return [
         'description' => 'Allow users to send invites to share any site, including those belonging to other users.',
         'default' => [],
     ],
+    [
+        'name' => 'change owner',
+        'title' => 'Transfer Site Ownership',
+        'description' => 'Allow users to transfer ownership of a site to another user, including those belonging to other users.',
+        'default' => [],
+    ],
 ];
