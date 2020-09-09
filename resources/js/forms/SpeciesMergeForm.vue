@@ -17,7 +17,7 @@
             <ul>
               <li v-for="item in species">
                 <strong>{{ item.name }}</strong>
-                <div>
+                <div v-if="item.type">
                   <span class="text-muted">{{ item.type.name }}</span>
                 </div>
               </li>
