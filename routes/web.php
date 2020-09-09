@@ -37,26 +37,38 @@ Route::get('/impacts/symptoms', 'ImpactsController@symptoms')->name('symptoms');
 // Site Preparation
 Route::get('/site-preparation', 'SitePreparationController@selection')->name('selection');
 Route::get('/site-preparation/key', 'SitePreparationController@key')->name('key');
-Route::get('/site-preparation/equipment', 'SitePreparationController@equipment')->name('equipment');
+Route::get('/site-preparation/equipment', 'SitePreparationController@equipment')
+    ->name('equipment');
 Route::get('/site-preparation/plots', 'SitePreparationController@plots')->name('plots');
-Route::get('/site-preparation/quadrants', 'SitePreparationController@quadrants')->name('quadrants');
+Route::get('/site-preparation/quadrants', 'SitePreparationController@quadrants')
+    ->name('quadrants');
 Route::get('/site-preparation/data', 'SitePreparationController@data')->name('data');
 
 // User Guides
-Route::get('/user-guides/getting-started', 'UserGuidesController@gettingStarted')->name('getting-started');
-Route::get('/user-guides/spring-wildflowers', 'UserGuidesController@springWildflowers')->name('spring-wildflowers');
-Route::get('/user-guides/woody-seedlings', 'UserGuidesController@woodySeedlings')->name('woody-seedlings');
-Route::get('/user-guides/exclosures', 'UserGuidesController@exclosures')->name('exclosures');
+Route::get('/user-guides/getting-started', 'UserGuidesController@gettingStarted')
+    ->name('getting-started');
+Route::get('/user-guides/spring-wildflowers', 'UserGuidesController@springWildflowers')
+    ->name('spring-wildflowers');
+Route::get('/user-guides/woody-seedlings', 'UserGuidesController@woodySeedlings')
+    ->name('woody-seedlings');
+Route::get('/user-guides/exclosures', 'UserGuidesController@exclosures')
+    ->name('exclosures');
 
 // User Guides
-Route::get('/user-guides/getting-started', 'UserGuidesController@gettingStarted')->name('getting-started');
-Route::get('/user-guides/spring-wildflowers', 'UserGuidesController@springWildflowers')->name('spring-wildflowers');
-Route::get('/user-guides/woody-seedlings', 'UserGuidesController@woodySeedlings')->name('woody-seedlings');
-Route::get('/user-guides/exclosures', 'UserGuidesController@exclosures')->name('exclosures');
+Route::get('/user-guides/getting-started', 'UserGuidesController@gettingStarted')
+    ->name('getting-started');
+Route::get('/user-guides/spring-wildflowers', 'UserGuidesController@springWildflowers')
+    ->name('spring-wildflowers');
+Route::get('/user-guides/woody-seedlings', 'UserGuidesController@woodySeedlings')
+    ->name('woody-seedlings');
+Route::get('/user-guides/exclosures', 'UserGuidesController@exclosures')
+    ->name('exclosures');
 
 // Resources
-Route::get('/resources/data-sheets', 'ResourcesController@dataSheets')->name('data-sheets');
-Route::get('/resources/identification', 'ResourcesController@identification')->name('identification');
+Route::get('/resources/data-sheets', 'ResourcesController@dataSheets')
+    ->name('data-sheets');
+Route::get('/resources/identification', 'ResourcesController@identification')
+    ->name('identification');
 Route::get('/resources/manual', 'ResourcesController@manual')->name('manual');
 Route::get('/resources/references', 'ResourcesController@references')->name('references');
 
@@ -137,8 +149,10 @@ Route::group([
     Route::get('/user-sites/users', 'UserSiteController@users');
     Route::get('/user-sites/site/{site}', 'UserSiteController@show');
     Route::get('/user-sites/shared', 'UserSiteController@sharedUsers');
-    Route::put('/user-sites/site/{site}/user/{user}/toggle-edit', 'UserSiteController@toggleEdit');
-    Route::put('/user-sites/{site}/toggle-reminders', 'UserSiteController@toggleReminders');
+    Route::put('/user-sites/site/{site}/user/{user}/toggle-edit',
+        'UserSiteController@toggleEdit');
+    Route::put('/user-sites/{site}/toggle-reminders',
+        'UserSiteController@toggleReminders');
     Route::delete('/user-sites/site/{site}/user/{user}', 'UserSiteController@delete');
 
     // Plot Controller
@@ -187,13 +201,17 @@ Route::group([
     Route::get('/site-invitations', 'SiteInvitationController@index');
     Route::post('/sites/{site}/invitations', 'SiteInvitationController@create');
     Route::delete('/site/invitations/{invitation}', 'SiteInvitationController@delete');
-    Route::get('/site-invitations/{invitation}/accept', 'SiteInvitationController@accept');
-    Route::get('/site-invitations/{invitation}/reject', 'SiteInvitationController@reject');
+    Route::get('/site-invitations/{invitation}/accept',
+        'SiteInvitationController@accept');
+    Route::get('/site-invitations/{invitation}/reject',
+        'SiteInvitationController@reject');
 
     // Species Controller
     Route::post('/species', 'SpeciesController@create');
     Route::put('/species/{species}', 'SpeciesController@update');
     Route::delete('/species/{species}', 'SpeciesController@delete');
+    Route::get('/species/merge-options', 'SpeciesController@getMergeOptions');
+    Route::post('/species/merge-species', 'SpeciesController@mergeSpecies');
 
     // Users Controller
     Route::get('/users', 'UserController@index');
