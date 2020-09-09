@@ -41,7 +41,7 @@ class SpeciesPolicy
      */
     public function create(User $user)
     {
-        return $user->hasPermissionTo('manage species');
+        return true;
     }
 
     /**
