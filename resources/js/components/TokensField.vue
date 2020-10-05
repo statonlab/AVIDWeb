@@ -2,11 +2,11 @@
     <div>
         <div class="form-group">
             <Select2 :id="`${id}_select`"
-                     :options="options"
                      v-model="selects"
+                     :options="options"
                      :placeholder="placeholder"
                      :disabled="disabled"
-                     :settings="{ multiple: 'true', tags: tags, theme: 'bootstrap4' }"
+                     :settings="settings"
                      @change="onChange($event)" />
         </div>
     </div>
@@ -19,12 +19,13 @@
     name: 'TokensField',
 
     props: {
-      options: {required: true, type: Array},
+      url: {required: false, type: String},
+      options: {required: false, type: Array},
       id: {required: false, type: String},
       value: {required: false, type: Array},
       tags: {required: false, type: Boolean, default: false},
       disabled: {required: false, type: Boolean, default: false},
-      placeholder: {required: false, type: String, default: 'Search...'}
+      placeholder: {required: false, type: String, default: 'Search...'},
     },
 
     components: {Select2},
@@ -34,6 +35,45 @@
         selects : [],
       }
     },
+
+    computed: {
+      ajax() {
+        if (! this.url) {
+          return null
+        }
+        return {
+          url: this.url,
+          data(params) {
+            return {
+              search: params.term,
+              page: params.page || 1
+            }
+          },
+          processResults(data, params) {
+            params.page = params.page || 1;
+
+            return {
+              results: data.data.map(({id, name}) => ({id, text: name})),
+              pagination: {
+                more: data.current_page < data.last_page
+              }
+            };
+          }
+        }
+      },
+
+      settings() {
+        const settings = {
+          multiple: 'true',
+          tags: this.tags,
+          theme: 'bootstrap4',
+          ajax: this.url ? this.ajax : null,
+        }
+
+        return settings
+      },
+    },
+
 
     watch: {
       value() {
