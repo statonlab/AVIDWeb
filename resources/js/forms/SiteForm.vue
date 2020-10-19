@@ -117,8 +117,9 @@
                             <div class="d-flex align-items-center">
                                 <tokens-field id="species"
                                               class="flex-grow-1"
-                                              :options="speciesOptions"
-                                              v-model="form.species" />
+                                              v-model="form.species"
+                                              :selections="site ? site.species : null"
+                                              :url="`/web/species`"/>
                                 <button class="mb-2 ml-2 btn btn-link flex-shrink-0" @click.prevent="createSpecies = true">
                                     <icon name="add" />
                                     <span>New Species</span>
@@ -136,8 +137,9 @@
                             <div class="mb-0 d-flex align-items-center">
                                 <tokens-field id="shrubs"
                                               class="flex-grow-1"
-                                              :options="speciesOptions"
-                                              v-model="form.shrubs" />
+                                              v-model="form.shrubs"
+                                              :selections="site ? site.shrubs : null"
+                                              :url="`/web/species`"/>
                                 <button class="mb-2 ml-2 btn btn-link flex-shrink-0" @click.prevent="createSpecies = true">
                                     <icon name="add" />
                                     <span>New Species</span>
@@ -326,7 +328,7 @@
         })
       }
       this.loadStates()
-      this.loadSpecies()
+      // this.loadSpecies()
     },
 
     watch: {
@@ -420,7 +422,7 @@
         axios.get('/web/species', {
           params: {
             cancelToken: new axios.CancelToken(fn => this.request = fn),
-            limit: 500
+            limit: 20,
           },
         }).then(response => {
           this.speciesOptions = response.data.data.map(({id, name}) => ({id, text: name}))

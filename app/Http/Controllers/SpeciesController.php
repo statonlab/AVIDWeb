@@ -24,6 +24,8 @@ class SpeciesController extends Controller
             'search' => 'nullable|max:255',
             'plant_type_id' => 'nullable|exists:plant_types,id',
             'limit' => 'nullable|integer|min:20|max:100',
+            'selections' => 'nullable|array',
+            'selections.*' => 'nullable|exists:species,id',
         ]);
 
         $species = Species::with(['type'])
@@ -40,10 +42,18 @@ class SpeciesController extends Controller
             $species->where('plant_type_id', $request->plant_type_id);
         }
 
+        if (! empty($request->selections)) {
+            $species->whereNotIn('id', $request->selections);
+        }
+
         if (! empty($request->limit)) {
             $species = $species->paginate($request->limit);
         } else {
             $species = $species->paginate(20);
+        }
+
+        if (! empty($request->selections)) {
+            $species->getCollection()->prepend(Species::whereIn('id', $request->selections)->get());
         }
 
         return $this->success($species);

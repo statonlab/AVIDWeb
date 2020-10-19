@@ -80,6 +80,7 @@
                                     :lodaing="loadingSpecies"
                                     :options="species"
                                     :error="form.errors.has('species_id')"
+                                    :total="total"
                                     @search="speciesSearch = $event"
                             />
                             <small class="form-text text-danger" v-if="form.errors.has('species_id')">
@@ -261,6 +262,7 @@
           tag               : '',
           species_id        : '',
           quadrant          : '',
+          total             : '',
         }),
 
         loadingPlants : false,
@@ -299,6 +301,7 @@
               plant_type_id : this.form.plant_type_id,
             },
           })
+          this.total = data.total
           this.species = data.data.map(species => ({
             label: species.name,
             value: species.id,
