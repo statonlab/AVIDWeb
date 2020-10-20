@@ -18,7 +18,7 @@ mix.webpackConfig({
     app: ['./resources/sass/app.scss'],
   },
   output: {
-    chunkFilename: 'partials/[name].[chunkhash].js',
+    chunkFilename: 'js/[name].[chunkhash].js',
   },
 })
 
