@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="ml-auto">
-                    <button class="btn btn-link" v-if="editable || User.owns(plant) || User.owns(plant.site) || User.can('update sites')" @click.prevent="editingPlant = true">
+                    <button class="btn btn-link" v-if="sharedEdit || editable || User.owns(plant) || User.owns(plant.site) || User.can('update sites')" @click.prevent="editingPlant = true">
                         <icon name="create"/>
                         <span>Edit Plant</span>
                     </button>
@@ -100,7 +100,7 @@
                                             <button type="button"
                                                     class="btn btn-link btn-sm"
                                                     v-tooltip="'Edit'"
-                                                    v-if="editable || User.owns(measurement) || User.owns(plant.site) || User.can('update sites')"
+                                                    v-if="sharedEdit || editable || User.owns(measurement) || User.owns(plant.site) || User.can('update sites')"
                                                     @click.prevent="edit(measurement)">
                                                 <icon name="create"/>
                                             </button>
@@ -213,12 +213,16 @@
         orderBy            : 'date',
         orderDir           : 'desc',
         unauthorized       : false,
+        sharedEdit         : false,
       }
     },
 
-    mounted() {
-      this.loadPlant()
+    async mounted() {
       this.loadMeasurements()
+      await this.loadPlant()
+      if (! this.User.owns(this.plant.site)) {
+        this.loadUserSite()
+      }
     },
 
     watch: {
@@ -279,6 +283,21 @@
           })
         }
         this.loadingMeasurements = false
+      },
+
+      async loadUserSite() {
+        try {
+          const {data} = await axios.get(`/web/user-sites/site/${this.plant.site.id}`)
+          this.sharedEdit = data.editable
+        } catch (e) {
+          if (e.response && e.response.status === 500) {
+            this.$notify({
+              text: 'Unable to load site information. Please try refreshing the page.',
+              type: 'error',
+            })
+            console.error(e)
+          }
+        }
       },
 
       add() {
