@@ -130,7 +130,7 @@
                             </router-link>
                             <button class="btn btn-link btn-sm mr-1"
                                     @click.prevent="edit(site)"
-                                    v-if="editable || User.owns(site) || User.can('edit sites')"
+                                    v-if="site.editable || editable || User.owns(site) || User.can('edit sites')"
                                     v-tooltip="'Edit Site'">
                                 <icon name="create"/>
                             </button>
@@ -241,6 +241,10 @@
           })
           this.total    = data.total
           this.sites    = data.data
+          this.sites = this.sites.map(site => ({
+            ...site,
+            editable: site.user_sites.length !== 0 ? site.user_sites[0].editable : false,
+          }))
           this.lastPage = data.last_page
           this.loading  = false
           this.$emit('load', data)
