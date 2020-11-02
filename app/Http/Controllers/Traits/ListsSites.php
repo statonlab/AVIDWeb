@@ -41,6 +41,9 @@ trait ListsSites
             },
             'shrubs' => function ($query) {
             },
+            'userSites' => function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            }
         ])
             ->withCount(['plants', 'plots'])
             ->when($request->search, function ($query) use ($request) {

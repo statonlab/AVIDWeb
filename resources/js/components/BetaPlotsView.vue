@@ -7,7 +7,7 @@
                         <div class="flex-grow-1">
                             <strong>Plots</strong>
                         </div>
-                        <div class="flex-shrink-0" v-if="editable || User.owns(site) || User.can('update sites')">
+                        <div class="flex-shrink-0" v-if="sharedEdit || editable || User.owns(site) || User.can('update sites')">
                             <button class="btn btn-primary" @click.prevent="showPlotForm = true">
                                 <icon name="add"/>
                                 <span>Plot</span>
@@ -73,7 +73,7 @@
                         <tab name="Plants" selected>
                             <beta-plants-view
                                     :site-url-prefix="siteUrlPrefix"
-                                    :editable="editable"
+                                    :editable="sharedEdit || editable"
                                     v-if="plot"
                                     :plot="plot"
                                     :site="site"/>
@@ -109,7 +109,7 @@
                                 <div class="flex-shrink-0">
                                     <button class="btn btn-link"
                                             @click.prevent="edit"
-                                            v-if="editable || User.owns(plot) || User.owns(site) || User.can('update sites')">
+                                            v-if="sharedEdit || editable || User.owns(plot) || User.owns(site) || User.can('update sites')">
                                         <icon name="create"/>
                                         <span>Edit Plot</span>
                                     </button>
@@ -166,7 +166,7 @@
                                 <div class="flex-shrink-0">
                                     <button class="btn btn-link"
                                             @click.prevent="$emit('edit-site-request')"
-                                            v-if="editable || User.owns(site) || User.can('update sites')">
+                                            v-if="sharedEdit || editable || User.owns(site) || User.can('update sites')">
                                         <icon name="create"/>
                                         <span>Edit Site</span>
                                     </button>
@@ -287,6 +287,7 @@
         importing     : false,
         userSite      : null,
         sendReminders : false,
+        sharedEdit    : false,
       }
     },
 
@@ -358,6 +359,7 @@
         try {
           const {data} = await axios.get(`/web/user-sites/site/${this.site.id}`)
           this.userSite = data
+          this.sharedEdit = data.editable
           this.sendReminders = data.sends_reminders
         } catch (e) {
           if (e.response && e.response.status === 404) {
