@@ -94,6 +94,14 @@ class Site extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function measurements()
+    {
+        return $this->hasMany(Measurement::class);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function species()
@@ -139,8 +147,9 @@ class Site extends Model
      * @param \App\User $user
      * @return mixed
      */
-    public function scopeWithShared($query, User $user) {
-        return $query->whereHas('userSites', function($query) use ($user) {
+    public function scopeWithShared($query, User $user)
+    {
+        return $query->whereHas('userSites', function ($query) use ($user) {
             $query->where('user_id', $user->id)->where('is_shared', true);
         });
     }
