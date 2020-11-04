@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Measurement;
 use Illuminate\Console\Command;
 
-class wAddSiteInfoToMeasurements extends Command
+class AddSiteInfoToMeasurements extends Command
 {
     /**
      * The name and signature of the console command.
