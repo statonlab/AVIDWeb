@@ -16,6 +16,7 @@ class GroupController extends Controller
     /**
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function index(Request $request)
     {
@@ -250,6 +251,11 @@ class GroupController extends Controller
         return $this->success($user);
     }
 
+    /**
+     * @param \App\Group $group
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
     public function getPermissions(Group $group, Request $request)
     {
         $user = $request->user();
