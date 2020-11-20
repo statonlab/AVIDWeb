@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="card">
-                        <div class="card-header d-flex p-2" v-if="User.owns(plant) || User.owns(plant.site) || User.can('update sites')">
+                        <div class="card-header d-flex p-2" v-if="sharedEdit || editable || User.owns(plant) || User.owns(plant.site) || User.can('update sites')">
                             <div class="ml-auto flex-shrink-0 pl-1">
                                 <button class="btn btn-primary" :disabled="disableCreate" @click.prevent="add">
                                     <icon name="add"/>
