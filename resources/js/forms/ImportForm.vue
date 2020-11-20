@@ -99,7 +99,13 @@
           })
           this.$emit('create', data)
         } catch (e) {
-          if (e.response && e.response.status !== 422) {
+          if (e.response && e.response.status === 403) {
+              this.$notify({
+                text: 'You do not have permission to edit this site.',
+                type: 'error',
+              })
+          }
+          else if (e.response && e.response.status !== 422) {
             this.$notify({
               text: 'Unable to save site. Please try refreshing the page.',
               type: 'error',
