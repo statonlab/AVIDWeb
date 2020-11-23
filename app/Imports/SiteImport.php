@@ -104,17 +104,16 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
                     if (is_int($value) && $value < self::MINIMUM_TIMESTAMP) {
                         $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
                     }
-
-                    //if (strtotime(str_replace('-', '/', $value)) === false) {
-                    //    $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
-                    //}
+                    else if (strtotime(str_replace('-', '/', $value)) === false) {
+                        $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
+                    }
                 }
             ],
             'height_inches' => [
                 'required',
                 function ($attribute, $value, $fail) {
                     if ($value !== 'dead' && $value !== 'missing' && ! is_numeric($value)) {
-                        $fail($attribute.' is invalid.');
+                        $fail('Height must be either a number, \'dead\', or \'missing\'.');
                     }
                 },
             ],
