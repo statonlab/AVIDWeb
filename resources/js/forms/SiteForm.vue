@@ -9,7 +9,7 @@
                     <close @click="$emit('close')"/>
                 </modal-header>
                 <modal-body>
-                    <div v-if="!createSpecies">
+                    <div v-show="!createSpecies">
                         <div class="form-group">
                             <label for="name">
                                 Site Name
@@ -188,7 +188,7 @@
                             </span>
                         </div>
                     </div>
-                    <div v-else>
+                    <div v-if="createSpecies">
                         <div class="form-group">
                             <label for="species-name">
                                 Name
