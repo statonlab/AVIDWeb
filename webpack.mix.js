@@ -14,16 +14,17 @@ const mix = require('laravel-mix')
 mix.browserSync('aviddeer.test')
 
 mix.webpackConfig({
-  entry: {
+  entry : {
     app: ['./resources/sass/app.scss'],
   },
   output: {
-    chunkFilename: 'js/[name].[chunkhash].js',
+    chunkFilename: '[name].js?id=[chunkhash]',
   },
 })
 
 mix.js('resources/js/app.js', 'public/js')
-    .js('resources/js/auth.js', 'public/js')
-    .js('resources/js/guest.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css')
-    .version()
+  .js('resources/js/auth.js', 'public/js')
+  .js('resources/js/guest.js', 'public/js')
+  .sass('resources/sass/app.scss', 'public/css')
+  .version()
+  .sourceMaps()
