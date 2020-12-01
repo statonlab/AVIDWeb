@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Plot;
 use App\Site;
-use App\Measurement;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Events\PlotCreated;
