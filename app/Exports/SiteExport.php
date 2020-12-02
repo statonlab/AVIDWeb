@@ -57,8 +57,8 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
             ->where('id', $this->site->id)
             ->first();
 
-        foreach ($site->plots as $plot) {
-            foreach ($plot->plants as $plant) {
+        foreach ($site->plots()->orderBy('number', 'asc')->cursor() as $plot) {
+            foreach ($plot->plants()->orderBy('tag', 'sc')->cursor() as $plant) {
                 $row = [
                     $site->name,
                     $plot->number,
