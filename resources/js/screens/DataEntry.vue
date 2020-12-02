@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <div class="card mb-3 position-static" v-if="!loadingSites && site !== ''">
+    <div class="card mb-3 position-static" v-if="!loadingSites && sites.length > 0">
       <div class="card-header d-flex px-2">
         <div class="flex-grow-1">
           <input type="search"
