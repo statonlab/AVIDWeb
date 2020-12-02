@@ -26,7 +26,19 @@
     <div class="d-flex justify-content-center align-items-center" v-if="loadingSites">
       <inline-spinner class="text-primary"/>
     </div>
-    <div class="card mb-3 position-static" v-if="!loadingSites">
+
+    <div v-if="!loadingSites && sites.length === 0" class="card">
+      <div class="card-body text-center">
+        <p>No sites found. Please create a new site first.</p>
+
+        <button class="btn btn-primary" @click.prevent="showSiteForm = true">
+          <icon name="add"/>
+          <span>New Site</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card mb-3 position-static" v-if="!loadingSites && site !== ''">
       <div class="card-header d-flex px-2">
         <div class="flex-grow-1">
           <input type="search"
