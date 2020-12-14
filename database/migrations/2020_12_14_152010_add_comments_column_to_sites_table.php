@@ -14,7 +14,7 @@ class AddCommentsColumnToSitesTable extends Migration
     public function up()
     {
         Schema::table('sites', function (Blueprint $table) {
-            $table->text('comments');
+            $table->text('comments')->nullable();
         });
     }
 
@@ -25,6 +25,8 @@ class AddCommentsColumnToSitesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::table('sites', function (Blueprint $table) {
+            $table->dropColumn('comments');
+        });
     }
 }
