@@ -17,6 +17,10 @@
                     <icon name="create"/>
                     <span>Edit Plant</span>
                 </a>
+                <a href="#" class="dropdown-item pl-2 d-flex align-items-center" @click.prevent="$emit('movePlant')">
+                    <icon name="move"/>
+                    <span>Move Plant</span>
+                </a>
                 <a href="#" class="dropdown-item pl-2 d-flex align-items-center" @click.prevent="$emit('deletePlant')">
                     <icon name="trash"/>
                     <span>Delete Plant</span>
