@@ -168,6 +168,8 @@ Route::group([
     Route::get('/plants/{plant}', 'PlantController@show');
     Route::put('/plants/{plant}', 'PlantController@update');
     Route::delete('/plants/{plant}', 'PlantController@destroy');
+    Route::put('/plants/{plant}/transfer', 'PlantController@transfer');
+
 
     // Measurements
     Route::get('/plants/{plant}/measurements', 'MeasurementController@index');

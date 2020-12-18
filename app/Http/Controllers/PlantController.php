@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Console\Commands\SetLastMeasuredAt;
 use App\Measurement;
 use App\Species;
 use App\Plant;
@@ -285,5 +286,31 @@ class PlantController extends Controller
         $plant->delete();
 
         return $this->deleted($plant);
+    }
+
+    /**
+     * @param Plant $plant
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
+    public function transfer(Plant $plant, Request $request)
+    {
+        $this->authorize('update', $plant);
+        $this->validate($request, [
+            'plot_id' => 'required|exists:plots,id',
+            'site_id' => 'required|exists:sites,id',
+        ]);
+
+        $plant->fill([
+            'plot_id' => $request->plot_id,
+        ])->save();
+
+        Measurement::where(['plant_id' => $plant->id])->update([
+            'plot_id' => $request->plot_id,
+            'site_id' => $request->site_id,
+        ]);
+
+        dispatch(fn () => \Artisan::call(SetLastMeasuredAt::class));
+        return $this->created($plant);
     }
 }

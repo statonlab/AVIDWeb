@@ -1,6 +1,6 @@
 <template>
     <modal @close="$emit('close')">
-        <form action="#" @submit.prevent="save">
+        <form action="#" @submit.prevent="transfer">
             <modal-card>
                 <modal-header>
                     <modal-title>Move Plant #{{ plant.tag }}</modal-title>
@@ -29,7 +29,6 @@
                         <inline-spinner v-if="saving"/>
                         Save
                     </button>
-
                     <button type="button" class="btn btn-light" @click.prevent="$emit('close')">
                         Cancel
                     </button>
@@ -52,13 +51,10 @@ import Close from '../components/Modal/Close'
 import Dropdown from '../components/Dropdown'
 import InlineSpinner from '../components/InlineSpinner'
 import Icon from '../components/Icon'
-import DatePicker from 'v-calendar/lib/components/date-picker.umd'
-import moment from 'moment'
 
 export default {
     name: "MovePlantForm",
     components: {
-        DatePicker,
         InlineSpinner,
         Dropdown,
         Close,
@@ -78,21 +74,11 @@ export default {
     },
 
     data() {
-        const date = window.avid.last_entry
         return {
             saving: false,
-            date: date ? moment(date).toDate() : null,
             form: new Form({
-                new_measurement: false,
-                date: window.avid.last_entry,
-                height: '',
-                new_species: false,
-                new_species_name: '',
-                plant_type_id: '',
-                tag: '',
-                species_id: '',
-                quadrant: '',
-                total: '',
+                plot_id: '',
+                site_id: '',
             }),
         }
     },
@@ -102,20 +88,16 @@ export default {
     },
 
     methods: {
-        save() {
-            this.create()
-            this.deletePlant()
-            this.$emit('update')
-        },
-
-        async create() {
+        async transfer() {
             this.saving = true
             try {
-                const {data} = await this.form.post(`/web/plots/${this.form.plot_id}/plants`)
+                this.form.site_id = this.plot.site_id
+                await this.form.put(`/web/plants/${this.plant.id}/transfer`)
+                this.$emit('update')
             } catch (e) {
                 if (!e.response || e.response.status !== 422) {
                     this.$notify({
-                        text: 'Unable to create plant. Please try refreshing the page.',
+                        text: 'Unable to transfer plant. Please try refreshing the page.',
                         type: 'error',
                     })
                 }
@@ -123,22 +105,8 @@ export default {
             }
             this.saving = false
         },
-
-        async deletePlant() {
-            try {
-                await axios.delete(`/web/plants/${this.plant.id}`)
-            } catch (e) {
-                this.$notify({
-                    text: 'Unable to delete plant. Please try refreshing the page.',
-                    type: 'error',
-                })
-                console.error(e)
-            }
-        },
     },
 }
 </script>
-
 <style scoped>
-
 </style>
