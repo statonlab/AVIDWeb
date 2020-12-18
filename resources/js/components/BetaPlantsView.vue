@@ -4,7 +4,8 @@
             <div class="flex-grow-1">
                 <input type="search" class="form-control" placeholder="Search by tag or species" v-model="search">
             </div>
-            <div class="flex-shrink-0 text-muted" v-if="editable || User.owns(plot) || User.owns(site) || User.can('update sites')">
+            <div class="flex-shrink-0 text-muted"
+                 v-if="editable || User.owns(plot) || User.owns(site) || User.can('update sites')">
                 <button class="btn btn-primary" @click.prevent="showForm = true">
                     <icon name="add"/>
                     <span>Plant</span>
@@ -16,7 +17,8 @@
                 <inline-spinner class="text-primary"/>
             </div>
             <div v-if="!loading && plants.length === 0" class="p-3 text-muted border-top">
-                No plants found. Please try adjusting your filters or create a new plant using the "+ Plant" button above.
+                No plants found. Please try adjusting your filters or create a new plant using the "+ Plant" button
+                above.
             </div>
 
             <table class="table table-middle mb-0" v-if="!loading && plants.length > 0">
@@ -60,8 +62,11 @@
                 <tbody>
                 <tr v-for="plant in plants">
                     <td>
-                        <router-link :to="`${siteUrlPrefix}/${plant.id}`">{{plant.type.name}} #{{ plant.tag }}</router-link>
-                        <p class="mb-0 text-muted" v-if="plant.old_tag">{{`Previously ${plant.old_tag}`}}</p>
+                        <router-link :to="`${siteUrlPrefix}/${plant.id}`">{{ plant.type.name }} #{{
+                                plant.tag
+                            }}
+                        </router-link>
+                        <p class="mb-0 text-muted" v-if="plant.old_tag">{{ `Previously ${plant.old_tag}` }}</p>
                     </td>
                     <td>{{ plant.species_name }}</td>
                     <td>{{ plant.quadrant }}</td>
@@ -73,6 +78,12 @@
                                     v-if="editable || User.owns(plant) || User.owns(site) || User.can('update sites')"
                                     @click.prevent="edit(plant)">
                                 <icon name="create"/>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-link"
+                                    v-tooltip="'Move'"
+                                    v-if="editable || User.owns(plant) || User.owns(site) || User.can('update sites')"
+                                    @click.prevent="movePlant(plant)">
+                                <icon name="move"/>
                             </button>
                             <button type="button"
                                     v-if="User.owns(plant) || User.owns(site) || User.can('delete sites')"
@@ -91,200 +102,227 @@
 
             <div class="py-2" v-if="lastPage > 1">
                 <pager
-                        :page="page"
-                        :last-page="lastPage"
-                        @change="goTo($event)"/>
+                    :page="page"
+                    :last-page="lastPage"
+                    @change="goTo($event)"/>
             </div>
         </div>
 
         <plant-form
-                :plot="plot"
-                v-if="showForm"
-                :plant="plant"
-                @close="closeForm"
-                @create="created"
-                @update="updated"
+            :plot="plot"
+            v-if="showForm"
+            :plant="plant"
+            @close="closeForm"
+            @create="created"
+            @update="updated"
+        />
+
+        <move-plant-form
+            :plot="plot"
+            :plots="plots"
+            :plant="plant"
+            v-if="showMovePlantForm"
+            @close="hideMovePlantForm"
+            @update="plantMoved()"
         />
     </div>
 </template>
 
 <script>
-  import Icon from './Icon'
-  import InlineSpinner from './InlineSpinner'
-  import User from '../helpers/User'
-  import PlantForm from '../forms/PlantForm'
-  import Pager from './Pager'
+import Icon from './Icon'
+import InlineSpinner from './InlineSpinner'
+import User from '../helpers/User'
+import PlantForm from '../forms/PlantForm'
+import Pager from './Pager'
+import MovePlantForm from '../forms/MovePlantForm'
 
-  export default {
+export default {
     name: 'BetaPlantsView',
 
-    components: {Pager, PlantForm, InlineSpinner, Icon},
+    components: {Pager, PlantForm, MovePlantForm, InlineSpinner, Icon},
 
     props: {
-      site          : {required: true},
-      plot          : {required: true},
-      editable      : {required: false, type: Boolean, default: false},
-      siteUrlPrefix : {required: false, type: String, default: '/app/plants'},
+        site: {required: true},
+        plot: {required: true},
+        plots: {required: false},
+        editable: {required: false, type: Boolean, default: false},
+        siteUrlPrefix: {required: false, type: String, default: '/app/plants'},
     },
 
     watch: {
-      'plot.id': {
-        handler() {
-          this.loading = true
-          this.loadPlants()
+        'plot.id': {
+            handler() {
+                this.loading = true
+                this.loadPlants()
+            },
         },
-      },
 
-      search() {
-        this.loadPlants()
-      }
+        search() {
+            this.loadPlants()
+        }
     },
 
     data() {
-      return {
-        User    : User,
-        plants  : [],
-        plant   : null,
-        showForm: false,
-        lastPage: 1,
-        page    : 1,
-        orderBy : 'tag',
-        orderDir: 'asc',
-        request : null,
-        total   : 0,
-        deleting: null,
-        loading : true,
-        search: '',
-      }
+        return {
+            User: User,
+            plants: [],
+            plant: null,
+            showForm: false,
+            showMovePlantForm: false,
+            lastPage: 1,
+            page: 1,
+            orderBy: 'tag',
+            orderDir: 'asc',
+            request: null,
+            total: 0,
+            deleting: null,
+            loading: true,
+            search: '',
+        }
     },
 
     mounted() {
-      this.loadPlants()
+        this.loadPlants()
     },
 
     methods: {
-      async loadPlants() {
-        if (this.request) {
-          this.request()
-        }
-
-        try {
-          const {data}  = await axios.get(`/web/plots/${this.plot.id}/plants`, {
-            params     : {
-              search   : this.search,
-              page     : this.page,
-              order_by : this.orderBy,
-              order_dir: this.orderDir,
-            },
-            cancelToken: new axios.CancelToken(c => this.request = c),
-          })
-          this.plants   = data.data
-          this.lastPage = data.last_page
-          this.total    = data.total
-        } catch (e) {
-          if (!axios.isCancel(e)) {
-            console.error(e)
-            this.$notify({
-              text: 'Unable to load plot. Please try refreshing the page.',
-              type: 'error',
-            })
-          }
-        }
-
-        this.loading = false
-      },
-
-      goTo(page) {
-        this.page = page
-        this.loadPlants()
-      },
-
-      created(plant) {
-        this.closeForm()
-        this.loadPlants()
-        this.$notify({
-          text: 'Plant created successfully',
-          type: 'success',
-        })
-      },
-
-      updated(plant) {
-        this.closeForm()
-        this.plants = this.plants.map(p => p.id === plant.id ? plant : p)
-        this.$notify({
-          text: 'Plant updated successfully',
-          type: 'success',
-        })
-      },
-
-      closeForm() {
-        this.plant    = null
-        this.showForm = false
-      },
-
-      edit(plant) {
-        this.plant    = plant
-        this.showForm = true
-      },
-
-      destroy(plant) {
-        if (this.deleting !== null) {
-          return
-        }
-
-        this.$confirm({
-          title    : `Are you sure you want to delete Plant #${plant.tag}?`,
-          text     : 'This action is permanent!',
-          onConfirm: async () => {
-            this.deleting = plant.id
-            try {
-              await axios.delete(`/web/plants/${plant.id}`)
-              this.loadPlants()
-              this.$notify({
-                text: 'Plant deleted successfully',
-                type: 'success',
-              })
-            } catch (e) {
-              this.$notify({
-                text: 'Unable to delete plant. Please try refreshing the page.',
-                type: 'error',
-              })
-              console.error(e)
+        async loadPlants() {
+            if (this.request) {
+                this.request()
             }
-            this.deleting = null
-          },
-        })
-      },
 
-      plotUpdated(plot) {
-        this.plot        = plot
-        this.editingPlot = false
-      },
+            try {
+                const {data} = await axios.get(`/web/plots/${this.plot.id}/plants`, {
+                    params: {
+                        search: this.search,
+                        page: this.page,
+                        order_by: this.orderBy,
+                        order_dir: this.orderDir,
+                    },
+                    cancelToken: new axios.CancelToken(c => this.request = c),
+                })
+                this.plants = data.data
+                this.lastPage = data.last_page
+                this.total = data.total
+            } catch (e) {
+                if (!axios.isCancel(e)) {
+                    console.error(e)
+                    this.$notify({
+                        text: 'Unable to load plot. Please try refreshing the page.',
+                        type: 'error',
+                    })
+                }
+            }
 
-      sort(column) {
-        if (column === this.orderBy) {
-          this.orderDir = this.orderDir === 'asc' ? 'desc' : 'asc'
-        } else {
-          this.orderBy  = column
-          this.orderDir = 'asc'
-        }
+            this.loading = false
+        },
 
-        this.loadPlants()
-      },
+        goTo(page) {
+            this.page = page
+            this.loadPlants()
+        },
 
-      sortIcon(column) {
-        if (column !== this.orderBy) {
-          return 'swap-vertical'
-        }
+        created(plant) {
+            this.closeForm()
+            this.loadPlants()
+            this.$notify({
+                text: 'Plant created successfully',
+                type: 'success',
+            })
+        },
 
-        if (this.orderDir === 'asc') {
-          return 'arrow-up'
-        }
+        updated(plant) {
+            this.closeForm()
+            this.plants = this.plants.map(p => p.id === plant.id ? plant : p)
+            this.$notify({
+                text: 'Plant updated successfully',
+                type: 'success',
+            })
+        },
 
-        return 'arrow-down'
-      },
+        closeForm() {
+            this.plant = null
+            this.showForm = false
+        },
+
+        edit(plant) {
+            this.plant = plant
+            this.showForm = true
+        },
+
+        destroy(plant) {
+            if (this.deleting !== null) {
+                return
+            }
+
+            this.$confirm({
+                title: `Are you sure you want to delete Plant #${plant.tag}?`,
+                text: 'This action is permanent!',
+                onConfirm: async () => {
+                    this.deleting = plant.id
+                    try {
+                        await axios.delete(`/web/plants/${plant.id}`)
+                        this.loadPlants()
+                        this.$notify({
+                            text: 'Plant deleted successfully',
+                            type: 'success',
+                        })
+                    } catch (e) {
+                        this.$notify({
+                            text: 'Unable to delete plant. Please try refreshing the page.',
+                            type: 'error',
+                        })
+                        console.error(e)
+                    }
+                    this.deleting = null
+                },
+            })
+        },
+
+        plotUpdated(plot) {
+            this.plot = plot
+            this.editingPlot = false
+        },
+
+        sort(column) {
+            if (column === this.orderBy) {
+                this.orderDir = this.orderDir === 'asc' ? 'desc' : 'asc'
+            } else {
+                this.orderBy = column
+                this.orderDir = 'asc'
+            }
+
+            this.loadPlants()
+        },
+
+        sortIcon(column) {
+            if (column !== this.orderBy) {
+                return 'swap-vertical'
+            }
+
+            if (this.orderDir === 'asc') {
+                return 'arrow-up'
+            }
+
+            return 'arrow-down'
+        },
+
+        movePlant(plant) {
+            this.plant = plant
+            this.showMovePlantForm = true
+        },
+
+        plantMoved() {
+            this.hideMovePlantForm()
+            this.loadPlants()
+        },
+
+        hideMovePlantForm() {
+            this.showMovePlantForm = false
+            this.plant = null
+        },
     },
-  }
+}
 </script>
 
 <style scoped>
