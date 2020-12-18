@@ -110,6 +110,7 @@ Route::group([
     Route::get('/events', 'HomeController@data');
     Route::get('/data-entry', 'HomeController@data');
     Route::get('/statistics', 'HomeController@data');
+    Route::get('/data-quarantine', 'HomeController@data');
 });
 
 /**
@@ -159,15 +160,15 @@ Route::group([
     Route::get('/sites/{site}/plots', 'PlotController@index');
     Route::post('/sites/{site}/plots', 'PlotController@create');
     Route::get('/plots/{plot}', 'PlotController@show');
-    Route::put('/plots/{plot}', 'PlotController@update');
-    Route::delete('/plots/{plot}', 'PlotController@destroy');
+    Route::put('/plots/{id}', 'PlotController@update');
+    Route::delete('/plots/{id}', 'PlotController@destroy');
 
     // Plants
     Route::get('/plots/{plot}/plants', 'PlantController@index');
     Route::post('/plots/{plot}/plants', 'PlantController@create');
     Route::get('/plants/{plant}', 'PlantController@show');
-    Route::put('/plants/{plant}', 'PlantController@update');
-    Route::delete('/plants/{plant}', 'PlantController@destroy');
+    Route::put('/plants/{id}', 'PlantController@update');
+    Route::delete('/plants/{id}', 'PlantController@destroy');
 
     // Measurements
     Route::get('/plants/{plant}/measurements', 'MeasurementController@index');
@@ -259,6 +260,12 @@ Route::group([
     Route::get('/statistics/species', 'StatisticsController@species');
     Route::get('/statistics/{site}/chart', 'StatisticsController@siteChart');
     Route::get('/statistics/chart', 'StatisticsController@chart');
+
+    // Data Quarantine
+    Route::get('/data-quarantine/sites', 'QuarantineController@sites');
+    Route::get('/data-quarantine/sites/{site}', 'QuarantineController@plots');
+    Route::get('/data-quarantine/import/plot/{plot}', 'QuarantineController@importPlot');
+    Route::get('/data-quarantine/import/plant/{plant}', 'QuarantineController@importPlant');
 
     Route::get('/admin-exports/plots', 'ExportPlotsController@index');
 });

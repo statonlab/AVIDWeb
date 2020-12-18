@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePlotRequest;
 use App\Plot;
 use App\Site;
 use Illuminate\Http\Request;
@@ -14,9 +15,11 @@ class PlotController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Site $site
-     * @return \Illuminate\Http\JsonResponse
+     * @param \App\Site $site
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function index(Site $site, Request $request)
     {
@@ -53,17 +56,15 @@ class PlotController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @param \App\Site $site
+     * @param \App\Http\Requests\CreatePlotRequest $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function create(Site $site, Request $request)
+    public function create(Site $site, CreatePlotRequest $request)
     {
         // Is the user allowed to add plots to this site?
         $this->authorize('update', $site);
-
-        $this->validate($request, $this->validationRules($request));
 
         /** @var \App\User $user */
         $user = $request->user();
@@ -133,17 +134,16 @@ class PlotController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Plot $plot
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @param \App\Http\Requests\CreatePlotRequest $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, Plot $plot)
+    public function update(CreatePlotRequest $request, $id)
     {
-        $this->authorize('update', $plot);
+        $plot = Plot::withQuarantined()->findOrFail($id);
 
-        $this->validate($request, $this->validationRules($request));
+        $this->authorize('update', $plot);
 
         if ($plot->number != $request->number) {
             $exists = Plot::where([
@@ -193,58 +193,18 @@ class PlotController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Plot $plot
+     * @param $id
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(Plot $plot)
+    public function destroy($id)
     {
+        $plot = Plot::withQuarantined()->findOrFail($id);
+
         $this->authorize('delete', $plot);
 
         $plot->delete();
 
         return $this->created('Plot deleted');
-    }
-
-    /**
-     * Validation rules for `create` and `update` methods.
-     *
-     * @param Request $request
-     * @return array
-     */
-    public function validationRules(Request $request)
-    {
-        $seasons = ['0', '1 to 2', 'Greater than or equal to 3'];
-
-        $percentages = [
-            '0-9%',
-            '10-19%',
-            '20-29%',
-            '30-39%',
-            '40-49%',
-            '50-59%',
-            '60-69%',
-            '70-79%',
-            '80-89%',
-            '90-100%',
-        ];
-
-        $rules = [
-            'number' => 'required|integer',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'is_protected' => 'required|boolean',
-            'canopy' => ['required', Rule::in($percentages)],
-            'subcanopy' => ['required', Rule::in($percentages)],
-            'ground_cover' => ['required', Rule::in($percentages)],
-            'recorders' => 'nullable',
-            'basal_area' => 'nullable|numeric',
-        ];
-
-        if ($request->is_protected) {
-            $rules['protection_seasons'] = ['required', Rule::in($seasons)];
-        }
-
-        return $rules;
     }
 }

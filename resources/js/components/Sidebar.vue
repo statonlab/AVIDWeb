@@ -76,6 +76,11 @@
             label: 'Data Entry'
           },
           {
+            icon: 'lock-closed-outline',
+            to: '/app/data-quarantine',
+            label: 'Data Quarantine'
+          },
+          {
             icon: 'bar-chart-outline',
             to: '/app/statistics',
             label: 'Statistics'

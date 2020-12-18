@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\QuarantinedScope;
 use App\Events\PlotDeleted;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,6 +29,7 @@ class Plot extends Model
         'recorders',
         'last_measured_at',
         'wmu',
+        'is_quarantined',
     ];
 
     /**
@@ -43,6 +45,14 @@ class Plot extends Model
     protected $casts = [
         'last_measured_at' => 'date:Y-m-d',
     ];
+
+    /**
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new QuarantinedScope);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -84,4 +94,14 @@ class Plot extends Model
             }
         }
     }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeWithQuarantined($query)
+    {
+        return $query->withoutGlobalScope(QuarantinedScope::class);
+    }
+
 }
