@@ -21,5 +21,6 @@ $factory->define(Site::class, function (Faker $faker) {
         'city' => $faker->city,
         'owner_name' => $faker->name,
         'owner_contact' => $faker->paragraph,
+        'comments' => $faker->paragraph,
     ];
 });

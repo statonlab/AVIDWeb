@@ -213,6 +213,11 @@
                   <dt>Average Overstory Tree Diameter</dt>
                   <dd class="text-muted">{{ optional(site.diameter) }} <span v-show="site.diameter">in</span>
                   </dd>
+
+                  <dt>Comments</dt>
+                  <dd class="text-muted">
+                    {{ optional(site.comments, 'Comments') }}
+                  </dd>
                 </dl>
               </div>
             </tab>

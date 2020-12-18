@@ -27,6 +27,7 @@ class Site extends Model
         'diameter',
         'last_measured_at',
         'sends_reminders',
+        'comments',
     ];
 
     /**
