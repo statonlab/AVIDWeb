@@ -21,25 +21,27 @@
           No quarantined data exists.
         </p>
         <div v-else v-for="plot in plots">
-          <span class="page-title mb-2">Plot #{{plot.number}}</span>
-          <div v-if="plot.is_quarantined">
-            <button class="btn btn-link btn-sm mr-1"
-                    @click.prevent="editPlot(plot)"
-                    v-tooltip="'Edit Plot'">
-              <icon name="create"/>
-            </button>
-            <button class="btn btn-link btn-sm mr-1"
-                    @click.prevent="deletePlot(plot)"
-                    v-tooltip="'Delete Plot'">
-              <icon name="trash" v-if="deleting !== plot.id"/>
-              <inline-spinner v-else/>
-            </button>
-            <button class="btn btn-link btn-sm mr-1"
-                    @click.prevent="importPlot(plot)"
-                    v-tooltip="'Import Plot'"
-                    :disabled="plot.is_incomplete">
-              <icon name="cloud-upload-outline" />
-            </button>
+          <div class="d-flex">
+            <span class="page-title mb-2 mr-2">Plot #{{plot.number}}</span>
+            <div v-if="plot.is_quarantined">
+              <button class="btn btn-link btn-sm mr-1"
+                      @click.prevent="editPlot(plot)"
+                      v-tooltip="'Edit Plot'">
+                <icon name="create"/>
+              </button>
+              <button class="btn btn-link btn-sm mr-1"
+                      @click.prevent="deletePlot(plot)"
+                      v-tooltip="'Delete Plot'">
+                <icon name="trash" v-if="deleting !== plot.id"/>
+                <inline-spinner v-else/>
+              </button>
+              <button class="btn btn-link btn-sm mr-1"
+                      @click.prevent="importPlot(plot)"
+                      v-tooltip="'Import Plot'"
+                      :disabled="plot.is_incomplete">
+                <icon name="cloud-upload-outline" />
+              </button>
+            </div>
           </div>
           <table class="table">
             <thead>
@@ -216,13 +218,14 @@
           onConfirm: async () => {
             this.deleting = plot.id
             try {
-              await axios.delete(`/web/plots/${this.plot.id}`)
+              await axios.delete(`/web/plots/${plot.id}`)
               this.loadPlots()
               this.$notify({
                 text: 'Plot deleted successfully.',
                 type: 'success',
               })
             } catch (e) {
+              console.error(e)
               this.$notify({
                 text: 'Unable to delete plot. Please try refreshing the page.',
                 type: 'error',

@@ -33,11 +33,12 @@ class QuarantineController extends Controller
      */
     public function plots(Request $request, Site $site)
     {
-        $plots = Plot::withQuarantined()
-            ->where('site_id', $site->id)
-            ->where('plots.is_quarantined', true)
-            ->orWhereHas('plants', function ($query) {
-                $query->withQuarantined()->where('plants.is_quarantined', true);
+        $plots = Plot::withQuarantined()->where('site_id', $site->id)
+            ->where(function ($query) {
+                $query->where('plots.is_quarantined', true)
+                    ->orWhereHas('plants', function ($query) {
+                        $query->withQuarantined()->where('plants.is_quarantined', true);
+                    });
             })->get();
 
         $plots->transform(function (Plot $plot) {

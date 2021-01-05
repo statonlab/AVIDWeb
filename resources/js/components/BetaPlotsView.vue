@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="site && site.has_quarantined" class="alert alert-warning">
+    <div v-if="showQuarantineError" class="alert alert-warning">
       This site contains quarantined data. This data will not be displayed on this page until the
       required data has been filled out on the
       <router-link to="/app/data-quarantine">Data Quarantine</router-link> page.
@@ -305,6 +305,7 @@ export default {
       userSite     : null,
       sendReminders: false,
       sharedEdit   : false,
+      showQuarantineError: this.site.has_quarantined,
     }
   },
 
@@ -503,7 +504,8 @@ export default {
       return 'Not provided'
     },
 
-    measurementsCreated() {
+    measurementsCreated(data) {
+      this.showQuarantineError = data
       this.closeImportForm()
     },
 

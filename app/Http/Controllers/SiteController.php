@@ -234,7 +234,16 @@ class SiteController extends Controller
 
         Excel::import(new SiteImport($user, $site), $request->file('file'));
 
-        return $this->success('Measurements uploaded successfully.');
+        $plots_exist = Plot::withQuarantined()->where('site_id', $site->id)
+            ->where('is_quarantined', true)->exists();
+
+        $plants_exist = Plant::withQuarantined()
+            ->whereHas('plot', function ($query) use ($site) {
+                $query->where('site_id', $site->id);
+            })
+            ->where('is_quarantined', true)->exists();
+
+        return $this->success($plots_exist || $plants_exist);
     }
 
     /**
