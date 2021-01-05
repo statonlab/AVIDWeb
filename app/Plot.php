@@ -44,6 +44,7 @@ class Plot extends Model
      */
     protected $casts = [
         'last_measured_at' => 'date:Y-m-d',
+        'is_quarantined' => 'boolean',
     ];
 
     /**

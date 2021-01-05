@@ -40,6 +40,7 @@ class Plant extends Model
      */
     protected $casts = [
         'collected_at' => 'datetime',
+        'is_quarantined' => 'boolean',
     ];
 
     /**

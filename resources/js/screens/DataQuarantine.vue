@@ -1,60 +1,81 @@
 <template>
   <div>
-    <div class="page-title">
-      Data Quarantine
+    <div class="mb-3">
+      <span class="page-title">Data Quarantine</span>
+      <div class="text-muted">
+        Entries from spreadsheet importing that require additional information will show up here.
+        After filling out the requisite information, these entries will be added to your sites.
+      </div>
     </div>
-    <div class="text-muted">
-      Entries from spreadsheet importing that require additional information will show up here.
-      After filling out the requisite information, these entries will be added to your sites.
-    </div>
-    <div v-if="sites">
-      <dropdown class="bg-white"
-                :options="sites.map(s => ({label: s.name, value: s.id}))"
-                v-model="site">
-      </dropdown>
-    </div>
-    <div v-for="plot in plots">
-      <div class="d-flex">
-        <span :class="{'text-danger': plot.is_incomplete}">Plot #{{plot.number}}</span>
+    <div class="card">
+      <div class="card-header d-flex" v-if="sites.length !== 0">
         <div class="flex-shrink-0">
-          <button class="btn btn-link btn-sm mr-1"
-                  @click.prevent="editPlot(plot)"
-                  v-tooltip="'Edit Plot'">
-            <icon name="create"/>
-          </button>
-          <button class="btn btn-link"
-                  @click.prevent="deletePlot(plot)"
-                  v-tooltip="'Delete Plot'">
-            <icon name="trash" v-if="deleting !== plot.id"/>
-            <inline-spinner v-else/>
-          </button>
-          <button class="btn btn-link"
-                  @click.prevent="importPlot(plot)"
-                  v-tooltip="'Import Plot'"
-                  :disabled="plot.is_incomplete">
-            <icon name="cloud-upload-outline" />
-          </button>
+          <dropdown class="bg-white"
+                    :options="sites.map(s => ({label: s.name, value: s.id}))"
+                    v-model="site">
+          </dropdown>
         </div>
       </div>
-      <div v-for="plant in plot.plants">
-        <span :class="{'text-danger': plant.is_incomplete}">Plant #{{plant.tag}}</span>
-        <button class="btn btn-link btn-sm mr-1"
-                @click.prevent="editPlant(plant)"
-                v-tooltip="'Edit Plant'">
-          <icon name="create"/>
-        </button>
-        <button class="btn btn-link"
-                @click.prevent="deletePlant(plant)"
-                v-tooltip="'Delete Plant'">
-          <icon name="trash" v-if="deleting !== plant.id"/>
-          <inline-spinner v-else/>
-        </button>
-        <button class="btn btn-link"
-                @click.prevent="importPlant(plant)"
-                v-tooltip="'Import Plant'"
-                :disabled="plant.is_incomplete">
-          <icon name="cloud-upload-outline" />
-        </button>
+      <div class="card-body px-4 py-2">
+        <p class="mb-0 p-4 text-muted" v-if="plots.length === 0">
+          No quarantined data exists.
+        </p>
+        <div v-else v-for="plot in plots">
+          <span class="page-title mb-2">Plot #{{plot.number}}</span>
+          <div v-if="plot.is_quarantined">
+            <button class="btn btn-link btn-sm mr-1"
+                    @click.prevent="editPlot(plot)"
+                    v-tooltip="'Edit Plot'">
+              <icon name="create"/>
+            </button>
+            <button class="btn btn-link btn-sm mr-1"
+                    @click.prevent="deletePlot(plot)"
+                    v-tooltip="'Delete Plot'">
+              <icon name="trash" v-if="deleting !== plot.id"/>
+              <inline-spinner v-else/>
+            </button>
+            <button class="btn btn-link btn-sm mr-1"
+                    @click.prevent="importPlot(plot)"
+                    v-tooltip="'Import Plot'"
+                    :disabled="plot.is_incomplete">
+              <icon name="cloud-upload-outline" />
+            </button>
+          </div>
+          <table class="table">
+            <thead>
+            <tr>Tag</tr>
+            <tr></tr>
+            </thead>
+            <tbody>
+              <tr v-for="plant in plot.plants">
+                <td :class="{'text-danger': plant.is_incomplete}">#{{plant.tag}}</td>
+                <td class="text-right no-wrap">
+                  <button class="btn btn-link btn-sm mr-1"
+                          @click.prevent="editPlant(plant)"
+                          v-tooltip="'Edit Plant'">
+                    <icon name="create"/>
+                  </button>
+                  <button class="btn btn-link btn-sm mr-1"
+                          @click.prevent="deletePlant(plant)"
+                          v-tooltip="'Delete Plant'">
+                    <icon name="trash" v-if="deleting !== plant.id"/>
+                    <inline-spinner v-else/>
+                  </button>
+                  <span class="d-inline-block"
+                        data-toggle="tooltip"
+                        :title="getPlantDisabledTooltip(plot, plant)">
+                    <button class="btn btn-link btn-sm mr-1"
+                            @click.prevent="importPlant(plant)"
+                            v-tooltip="'Import Plant'"
+                            :disabled="plant.is_incomplete || plot.is_quarantined">
+                      <icon name="cloud-upload-outline" />
+                    </button>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -148,7 +169,9 @@
       },
 
       plotUpdated(plot) {
+        let plants = this.plots.filter(p => p.id === plot.id)[0].plants
         plot.is_incomplete = false
+        plot.plants = plants
         this.plots = this.plots.map(p => p.id === plot.id ? plot : p)
         this.showPlotForm = false
       },
@@ -164,7 +187,7 @@
           onConfirm: async () => {
             this.importing = plot.id
             try {
-              await axios.patch(`/web/data-quarantine/${this.plot.id}`)
+              await axios.patch(`/web/data-quarantine/import/plot/${plot.id}`)
               this.loadPlots()
               this.$notify({
                 text: 'Plot imported successfully.',
@@ -175,6 +198,7 @@
                 text: 'Unable to import plot. Please try refreshing the page.',
                 type: 'error',
               })
+              console.error(e)
             }
             this.importing = null
           },
@@ -211,11 +235,9 @@
 
       plantUpdated(plant) {
         plant.is_incomplete = false
-        this.plots = this.plots.map(p => {
-          p.id === plant.plot_id ? p.plants.map(pp =>
-            pp.id === plant.id ? plant : pp
-          ) : p
-        })
+        let plot = this.plots.filter(p => p.id === plant.plot_id)[0]
+        plot.plants = plot.plants.map(p => p.id === plant.id ? plant : p)
+        this.plots = this.plots.map(p => p.id === plant.plot_id ? plot : p)
         this.showPlantForm = false
       },
 
@@ -263,7 +285,7 @@
           onConfirm: async () => {
             this.importing = plant.id
             try {
-              await axios.patch(`/web/data-quarantine/${plant.id}`)
+              await axios.patch(`/web/data-quarantine/import/plant/${plant.id}`)
               this.loadPlots()
               this.$notify({
                 text: 'Plant imported successfully.',
@@ -279,6 +301,18 @@
           },
         })
       },
+
+      getPlantDisabledTooltip(plot, plant) {
+        if (plant.is_incomplete) {
+          return 'Plant information is incomplete'
+        }
+
+        if (plot.is_quarantined) {
+          return 'Plot must be imported first'
+        }
+
+        return ''
+      }
     }
   }
 </script>

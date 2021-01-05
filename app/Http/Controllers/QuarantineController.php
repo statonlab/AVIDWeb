@@ -35,7 +35,10 @@ class QuarantineController extends Controller
     {
         $plots = Plot::withQuarantined()
             ->where('site_id', $site->id)
-            ->where('is_quarantined', true)->get();
+            ->where('plots.is_quarantined', true)
+            ->orWhereHas('plants', function ($query) {
+                $query->withQuarantined()->where('plants.is_quarantined', true);
+            })->get();
 
         $plots->transform(function (Plot $plot) {
             $seasons = ['0', '1 to 2', 'Greater than or equal to 3'];
@@ -76,7 +79,7 @@ class QuarantineController extends Controller
                 ->get();
 
             $plants->transform(function (Plant $plant) {
-                $quadrants = 'Southwest, Northwest, Southeast, Northeast';
+                $quadrants = ['Southwest', 'Northwest', 'Southeast', 'Northeast'];
                 $plant_validator = Validator::make($plant->toArray(), [
                     'plant_type_id' => 'required|exists:plant_types,id',
                     'tag' => 'required|integer',
@@ -106,8 +109,10 @@ class QuarantineController extends Controller
      * @param \App\Plot $plot
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function importPlot(Plot $plot) {
-        $plot->fill(['is_quarantined' => true])->save();
+    public function importPlot($id) {
+        $plot = Plot::withQuarantined()->findOrFail($id);
+
+        $plot->fill(['is_quarantined' => false])->save();
 
         return $this->success($plot);
     }
@@ -118,8 +123,10 @@ class QuarantineController extends Controller
      * @param \App\Plant $plant
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function importPlant(Plant $plant) {
-        $plant->fill(['is_quarantined' => true])->save();
+    public function importPlant($id) {
+        $plant = Plant::withQuarantined()->findOrFail($id);
+
+        $plant->fill(['is_quarantined' => false])->save();
 
         return $this->success($plant);
     }
