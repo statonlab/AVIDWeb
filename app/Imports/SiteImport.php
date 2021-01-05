@@ -131,8 +131,7 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
                 function ($attribute, $value, $fail) {
                     if (is_int($value) && $value < self::MINIMUM_TIMESTAMP) {
                         $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
-                    }
-                    else if (strtotime(str_replace('-', '/', $value)) === false) {
+                    } elseif (!is_int($value) && strtotime(str_replace('-', '/', $value)) === false) {
                         $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
                     }
                 }
