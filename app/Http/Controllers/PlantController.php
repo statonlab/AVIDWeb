@@ -295,12 +295,12 @@ class PlantController extends Controller
      */
     public function transfer(Plant $plant, Request $request)
     {
-        $this->authorize('update', $plant);
-        $this->authorize('update', Plot::find($request->plot_id));
         $this->validate($request, [
             'plot_id' => 'required|exists:plots,id',
             'site_id' => 'required|exists:sites,id',
         ]);
+        $this->authorize('update', $plant);
+        $this->authorize('update', Plot::find($request->plot_id));
 
         $plant->fill([
             'plot_id' => $request->plot_id,
