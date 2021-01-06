@@ -27,6 +27,7 @@ class Measurement extends Model
     ];
 
     protected $casts = [
+        'is_quarantined' => 'boolean',
         'is_located' => 'boolean',
         'is_alive' => 'boolean',
         'date' => 'date:Y-m-d',

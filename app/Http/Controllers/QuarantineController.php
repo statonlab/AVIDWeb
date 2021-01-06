@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Site;
 use App\Plot;
 use App\Plant;
+use App\Measurement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -128,6 +129,15 @@ class QuarantineController extends Controller
         $plant = Plant::withQuarantined()->findOrFail($id);
 
         $plant->fill(['is_quarantined' => false])->save();
+
+        $measurement = Measurement::withQuarantined()
+            ->where('is_quarantined', true)
+            ->where('plant_id', $plant->id)
+            ->first();
+
+        if ($measurement !== null) {
+            $measurement->fill(['is_quarantined' => false])->save();
+        }
 
         return $this->success($plant);
     }

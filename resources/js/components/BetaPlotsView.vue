@@ -230,7 +230,7 @@
         @close="closeImportForm"
         v-if="importing"
         :site="site"
-        @create="measurementsCreated()"
+        @create="measurementsCreated($event)"
     />
 
     <plot-form
@@ -399,7 +399,6 @@ export default {
       this.plotId = plot.id
       this.setOptions()
       this.closeForm()
-      console.log(this.plots.length)
     },
 
     updated(plot) {

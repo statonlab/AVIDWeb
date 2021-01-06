@@ -36,7 +36,6 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
 
     /**
      * @param \Maatwebsite\Excel\Row $row
-     * @return \App\Measurement|null
      */
     public function onRow(Row $row)
     {
@@ -68,6 +67,7 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
         if ($plant->doesntExist()) {
             $quarantined = true;
             $plant = Plant::create([
+                'user_id' => $this->user->id,
                 'plot_id' => $plot->id,
                 'quadrant' => $row['quadrant'],
                 'tag' => $row['tag'],
@@ -100,7 +100,7 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
         $is_alive = $is_located == 1 ? $col_height !== 'dead' : null;
         $height = $is_alive == 1 ? $col_height : null;
 
-        return new Measurement([
+        Measurement::create([
             'plant_id' => $plant->id,
             'plot_id' => $plot->id,
             'site_id' => $this->site->id,
