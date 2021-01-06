@@ -32,7 +32,7 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
      */
     public function headings(): array
     {
-        $header = ['Site', 'Plot', 'Quadrant', 'Tag', 'Species'];
+        $header = ['Site', 'Plot', 'Quadrant', 'Tag', 'Plant Type', 'Species'];
 
         $year = now()->year;
 
@@ -53,8 +53,11 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
     {
         $rows = collect([]);
 
-        $site = Site::with(['plots.plants'])
-            ->where('id', $this->site->id)
+        $site = Site::with([
+            'plots.plants' => function ($query) {
+                $query->with(['type']);
+            }
+        ])->where('id', $this->site->id)
             ->first();
 
         foreach ($site->plots()->orderBy('number', 'asc')->cursor() as $plot) {
@@ -64,6 +67,7 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
                     $plot->number,
                     $plant->quadrant,
                     $plant->tag,
+                    $plant->type->name,
                     $plant->species->name,
                 ];
 

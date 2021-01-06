@@ -6,6 +6,8 @@ use App\Plot;
 use App\User;
 use App\Site;
 use App\Plant;
+use App\PlantType;
+use App\Species;
 use App\Measurement;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Row;
@@ -65,13 +67,31 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
             ->where('tag', $row['tag']);
 
         if ($plant->doesntExist()) {
-            $quarantined = true;
+            $type = null;
+            $species = null;
+
+            if ($row['plant_type']) {
+                /** @var PlantType $type */
+                $type = PlantType::where('name', $row['plant_type'])->first();
+            }
+
+            if ($row['species']) {
+                /** @var Species $species */
+                $species = Species::where('name', $row['species'])->first();
+            }
+
+            if ($type === null || $species === null) {
+                $quarantined = true;
+            }
+
             $plant = Plant::create([
                 'user_id' => $this->user->id,
                 'plot_id' => $plot->id,
                 'quadrant' => $row['quadrant'],
+                'species_id' => $species ? $species->id : null,
+                'plant_type_id' => $type ? $type->id : null,
                 'tag' => $row['tag'],
-                'is_quarantined' => true,
+                'is_quarantined' => $quarantined,
             ]);
         } else {
             $plant = $plant->first();
@@ -125,7 +145,8 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
             'plot' => 'required',
             'quadrant' => "required|in:$quadrants",
             'tag' => 'required',
-            'species' => 'required|exists:species,name',
+            'plant_type' => 'nullable|exists:plant_types,name',
+            'species' => 'nullable|exists:species,name',
             'date_mm_dd_yyyy' => [
                 'required',
                 function ($attribute, $value, $fail) {
