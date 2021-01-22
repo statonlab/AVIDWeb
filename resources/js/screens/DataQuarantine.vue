@@ -7,109 +7,100 @@
         After filling out the requisite information, these entries will be added to your sites.
       </div>
     </div>
-    <div class="card">
-      <div class="card-header d-flex" v-if="sites.length !== 0">
-        <div class="flex-shrink-0">
-          <dropdown class="bg-white"
-                    :options="sites.map(s => ({label: s.name, value: s.id}))"
-                    v-model="site">
-          </dropdown>
+
+    <div v-if="!loadingSites && sites.length > 0">
+      <div class="flex-grow-1 d-flex mb-3">
+        <dropdown class="bg-white"
+                  :options="sites.map(s => ({label: s.name, value: s.id}))"
+                  v-model="site">
+        </dropdown>
+      </div>
+
+      <div v-if="hasQuarantinedPlots">
+        <div class="row">
+          <div class="col-lg-6" v-for="plot in plots">
+            <PlotFormCard :plot="plot"
+                          @deleted="plotDeleted(plot)"
+                          @imported="plotImported(plot)"/>
+          </div>
         </div>
       </div>
-      <div class="card-body px-4 py-2">
-        <p class="mb-0 p-4 text-muted" v-if="plots.length === 0">
-          No quarantined data exists.
-        </p>
-        <div v-else v-for="plot in plots">
-          <div class="d-flex">
-            <span class="page-title mb-2 mr-2">Plot #{{plot.number}}</span>
-            <div v-if="plot.is_quarantined">
-              <button class="btn btn-link btn-sm mr-1"
-                      @click.prevent="editPlot(plot)"
-                      v-tooltip="'Edit Plot'">
-                <icon name="create"/>
-              </button>
-              <button class="btn btn-link btn-sm mr-1"
-                      @click.prevent="deletePlot(plot)"
-                      v-tooltip="'Delete Plot'">
-                <icon name="trash" v-if="deleting !== plot.id"/>
-                <inline-spinner v-else/>
-              </button>
-              <button class="btn btn-link btn-sm mr-1"
-                      @click.prevent="importPlot(plot)"
-                      v-tooltip="'Import Plot'"
-                      :disabled="plot.is_incomplete">
-                <icon name="cloud-upload-outline" />
-              </button>
+
+      <div v-else>
+        <div class="card mb-3 position-static" v-if="!loadingSites && sites.length > 0">
+          <div class="card-header d-flex px-2">
+            <div class="flex-grow-1">
+              <input type="search"
+                     v-model="search"
+                     class="form-control"
+                     placeholder="Search by plant tag"
+                     title="Search">
             </div>
           </div>
-          <table class="table">
-            <thead>
-            <tr>Tag</tr>
-            <tr></tr>
-            </thead>
-            <tbody>
-              <tr v-for="plant in plot.plants">
-                <td :class="{'text-danger': plant.is_incomplete}">#{{plant.tag}}</td>
-                <td class="text-right no-wrap">
-                  <button class="btn btn-link btn-sm mr-1"
-                          @click.prevent="editPlant(plant)"
-                          v-tooltip="'Edit Plant'">
-                    <icon name="create"/>
-                  </button>
-                  <button class="btn btn-link btn-sm mr-1"
-                          @click.prevent="deletePlant(plant)"
-                          v-tooltip="'Delete Plant'">
-                    <icon name="trash" v-if="deleting !== plant.id"/>
-                    <inline-spinner v-else/>
-                  </button>
-                  <span class="d-inline-block"
-                        data-toggle="tooltip"
-                        :title="getPlantDisabledTooltip(plot, plant)">
-                    <button class="btn btn-link btn-sm mr-1"
-                            @click.prevent="importPlant(plant)"
-                            v-tooltip="'Import Plant'"
-                            :disabled="plant.is_incomplete || plot.is_quarantined">
-                      <icon name="cloud-upload-outline" />
-                    </button>
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="p-3 d-flex align-items-center justify-content-center" v-if="loadingPlots">
+            <inline-spinner class="text-primary"/>
+          </div>
+          <div class="p-3 text-muted" v-if="!loadingPlots && plots.length === 0">
+            No plots found.
+          </div>
+          <div class="table table-bordered mb-0" v-if="!loadingPlots && plots.length > 0">
+            <div class="tr">
+              <div class="th text-muted border-bottom">Plot</div>
+              <div class="th text-muted border-bottom">Tag</div>
+              <div class="th text-muted border-bottom">Plant Type</div>
+              <div class="th text-muted border-bottom">Species</div>
+              <div class="th text-muted border-bottom">Quadrant</div>
+            </div>
+            <template v-for="plot in plots">
+              <template v-if="plot.plants.length > 0">
+                <template v-for="(plant, plant_index) in plot.plants">
+                  <inline-plant-form :plot="plot"
+                                     :plant="plant"
+                                     :species="species"
+                                     :plants="plants"
+                                     :showPlotNumber="plant_index === 0"
+                                     :total="total"/>
+                </template>
+              </template>
+              <div class="tr" v-else>
+                <div class="th">
+                  <span>{{ `Plot #${plot.number}` }}</span>
+                </div>
+                <div class="td text-muted border-right-0">No Plants Found</div>
+                <div class="td border-right-0" v-for="i in 2"></div>
+                <div class="td"></div>
+              </div>
+            </template>
+          </div>
         </div>
       </div>
     </div>
-
-    <plot-form
-        :site="sites.filter(s => s === site)[0]"
-        :plot="plot"
-        v-if="showPlotForm"
-        @update="plotUpdated($event)"
-        @close="showPlotForm = false"/>
-
-    <plant-form
-        v-if="showPlantForm"
-        :plant="plant"
-        @close="showPlantForm = false"
-        @update="plantUpdated($event)"/>
   </div>
 </template>
 
 <script>
   import Dropdown from '../components/Dropdown'
   import Icon from '../components/Icon'
-  import PlotForm from '../forms/PlotForm'
-  import PlantForm from '../forms/PlantForm'
   import InlineSpinner from '../components/InlineSpinner'
+  import InlinePlantForm from '../components/Data/InlinePlantForm'
+  import PlotEntryButton from '../components/Data/PlotEntryButton'
+  import PlotFormCard from '../components/Data/PlotFormCard'
 
   export default {
     name: 'DataQuarantine',
 
-    components: { Dropdown, PlotForm, PlantForm, Icon, InlineSpinner },
+    components: {
+      Dropdown,
+      Icon,
+      InlineSpinner,
+      InlinePlantForm,
+      PlotEntryButton,
+      PlotFormCard,
+    },
 
     mounted() {
       this.loadSites()
+      this.loadTypes()
     },
 
     watch: {
@@ -120,16 +111,24 @@
 
     data() {
       return {
-        plot: null,
-        plant: null,
-        plots: [],
-        sites: [],
-        site: '',
-        loading: false,
-        showPlotForm: false,
-        showPlantForm: false,
-        deleting: null,
-        importing: null,
+        plot              : null,
+        plots             : [],
+        sites             : [],
+        species           : [],
+        plants            : [],
+        site              : '',
+        importing         : null,
+        deleting          : null,
+        showPlotForm      : false,
+        showPlantForm     : false,
+        loadingSites      : false,
+        loadingPlots      : false,
+        loadingSpecies    : false,
+        loadingPlants     : false,
+        search            : '',
+        speciesSearch     : '',
+        total             : 0,
+        hasQuarantinedPlots: false,
       }
     },
 
@@ -152,17 +151,52 @@
       },
 
       async loadPlots() {
-        this.loading = true
+        this.loadingPlots = true
 
         try {
           const {data} = await axios.get(`/web/data-quarantine/sites/${this.site}`)
           this.plots   = data
+          this.hasQuarantinedPlots = data.filter(plot => plot.is_quarantined).length !== 0
         } catch (e) {
           this.$alert('Unable to load sites. Please try refreshing the page or contact us.')
           console.error(e)
         }
 
-        this.loading = false
+        this.loadingPlots = false
+      },
+
+      async loadSpecies() {
+        this.loadingSpecies = true
+
+        try {
+          const {data} = await axios.get('/web/species', {
+            params: {
+              search        : this.speciesSearch,
+            },
+          })
+          this.total = data.total
+          this.species = data.data.map(species => ({
+            label: species.name,
+            value: species.id,
+          }))
+        } catch (e) {
+          this.$alert('Unable to load sites. Please try refreshing the page or contact us.')
+          console.error(e)
+        }
+
+        this.loadingSpecies = false
+      },
+
+      async loadTypes() {
+        this.loadingPlants = true
+        try {
+          const {data}            = await axios.get('/web/plant-types')
+          this.plants             = data
+          await this.loadSpecies()
+        } catch (e) {
+          this.$alert('Unable to load form. Please try refreshing the page.')
+        }
+        this.loadingPlants = false
       },
 
       editPlot(plot) {
@@ -178,62 +212,12 @@
         this.showPlotForm = false
       },
 
-      async importPlot(plot) {
-        if (this.importing !== null) {
-          return
-        }
-
-        this.$confirm({
-          title    : `Are you sure you want to import Plot #${plot.number}?`,
-          text     : 'This action is permanent!',
-          onConfirm: async () => {
-            this.importing = plot.id
-            try {
-              await axios.patch(`/web/data-quarantine/import/plot/${plot.id}`)
-              this.loadPlots()
-              this.$notify({
-                text: 'Plot imported successfully.',
-                type: 'success',
-              })
-            } catch (e) {
-              this.$notify({
-                text: 'Unable to import plot. Please try refreshing the page.',
-                type: 'error',
-              })
-              console.error(e)
-            }
-            this.importing = null
-          },
-        })
+      plotDeleted(plot) {
+        this.plots = this.plots.filter(p => p.id !== plot.id)
       },
 
-      deletePlot(plot) {
-        if (this.deleting !== null) {
-          return
-        }
-
-        this.$confirm({
-          title    : `Are you sure you want to delete Plot #${plot.number}?`,
-          text     : 'This action is permanent!',
-          onConfirm: async () => {
-            this.deleting = plot.id
-            try {
-              await axios.delete(`/web/plots/${plot.id}`)
-              this.loadPlots()
-              this.$notify({
-                text: 'Plot deleted successfully.',
-                type: 'success',
-              })
-            } catch (e) {
-              console.error(e)
-              this.$notify({
-                text: 'Unable to delete plot. Please try refreshing the page.',
-                type: 'error',
-              })
-            }
-            this.deleting = null
-          },
-        })
+      plotImported(plot) {
+        this.plots = this.plots.filter(p => p.id !== plot.id)
       },
 
       plantUpdated(plant) {
@@ -242,67 +226,6 @@
         plot.plants = plot.plants.map(p => p.id === plant.id ? plant : p)
         this.plots = this.plots.map(p => p.id === plant.plot_id ? plot : p)
         this.showPlantForm = false
-      },
-
-      editPlant(plant) {
-        this.plant = plant
-        this.showPlantForm = true
-      },
-
-      deletePlant(plant) {
-        if (this.deleting !== null) {
-          return
-        }
-
-        this.$confirm({
-          title    : `Are you sure you want to delete Plant #${plant.tag}?`,
-          text     : 'This action is permanent!',
-          onConfirm: async () => {
-            this.deleting = plant.id
-            try {
-              await axios.delete(`/web/plants/${plant.id}`)
-              this.loadPlots()
-              this.$notify({
-                text: 'Plant deleted successfully.',
-                type: 'success',
-              })
-            } catch (e) {
-              this.$notify({
-                text: 'Unable to delete plant. Please try refreshing the page.',
-                type: 'error',
-              })
-            }
-            this.deleting = null
-          },
-        })
-      },
-
-      async importPlant(plant) {
-        if (this.importing !== null) {
-          return
-        }
-
-        this.$confirm({
-          title    : `Are you sure you want to import Plant #${plant.tag}?`,
-          text     : 'This action is permanent!',
-          onConfirm: async () => {
-            this.importing = plant.id
-            try {
-              await axios.patch(`/web/data-quarantine/import/plant/${plant.id}`)
-              this.loadPlots()
-              this.$notify({
-                text: 'Plant imported successfully.',
-                type: 'success',
-              })
-            } catch (e) {
-              this.$notify({
-                text: 'Unable to import plant. Please try refreshing the page.',
-                type: 'error',
-              })
-            }
-            this.importing = null
-          },
-        })
       },
 
       getPlantDisabledTooltip(plot, plant) {
@@ -315,7 +238,7 @@
         }
 
         return ''
-      }
+      },
     }
   }
 </script>

@@ -46,7 +46,8 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
         $quarantined = false;
 
         /** @var Plot $plot */
-        $plot = Plot::where('number', $row['plot'])
+        $plot = Plot::withQuarantined()
+            ->where('number', $row['plot'])
             ->where('site_id', $this->site->id);
 
         if ($plot->doesntExist()) {
@@ -62,7 +63,8 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
         }
 
         /** @var Plant $plant */
-        $plant = Plant::with(['plot'])
+        $plant = Plant::withQuarantined()
+            ->with(['plot'])
             ->where('plot_id', $plot->id)
             ->where('tag', $row['tag']);
 
@@ -106,7 +108,8 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
             $date = (new Carbon('Dec 31 1899'))->addDays($row['date_mm_dd_yyyy'] - 1);
         }
 
-        $exists = Measurement::where('plant_id', $plant->id)
+        $exists = Measurement::withQuarantined()
+            ->where('plant_id', $plant->id)
             ->where('date', $date->format('Y-m-d'))
             ->exists();
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePlotRequest;
+use App\Http\Requests\CreatePlantRequest;
 use App\Site;
 use App\Plot;
 use App\Plant;
@@ -40,67 +42,9 @@ class QuarantineController extends Controller
                     ->orWhereHas('plants', function ($query) {
                         $query->withQuarantined()->where('plants.is_quarantined', true);
                     });
-            })->get();
-
-        $plots->transform(function (Plot $plot) {
-            $seasons = ['0', '1 to 2', 'Greater than or equal to 3'];
-
-            $percentages = [
-                '0-9%',
-                '10-19%',
-                '20-29%',
-                '30-39%',
-                '40-49%',
-                '50-59%',
-                '60-69%',
-                '70-79%',
-                '80-89%',
-                '90-100%',
-            ];
-
-            $plot_validator = Validator::make($plot->toArray(), [
-                'number' => 'required|integer',
-                'latitude' => 'required|numeric',
-                'longitude' => 'required|numeric',
-                'is_protected' => 'required|boolean',
-                'canopy' => ['required', Rule::in($percentages)],
-                'subcanopy' => ['required', Rule::in($percentages)],
-                'ground_cover' => ['required', Rule::in($percentages)],
-                'protection_seasons' => [
-                    'exclude_unless:is_protected,true',
-                    'required',
-                    Rule::in($seasons),
-                ],
-            ]);
-
-            $plot->is_incomplete = $plot_validator->fails();
-
-            $plants = Plant::withQuarantined()
-                ->where('plot_id', $plot->id)
-                ->where('is_quarantined', true)
-                ->get();
-
-            $plants->transform(function (Plant $plant) {
-                $quadrants = ['Southwest', 'Northwest', 'Southeast', 'Northeast'];
-                $plant_validator = Validator::make($plant->toArray(), [
-                    'plant_type_id' => 'required|exists:plant_types,id',
-                    'tag' => 'required|integer',
-                    'quadrant' => [
-                        'required',
-                        Rule::in($quadrants),
-                    ],
-                    'species_id' => 'required|exists:species,id',
-                ]);
-
-                $plant->is_incomplete = $plant_validator->fails();
-
-                return $plant;
-            });
-
-            $plot->plants = $plants;
-
-            return $plot;
-        });
+            })->with(['plants' => function($query) {
+               $query->withQuarantined();
+            }])->get();
 
         return $this->success($plots);
     }
@@ -108,13 +52,29 @@ class QuarantineController extends Controller
     /**
      * Removes a plot from quarantine.
      *
-     * @param \App\Plot $plot
+     * @param \App\Http\Requests\CreatePlotRequest $request
+     * @param $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function importPlot($id) {
+    public function importPlot(CreatePlotRequest $request, $id)
+    {
         $plot = Plot::withQuarantined()->findOrFail($id);
 
-        $plot->fill(['is_quarantined' => false])->save();
+        $this->authorize('update', $plot);
+
+        $plot->fill([
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'basal_area' => $request->basal_area,
+            'is_protected' => $request->is_protected == '1' ? 1 : 0,
+            'protection_seasons' => $request->protection_seasons,
+            'canopy' => $request->canopy,
+            'subcanopy' => $request->subcanopy,
+            'ground_cover' => $request->ground_cover,
+            'recorders' => $request->recorders,
+            'is_quarantined' => false,
+        ])->save();
 
         return $this->success($plot);
     }
@@ -122,13 +82,23 @@ class QuarantineController extends Controller
     /**
      * Removes a plant from quarantine.
      *
-     * @param \App\Plant $plant
+     * @param \App\Http\Requests\CreatePlantRequest $request
+     * @param $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function importPlant($id) {
+    public function importPlant(CreatePlantRequest $request, $id)
+    {
         $plant = Plant::withQuarantined()->findOrFail($id);
 
-        $plant->fill(['is_quarantined' => false])->save();
+        $this->authorize('update', $plant);
+
+        $plant->fill([
+            'plant_type_id' => $request->plant_type_id,
+            'species_id' => $request->species_id,
+            'tag' => $request->tag,
+            'quadrant' => $request->quadrant,
+            'is_quarantined' => false,
+        ])->save();
 
         $measurement = Measurement::withQuarantined()
             ->where('is_quarantined', true)

@@ -264,8 +264,8 @@ Route::group([
     // Data Quarantine
     Route::get('/data-quarantine/sites', 'QuarantineController@sites');
     Route::get('/data-quarantine/sites/{site}', 'QuarantineController@plots');
-    Route::patch('/data-quarantine/import/plot/{id}', 'QuarantineController@importPlot');
-    Route::patch('/data-quarantine/import/plant/{id}', 'QuarantineController@importPlant');
+    Route::post('/data-quarantine/import/plot/{id}', 'QuarantineController@importPlot');
+    Route::post('/data-quarantine/import/plant/{id}', 'QuarantineController@importPlant');
 
     Route::get('/admin-exports/plots', 'ExportPlotsController@index');
 });
