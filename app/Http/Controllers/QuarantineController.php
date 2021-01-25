@@ -44,6 +44,7 @@ class QuarantineController extends Controller
     public function plots(Request $request, Site $site)
     {
         $plots = Plot::withQuarantined()->where('site_id', $site->id)
+            ->orderBy('number')
             ->where(function ($query) {
                 $query->where('plots.is_quarantined', true)
                     ->orWhereHas('plants', function ($query) {

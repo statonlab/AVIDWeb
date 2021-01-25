@@ -161,6 +161,7 @@ export default {
               text: 'Plant deleted successfully.',
               type: 'success',
             })
+            this.$emit('delete')
           } catch (e) {
             this.$notify({
               text: 'Unable to delete plant. Please try refreshing the page.',

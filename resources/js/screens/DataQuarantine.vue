@@ -9,7 +9,7 @@
     </div>
 
     <div class="card" v-if="!loadingSites">
-      <table class="table mb-0 table-middle table-hover table-nowrap">
+      <table class="table mb-0 table-middle table-hover table-nowrap" v-if="sites.length > 0">
         <thead>
         <tr>
           <th>Site Name</th>
@@ -29,6 +29,10 @@
         </tr>
         </tbody>
       </table>
+
+      <div v-else class="card-body">
+        <span class="text-muted">No quarantined data exists.</span>
+      </div>
     </div>
   </div>
 </template>

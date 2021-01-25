@@ -52,6 +52,7 @@
                                      :showPlotNumber="plant_index === 0"
                                      :total="total"
                                      @create="plantImported(plant)"
+                                     @delete="plantDeleted(plant)"
                                      @search="speciesSearch = $event"
                                      @plantTypeChanged="type = $event"/>
                 </template>
@@ -223,6 +224,17 @@ export default {
         this.plots = this.plots.map(p => p.id === plant.plot_id ? plot : p)
       }
     },
+
+    plantDeleted(plant) {
+      let plot = this.plots.filter(p => p.id === plant.plot_id)[0]
+      plot.plants = plot.plants.filter(p => p.id !== plant.id)
+
+      if (plot.plants.length === 0) {
+        this.plots = this.plots.filter(p => p.id !== plot.id)
+      } else {
+        this.plots = this.plots.map(p => p.id === plant.plot_id ? plot : p)
+      }
+    }
   }
 }
 </script>
