@@ -136,6 +136,10 @@ const routes = [
     path     : '/app/data-quarantine',
     component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/DataQuarantine')),
   },
+  {
+    path     : '/app/data-quarantine/:id',
+    component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/SiteQuarantine')),
+  },
 ]
 
 const router = new VueRouter({

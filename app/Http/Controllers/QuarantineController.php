@@ -24,7 +24,14 @@ class QuarantineController extends Controller
             $query->withQuarantined()->where('plots.is_quarantined', true);
         })->orWhereHas('plants', function ($query) {
             $query->withQuarantined()->where('plants.is_quarantined', true);
-        });
+        })->withCount([
+            'plots' => function ($query) {
+                $query->withQuarantined()->where('plots.is_quarantined', true);
+            },
+            'plants' => function ($query) {
+                $query->withQuarantined()->where('plants.is_quarantined', true);
+            },
+        ]);
 
         return $this->success($sites->get());
     }
@@ -43,7 +50,7 @@ class QuarantineController extends Controller
                         $query->withQuarantined()->where('plants.is_quarantined', true);
                     });
             })->with(['plants' => function($query) {
-               $query->withQuarantined();
+               $query->withQuarantined()->where('is_quarantined', true);
             }])->get();
 
         return $this->success($plots);

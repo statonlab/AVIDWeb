@@ -76,7 +76,7 @@
             <small class="text-muted">When entering coordinates manually, please verify the location on the map</small>
           </div>
         </div>
-        <div class="col-6" v-if="mapsReady">
+        <div class="col-6">
           <clickable-map class="map-height map-mini mb-3"
                          @input="setGpsFromMap($event)"
                          :value="{latitude: form.latitude, longitude: form.longitude}"/>
@@ -218,7 +218,6 @@ import Options from '../../helpers/Options'
 import Form from '../../forms/Form'
 import ClickableMap from '../ClickableMap'
 import Icon from '../Icon'
-import Maps from '../../helpers/Maps'
 
 export default {
   name: 'PlotFormCard',
@@ -232,7 +231,7 @@ export default {
   data() {
     return {
       form: new Form({
-        number            : '',
+        number            : this.plot.number,
         latitude          : null,
         longitude         : null,
         basal_area        : '',
@@ -244,14 +243,11 @@ export default {
         recorders         : '',
       }),
       options: Options,
-      mapsReady: false,
     }
   },
 
   mounted() {
     this.form.setDefault(this.plot)
-
-    Maps.load(() => this.mapsReady = true)
   },
 
   methods: {
@@ -267,6 +263,7 @@ export default {
               text: 'Plot imported successfully.',
               type: 'success',
             })
+            this.form.reset()
           } catch (e) {
             if (e.response && e.response.status === 422) {
               this.$alert({

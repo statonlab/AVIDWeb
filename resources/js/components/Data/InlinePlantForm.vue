@@ -1,7 +1,7 @@
 <template>
   <form class="tr" @submit.prevent="importPlant">
     <div class="th" :class="{'border-top-0': !showPlotNumber}">
-      <span>{{ `Plot #${plot.number}` }}</span>
+      <span v-if="showPlotNumber">{{ `Plot #${plot.number}` }}</span>
     </div>
     <div class="td p-0" :class="{'outline-primary': focusedCell === 'tag'}">
       <input class="form-control px-3 border-0 w-100 cell-h focus-outlined flex-grow-1"
@@ -36,7 +36,7 @@
           :options="species"
           :error="form.errors.has('species_id')"
           :total="total"
-          @search="speciesSearch = $event"
+          @search="$emit('search', $event)"
       />
     </div>
     <div class="td p-0" :class="{'outline-primary': focusedCell === 'quadrant'}">
@@ -94,6 +94,15 @@ export default {
     if (this.plant) {
       this.form.setDefault(this.plant)
     }
+  },
+
+  watch: {
+    'form.plant_type_id': {
+      handler() {
+        console.log('changed plant type')
+        this.$emit('plantTypeChanged', this.form.plant_type_id)
+      }
+    },
   },
 
   data() {

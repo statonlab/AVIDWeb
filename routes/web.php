@@ -111,6 +111,7 @@ Route::group([
     Route::get('/data-entry', 'HomeController@data');
     Route::get('/statistics', 'HomeController@data');
     Route::get('/data-quarantine', 'HomeController@data');
+    Route::get('/data-quarantine/{id}', 'HomeController@data');
 });
 
 /**
