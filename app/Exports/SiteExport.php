@@ -4,12 +4,12 @@ namespace App\Exports;
 
 use App\User;
 use App\Site;
-use App\Plot;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
+class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize, WithTitle
 {
     /** @var User $user */
     protected $user;
@@ -32,7 +32,7 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
      */
     public function headings(): array
     {
-        $header = ['Site', 'Plot', 'Quadrant', 'Tag', 'Plant Type', 'Species'];
+        $header = ['Plot', 'Quadrant', 'Tag', 'Plant Type', 'Species'];
 
         $year = now()->year;
 
@@ -63,7 +63,6 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
         foreach ($site->plots()->orderBy('number', 'asc')->cursor() as $plot) {
             foreach ($plot->plants()->orderBy('tag', 'asc')->cursor() as $plant) {
                 $row = [
-                    $site->name,
                     $plot->number,
                     $plant->quadrant,
                     $plant->tag,
@@ -94,5 +93,10 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize
         }
 
         return $rows;
+    }
+
+    public function title(): string
+    {
+        return $this->site->name;
     }
 }

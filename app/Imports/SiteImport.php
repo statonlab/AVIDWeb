@@ -144,7 +144,6 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
         $quadrants = 'Southwest,Northwest,Southeast,Northeast';
 
         return [
-            'site' => 'required|in:'.$this->site->name,
             'plot' => 'required',
             'quadrant' => "required|in:$quadrants",
             'tag' => 'required',
