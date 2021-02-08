@@ -252,31 +252,25 @@ export default {
 
   methods: {
     async importPlot() {
-      this.$confirm({
-        title    : `Are you sure you want to import Plot #${this.plot.number}?`,
-        text     : 'This action is permanent!',
-        onConfirm: async () => {
-          try {
-            await this.form.post(`/web/data-quarantine/import/plot/${this.plot.id}`)
-            this.$emit('imported')
-            this.$notify({
-              text: 'Plot imported successfully.',
-              type: 'success',
-            })
-            this.form.reset()
-          } catch (e) {
-            if (e.response && e.response.status === 422) {
-              this.$alert({
-                title: 'Please Review The Following',
-                text : this.form.errors.toArray().join(' '),
-              })
-            } else {
-              this.$alert('Unable to import plot. Please try refreshing the page or report the error to us!')
-            }
-            console.error(e)
-          }
-        },
-      })
+      try {
+        await this.form.post(`/web/data-quarantine/import/plot/${this.plot.id}`)
+        this.$emit('imported')
+        this.$notify({
+          text: 'Plot imported successfully.',
+          type: 'success',
+        })
+        this.form.reset()
+      } catch (e) {
+        if (e.response && e.response.status === 422) {
+          this.$alert({
+            title: 'Please Review The Following',
+            text : this.form.errors.toArray().join(' '),
+          })
+        } else {
+          this.$alert('Unable to import plot. Please try refreshing the page or report the error to us!')
+        }
+        console.error(e)
+      }
     },
 
     deletePlot() {

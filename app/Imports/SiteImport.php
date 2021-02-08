@@ -169,4 +169,14 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
             ],
         ];
     }
+
+    /**
+     * Skip the instructions row.
+     *
+     * @return int
+     */
+    public function headingRow(): int
+    {
+        return 2;
+    }
 }

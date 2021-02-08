@@ -70,6 +70,7 @@ class SiteController extends Controller
             'owner_contact' => 'nullable',
             'species' => 'required|array',
             'shrubs' => 'required|array',
+            'comments' => 'nullable',
         ]);
 
         $site = Site::create([
@@ -82,6 +83,7 @@ class SiteController extends Controller
             'city' => $request->city,
             'owner_name' => $request->owner_name,
             'owner_contact' => $request->owner_contact,
+            'comments' => $request->comments,
         ]);
 
         foreach ($user->groups as $group) {
@@ -165,6 +167,7 @@ class SiteController extends Controller
             'species.*' => 'required|exists:species,id',
             'shrubs' => 'required|array',
             'shrubs.*' => 'required|exists:species,id',
+            'comments' => 'nullable',
         ]);
 
         $site->fill([
@@ -176,6 +179,7 @@ class SiteController extends Controller
             'city' => $request->city,
             'owner_name' => $request->owner_name,
             'owner_contact' => $request->owner_contact,
+            'comments' => $request->comments,
         ])->save();
 
         $site->species()->sync($request->species);
