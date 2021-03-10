@@ -34,7 +34,7 @@
         "@fullcalendar/vue": "^4.4.0",
         "@toast-ui/vue-editor": "^2.1.2",
         "@ttskch/select2-bootstrap4-theme": "^1.4.0",
-        "apexcharts": "^3.19.2",
+        "apexcharts": "^3.24.0",
         "moment": "^2.24.0",
         "v-calendar": "1.0.8",
         "v-select2-component": "^0.4.3",
