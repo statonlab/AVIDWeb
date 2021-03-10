@@ -115,6 +115,11 @@
                 if   : User.can('view sites'),
               },
               {
+                to   : '/app/admin/data-quarantine',
+                label: 'Quarantined Data',
+                if   : User.can('view sites'),
+              },
+              {
                 to   : '/app/species',
                 label: 'Manage Species',
                 if   : User.can('manage species'),

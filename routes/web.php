@@ -102,6 +102,7 @@ Route::group([
     Route::get('/users/{user}', 'HomeController@data');
     Route::get('/roles', 'HomeController@data');
     Route::get('/admin/sites', 'HomeController@data');
+    Route::get('/admin/data-quarantine', 'HomeController@data');
     Route::get('/admin/sites/{id}', 'HomeController@data');
     Route::get('/admin/plots/{id}', 'HomeController@data');
     Route::get('/admin/plants/{id}', 'HomeController@data');
@@ -239,6 +240,9 @@ Route::group([
 
     // Admin Sites
     Route::get('/admin/sites', 'Admin\SiteController@index');
+
+    // Admin Quarantine
+    Route::get('/admin/data-quarantine', 'Admin\QuarantineController@index');
 
     // Reminders
     Route::get('/reminders', 'ReminderController@index');
