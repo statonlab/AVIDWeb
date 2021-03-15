@@ -104,7 +104,7 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
                     if (is_int($value) && $value < self::MINIMUM_TIMESTAMP) {
                         $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
                     }
-                    else if (strtotime(str_replace('-', '/', $value)) === false) {
+                    else if (!is_int($value) && strtotime(str_replace('-', '/', $value)) === false) {
                         $fail("Date is invalid. Expected a date in M-D-Y format. Received $value.");
                     }
                 }
