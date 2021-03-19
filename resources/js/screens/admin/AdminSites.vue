@@ -39,10 +39,6 @@
     },
 
     methods: {
-      exportData() {
-
-      },
-
       setMeta(data) {
         this.page = data.current_page
         this.lastPage = data.last_page

@@ -231,10 +231,6 @@
     },
 
     methods: {
-      exportData() {
-
-      },
-
       async loadSites() {
         if (this._request) {
           this._request()
