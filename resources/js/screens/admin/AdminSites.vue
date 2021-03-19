@@ -15,6 +15,7 @@
                 url="/web/admin/sites"
                 show-owner
                 :site-url-prefix="`/app/admin/sites`"
+                :show-export-button="true"
                 @load="setMeta($event)"
         />
     </div>
@@ -42,7 +43,7 @@
         this.page = data.current_page
         this.lastPage = data.last_page
         this.total = data.total
-      }
+      },
     }
   }
 </script>
