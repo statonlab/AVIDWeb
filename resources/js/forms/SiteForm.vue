@@ -187,6 +187,18 @@
                                 {{ form.errors.first('diameter') }}
                             </span>
                         </div>
+                        <div class="form-group">
+                          <label for="contact">Comments</label>
+                          <textarea type="text"
+                                    class="form-control"
+                                    name="comments"
+                                    v-model="form.comments"
+                                    id="comments"
+                                    placeholder="Type comments"></textarea>
+                          <span class="form-text text-danger" v-if="form.errors.has('comments')">
+                            {{ form.errors.first('comments') }}
+                          </span>
+                        </div>
                     </div>
                     <div v-if="createSpecies">
                         <div class="form-group">
@@ -304,6 +316,7 @@
           basal_area   : '',
           owner_name   : '',
           owner_contact: '',
+          comments     : '',
           species      : [],
           shrubs       : [],
         }),

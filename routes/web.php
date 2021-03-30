@@ -263,4 +263,5 @@ Route::group([
     Route::get('/statistics/chart', 'StatisticsController@chart');
 
     Route::get('/admin-exports/plots', 'ExportPlotsController@index');
+    Route::get('/admin-exports/data', 'ExportDataController@index');
 });

@@ -13,7 +13,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h1 class="mb-4">AVID Instruction Manual</h1>
-                                <a href="/files/AVID.draft.regeneration.protocol_7_19_2017.pdf" download>AVID Instruction Manual</a>
+                                <a href="/files/AVID_Manual_2020.pdf" download>AVID Instruction Manual</a>
                             </div>
                         </div>
                     </div>

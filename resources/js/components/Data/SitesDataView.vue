@@ -45,6 +45,13 @@
                         </select>
                     </div>
                     <div class="flex-shrink-0">
+                        <a class="d-flex align-items-center ml-2 btn btn-primary"
+                           :href="`/web/admin-exports/data`"
+                           v-if="showExportButton"
+                           target="_blank">
+                            <icon name="cloud-download"/>
+                            <span>Export Data</span>
+                        </a>
                         <button class="ml-2 btn btn-primary" @click.prevent="showSiteForm = true">
                             <icon name="add"/>
                             <span>New Site</span>
@@ -178,6 +185,7 @@
       editable           : {required: false, type: Boolean, default: false},
       showOwner          : {required: false, type: Boolean, default: false},
       showInvitations    : {required: false, type: Boolean, default: false},
+      showExportButton   : {required: false, type: Boolean, default: false},
       siteUrlPrefix      : {required: false, type: String, default: '/app/sites'},
       unauthorizedMessage: {required: false, type: String, default: 'You do not have permission to view sites.'},
     },

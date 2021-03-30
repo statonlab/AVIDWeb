@@ -10,7 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "axios": "^0.19",
+        "axios": "^0.21",
         "bootstrap": "^4.5.0",
         "browser-sync": "^2.26.7",
         "browser-sync-webpack-plugin": "^2.0.1",
@@ -34,7 +34,7 @@
         "@fullcalendar/vue": "^4.4.0",
         "@toast-ui/vue-editor": "^2.1.2",
         "@ttskch/select2-bootstrap4-theme": "^1.4.0",
-        "apexcharts": "^3.19.2",
+        "apexcharts": "^3.24.0",
         "moment": "^2.24.0",
         "v-calendar": "1.0.8",
         "v-select2-component": "^0.4.3",
