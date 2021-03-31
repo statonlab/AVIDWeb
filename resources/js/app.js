@@ -137,11 +137,11 @@ const routes = [
     component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/Statistics')),
   },
   {
-    path     : '/app/data-quarantine',
+    path     : '/app/incomplete-data',
     component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/DataQuarantine')),
   },
   {
-    path     : '/app/data-quarantine/:id',
+    path     : '/app/incomplete-data/:id',
     component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/SiteQuarantine')),
   },
 ]

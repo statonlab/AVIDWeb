@@ -115,12 +115,7 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize, WithTi
     {
         $sheet = $event->sheet->getDelegate();
 
-        $instructions = "To update existing plants, you must fill out the date and height columns (Columns I and J).\n" .
-            "To add new plants or plots, you can additionally fill out the plot number and plant tag.\n" .
-            "Any new plots or plants that have missing information will be added to data quarantine.\n" .
-            "\nWhen you have finished, save the document, return to the site page, click the 'Import Spreadsheet'\n" .
-            "button under the Actions block, and select this spreadsheet.\n" .
-            "Once the import is completed, you should see new measurements for each of your plants.";
+        $instructions = "To update existing plants, you must fill out the date and height columns (Columns I and J) for all existing plant tags. To add new plants or plots,\n"."you can additionally fill out the plot number, plant tag, species name, and plant type. If a plant is dead, put ‘dead’ in the height column.\n"."If a plant was not found, put ‘missing’ in the height column. New study site locations must be created via the website.\n\n"."The \"previous height\" columns (Columns F, G, H) are shown for your convenience to facilitate finding the plant in the field, but these cannot be edited. If you\n"."want to import information for previous years, you may do so by filling out the date column (Column I) with the desired date (e.g. 2-18-2019) and adding the\n"."measurement in Column J.\n\n"."New plots and plants that are incomplete will appear on the Incomplete Data page, where you will have to fill out additional information to complete the\n"."import process.\n\n"."When you have finished, save the document, return to the AVID web site page, click the 'Import Spreadsheet' button under the Actions block, and\n"."select this spreadsheet.\n\n"."Once the spreadsheet is imported and incomplete data is completed, you should see new measurements for each of your plants. Please check the data through\n"."the AVID website to make sure your data were imported correctly.\n\n"."If you encounter problems, please contact us.";
 
         $sheet->insertNewRowBefore(1);
         $sheet->setCellValue('A1', $instructions);
@@ -135,7 +130,7 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize, WithTi
         $sheet->getColumnDimension('A')->setWidth(strlen($site_name) * 2.0);
 
         // Adjust header row height.
-        $sheet->getRowDimension(1)->setRowHeight(100);
+        $sheet->getRowDimension(1)->setRowHeight(250);
 
         // Set the background color to green.
         $sheet->getStyle('A1:J1')->getFill()
@@ -147,3 +142,4 @@ class SiteExport implements FromCollection, WithHeadings, ShouldAutoSize, WithTi
           ->getColor()->setARGB('ffffff');
     }
 }
+

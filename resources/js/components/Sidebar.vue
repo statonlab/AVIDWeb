@@ -77,8 +77,8 @@
           },
           {
             icon: 'lock-closed-outline',
-            to: '/app/data-quarantine',
-            label: 'Data Quarantine'
+            to: '/app/incomplete-data',
+            label: 'Incomplete Data'
           },
           {
             icon: 'bar-chart-outline',
@@ -114,11 +114,11 @@
                 label: 'All Data',
                 if   : User.can('view sites'),
               },
-              {
-                to   : '/app/admin/data-quarantine',
-                label: 'Quarantined Data',
-                if   : User.can('view sites'),
-              },
+              // {
+              //   to   : '/app/admin/data-quarantine',
+              //   label: 'Quarantined Data',
+              //   if   : User.can('view sites'),
+              // },
               {
                 to   : '/app/species',
                 label: 'Manage Species',

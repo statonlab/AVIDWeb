@@ -1,10 +1,9 @@
 <template>
   <div>
     <div class="mb-3">
-      <span class="page-title">Data Quarantine</span>
+      <span class="page-title">Incomplete Data</span>
       <div class="text-muted">
-        Entries from spreadsheet importing that require additional information will show up here.
-        After filling out the requisite information, these entries will be added to your sites.
+        Entries from spreadsheet importing that require additional information will show up here. Once the required information is entered, clicking the ‘Save’ button will make these entries publicly available. Your data is saved but is incomplete and needs your review. It will not be lost if you navigate away from this page.
       </div>
     </div>
 

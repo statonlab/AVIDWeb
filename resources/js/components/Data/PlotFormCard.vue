@@ -5,7 +5,7 @@
       <div class="flex-shrink-0">
         <button class="btn btn-primary" type="submit">
           <icon name="cloud-upload-outline"/>
-          <span>Import</span>
+          <span>Save</span>
         </button>
         <button class="btn btn-danger" @click.prevent="deletePlot()">
           <icon name="trash-outline"/>

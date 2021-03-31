@@ -56,7 +56,7 @@
                 type="submit"
                 :disabled="importing">
           <inline-spinner v-if="importing" class="position-absolute text-white ml-2"/>
-          <span>Import</span>
+          <span>Save</span>
         </button>
         <button class="cell-h btn rounded-0 btn-danger"
                 :class="{'text-transparent': deleting}"
