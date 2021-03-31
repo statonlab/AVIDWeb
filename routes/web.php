@@ -102,6 +102,7 @@ Route::group([
     Route::get('/users/{user}', 'HomeController@data');
     Route::get('/roles', 'HomeController@data');
     Route::get('/admin/sites', 'HomeController@data');
+    Route::get('/admin/data-quarantine', 'HomeController@data');
     Route::get('/admin/sites/{id}', 'HomeController@data');
     Route::get('/admin/plots/{id}', 'HomeController@data');
     Route::get('/admin/plants/{id}', 'HomeController@data');
@@ -110,6 +111,8 @@ Route::group([
     Route::get('/events', 'HomeController@data');
     Route::get('/data-entry', 'HomeController@data');
     Route::get('/statistics', 'HomeController@data');
+    Route::get('/incomplete-data', 'HomeController@data');
+    Route::get('/incomplete-data/{id}', 'HomeController@data');
 });
 
 /**
@@ -159,15 +162,15 @@ Route::group([
     Route::get('/sites/{site}/plots', 'PlotController@index');
     Route::post('/sites/{site}/plots', 'PlotController@create');
     Route::get('/plots/{plot}', 'PlotController@show');
-    Route::put('/plots/{plot}', 'PlotController@update');
-    Route::delete('/plots/{plot}', 'PlotController@destroy');
+    Route::put('/plots/{id}', 'PlotController@update');
+    Route::delete('/plots/{id}', 'PlotController@destroy');
 
     // Plants
     Route::get('/plots/{plot}/plants', 'PlantController@index');
     Route::post('/plots/{plot}/plants', 'PlantController@create');
     Route::get('/plants/{plant}', 'PlantController@show');
-    Route::put('/plants/{plant}', 'PlantController@update');
-    Route::delete('/plants/{plant}', 'PlantController@destroy');
+    Route::put('/plants/{id}', 'PlantController@update');
+    Route::delete('/plants/{id}', 'PlantController@destroy');
 
     // Measurements
     Route::get('/plants/{plant}/measurements', 'MeasurementController@index');
@@ -238,6 +241,9 @@ Route::group([
     // Admin Sites
     Route::get('/admin/sites', 'Admin\SiteController@index');
 
+    // Admin Quarantine
+    Route::get('/admin/data-quarantine', 'Admin\QuarantineController@index');
+
     // Reminders
     Route::get('/reminders', 'ReminderController@index');
     Route::post('/reminders', 'ReminderController@create');
@@ -259,6 +265,12 @@ Route::group([
     Route::get('/statistics/species', 'StatisticsController@species');
     Route::get('/statistics/{site}/chart', 'StatisticsController@siteChart');
     Route::get('/statistics/chart', 'StatisticsController@chart');
+
+    // Data Quarantine
+    Route::get('/data-quarantine/sites', 'QuarantineController@sites');
+    Route::get('/data-quarantine/sites/{site}', 'QuarantineController@plots');
+    Route::post('/data-quarantine/import/plot/{id}', 'QuarantineController@importPlot');
+    Route::post('/data-quarantine/import/plant/{id}', 'QuarantineController@importPlant');
 
     Route::get('/admin-exports/plots', 'ExportPlotsController@index');
     Route::get('/admin-exports/data', 'ExportDataController@index');
