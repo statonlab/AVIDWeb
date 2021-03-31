@@ -273,4 +273,5 @@ Route::group([
     Route::post('/data-quarantine/import/plant/{id}', 'QuarantineController@importPlant');
 
     Route::get('/admin-exports/plots', 'ExportPlotsController@index');
+    Route::get('/admin-exports/data', 'ExportDataController@index');
 });

@@ -13,6 +13,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <h1 class="mb-4">Wildflower and Seedling Identification Guides</h1>
+                                <div>
+                                    <p>
+                                        <a href="/files/AVID_Wildflower_Identification_Guides_2020.pdf" download>
+                                            AVID Wildflower Identification Guides
+                                        </a>
+                                    </p>
+                                </div>
                                 <div class="row mb-2">
                                     <div class="col-4">
                                         <img class="img-fit img-fluid" src="/img/canada-mayflower.jpeg">
