@@ -20,6 +20,10 @@ class MeasurementCreatedListener implements ShouldQueue
     {
         $measurement = $event->measurement;
 
+        if ($measurement->is_quarantined) {
+            return;
+        }
+
         $site = $measurement->site;
 
         if ($site->user->email_verified_at === null) {

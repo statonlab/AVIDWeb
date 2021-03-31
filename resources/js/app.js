@@ -105,6 +105,10 @@ const routes = [
     component: () => AsyncComponent(import (/* webpackChunkName: "js/admin_sites" */'./screens/admin/AdminSites')),
   },
   {
+    path     : '/app/admin/data-quarantine',
+    component: () => AsyncComponent(import (/* webpackChunkName: "js/admin_sites" */'./screens/admin/AdminQuarantine')),
+  },
+  {
     path     : '/app/admin/sites/:id',
     component: () => AsyncComponent(import (/* webpackChunkName: "js/admin_plots" */'./screens/admin/AdminPlots')),
   },
@@ -131,6 +135,14 @@ const routes = [
   {
     path     : '/app/statistics',
     component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/Statistics')),
+  },
+  {
+    path     : '/app/incomplete-data',
+    component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/DataQuarantine')),
+  },
+  {
+    path     : '/app/incomplete-data/:id',
+    component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/SiteQuarantine')),
   },
 ]
 

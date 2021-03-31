@@ -2,16 +2,20 @@
 
 namespace App\Imports;
 
+use App\Plot;
 use App\User;
 use App\Site;
 use App\Plant;
+use App\PlantType;
+use App\Species;
 use App\Measurement;
 use Carbon\Carbon;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Row;
+use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class SiteImport implements ToModel, WithHeadingRow, WithValidation
+class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
 {
     /** @var Site $site */
     protected $site;
@@ -33,21 +37,66 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
     }
 
     /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @param \Maatwebsite\Excel\Row $row
      */
-    public function model(array $row)
+    public function onRow(Row $row)
     {
-        /** @var Plant $plant */
-        $plant = Plant::with(['plot'])
-            ->get()
-            ->where('plot.number', $row['plot'])
-            ->where('tag', $row['tag'])
-            ->first();
+        $row = $row->toArray();
 
-        if ($plant === null) {
-            return null;
+        $quarantined = false;
+
+        /** @var Plot $plot */
+        $plot = Plot::withQuarantined()
+            ->where('number', $row['plot'])
+            ->where('site_id', $this->site->id);
+
+        if ($plot->doesntExist()) {
+            $quarantined = true;
+            $plot = Plot::create([
+                'user_id' => $this->user->id,
+                'site_id' => $this->site->id,
+                'number' => $row['plot'],
+                'is_quarantined' => true,
+            ]);
+        } else {
+            $plot = $plot->first();
+        }
+
+        /** @var Plant $plant */
+        $plant = Plant::withQuarantined()
+            ->with(['plot'])
+            ->where('plot_id', $plot->id)
+            ->where('tag', $row['tag']);
+
+        if ($plant->doesntExist()) {
+            $type = null;
+            $species = null;
+
+            if ($row['plant_type']) {
+                /** @var PlantType $type */
+                $type = PlantType::where('name', $row['plant_type'])->first();
+            }
+
+            if ($row['species']) {
+                /** @var Species $species */
+                $species = Species::where('name', $row['species'])->first();
+            }
+
+            if ($type === null || $species === null) {
+                $quarantined = true;
+            }
+
+            $plant = Plant::create([
+                'user_id' => $this->user->id,
+                'plot_id' => $plot->id,
+                'quadrant' => $row['quadrant'],
+                'species_id' => $species ? $species->id : null,
+                'plant_type_id' => $type ? $type->id : null,
+                'tag' => $row['tag'],
+                'is_quarantined' => $quarantined,
+            ]);
+        } else {
+            $plant = $plant->first();
         }
 
         $date = null;
@@ -59,7 +108,8 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
             $date = (new Carbon('Dec 31 1899'))->addDays($row['date_mm_dd_yyyy'] - 1);
         }
 
-        $exists = Measurement::where('plant_id', $plant->id)
+        $exists = Measurement::withQuarantined()
+            ->where('plant_id', $plant->id)
             ->where('date', $date->format('Y-m-d'))
             ->exists();
 
@@ -73,15 +123,16 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
         $is_alive = $is_located == 1 ? $col_height !== 'dead' : null;
         $height = $is_alive == 1 ? $col_height : null;
 
-        return new Measurement([
+        Measurement::create([
             'plant_id' => $plant->id,
-            'plot_id' => $plant->plot->id,
+            'plot_id' => $plot->id,
             'site_id' => $this->site->id,
             'user_id' => $this->user->id,
             'is_located' => $is_located,
             'date' => $date,
             'height' => $height,
             'is_alive' => $is_alive,
+            'is_quarantined' => $quarantined,
         ]);
     }
 
@@ -93,11 +144,11 @@ class SiteImport implements ToModel, WithHeadingRow, WithValidation
         $quadrants = 'Southwest,Northwest,Southeast,Northeast';
 
         return [
-            'site' => 'required|in:'.$this->site->name,
-            'plot' => 'required|exists:plots,number',
+            'plot' => 'required',
             'quadrant' => "required|in:$quadrants",
-            'tag' => 'required|exists:plants,tag',
-            'species' => 'required|exists:species,name',
+            'tag' => 'required',
+            'plant_type' => 'nullable|exists:plant_types,name',
+            'species' => 'nullable|exists:species,name',
             'date_mm_dd_yyyy' => [
                 'required',
                 function ($attribute, $value, $fail) {

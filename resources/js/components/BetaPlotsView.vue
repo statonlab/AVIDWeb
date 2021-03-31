@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div v-if="showQuarantineError" class="alert alert-warning">
+      This site contains incomplete data. This data will not be displayed on this page or included in statistics
+      until you have added the required data have been filled out on the
+      <router-link :to="`/app/incomplete-data/${site.id}`">Incomplete Data</router-link> page.
+    </div>
     <div class="row">
       <div class="col-md-4 col-lg-3">
         <div class="card mb-3">
@@ -230,7 +235,7 @@
         @close="closeImportForm"
         v-if="importing"
         :site="site"
-        @create="measurementsCreated()"
+        @create="measurementsCreated($event)"
     />
 
     <plot-form
@@ -305,6 +310,7 @@ export default {
       userSite     : null,
       sendReminders: false,
       sharedEdit   : false,
+      showQuarantineError: this.site.has_quarantined,
     }
   },
 
@@ -398,7 +404,6 @@ export default {
       this.plotId = plot.id
       this.setOptions()
       this.closeForm()
-      console.log(this.plots.length)
     },
 
     updated(plot) {
@@ -503,7 +508,8 @@ export default {
       return 'Not provided'
     },
 
-    measurementsCreated() {
+    measurementsCreated(data) {
+      this.showQuarantineError = data
       this.closeImportForm()
     },
 
