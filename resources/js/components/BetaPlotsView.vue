@@ -1,8 +1,7 @@
 <template>
   <div>
     <div v-if="showQuarantineError" class="alert alert-warning">
-      This site contains incomplete data. This data will not be displayed on this page or included in statistics
-      until you have added the required data have been filled out on the
+      This site contains incomplete data. This data will not be displayed on this page or be included in statistics until the required data have been filled out on the Incomplete Data page.
       <router-link :to="`/app/incomplete-data/${site.id}`">Incomplete Data</router-link> page.
     </div>
     <div class="row">

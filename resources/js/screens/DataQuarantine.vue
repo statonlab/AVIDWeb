@@ -3,7 +3,7 @@
     <div class="mb-3">
       <span class="page-title">Incomplete Data</span>
       <div class="text-muted">
-        Entries from spreadsheet importing that require additional information will show up here. Once the required information is entered, clicking the ‘Save’ button will make these entries publicly available. Your data is saved but is incomplete and needs your review. It will not be lost if you navigate away from this page.
+        Entries from spreadsheet importing that require additional information will show up here. Your data is saved but is incomplete and needs your review. It will not be lost if you navigate away from this page. Once the required information is entered, click the Save button.
       </div>
     </div>
 
