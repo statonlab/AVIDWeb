@@ -341,12 +341,7 @@
             })
             console.error(e)
           }
-          for (const value in this.form.errors.errors) {
-                  this.$notify({
-                      type: 'error',
-                      text: this.form.errors.errors[value][0],
-              })
-          }
+          this.$alert(this.form.errors.toArray().join(' '))
         }
         this.loading = false
       },
