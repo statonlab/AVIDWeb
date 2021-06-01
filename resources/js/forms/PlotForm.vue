@@ -316,7 +316,7 @@
           if (!e.response || e.response.status !== 422) {
             this.$notify({
               type: 'error',
-              text: this.form.errors,
+              text: 'Unable to process the request. Please try refreshing the page.',
             })
             console.error(e)
           }
