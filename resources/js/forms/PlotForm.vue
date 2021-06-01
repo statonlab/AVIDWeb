@@ -341,6 +341,7 @@
             })
             console.error(e)
           }
+          this.$alert(this.form.errors.toArray().join(' '))
         }
         this.loading = false
       },
