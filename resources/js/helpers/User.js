@@ -12,7 +12,7 @@ class User {
   }
 
   owns(resource) {
-    return this.user.id === resource.user_id
+    return this.user.id === (resource ? resource.user_id : null)
   }
 
   can(ability) {
