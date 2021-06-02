@@ -87,10 +87,10 @@
                 <tbody>
                 <tr v-for="measurement in measurements">
                   <td>{{ moment(measurement.date).format('MMM Do, YYYY') }}</td>
-                  <td>{{ measurement.is_located ? 'Yes' : 'No'}}</td>
+                  <td>{{ measurement.is_located ? 'Yes' : 'No' }}</td>
                   <td>
                     <span v-if="measurement.is_alive !== null">
-                      {{ measurement.is_alive ? 'Yes' : 'No'}}
+                      {{ measurement.is_alive ? 'Yes' : 'No' }}
                     </span>
                   </td>
                   <td>
@@ -154,7 +154,7 @@
     </div>
 
     <div class="card p-4" v-if="unauthorized">
-      {{unauthorizedMessage}}
+      {{ unauthorizedMessage }}
     </div>
 
     <div class="card p-4" v-if="!unauthorized && !loading && !plant">
@@ -221,10 +221,20 @@ export default {
   },
 
   async mounted() {
-    this.loadMeasurements()
-    await this.loadPlant()
-    if (!this.User.owns(this.plant.site)) {
-      this.loadUserSite()
+    try {
+      await this.loadMeasurements()
+      await this.loadPlant()
+
+      if (!User.owns(this.plant?.site)) {
+        await this.loadUserSite()
+      }
+    } catch (e) {
+      if (e.response && e.response.status === 403) {
+        this.$alert('You are not authorized to access this resource.')
+      } else {
+        this.$alert('Unable to process your request. Please try refreshing the page or contact us.')
+      }
+      console.error(e)
     }
   },
 

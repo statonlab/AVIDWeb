@@ -139,4 +139,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(SiteInvitation::class, 'recipient_id', 'id');
     }
+
+    /**
+     * @return bool
+     */
+    public function isSuperUser(): bool
+    {
+        return SuperUser::where('user_id', $this->id)->exists();
+    }
 }

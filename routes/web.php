@@ -274,4 +274,6 @@ Route::group([
 
     Route::get('/admin-exports/plots', 'ExportPlotsController@index');
     Route::get('/admin-exports/data', 'ExportDataController@index');
+
+    Route::get('/impersonate/{user}', 'ImpersonateController@impersonate');
 });
