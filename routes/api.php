@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\MeasurementsController;
+use App\Http\Controllers\Api\SitesController;
+use App\Http\Controllers\Api\SpeciesController;
+use App\Http\Controllers\Api\UserTokenController;
 use App\Site;
 use Illuminate\Http\Request;
 use App\User;
@@ -18,71 +22,13 @@ use App\Http\Controllers\Traits\ListsSites;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/sanctum/token', function (Request $request) {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-        'device_name' => 'required',
-    ]);
-
-    $user = User::where('email', $request->email)->first();
-
-    if (!$user || !Hash::check($request->password, $user->password)) {
-        throw ValidationException::withMessages([
-            'email' => ['The provided credentials are incorrect.'],
-        ]);
-    }
-
-    $token = $user->createToken($request->device_name)->plainTextToken;
-
-    $response = [
-        'user' => $user,
-        'token' => $token
-    ];
-
-    return response()->json($response, '201');
-});
-
-Route::post('/sanctum/download', function (Request $request) {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-        //'token' => 'required',
-    ]);
-
-    $user = User::where('email', $request->email)->first();
-
-//    if (!$user || !Hash::check($request->password, $user->password)) {
-//        throw ValidationException::withMessages([
-//            'email' => ['The provided credentials are incorrect.'],
-//        ]);
-//    }
-
-    $sites = Site::whereNotNull('user_id')->with([
-        'plots' => function ($query) {
-            $query->with([
-                'plants' => function ($query) {
-                    $query->with(['measurements']);
-                },
-            ]);
-        },
-    ])
-        ->withShared($user)
-        ->orWhere('user_id', $user->id)
-        ->get();
-
-
-    $response = [
-        'sites' => $sites,
-    ];
-
-    return response()->json($response, '201');
-});
+Route::post('/sanctum/token', [UserTokenController::class, 'login']);
+Route::post('/sanctum/logout', [UserTokenController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('/download/species', [SpeciesController::class, 'download'])->middleware('auth:sanctum');
+Route::get('/download/sites', [SitesController::class, 'download'])->middleware('auth:sanctum');
+Route::post('/upload/measurements', [MeasurementsController::class, 'upload'])->middleware('auth:sanctum');
+Route::post('/upload/sites', [SitesController::class, 'upload'])->middleware('auth:sanctum');

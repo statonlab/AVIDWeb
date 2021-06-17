@@ -118,7 +118,7 @@
                                 <strong>{{ site.name }}</strong>
                             </router-link>
                             <div class="text-muted">
-                                {{ site.county.name }}, {{ site.state.code }}
+                                {{ site.county ? site.county.name : 'no county'}}, {{ site.state !== null ? site.state.code : 'no state'}}
                             </div>
                         </td>
                         <td v-if="showOwner">{{ site.user.name }}</td>
