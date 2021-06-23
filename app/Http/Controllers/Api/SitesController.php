@@ -43,59 +43,49 @@ class SitesController extends Controller
         return $this->success($sites);
     }
 
-    public function upload(Request $request)
+    public function uploadSite(Request $request)
     {
         Log::info('beginning upload');
         $created = '';
         $user = $request->user();
         $site = $request->site;
+        $sitesController = new SitesController();
         Log::info('site found?');
         if ($site['id']) { // site exists on server already
             $serverSite = Site::find($site['id']);
-            // sync $site and $serverSite
+            $serverSite = $sitesController->update($serverSite, $site);
         } else {
             Log::info('attempting site creation');
-            $siteController = new SitesController();
-            $serverSite = $siteController->create($site, $user);
+            $serverSite = $sitesController->upload($site, $user);
             Log::info('site creation success');
         }
         Log::info('site found!');
         if ($site['plots']) {
             foreach ($site['plots'] as $plot) {
+                $plotsController = new PlotsController();
                 if ($plot['id']) { // plot exists on server already
                     $serverPlot = Plot::find($plot['id']);
-                    // sync $plot and $serverPlot
+                    $serverPlot = $plotsController->update($serverPlot, $plot);
                 } else {
-                    $plotController = new PlotsController();
-                    try {
-                        $serverPlot = $plotController->upload($serverSite, $plot, $user);
-                    } catch (\Throwable $e) {
-                        Log::info('ruh roh');
-                        Log::info($e);
-                    }
+                    $serverPlot = $plotsController->upload($serverSite, $plot, $user);
                 }
                 if ($plot['plants']) {
+                    $plantsController = new PlantsController();
                     foreach ($plot['plants'] as $plant) {
                         if ($plant['id']) { // plant exists on server already
                             $serverPlant = Plant::find($plant['id']);
-                            // sync $plant and $serverplant
+                            $serverPlant = $plantsController->update($serverPlant, $plant);
                         } else {
-                            $plantsController = new PlantsController();
-                            try {
-                                $serverPlant = $plantsController->upload($serverPlot, $plant, $user);
-                            } catch (\Throwable $e) {
-                                Log::info('ruh roh');
-                                Log::info($e);
-                            }
+                            $serverPlant = $plantsController->upload($serverPlot, $plant, $user);
                             //$serverPlant = Plant::find($plant['id']);
                         }
                         if ($plant['measurements']) {
+                            $measurementController = new MeasurementsController();
                             foreach ($plant['measurements'] as $measurement) {
                                 if ($measurement['id']) { // measurement exists on server already
                                     $serverMeasurement = Measurement::find($measurement['id']);
-                                    // sync $measurement and $serverMeasurement
+                                    $serverMeasurement = $measurementController->update($serverMeasurement, $measurement);
                                 } else {
-                                    $measurementController = new MeasurementsController();
                                     $measurementController->upload($serverPlant, $measurement, $user);
                                 }
                             }
@@ -108,7 +98,14 @@ class SitesController extends Controller
         return $this->success($created);
     }
 
-    public function create($site, $user)
+    /**
+     * Creates site on server from uploaded app data.
+     * @param $site
+     * @param $user
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function upload($site, $user)
     {
         $serverSite = DB::transaction(function () use ($site, $user) {
             return Site::create([
@@ -124,12 +121,11 @@ class SitesController extends Controller
                 'comments' => $site['comments'],
             ]);
         });
-        Log::info('1');
+
         foreach ($user->groups as $group) {
             $group->sites()->attach($serverSite->id);
         }
 
-        Log::info('2');
         $species = array_map(function ($species) {
             if (Species::find($species) !== null) {
                 return $species;
@@ -137,7 +133,6 @@ class SitesController extends Controller
             return Species::create(['name' => $species])->id;
         }, $site['over_species']);
 
-        Log::info('3');
         $shrubs = array_map(function ($shrub) {
             if (Species::find($shrub) !== null) {
                 return $shrub;
@@ -145,15 +140,38 @@ class SitesController extends Controller
             return Species::create(['name' => $shrub])->id;
         }, $site['under_species']);
 
-        Log::info('4');
         $serverSite->species()->sync($species);
         $serverSite->shrubs()->sync($shrubs);
 
-        Log::info('5');
         $serverSite->load(['county', 'state', 'species', 'shrubs']);
         $serverSite->loadCount(['plants', 'plots']);
 
-        Log::info('6');
+        return $serverSite;
+    }
+
+    public function update(Site $serverSite, $appSite)
+    {
+
+        $serverSite = DB::transaction(function () use ($serverSite, $appSite) {
+            $serverSite->fill([
+                'name' => $appSite['name'],
+                //'state_id' => $appSite['state_id'],
+                //'county_id' => $appSite['county_id'],
+                'basal_area' => $appSite['basal_area'],
+                'diameter' => $appSite['tree_diameter'],
+                'city' => $appSite['city'],
+                'owner_name' => $appSite['owner_name'],
+                'owner_contact' => $appSite['owner_contact'],
+                'comments' => $appSite['comments'],
+            ])->save();
+            return $serverSite;
+        });
+
+        // Can't change species and shrubs from within the app
+
+        $serverSite->load(['user', 'county', 'state', 'species', 'shrubs']);
+        $serverSite->loadCount(['plants', 'plots']);
+
         return $serverSite;
     }
 }

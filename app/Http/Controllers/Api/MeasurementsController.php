@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 class MeasurementsController extends Controller
 {
     /**
+     * Creates measurement on server from uploaded app data.
      * @param Plant $plant
      * @param $measurement
      */
@@ -35,23 +36,47 @@ class MeasurementsController extends Controller
         });
         return $this->created($created);
     }
+
+    public function update(Measurement $serverMeasurement, $appMeasurement)
+    {
+        $serverMeasurement->fill([
+            'is_located' => $appMeasurement['is_located'],
+            'date' => date("Y-m-d", strtotime($appMeasurement['date'])),
+        ]);
+
+        if ($appMeasurement['is_located'] == 1) {
+            $serverMeasurement->fill([
+                'height' => $appMeasurement['height'],
+                'is_alive' => $appMeasurement['is_alive'],
+            ]);
+        } else {
+            $serverMeasurement->fill([
+                'height' => null,
+                'is_alive' => null,
+            ]);
+        }
+
+        $serverMeasurement->save();
+
+        $serverMeasurement->plot->setLastMeasuredAt($serverMeasurement);
+
+        $this->with($serverMeasurement);
+
+        return $serverMeasurement;
+    }
+
+    protected function with($measurement)
+    {
+        $load = [
+            'user' => function ($query) {
+                $query->select(['users.id', 'users.name']);
+            },
+        ];
+
+        if ($measurement instanceof Measurement) {
+            return $measurement->load($load);
+        }
+
+        return $measurement->with($load);
+    }
 }
-//        $user = $request->user();
-//        $plant = $request->plant;
-//
-//        if ($plant['id']) {
-//            $serverPlant = Plant::find($plant['id']);
-//            Log::info('this worked?');
-//            $created = DB::transaction(function () use($serverPlant, $request) {
-//                $measurementController = new MeasurementController();
-//                return $measurementController->create($serverPlant, $request);
-//            });
-//        } else {
-//            Log::info('no plant_id found');
-//
-//            // createplant()
-//            // then createmeasurement()
-//        }
-//
-//        Log::info('finishing request');
-//        return $this->success($created);

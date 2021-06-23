@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\PlotCreated;
+use App\Events\PlotUpdated;
 use App\Http\Controllers\Controller;
 use App\Plot;
 use App\Site;
@@ -12,6 +13,14 @@ use Illuminate\Support\Facades\Log;
 
 class PlotsController extends Controller
 {
+    /**
+     * Creates plot on server from uploaded app data.
+     * @param Site $site
+     * @param $plot
+     * @param $user
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|mixed
+     * @throws \Throwable
+     */
     public function upload(Site $site, $plot, $user)
     {
         $exists = Plot::where([
@@ -51,5 +60,56 @@ class PlotsController extends Controller
         event(new PlotCreated($created));
 
         return $created;
+    }
+
+    public function update(Plot $serverPlot, $appPlot)
+    {
+
+        if ($serverPlot->number != $appPlot['number']) {
+            $exists = Plot::where([
+                'site_id' => $serverPlot->site_id,
+                'number' => $appPlot['number'],
+            ])->exists();
+
+            if ($exists) {
+                return $this->error('Already exists', [
+                    'number' => ['This plot number already exists'],
+                ]);
+            }
+        }
+
+        $serverPlot = DB::transaction(function () use ($serverPlot, $appPlot) {
+            $serverPlot->fill([
+                'number' => $appPlot['number'],
+                'latitude' => $appPlot['latitude'],
+                'longitude' => $appPlot['longitude'],
+                'basal_area' => $appPlot['basal_area'],
+                'is_protected' => $appPlot['is_protected'] == '1' ? 1 : 0,
+                'protection_seasons' => $appPlot['protection_seasons'],
+                'canopy' => $appPlot['canopy'],
+                'subcanopy' => $appPlot['subcanopy'],
+                'ground_cover' => $appPlot['ground_cover'],
+                'recorders' => $appPlot['recorders'],
+            ])->save();
+            return $serverPlot;
+        });
+
+        $serverPlot->load([
+            'user' => function ($query) {
+                $query->select(['users.id', 'users.name']);
+            },
+            'site' => function ($query) {
+            },
+            'plants.measurements' => function ($query) {
+            },
+            'plants.species' => function ($query) {
+            },
+        ]);
+
+        $serverPlot->loadCount(['plants']);
+
+        event(new PlotUpdated($serverPlot));
+
+        return $serverPlot;
     }
 }
