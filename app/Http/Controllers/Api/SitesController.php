@@ -43,14 +43,18 @@ class SitesController extends Controller
         return $this->success($sites);
     }
 
+    /**
+     * Takes in one site from the app and updates the server with it.
+     * @param Request $request
+     * @return JsonResponse|Response
+     * @throws \Throwable
+     */
     public function uploadSite(Request $request)
     {
-        Log::info('beginning upload');
         $created = '';
         $user = $request->user();
         $site = $request->site;
         $sitesController = new SitesController();
-        Log::info('site found?');
         if ($site['id']) { // site exists on server already
             $serverSite = Site::find($site['id']);
             $serverSite = $sitesController->update($serverSite, $site);
@@ -87,6 +91,67 @@ class SitesController extends Controller
                                     $serverMeasurement = $measurementController->update($serverMeasurement, $measurement);
                                 } else {
                                     $measurementController->upload($serverPlant, $measurement, $user);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $this->success($created);
+    }
+
+    /**
+     * Takes in several sites from the app and updates the server with it
+     * @param Request $request
+     * @return JsonResponse|Response
+     * @throws \Throwable
+     */
+    public function uploadSites(Request $request)
+    {
+        $created = '';
+        $user = $request->user();
+        $sites = $request->sites;
+        $sitesController = new SitesController();
+        foreach ($sites as $site) {
+            if ($site['id']) { // site exists on server already
+                $serverSite = Site::find($site['id']);
+                $serverSite = $sitesController->update($serverSite, $site);
+            } else {
+                Log::info('attempting site creation');
+                $serverSite = $sitesController->upload($site, $user);
+                Log::info('site creation success');
+            }
+            Log::info('site found!');
+            if ($site['plots']) {
+                foreach ($site['plots'] as $plot) {
+                    $plotsController = new PlotsController();
+                    if ($plot['id']) { // plot exists on server already
+                        $serverPlot = Plot::find($plot['id']);
+                        $serverPlot = $plotsController->update($serverPlot, $plot);
+                    } else {
+                        $serverPlot = $plotsController->upload($serverSite, $plot, $user);
+                    }
+                    if ($plot['plants']) {
+                        $plantsController = new PlantsController();
+                        foreach ($plot['plants'] as $plant) {
+                            if ($plant['id']) { // plant exists on server already
+                                $serverPlant = Plant::find($plant['id']);
+                                $serverPlant = $plantsController->update($serverPlant, $plant);
+                            } else {
+                                $serverPlant = $plantsController->upload($serverPlot, $plant, $user);
+                                //$serverPlant = Plant::find($plant['id']);
+                            }
+                            if ($plant['measurements']) {
+                                $measurementController = new MeasurementsController();
+                                foreach ($plant['measurements'] as $measurement) {
+                                    if ($measurement['id']) { // measurement exists on server already
+                                        $serverMeasurement = Measurement::find($measurement['id']);
+                                        $serverMeasurement = $measurementController->update($serverMeasurement, $measurement);
+                                    } else {
+                                        $measurementController->upload($serverPlant, $measurement, $user);
+                                    }
                                 }
                             }
                         }

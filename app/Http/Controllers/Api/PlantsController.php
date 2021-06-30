@@ -118,7 +118,12 @@ class PlantsController extends Controller
 
         $serverPlant->loadCount(['measurements']);
 
-        $serverPlant->species_name = $serverPlant->species->name;
+//        if ($serverPlant->species->name) {
+//            $serverPlant->species_name = $serverPlant->species->name;
+//        }
+//        else {
+//            $serverPlant->species_name = $serverPlant->species;
+//        }
 
         return $serverPlant;
     }
