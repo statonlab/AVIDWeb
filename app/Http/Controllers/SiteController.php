@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ListsSites;
 use App\Site;
+use App\Plot;
+use App\Plant;
 use App\User;
 use App\Species;
 use Illuminate\Http\Request;
@@ -125,6 +127,17 @@ class SiteController extends Controller
         $site->load(['county', 'state', 'species', 'shrubs']);
         $site->loadCount(['plants', 'plots']);
 
+        $plots_exist = Plot::withQuarantined()->where('site_id', $site->id)
+            ->where('is_quarantined', true)->exists();
+
+        $plants_exist = Plant::withQuarantined()
+            ->whereHas('plot', function ($query) use ($site) {
+                $query->where('site_id', $site->id);
+            })
+            ->where('is_quarantined', true)->exists();
+
+        $site->has_quarantined = $plots_exist || $plants_exist;
+
         return $this->success($site);
     }
 
@@ -225,7 +238,16 @@ class SiteController extends Controller
 
         Excel::import(new SiteImport($user, $site), $request->file('file'));
 
-        return $this->success('Measurements uploaded successfully.');
+        $plots_exist = Plot::withQuarantined()->where('site_id', $site->id)
+            ->where('is_quarantined', true)->exists();
+
+        $plants_exist = Plant::withQuarantined()
+            ->whereHas('plot', function ($query) use ($site) {
+                $query->where('site_id', $site->id);
+            })
+            ->where('is_quarantined', true)->exists();
+
+        return $this->success($plots_exist || $plants_exist);
     }
 
     /**

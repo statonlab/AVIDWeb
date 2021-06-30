@@ -47,7 +47,7 @@
                     <div class="flex-shrink-0">
                         <a class="d-flex align-items-center ml-2 btn btn-primary"
                            :href="`/web/admin-exports/data`"
-                           v-if="showExportButton"
+                           v-if="false"
                            target="_blank">
                             <icon name="cloud-download"/>
                             <span>Export Data</span>

@@ -262,13 +262,13 @@
           tag               : '',
           species_id        : '',
           quadrant          : '',
-          total             : '',
         }),
 
         loadingPlants : false,
         loadingSpecies: false,
         species       : [],
         speciesSearch : '',
+        total         : '',
       }
     },
 

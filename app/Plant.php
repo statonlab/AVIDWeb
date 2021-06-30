@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Events\PlantDeleted;
+use App\Scopes\QuarantinedScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -24,6 +25,7 @@ class Plant extends Model
         'stems',
         'flowers',
         'old_tag',
+        'is_quarantined',
     ];
 
     /**
@@ -38,7 +40,16 @@ class Plant extends Model
      */
     protected $casts = [
         'collected_at' => 'datetime',
+        'is_quarantined' => 'boolean',
     ];
+
+    /**
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new QuarantinedScope);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -53,7 +64,7 @@ class Plant extends Model
      */
     public function plot()
     {
-        return $this->belongsTo(Plot::class);
+        return $this->belongsTo(Plot::class)->withQuarantined();
     }
 
     /**
@@ -86,5 +97,14 @@ class Plant extends Model
     public function site()
     {
         return $this->plot()->first()->site();
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeWithQuarantined($query)
+    {
+        return $query->withoutGlobalScope(QuarantinedScope::class);
     }
 }

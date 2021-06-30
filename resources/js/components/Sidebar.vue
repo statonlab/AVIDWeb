@@ -76,6 +76,11 @@
             label: 'Data Entry'
           },
           {
+            icon: 'lock-closed-outline',
+            to: '/app/incomplete-data',
+            label: 'Incomplete Data'
+          },
+          {
             icon: 'bar-chart-outline',
             to: '/app/statistics',
             label: 'Statistics'
@@ -109,6 +114,11 @@
                 label: 'All Data',
                 if   : User.can('view sites'),
               },
+              // {
+              //   to   : '/app/admin/data-quarantine',
+              //   label: 'Quarantined Data',
+              //   if   : User.can('view sites'),
+              // },
               {
                 to   : '/app/species',
                 label: 'Manage Species',
