@@ -26,9 +26,7 @@ class PlotsApi
         ])->exists();
 
         if ($exists) {
-            return $this->error('Already exists', [
-                'number' => ['This plot number already exists'],
-            ]);
+            return 'error, number in use';
         }
 
         $created = Plot::create([
@@ -67,9 +65,7 @@ class PlotsApi
             ])->exists();
 
             if ($exists) {
-                return $this->error('Already exists', [
-                    'number' => ['This plot number already exists'],
-                ]);
+                return 'error, number in use';
             }
         }
 

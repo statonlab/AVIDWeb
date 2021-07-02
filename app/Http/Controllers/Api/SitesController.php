@@ -53,183 +53,58 @@ class SitesController extends Controller
     }
 
     /**
-     * Takes in one site from the app and updates the server with it.
+     * Takes in one or more sites from the app and updates the server with it
      * @param Request $request
-     * @return JsonResponse|Response
-     * @throws \Throwable
-     */
-    public function uploadSite(Request $request)
-    {
-        return DB::transaction(function () use ($request) {
-            $quadrants = implode(',', static::$quadrants);
-            $user = $request->user();
-            $site = $request->site;
-            $validator = \Validator::make($site, [
-                'name' => 'required',
-                'basal_area' => 'nullable|numeric',
-                'diameter' => 'nullable|numeric',
-                'city' => 'nullable|max:255',
-                'owner_name' => 'nullable|max:255',
-                'owner_contact' => 'nullable',
-                'comments' => 'nullable',
-            ]);
-            if ($validator->fails()) {
-                return $this->error('Message', [$validator->errors()]);
-            }
-            $sitesApi = new SitesApi();
-            if ($site['id']) { // site exists on server already
-                $serverSite = Site::find($site['id']);
-                $this->authorize('update', $serverSite);
-                $serverSite = $sitesApi->update($serverSite, $site);
-            } else {
-                $this->authorize('create', Site::class);
-                $serverSite = $sitesApi->upload($site, $user);
-            }
-            if ($site['plots']) {
-                foreach ($site['plots'] as $plot) {
-                    $validator = \Validator::make($plot, ['number' => 'required|integer',]);
-                    if ($validator->fails()) {
-                        return $this->error('Message', [$validator->errors()]);
-                    }
-                    $plotsApi = new PlotsApi();
-                    if ($plot['id']) { // plot exists on server already
-                        $serverPlot = Plot::find($plot['id']);
-                        $this->authorize('update', $serverPlot);
-                        $serverPlot = $plotsApi->update($serverPlot, $plot);
-                    } else {
-                        $this->authorize('update', $serverSite);
-                        $serverPlot = $plotsApi->upload($serverSite, $plot, $user);
-                    }
-                    if ($plot['plants']) {
-                        $plantsApi = new PlantsApi();
-                        foreach ($plot['plants'] as $plant) {
-                            $validator = \Validator::make($plant, [
-                                'tag' => 'required|integer',
-                                'plant_type_id' => 'required|exists:plant_types,id',
-                                'quadrant' => "required|in:$quadrants",
-                            ]);
-                            if ($validator->fails()) {
-                                return $this->error('Message', [$validator->errors()]);
-                            }
-                            if ($plant['id']) { // plant exists on server already
-                                $serverPlant = Plant::find($plant['id']);
-                                $this->authorize('update', $serverPlant);
-                                $serverPlant = $plantsApi->update($serverPlant, $plant);
-                            } else {
-                                $this->authorize('update', $serverPlot);
-                                $serverPlant = $plantsApi->upload($serverPlot, $plant, $user);
-                            }
-                            if ($serverPlant === 'error, tag exists') {
-                                return $this->error('Plant already exists', [
-                                    'tag' => ['Tag already exists in this plot. Please use a unique tag.'],
-                                ]);
-                            }
-                            if ($plant['measurements']) {
-                                $measurementsApi = new MeasurementsApi();
-                                foreach ($plant['measurements'] as $measurement) {
-                                    if ($measurement['is_located'] == 1) {
-                                        $validator = \Validator::make($measurement, [
-                                            'date' => 'required|date',
-                                            'is_located' => 'required|boolean',
-                                            'height' => 'required|numeric',
-                                            'is_alive' => 'required|boolean',
-                                        ]);
-                                    } else {
-                                        $validator = \Validator::make($measurement, [
-                                            'date' => 'required|date',
-                                            'is_located' => 'required|boolean',
-                                        ]);
-                                    }
-                                    if ($validator->fails()) {
-                                        return $this->error('Message', [$validator->errors()]);
-                                    }
-                                    if ($measurement['id']) { // measurement exists on server already
-                                        $serverMeasurement = Measurement::find($measurement['id']);
-                                        $this->authorize('update', $serverMeasurement);
-                                        $serverMeasurement = $measurementsApi->update($serverMeasurement, $measurement);
-                                    } else {
-                                        $this->authorize('update', $serverPlant);
-                                        $measurementsApi->upload($serverPlant, $measurement, $user);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return $this->success('');
-        });
-    }
-
-    /**
-     * Takes in several sites from the app and updates the server with it
-     * @param Request $request
-     * @return JsonResponse|Response
+     * @return string
      * @throws \Throwable
      */
     public function uploadSites(Request $request)
     {
         DB::beginTransaction();
-        $quadrants = implode(',', static::$quadrants);
         $user = $request->user();
-        $sites = $request->sites;
+        if ($request->site) {
+            $sites = [$request->site];
+        } else {
+            $sites = $request->sites;
+        }
+
         $sitesApi = new SitesApi();
         foreach ($sites as $site) {
-            $validator = \Validator::make($site, [
-                'name' => 'required',
-                'basal_area' => 'nullable|numeric',
-                'diameter' => 'nullable|numeric',
-                'city' => 'nullable|max:255',
-                'owner_name' => 'nullable|max:255',
-                'owner_contact' => 'nullable',
-                'comments' => 'nullable',
-            ]);
-            if ($validator->fails()) {
-                return $this->error('Message', $validator->errors()->toArray());
+            $validation = $this->validateSite($site);
+            if ($validation != 'validated successfully') {
+                return $validation;
             }
+
             if ($site['id']) { // site exists on server already
                 $serverSite = Site::find($site['id']);
-                $this->authorize('update', $serverSite);
                 $serverSite = $sitesApi->update($serverSite, $site);
             } else {
-                $this->authorize('create', Site::class);
                 $serverSite = $sitesApi->upload($site, $user);
             }
             if ($site['plots']) {
                 foreach ($site['plots'] as $plot) {
-                    $validator = \Validator::make($plot, ['number' => 'required|integer',]);
-                    if ($validator->fails()) {
-                        return $this->error('Message', [$validator->errors()]);
-                    }
                     $plotsApi = new PlotsApi();
                     if ($plot['id']) { // plot exists on server already
                         $serverPlot = Plot::find($plot['id']);
-                        $this->authorize('update', $serverPlot);
                         $serverPlot = $plotsApi->update($serverPlot, $plot);
                     } else {
-                        $this->authorize('update', $serverSite);
                         $serverPlot = $plotsApi->upload($serverSite, $plot, $user);
+                    }
+                    if ($serverPlot === 'error, number in use') {
+                        return $this->error('Already exists', [
+                            'number' => ['This plot number already exists'],
+                        ]);
                     }
                     if ($plot['plants']) {
                         $plantsApi = new PlantsApi();
                         foreach ($plot['plants'] as $plant) {
-                            $validator = \Validator::make($plant, [
-                                'tag' => 'required|integer',
-                                'plant_type_id' => 'required|exists:plant_types,id',
-                                'quadrant' => "required|in:$quadrants",
-                            ]);
-                            if ($validator->fails()) {
-                                return $this->error('Message', [$validator->errors()]);
-                            }
                             if ($plant['id']) { // plant exists on server already
                                 $serverPlant = Plant::find($plant['id']);
-                                $this->authorize('update', $serverPlant);
                                 $serverPlant = $plantsApi->update($serverPlant, $plant);
                             } else {
-                                $this->authorize('update', $serverPlot);
                                 $serverPlant = $plantsApi->upload($serverPlot, $plant, $user);
                             }
-                            if ($serverPlant === 'error, tag exists') {
+                            if ($serverPlant == 'error, tag exists') {
                                 return $this->error('Plant already exists', [
                                     'tag' => ['Tag already exists in this plot. Please use a unique tag.'],
                                 ]);
@@ -237,28 +112,10 @@ class SitesController extends Controller
                             if ($plant['measurements']) {
                                 $measurementsApi = new MeasurementsApi();
                                 foreach ($plant['measurements'] as $measurement) {
-                                    if ($measurement['is_located'] == 1) {
-                                        $validator = \Validator::make($measurement, [
-                                            'date' => 'required|date',
-                                            'is_located' => 'required|boolean',
-                                            'height' => 'required|numeric',
-                                            'is_alive' => 'required|boolean',
-                                        ]);
-                                    } else {
-                                        $validator = \Validator::make($measurement, [
-                                            'date' => 'required|date',
-                                            'is_located' => 'required|boolean',
-                                        ]);
-                                    }
-                                    if ($validator->fails()) {
-                                        return $this->error('Message', [$validator->errors()]);
-                                    }
                                     if ($measurement['id']) { // measurement exists on server already
                                         $serverMeasurement = Measurement::find($measurement['id']);
-                                        $this->authorize('update', $serverMeasurement);
                                         $serverMeasurement = $measurementsApi->update($serverMeasurement, $measurement);
                                     } else {
-                                        $this->authorize('update', $serverPlant);
                                         $serverMeasurement = $measurementsApi->upload($serverPlant, $measurement, $user);
                                     }
                                 }
@@ -275,7 +132,7 @@ class SitesController extends Controller
     /**
      * Work in progress... will eventually handle all validation for a single site
      * @param $site
-     * @return JsonResponse|Response
+     * @return string
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function validateSite($site)
@@ -293,32 +150,24 @@ class SitesController extends Controller
         if ($validator->fails()) {
             return $this->error('Message', $validator->errors()->toArray());
         }
+
         if ($site['id']) { // site exists on server already
             $serverSite = Site::find($site['id']);
             $this->authorize('update', $serverSite);
         } else {
             $this->authorize('create', Site::class);
         }
+
         if ($site['plots']) {
             foreach ($site['plots'] as $plot) {
                 $validator = \Validator::make($plot, ['number' => 'required|integer',]);
                 if ($validator->fails()) {
                     return $this->error('Message', [$validator->errors()]);
                 }
+
                 if ($plot['id']) { // plot exists on server already
                     $serverPlot = Plot::find($plot['id']);
                     $this->authorize('update', $serverPlot);
-                    if ($serverPlot->number === $plot['number']) {
-                        return $this->error('Already exists', [
-                            'number' => ['This plot number already exists'],
-                        ]);
-                    }
-                }
-
-                if ($this->plotNumberUsed($site, $plot) === 'plot exists') {
-                    return $this->error('Already exists', [
-                        'number' => ['This plot number already exists'],
-                    ]);
                 }
 
                 if ($plot['plants']) {
@@ -331,18 +180,10 @@ class SitesController extends Controller
                         if ($validator->fails()) {
                             return $this->error('Message', [$validator->errors()]);
                         }
+
                         if ($plant['id']) { // plant exists on server already
                             $serverPlant = Plant::find($plant['id']);
                             $this->authorize('update', $serverPlant);
-                        } else {
-                            $this->authorize('update', $serverPlot);
-                        }
-                        if (!$plant['id'] && $serverPlant->tag != $plant['tag']) {
-                            if ($this->plantTagUsed($plot, $plant) === 'tag exists') {
-                                return $this->error('Plant already exists', [
-                                    'tag' => ['Tag already exists in this plot. Please use a unique tag.'],
-                                ]);
-                            }
                         }
 
                         if ($plant['measurements']) {
@@ -363,11 +204,10 @@ class SitesController extends Controller
                                 if ($validator->fails()) {
                                     return $this->error('Message', [$validator->errors()]);
                                 }
+
                                 if ($measurement['id']) { // measurement exists on server already
                                     $serverMeasurement = Measurement::find($measurement['id']);
                                     $this->authorize('update', $serverMeasurement);
-                                } else {
-                                    $this->authorize('update', $serverPlant);
                                 }
                             }
                         }
@@ -375,26 +215,6 @@ class SitesController extends Controller
                 }
             }
         }
-        return $this->success('');
-    }
-
-    public function plotNumberUsed($site, $plot)
-    {
-        $exists = Plot::where(['site_id' => $site->id, 'number' => $plot['number']])->exists();
-
-        if ($exists) {
-            return 'plot exists';
-        }
-        return $this->success('success');
-    }
-
-    public function plantTagUsed($plot, $plant)
-    {
-        $exists = Plant::where('tag', $plant['tag'])
-            ->where('plot_id', $plot['id'])
-            ->exists();
-        if ($exists) {
-            return 'tag exists';
-        }
+        return 'validated successfully';
     }
 }
