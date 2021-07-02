@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\SitesController;
-use App\Http\Controllers\Api\PlotsController;
-use App\Http\Controllers\Api\PlantsController;
-use App\Http\Controllers\Api\MeasurementsController;
+use App\Http\Controllers\Api\PlotsApi;
+use App\Http\Controllers\Api\PlantsApi;
+use App\Http\Controllers\Api\MeasurementsApi;
 use App\Http\Controllers\Api\SpeciesController;
 use App\Http\Controllers\Api\UserTokenController;
 use App\Site;
@@ -24,16 +24,9 @@ use App\Http\Controllers\Traits\ListsSites;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('/sanctum/token', [UserTokenController::class, 'login']);
 Route::post('/sanctum/logout', [UserTokenController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/download/species', [SpeciesController::class, 'download'])->middleware('auth:sanctum');
 Route::get('/download/sites', [SitesController::class, 'download'])->middleware('auth:sanctum');
 Route::post('/upload/site', [SitesController::class, 'uploadSite'])->middleware('auth:sanctum');
 Route::post('/upload/sites', [SitesController::class, 'uploadSites'])->middleware('auth:sanctum');
-Route::post('/upload/plot', [PlotsController::class, 'uploadPlot'])->middleware('auth:sanctum');
-//Route::post('/upload/measurements', [MeasurementsController::class, 'create'])->middleware('auth:sanctum');
-Route::post('/upload/measurement', [MeasurementsController::class, 'update'])->middleware('auth:sanctum');

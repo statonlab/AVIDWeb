@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Measurement;
 use App\Plant;
 use App\Plot;
 use App\Species;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
-class PlantsController extends Controller
+class PlantsApi
 {
     /**
      * Creates plant on server from uploaded app data.

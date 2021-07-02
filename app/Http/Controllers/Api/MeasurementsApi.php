@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\MeasurementController;
 use App\Measurement;
 use App\Plant;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
-class MeasurementsController extends Controller
+class MeasurementsApi
 {
     /**
      * Creates measurement on server from uploaded app data.
@@ -34,7 +29,7 @@ class MeasurementsController extends Controller
             ]);
             return $measurement;
         });
-        return $this->created($created);
+        return $created;
     }
 
     public function update(Measurement $serverMeasurement, $appMeasurement)

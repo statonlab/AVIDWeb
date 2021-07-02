@@ -4,14 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\PlotCreated;
 use App\Events\PlotUpdated;
-use App\Http\Controllers\Controller;
 use App\Plot;
 use App\Site;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
-class PlotsController extends Controller
+class PlotsApi
 {
     /**
      * Creates plot on server from uploaded app data.
