@@ -14,7 +14,7 @@ class PlantsApi
      * @param Plot $plot
      * @param $plant
      * @param $user
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return string
      * @throws \Throwable
      */
     public function upload(Plot $plot, $plant, $user)
@@ -23,9 +23,7 @@ class PlantsApi
             ->where('plot_id', $plot['id'])
             ->exists();
         if ($exists) {
-            return $this->error('Plant already exists', [
-                'tag' => ['Tag already exists in this plot. Please use a unique tag.'],
-            ]);
+            return 'error, tag exists';
         }
 
         // new species not applicable for now... but this should work when it's implemented app-side
@@ -67,9 +65,7 @@ class PlantsApi
                 ->where('plot_id', $serverPlant->plot->id)
                 ->exists();
             if ($exists) {
-                return $this->error('Plant already exists', [
-                    'tag' => ['Tag already exists in this plot. Please use a unique tag.'],
-                ]);
+                return 'error, tag exists';
             }
         }
         // At the moment, cannot make new species from app
