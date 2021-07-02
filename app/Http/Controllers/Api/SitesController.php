@@ -73,7 +73,6 @@ class SitesController extends Controller
             'comments' => 'nullable',
         ]);
         if ($validator->fails()) {
-            Log::info($validator->errors());
             return $this->error('Message', [$validator->errors()]);
         }
         $sitesApi = new SitesApi();
@@ -89,7 +88,6 @@ class SitesController extends Controller
             foreach ($site['plots'] as $plot) {
                 $validator = \Validator::make($plot, ['number' => 'required|integer',]);
                 if ($validator->fails()) {
-                    Log::info($validator->errors());
                     return $this->error('Message', [$validator->errors()]);
                 }
                 $plotsApi = new PlotsApi();
@@ -110,7 +108,6 @@ class SitesController extends Controller
                             'quadrant' => "required|in:$quadrants",
                         ]);
                         if ($validator->fails()) {
-                            Log::info($validator->errors());
                             return $this->error('Message', [$validator->errors()]);
                         }
                         if ($plant['id']) { // plant exists on server already
@@ -120,6 +117,11 @@ class SitesController extends Controller
                         } else {
                             $this->authorize('update', $serverPlot);
                             $serverPlant = $plantsApi->upload($serverPlot, $plant, $user);
+                        }
+                        if ($serverPlant === 'error, tag exists') {
+                            return $this->error('Plant already exists', [
+                                'tag' => ['Tag already exists in this plot. Please use a unique tag.'],
+                            ]);
                         }
                         if ($plant['measurements']) {
                             $measurementsApi = new MeasurementsApi();
@@ -138,7 +140,6 @@ class SitesController extends Controller
                                     ]);
                                 }
                                 if ($validator->fails()) {
-                                    Log::info($validator->errors());
                                     return $this->error('Message', [$validator->errors()]);
                                 }
                                 if ($measurement['id']) { // measurement exists on server already
@@ -197,7 +198,6 @@ class SitesController extends Controller
                 foreach ($site['plots'] as $plot) {
                     $validator = \Validator::make($plot, ['number' => 'required|integer',]);
                     if ($validator->fails()) {
-                        Log::info($validator->errors());
                         return $this->error('Message', [$validator->errors()]);
                     }
                     $plotsApi = new PlotsApi();
@@ -218,7 +218,6 @@ class SitesController extends Controller
                                 'quadrant' => "required|in:$quadrants",
                             ]);
                             if ($validator->fails()) {
-                                Log::info($validator->errors());
                                 return $this->error('Message', [$validator->errors()]);
                             }
                             if ($plant['id']) { // plant exists on server already
@@ -228,6 +227,11 @@ class SitesController extends Controller
                             } else {
                                 $this->authorize('update', $serverPlot);
                                 $serverPlant = $plantsApi->upload($serverPlot, $plant, $user);
+                            }
+                            if ($serverPlant === 'error, tag exists') {
+                                return $this->error('Plant already exists', [
+                                    'tag' => ['Tag already exists in this plot. Please use a unique tag.'],
+                                ]);
                             }
                             if ($plant['measurements']) {
                                 $measurementsApi = new MeasurementsApi();
@@ -246,7 +250,6 @@ class SitesController extends Controller
                                         ]);
                                     }
                                     if ($validator->fails()) {
-                                        Log::info($validator->errors());
                                         return $this->error('Message', [$validator->errors()]);
                                     }
                                     if ($measurement['id']) { // measurement exists on server already

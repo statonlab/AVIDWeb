@@ -72,7 +72,6 @@ class PlantsApi
                 ]);
             }
         }
-
         // At the moment, cannot make new species from app
 //        $new_species = null;
 //
