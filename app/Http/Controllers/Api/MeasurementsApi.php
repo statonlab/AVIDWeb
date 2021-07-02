@@ -15,21 +15,17 @@ class MeasurementsApi
      */
     public function upload(Plant $plant, $measurement, $user)
     {
-        $created = DB::transaction(function () use ($plant, $measurement, $user) {
-            /** @var \App\User $user */
-            $measurement = Measurement::create([
-                'plant_id' => $plant->id,
-                'plot_id' => $plant->plot->id,
-                'site_id' => $plant->plot->site_id,
-                'user_id' => $user->id,
-                'is_located' => $measurement['is_located'],
-                'date' => date("Y-m-d", strtotime($measurement['date'])),
-                'height' => $measurement['height'],
-                'is_alive' => $measurement['is_alive'],
-            ]);
-            return $measurement;
-        });
-        return $created;
+        $measurement = Measurement::create([
+            'plant_id' => $plant->id,
+            'plot_id' => $plant->plot->id,
+            'site_id' => $plant->plot->site_id,
+            'user_id' => $user->id,
+            'is_located' => $measurement['is_located'],
+            'date' => date("Y-m-d", strtotime($measurement['date'])),
+            'height' => $measurement['height'],
+            'is_alive' => $measurement['is_alive'],
+        ]);
+        return $measurement;
     }
 
     public function update(Measurement $serverMeasurement, $appMeasurement)

@@ -17,20 +17,18 @@ class SitesApi
      */
     public function upload($site, $user)
     {
-        $serverSite = DB::transaction(function () use ($site, $user) {
-            return Site::create([
-                'user_id' => $user->id,
-                'name' => $site['name'],
+        $serverSite = Site::create([
+            'user_id' => $user->id,
+            'name' => $site['name'],
 //            'state_id' => //$site['state_id'],
 //            'county_id' => //$site['county_id'],
-                'basal_area' => $site['basal_area'],
-                'diameter' => $site['tree_diameter'],
-                'city' => $site['city'],
-                'owner_name' => $site['owner_name'],
-                'owner_contact' => $site['owner_contact'],
-                'comments' => $site['comments'],
-            ]);
-        });
+            'basal_area' => $site['basal_area'],
+            'diameter' => $site['tree_diameter'],
+            'city' => $site['city'],
+            'owner_name' => $site['owner_name'],
+            'owner_contact' => $site['owner_contact'],
+            'comments' => $site['comments'],
+        ]);
 
         foreach ($user->groups as $group) {
             $group->sites()->attach($serverSite->id);
@@ -61,21 +59,17 @@ class SitesApi
 
     public function update(Site $serverSite, $appSite)
     {
-
-        $serverSite = DB::transaction(function () use ($serverSite, $appSite) {
-            $serverSite->fill([
-                'name' => $appSite['name'],
-                //'state_id' => $appSite['state_id'],
-                //'county_id' => $appSite['county_id'],
-                'basal_area' => $appSite['basal_area'],
-                'diameter' => $appSite['tree_diameter'],
-                'city' => $appSite['city'],
-                'owner_name' => $appSite['owner_name'],
-                'owner_contact' => $appSite['owner_contact'],
-                'comments' => $appSite['comments'],
-            ])->save();
-            return $serverSite;
-        });
+        $serverSite->fill([
+            'name' => $appSite['name'],
+            //'state_id' => $appSite['state_id'],
+            //'county_id' => $appSite['county_id'],
+            'basal_area' => $appSite['basal_area'],
+            'diameter' => $appSite['tree_diameter'],
+            'city' => $appSite['city'],
+            'owner_name' => $appSite['owner_name'],
+            'owner_contact' => $appSite['owner_contact'],
+            'comments' => $appSite['comments'],
+        ])->save();
 
         // Can't change species and shrubs from within the app
 

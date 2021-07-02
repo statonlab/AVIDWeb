@@ -31,22 +31,20 @@ class PlotsApi
             ]);
         }
 
-        $created = DB::transaction(function () use ($site, $plot, $user) {
-            return Plot::create([
-                'user_id' => $user->id,
-                'site_id' => $site->id,
-                'number' => $plot['number'],
-                'latitude' => $plot['latitude'],
-                'longitude' => $plot['longitude'],
-                'basal_area' => $plot['basal_area'],
-                'is_protected' => $plot['is_protected'] == '1' ? 1 : 0,
-                'protection_seasons' => $plot['protection_seasons'],
-                'canopy' => $plot['canopy'],
-                'subcanopy' => $plot['subcanopy'],
-                'ground_cover' => $plot['ground_cover'],
-                'recorders' => $plot['recorders'],
-            ]);
-        });
+        $created = Plot::create([
+            'user_id' => $user->id,
+            'site_id' => $site->id,
+            'number' => $plot['number'],
+            'latitude' => $plot['latitude'],
+            'longitude' => $plot['longitude'],
+            'basal_area' => $plot['basal_area'],
+            'is_protected' => $plot['is_protected'] == '1' ? 1 : 0,
+            'protection_seasons' => $plot['protection_seasons'],
+            'canopy' => $plot['canopy'],
+            'subcanopy' => $plot['subcanopy'],
+            'ground_cover' => $plot['ground_cover'],
+            'recorders' => $plot['recorders'],
+        ]);
 
         $created->load([
             'user' => function ($query) {
@@ -75,21 +73,18 @@ class PlotsApi
             }
         }
 
-        $serverPlot = DB::transaction(function () use ($serverPlot, $appPlot) {
-            $serverPlot->fill([
-                'number' => $appPlot['number'],
-                'latitude' => $appPlot['latitude'],
-                'longitude' => $appPlot['longitude'],
-                'basal_area' => $appPlot['basal_area'],
-                'is_protected' => $appPlot['is_protected'] == '1' ? 1 : 0,
-                'protection_seasons' => $appPlot['protection_seasons'],
-                'canopy' => $appPlot['canopy'],
-                'subcanopy' => $appPlot['subcanopy'],
-                'ground_cover' => $appPlot['ground_cover'],
-                'recorders' => $appPlot['recorders'],
-            ])->save();
-            return $serverPlot;
-        });
+        $serverPlot->fill([
+            'number' => $appPlot['number'],
+            'latitude' => $appPlot['latitude'],
+            'longitude' => $appPlot['longitude'],
+            'basal_area' => $appPlot['basal_area'],
+            'is_protected' => $appPlot['is_protected'] == '1' ? 1 : 0,
+            'protection_seasons' => $appPlot['protection_seasons'],
+            'canopy' => $appPlot['canopy'],
+            'subcanopy' => $appPlot['subcanopy'],
+            'ground_cover' => $appPlot['ground_cover'],
+            'recorders' => $appPlot['recorders'],
+        ])->save();
 
         $serverPlot->load([
             'user' => function ($query) {

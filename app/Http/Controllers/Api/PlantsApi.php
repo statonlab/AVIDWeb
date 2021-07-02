@@ -42,18 +42,14 @@ class PlantsApi
             }
         }
 
-        $plant = DB::transaction(function () use ($plot, $plant, $user, $new_species) {
-            /** @var \App\User $user */
-            $plant = Plant::create([
-                'plot_id' => $plot['id'],
-                'plant_type_id' => $plant['plant_type_id'],
-                'species_id' => $new_species ? $new_species->id : $plant['species_id'],
-                'tag' => $plant['tag'],
-                'quadrant' => $plant['quadrant'],
-                'user_id' => $user->id,
-            ]);
-            return $plant;
-        });
+        $plant = Plant::create([
+            'plot_id' => $plot['id'],
+            'plant_type_id' => $plant['plant_type_id'],
+            'species_id' => $new_species ? $new_species->id : $plant['species_id'],
+            'tag' => $plant['tag'],
+            'quadrant' => $plant['quadrant'],
+            'user_id' => $user->id,
+        ]);
 
         return $plant;
     }
@@ -86,15 +82,12 @@ class PlantsApi
 //            }
 //        }
 
-        $serverPlant = DB::transaction(function () use ($serverPlant, $appPlant) {
-            $serverPlant->fill([
-                'plant_type_id' => $appPlant['plant_type_id'],
-                'species_id' => $appPlant['species_id'], // $new_species ? $new_species->id : $request->species_id,
-                'tag' => $appPlant['tag'],
-                'quadrant' => $appPlant['quadrant'],
-            ])->save();
-            return $serverPlant;
-        });
+        $serverPlant->fill([
+            'plant_type_id' => $appPlant['plant_type_id'],
+            'species_id' => $appPlant['species_id'], // $new_species ? $new_species->id : $request->species_id,
+            'tag' => $appPlant['tag'],
+            'quadrant' => $appPlant['quadrant'],
+        ])->save();
 
         $serverPlant->load([
             'type' => function ($query) {
