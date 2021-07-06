@@ -9,7 +9,7 @@
                     {{ site.name }}
                 </h1>
                 <p class="mb-0 text-muted">
-                    {{ site.city ? `${site.city}, ` : ''}}{{ site.county.name }}, {{ site.state.name }}
+                    {{ site.city ? `${site.city}, ` : ''}}{{ site.county ? site.county.name : 'no county' }}, {{ site.state ? site.state.name : 'no state' }}
                 </p>
             </div>
         </div>
