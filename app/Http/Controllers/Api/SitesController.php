@@ -69,11 +69,16 @@ class SitesController extends Controller
         }
 
         $sitesApi = new SitesApi();
-        foreach ($sites as $site) {
+        
+        foreach($sites as $site) {
             $validation = $this->validateSite($site);
             if ($validation != 'validated successfully') {
                 return $validation;
             }
+        }
+        
+        DB::beginTransaction();
+        foreach ($sites as $site) {
 
             if ($site['id']) { // site exists on server already
                 $serverSite = Site::find($site['id']);
