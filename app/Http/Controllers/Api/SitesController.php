@@ -60,7 +60,6 @@ class SitesController extends Controller
      */
     public function uploadSites(Request $request)
     {
-        DB::beginTransaction();
         $user = $request->user();
         if ($request->site) {
             $sites = [$request->site];
