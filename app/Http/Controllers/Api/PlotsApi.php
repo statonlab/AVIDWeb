@@ -57,7 +57,6 @@ class PlotsApi
 
     public function update(Plot $serverPlot, $appPlot)
     {
-
         if ($serverPlot->number != $appPlot['number']) {
             $exists = Plot::where([
                 'site_id' => $serverPlot->site_id,
