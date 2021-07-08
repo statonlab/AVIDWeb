@@ -20,6 +20,10 @@ class Plot extends Model
         'number',
         'latitude',
         'longitude',
+        'custom_latitude',
+        'custom_longitude',
+        'accuracy',
+        'altitude',
         'basal_area',
         'is_protected',
         'protection_seasons',
@@ -81,9 +85,11 @@ class Plot extends Model
 
     /**
      * Sets the measured at field for both the current plot and the parent site based on the provided measurement.
+     *
      * @param \App\Measurement $measurement
      */
-    public function setLastMeasuredAt(Measurement $measurement) {
+    public function setLastMeasuredAt(Measurement $measurement)
+    {
         if ($this->last_measured_at === null || $this->last_measured_at < $measurement->date) {
             $this->fill(['last_measured_at' => $measurement->date])->save();
 
@@ -104,5 +110,4 @@ class Plot extends Model
     {
         return $query->withoutGlobalScope(QuarantinedScope::class);
     }
-
 }
