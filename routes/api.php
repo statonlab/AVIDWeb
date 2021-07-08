@@ -35,7 +35,7 @@ Route::get('/download/sites', [SitesController::class, 'download'])->middleware(
 Route::post('/upload/site', [SitesController::class, 'uploadSite'])->middleware('auth:sanctum');
 //Route::post('/upload/sites', [SitesController::class, 'uploadSites'])->middleware('auth:sanctum');
 Route::post('sites', [SitesController::class, 'create'])->middleware('auth:sanctum');
-Route::post('plots', [PlotsController::class, 'create'])->middleware('auth:sanctum');
+Route::post('sites/{site}/plots', [PlotsController::class, 'create'])->middleware('auth:sanctum');
 Route::post('plants', [PlantsController::class, 'create'])->middleware('auth:sanctum');
 Route::post('measurements', [MeasurementsController::class, 'create'])->middleware('auth:sanctum');
 Route::put('site/{site}', [SitesController::class, 'update'])->middleware('auth:sanctum');

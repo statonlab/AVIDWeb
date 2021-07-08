@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Events\PlotCreated;
 use App\Events\PlotUpdated;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreatePlotRequest;
 use App\Plot;
 use App\Site;
 use Illuminate\Http\Request;
@@ -12,18 +13,14 @@ use Illuminate\Http\Request;
 class PlotsController extends Controller
 {
     /**
-     * @param Request $request
+     * @param \App\Site $site
+     * @param \App\Http\Requests\CreatePlotRequest $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function create(Request $request)
+    public function create(Site $site, CreatePlotRequest $request)
     {
-        $site = Site::findOrFail($request->site_id);
-        $this->authorize('update', $site); //crashes on this line
-        $this->validate($request, [
-            'number' => 'required|integer'
-        ]);
+        $this->authorize('update', $site);
 
         /** @var \App\User $user */
         $user = $request->user();
@@ -43,8 +40,12 @@ class PlotsController extends Controller
             'user_id' => $user->id,
             'site_id' => $site->id,
             'number' => $request->number,
-            //'latitude' => $request->latitude,
-            //'longitude' => $request->longitude,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'custom_latitude' => $request->latitude,
+            'custom_longitude' => $request->longitude,
+            'accuracy' => $request->accuracy,
+            'altitude' => $request->altitude,
             'basal_area' => $request->basal_area,
             'is_protected' => $request->is_protected == '1' ? 1 : 0,
             'protection_seasons' => $request->protection_seasons,
@@ -74,12 +75,9 @@ class PlotsController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Plot $plot)
+    public function update(CreatePlotRequest $request, Plot $plot)
     {
         $this->authorize('update', $plot);
-        $this->validate($request, [
-            'number' => 'required|integer'
-        ]);
 
         if ($plot->number != $request->number) {
             $exists = Plot::where([
@@ -96,8 +94,12 @@ class PlotsController extends Controller
 
         $plot->fill([
             'number' => $request->number,
-            //'latitude' => $request->latitude,
-            //'longitude' => $request->longitude,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'custom_latitude' => $request->latitude,
+            'custom_longitude' => $request->longitude,
+            'accuracy' => $request->accuracy,
+            'altitude' => $request->altitude,
             'basal_area' => $request->basal_area,
             'is_protected' => $request->is_protected == '1' ? 1 : 0,
             'protection_seasons' => $request->protection_seasons,
