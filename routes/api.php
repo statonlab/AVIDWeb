@@ -28,6 +28,7 @@ use App\Http\Controllers\Traits\ListsSites;
 */
 
 Route::post('/sanctum/token', [UserTokenController::class, 'login']);
+Route::post('/sanctum/register', [UserTokenController::class, 'register']);
 Route::post('/sanctum/logout', [UserTokenController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/download/species', [SpeciesController::class, 'download'])->middleware('auth:sanctum');
 Route::get('/download/sites', [SitesController::class, 'download'])->middleware('auth:sanctum');
