@@ -6,6 +6,7 @@ use App\Measurement;
 use App\Plant;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MeasurementController extends Controller
 {
@@ -79,7 +80,6 @@ class MeasurementController extends Controller
     public function create(Plant $plant, Request $request)
     {
         $this->authorize('update', $plant);
-
         $this->validate($request, [
             'date' => 'required|date_format:Y-m-d',
             'is_located' => 'required|boolean',

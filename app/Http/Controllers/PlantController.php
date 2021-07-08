@@ -200,13 +200,15 @@ class PlantController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Plant $plant
+     * @param $id
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Plant $plant, Request $request)
+    public function update($id, Request $request)
     {
+        $plant = Plant::withQuarantined()->find($id);
+
         $this->authorize('update', $plant);
 
         $quadrants = implode(',', static::$quadrants);
@@ -274,13 +276,15 @@ class PlantController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Plant $plant
+     * @param $id
      * @return \Illuminate\Http\Response
      * @throws \Exception
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(Plant $plant)
+    public function destroy($id)
     {
+        $plant = Plant::withQuarantined()->find($id);
+
         $this->authorize('delete', $plant);
 
         $plant->delete();

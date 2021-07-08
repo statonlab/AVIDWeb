@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Events\MeasurementCreated;
+use App\Scopes\QuarantinedScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -22,9 +23,11 @@ class Measurement extends Model
         'is_alive',
         'date',
         'height',
+        'is_quarantined',
     ];
 
     protected $casts = [
+        'is_quarantined' => 'boolean',
         'is_located' => 'boolean',
         'is_alive' => 'boolean',
         'date' => 'date:Y-m-d',
@@ -36,6 +39,14 @@ class Measurement extends Model
     protected $dispatchesEvents = [
         'created' => MeasurementCreated::class,
     ];
+
+    /**
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new QuarantinedScope);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -67,5 +78,14 @@ class Measurement extends Model
     public function site()
     {
         return $this->belongsTo(Site::class);
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeWithQuarantined($query)
+    {
+        return $query->withoutGlobalScope(QuarantinedScope::class);
     }
 }
