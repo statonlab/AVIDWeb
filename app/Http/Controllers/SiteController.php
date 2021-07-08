@@ -40,7 +40,7 @@ class SiteController extends Controller
         ]);
 
         $sites = $this->getSites($user !== null ? $user->sites() : null)
-          ->paginate($request->limit ?? 20);
+            ->paginate($request->limit ?? 20);
 
         return $this->success($sites);
     }
@@ -94,6 +94,7 @@ class SiteController extends Controller
             if (Species::find($species) !== null) {
                 return $species;
             }
+
             return Species::create(['name' => $species])->id;
         }, $request->species);
 
@@ -101,6 +102,7 @@ class SiteController extends Controller
             if (Species::find($shrub) !== null) {
                 return $shrub;
             }
+
             return Species::create(['name' => $shrub])->id;
         }, $request->shrubs);
 
@@ -262,7 +264,7 @@ class SiteController extends Controller
             return $this->unauthorized();
         }
 
-        $site->fill(['sends_reminders' => !$site->sends_reminders])->save();
+        $site->fill(['sends_reminders' => ! $site->sends_reminders])->save();
 
         return $this->success($site);
     }
@@ -277,7 +279,7 @@ class SiteController extends Controller
         $this->authorize('changeOwner', Site::class);
 
         $this->validate($request, [
-            'user_id' => 'required|exists:users,id'
+            'user_id' => 'required|exists:users,id',
         ]);
 
         $site->fill(['user_id' => $request->user_id])->save();
