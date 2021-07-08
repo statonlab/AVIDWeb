@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Console\Commands\SetLastMeasuredAt;
 use App\Measurement;
 use App\Species;
 use App\Plant;
@@ -96,7 +97,7 @@ class PlantController extends Controller
 
         if ($request->new_species) {
             $this->validate($request, [
-                'new_species_name' => 'required|max:255'
+                'new_species_name' => 'required|max:255',
             ]);
         } else {
             $this->validate($request, [
@@ -216,7 +217,7 @@ class PlantController extends Controller
             'plant_type_id' => 'required|exists:plant_types,id',
             'tag' => 'required|integer',
             'quadrant' => "required|in:$quadrants",
-            'new_species' => 'nullable|boolean'
+            'new_species' => 'nullable|boolean',
         ]);
 
         if ($request->tag != $plant->tag) {
@@ -289,5 +290,42 @@ class PlantController extends Controller
         $plant->delete();
 
         return $this->deleted($plant);
+    }
+
+    /**
+     * @param Plant $plant
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
+    public function transfer(Plant $plant, Request $request)
+    {
+        $this->validate($request, [
+            'plot_id' => 'required|exists:plots,id',
+            'site_id' => 'required|exists:sites,id',
+        ]);
+
+        $plot = Plot::find($request->plot_id);
+
+        $this->authorize('update', $plant);
+        $this->authorize('update', $plot);
+
+        if ($plot->plants()->where('tag', $plant->tag)->exists()) {
+            return $this->error('Plant tag already exists', [
+                'plot_id' => ['The plant tag already exists in this plot. Please change the tag number before transferring to avoid duplicate tags.'],
+            ]);
+        }
+
+        $plant->fill([
+            'plot_id' => $request->plot_id,
+        ])->save();
+
+        Measurement::where(['plant_id' => $plant->id])->update([
+            'plot_id' => $request->plot_id,
+            'site_id' => $request->site_id,
+        ]);
+
+        dispatch(fn() => \Artisan::call(SetLastMeasuredAt::class));
+
+        return $this->created($plant);
     }
 }

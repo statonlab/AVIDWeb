@@ -169,6 +169,7 @@ Route::group([
     Route::get('/plots/{plot}/plants', 'PlantController@index');
     Route::post('/plots/{plot}/plants', 'PlantController@create');
     Route::get('/plants/{plant}', 'PlantController@show');
+    Route::put('/plants/{plant}/transfer', 'PlantController@transfer');
     Route::put('/plants/{id}', 'PlantController@update');
     Route::delete('/plants/{id}', 'PlantController@destroy');
 

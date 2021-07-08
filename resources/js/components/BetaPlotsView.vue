@@ -80,6 +80,7 @@
                   :editable="sharedEdit || editable"
                   v-if="plot"
                   :plot="plot"
+                  :plots="plots"
                   :site="site"/>
               <div v-else>
                 <div class="p-3 d-flex align-items-center justify-content-center" v-if="loading">
