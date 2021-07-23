@@ -32,8 +32,6 @@ Route::post('/sanctum/register', [UserTokenController::class, 'register']);
 Route::post('/sanctum/logout', [UserTokenController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/download/species', [SpeciesController::class, 'download'])->middleware('auth:sanctum');
 Route::get('/download/sites', [SitesController::class, 'download'])->middleware('auth:sanctum');
-Route::post('/upload/site', [SitesController::class, 'uploadSite'])->middleware('auth:sanctum');
-//Route::post('/upload/sites', [SitesController::class, 'uploadSites'])->middleware('auth:sanctum');
 Route::post('sites', [SitesController::class, 'create'])->middleware('auth:sanctum');
 Route::post('sites/{site}/plots', [PlotsController::class, 'create'])->middleware('auth:sanctum');
 Route::post('plants', [PlantsController::class, 'create'])->middleware('auth:sanctum');
