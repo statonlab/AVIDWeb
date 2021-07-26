@@ -14,7 +14,7 @@ class SpeciesController extends Controller
      */
     public function download(Request $request)
     {
-        $species = Species::all(); //$species = Species::with(['type'])->get();
+        $species = Species::whereNotNull('plant_type_id'); //$species = Species::with(['type'])->get();
 
         return $this->success($species);
     }
