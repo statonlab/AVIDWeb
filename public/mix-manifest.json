@@ -15,11 +15,11 @@
     "/vendors~js/calendar~js/dashboard~js/reminders.js.map": "/vendors~js/calendar~js/dashboard~js/reminders.js.map?id=2a507dfd3c5458ec752a",
     "/js/calendar~js/dashboard.js": "/js/calendar~js/dashboard.js?id=9d8604f1d0f22c186cff",
     "/js/calendar~js/dashboard.js.map": "/js/calendar~js/dashboard.js.map?id=d8633d7b46d1d9fb807a",
-    "/vendors~js/dashboard~js/statistics.js": "/vendors~js/dashboard~js/statistics.js?id=cc0d1e6e4c136e338988",
-    "/vendors~js/dashboard~js/statistics.js.map": "/vendors~js/dashboard~js/statistics.js.map?id=4e09777eeeb2f4ddbd90",
-    "/js/app.js": "/js/app.js?id=5012b39d7a0ede39960b",
+    "/vendors~js/dashboard~js/statistics.js": "/vendors~js/dashboard~js/statistics.js?id=b996d0e90878461e981e",
+    "/vendors~js/dashboard~js/statistics.js.map": "/vendors~js/dashboard~js/statistics.js.map?id=5ee43c46235daf89c1c9",
+    "/js/app.js": "/js/app.js?id=aa2017670470dd7b28de",
     "/css/app.css": "/css/app.css?id=2063e2134f1091fb3fb7",
-    "/js/app.js.map": "/js/app.js.map?id=03e9e3b75c04f4129b45",
+    "/js/app.js.map": "/js/app.js.map?id=295a351955ec02505d7c",
     "/css/app.css.map": "/css/app.css.map?id=dd6ee3b5054e43cd3248",
     "/js/auth.js": "/js/auth.js?id=abd7f2492ab5cfeb9d84",
     "/js/auth.js.map": "/js/auth.js.map?id=173503e6d9cfd8ce9f5b",
@@ -69,6 +69,6 @@
     "/js/user.js.map": "/js/user.js.map?id=68faadd0525aa6b0eadb",
     "/js/users.js": "/js/users.js?id=0c10bd80affe558b4a71",
     "/js/users.js.map": "/js/users.js.map?id=777e69d911e98776611a",
-    "/vendors~js/events.js": "/vendors~js/events.js?id=a0628d6be40c09675a7e",
-    "/vendors~js/events.js.map": "/vendors~js/events.js.map?id=0b60114d2c88a5c916a6"
+    "/vendors~js/events.js": "/vendors~js/events.js?id=45ec8c12444db459a262",
+    "/vendors~js/events.js.map": "/vendors~js/events.js.map?id=a70a82331efd37290c0a"
 }
