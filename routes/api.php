@@ -4,17 +4,9 @@ use App\Http\Controllers\Api\MeasurementsController;
 use App\Http\Controllers\Api\PlantsController;
 use App\Http\Controllers\Api\PlotsController;
 use App\Http\Controllers\Api\SitesController;
-use App\Http\Controllers\Api\PlotsApi;
-use App\Http\Controllers\Api\PlantsApi;
-use App\Http\Controllers\Api\MeasurementsApi;
 use App\Http\Controllers\Api\SpeciesController;
 use App\Http\Controllers\Api\UserTokenController;
-use App\Site;
-use Illuminate\Http\Request;
-use App\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
-use App\Http\Controllers\Traits\ListsSites;
+
 
 /*
 |--------------------------------------------------------------------------
