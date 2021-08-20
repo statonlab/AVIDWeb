@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Notifications\SiteSharedNotification;
 use App\User;
 use App\Site;
 use App\Reminder;
@@ -52,5 +53,7 @@ class SiteSharedListener implements ShouldQueue
             'site_id' => $site->id,
             'date' => $site->last_measured_at->addYear()->subMonth(),
         ]);
+
+        $event->user_site->user->notify(new SiteSharedNotification($site));
     }
 }
