@@ -49,7 +49,7 @@ class SiteSharedNotification extends Notification
     {
         $line = '';
         if ($this->site->last_measured_at) {
-            $line = ' The last measurement taken at this site was on ' . $this->site->last_measured_at->format('M jS, Y');
+            $line = ' The last measurement taken at this site was on ' . $this->site->last_measured_at->format('M jS, Y') . '.';
         }
 
         $message = (new MailMessage)->greeting("Hello $notifiable->name,")
