@@ -47,14 +47,10 @@ class SiteSharedNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $line = '';
-        if ($this->site->last_measured_at) {
-            $line = ' The last measurement taken at this site was on ' . $this->site->last_measured_at->format('M jS, Y') . '.';
-        }
 
         $message = (new MailMessage)->greeting("Hello $notifiable->name,")
             ->subject(Str::title("You've been invited to edit {$this->site->name}"))
-            ->line('This is a notification that you\'ve been added to the site ' . $this->site->name . '. If you have the AVID app on your iPhone or Android device, make sure to log into the app and tap \'Download data\' from the Settings tab to download the shared site data.' . $line);
+            ->line('This is a notification that you\'ve been added to the site ' . $this->site->name . '. If you have the AVID app on your iPhone or Android device, make sure to log into the app and tap \'Download data\' from the Settings tab to download the shared site data.');
 
 
         $message->action('Visit Site', url("/app/sites/{$this->site->id}"))
