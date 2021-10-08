@@ -34,11 +34,15 @@ class UserTokenController extends Controller
             ]);
         }
 
+        if ($user->tokens()) {
+            $user->tokens()->delete();
+        }
         $token = $user->createToken(\Str::random())->plainTextToken;
 
         $response = [
             'user' => $user,
             'token' => $token,
+            'token_expires_at' => 90 // token expires 90 days
         ];
 
         return $this->success($response);
@@ -95,6 +99,7 @@ class UserTokenController extends Controller
         $response = [
             'user' => $user,
             'token' => $token,
+            'token_expires_at' => 90 // token expires 90 days
         ];
 
         return $this->success($response);
