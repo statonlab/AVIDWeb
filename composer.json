@@ -18,20 +18,20 @@
     ],
     "license": "GPL-3.0-only",
     "require": {
-        "php": "^7.4",
+        "php": "^8.0",
+        "ext-json": "*",
+        "fakerphp/faker": "^1.16",
         "fideloper/proxy": "^4.0",
         "google/recaptcha": "^1.2",
         "guzzlehttp/guzzle": "^6.5",
         "laravel/framework": "^7.0",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.0",
-        "maatwebsite/excel": "^3.1",
-      "ext-json": "*"
+        "maatwebsite/excel": "^3.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.6",
         "facade/ignition": "^2.0",
-        "fzaninotto/faker": "^1.4",
         "laravel/ui": "^2.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^4.1",
