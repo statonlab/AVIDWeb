@@ -18,7 +18,7 @@ abstract class TestCase extends BaseTestCase
      * @return User
      * @throws \Exception
      */
-    public function makeUser($role, $overrides = [])
+    public function makeUser(string $role, array $overrides = []): User
     {
         $role = Role::where('name', $role)->first();
 
@@ -27,8 +27,9 @@ abstract class TestCase extends BaseTestCase
         }
 
         /** @var User $user */
-        $user = factory(User::class)->create(array_merge(
-            ['role_id' => $role->id], $overrides));
+        $user = factory(User::class)->create(array_merge([
+            'role_id' => $role->id,
+        ], $overrides));
 
         return $user;
     }
@@ -38,7 +39,7 @@ abstract class TestCase extends BaseTestCase
      * @return \App\User
      * @throws \Exception
      */
-    public function makeAdmin($overrides = [])
+    public function makeAdmin(array $overrides = []): User
     {
         return $this->makeUser('Admin', $overrides);
     }
@@ -48,7 +49,7 @@ abstract class TestCase extends BaseTestCase
      * @return \App\User
      * @throws \Exception
      */
-    public function makeMember($overrides = [])
+    public function makeMember(array $overrides = []): User
     {
         return $this->makeUser('Member', $overrides);
     }
@@ -57,7 +58,7 @@ abstract class TestCase extends BaseTestCase
      * @param array $overrides
      * @return \App\Site
      */
-    public function makeSite($overrides = [])
+    public function makeSite(array $overrides = []): Site
     {
         $site = factory(Site::class)->create($overrides);
         $species = [];

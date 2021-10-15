@@ -12,6 +12,13 @@ class SiteSharingTest extends TestCase
 {
     use DatabaseTransactions, WithFaker;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withHeader('Accept', 'application/json');
+    }
+
     public function testUserCanShareASite()
     {
         $member = $this->makeMember();

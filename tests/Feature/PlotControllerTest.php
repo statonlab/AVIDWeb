@@ -13,6 +13,13 @@ class PlotControllerTest extends TestCase
 {
     use DatabaseTransactions, WithFaker;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withHeader('Accept', 'application/json');
+    }
+
     public function testListingPlots()
     {
         $user = $this->makeAdmin();
@@ -157,6 +164,7 @@ class PlotControllerTest extends TestCase
             'latitude' => $plot->latitude,
             'longitude' => $plot->longitude,
             'is_protected' => $plot->is_protected,
+            'protection_seasons' => $plot->protection_seasons,
             'canopy' => $plot->canopy,
             'subcanopy' => $plot->subcanopy,
             'ground_cover' => $plot->ground_cover,

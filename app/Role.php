@@ -34,6 +34,10 @@ class Role extends Model
      * @return bool
      */
     public function can(string $ability) {
+        if($this->name === 'Admin') {
+            return true;
+        }
+
         return $this->permissions()->where('permissions.name', $ability)->exists();
     }
 }
