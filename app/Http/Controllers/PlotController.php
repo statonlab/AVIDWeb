@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use App\Events\PlotCreated;
 use App\Events\PlotUpdated;
+use Shapefile\ShapefileAutoloader;
 use Shapefile\ShapefileException;
 use Shapefile\ShapefileReader;
 use Storage;
@@ -246,6 +247,8 @@ class PlotController extends Controller
      */
     public function layers(Request $request): Response|JsonResponse
     {
+        require_once(base_path('vendor/gasparesganga/php-shapefile/src/Shapefile/ShapefileAutoloader.php'));
+        ShapefileAutoloader::register();
         $path = Storage::path("maps/NYS_WildlifeManagementUnits.shp");
 
         $shapefile = new ShapefileReader($path);
