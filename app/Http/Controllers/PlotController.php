@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreatePlotRequest;
 use App\Plot;
 use App\Site;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use App\Events\PlotCreated;
 use App\Events\PlotUpdated;
+use Shapefile\ShapefileException;
+use Shapefile\ShapefileReader;
+use Storage;
 
 class PlotController extends Controller
 {
@@ -29,7 +34,7 @@ class PlotController extends Controller
             'order_by' => 'nullable|in:number,plants_count,last_measured_at',
             'order_dir' => 'nullable|in:asc,desc',
             'search' => 'nullable|max:255',
-            'limit' => 'nullable|integer|min:20|max:1000'
+            'limit' => 'nullable|integer|min:20|max:1000',
         ]);
 
         $plots = $site->plots()->with([
@@ -47,8 +52,8 @@ class PlotController extends Controller
             });
         }
 
-        $plots = $plots->orderBy($request->order_by ?? 'number', $request->order_dir ?? 'asc')
-            ->paginate($request->limit ?? 20);
+        $plots = $plots->orderBy($request->order_by ?? 'number',
+            $request->order_dir ?? 'asc')->paginate($request->limit ?? 20);
 
         return $this->success($plots);
     }
@@ -206,5 +211,72 @@ class PlotController extends Controller
         $plot->delete();
 
         return $this->created('Plot deleted');
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
+    public function map(Request $request): Response|JsonResponse
+    {
+        $user = $request->user();
+
+        $plots = Plot::select([
+            'plots.id',
+            'plots.latitude',
+            'plots.longitude',
+            'plots.custom_latitude',
+            'plots.custom_longitude',
+        ])->when($user->cant('viewAny', Plot::class), function ($query) use ($user) {
+            $query->whereHas('site',
+                fn($q) => $q->where('sites.user_id', '=', $user->id));
+        })->where(function ($query) {
+            $query->where(fn($q) => $q->whereNotNull('latitude')
+                ->whereNotNull('longitude'));
+            $query->orWhere(fn($q) => $q->whereNotNull('custom_latitude')
+                ->whereNotNull('custom_longitude'));
+        })->get();
+
+        return $this->success($plots);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
+    public function layers(Request $request): Response|JsonResponse
+    {
+        $path = Storage::path("maps/NYS_WildlifeManagementUnits.shp");
+
+        $shapefile = new ShapefileReader($path);
+        $layers = [];
+        try {
+            // Read all the records
+            while ($geometry = $shapefile->fetchRecord()) {
+                // Skip the record if marked as "deleted"
+                if ($geometry->isDeleted()) {
+                    continue;
+                }
+
+                // Print Geometry as GeoJSON
+                $geometry = json_decode($geometry->getGeoJSON(), true);
+                $layers[] = [
+                    'type' => 'Feature',
+                    'geometry' => $geometry
+                ];
+            }
+        } catch (ShapefileException $e) {
+            // Print detailed error information
+            report($e);
+
+            return $this->error('Invalid shape file', [
+                'details' => [$e->getDetails()],
+            ]);
+        }
+
+        return $this->success([
+            'type' => 'FeatureCollection',
+            'features' => $layers
+        ]);
     }
 }

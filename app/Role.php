@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
@@ -24,7 +25,7 @@ class Role extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function permissions()
+    public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class);
     }
@@ -33,7 +34,8 @@ class Role extends Model
      * @param string $ability
      * @return bool
      */
-    public function can(string $ability) {
+    public function can(string $ability): bool
+    {
         return $this->permissions()->where('permissions.name', $ability)->exists();
     }
 }

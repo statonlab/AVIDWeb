@@ -32,8 +32,8 @@
 </template>
 
 <script>
-  import Dropdown from '../components/Dropdown'
-  import Icon from '../components/Icon'
+  import Dropdown from '../Dropdown'
+  import Icon from '../Icon'
   import ApexChart from 'vue-apexcharts'
 
   export default {

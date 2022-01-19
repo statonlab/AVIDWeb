@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[16],{I591:function(e,a,n){"use strict";n.r(a);var s={name:"CalendarReminders",components:{RemindersCalendar:n("odEN").a}},c=n("KHd+"),d=Object(c.a)(s,(function(){var e=this.$createElement,a=this._self._c||e;return a("div",[a("div",{staticClass:"card"},[a("div",{staticClass:"card-body"},[a("reminders-calendar")],1)])])}),[],!1,null,"fc2cc470",null);a.default=d.exports}}]);
-//# sourceMappingURL=calendar.js.map?id=11f456267390b1326e79
+(window.webpackJsonp=window.webpackJsonp||[]).push([[16],{I591:function(e,n,a){"use strict";a.r(n);var s={name:"CalendarReminders",components:{RemindersCalendar:a("IZMn").a}},d=a("KHd+"),r=Object(d.a)(s,(function(){var e=this.$createElement,n=this._self._c||e;return n("div",[n("div",{staticClass:"card"},[n("div",{staticClass:"card-body"},[n("reminders-calendar")],1)])])}),[],!1,null,"27d12603",null);n.default=r.exports}}]);
+//# sourceMappingURL=calendar.js.map?id=f9791440fe7871a79454

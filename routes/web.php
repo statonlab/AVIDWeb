@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PlotController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -164,6 +165,8 @@ Route::group([
     Route::get('/plots/{plot}', 'PlotController@show');
     Route::put('/plots/{id}', 'PlotController@update');
     Route::delete('/plots/{id}', 'PlotController@destroy');
+    Route::get('/plots-map', [PlotController::class, 'map']);
+    Route::get('/plots-map/layers', [PlotController::class, 'layers']);
 
     // Plants
     Route::get('/plots/{plot}/plants', 'PlantController@index');

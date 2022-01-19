@@ -13,9 +13,9 @@
 </template>
 
 <script>
-  import Calendar from './Calendar'
+  import Calendar from '../Calendar'
   import moment from 'moment'
-  import CalendarModal from './CalendarModal'
+  import CalendarModal from '../CalendarModal'
 
   export default {
     name: 'RemindersCalendar',

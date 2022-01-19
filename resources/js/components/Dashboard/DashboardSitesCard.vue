@@ -54,8 +54,8 @@
 </template>
 
 <script>
-  import Icon from '../components/Icon'
-  import InlineSpinner from '../components/InlineSpinner'
+  import Icon from '../Icon'
+  import InlineSpinner from '../InlineSpinner'
   import moment from 'moment'
 
   export default {

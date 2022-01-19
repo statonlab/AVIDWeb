@@ -10,7 +10,7 @@
 
 <script>
 
-  import RemindersCalendar from '../components/RemindersCalendar'
+  import RemindersCalendar from '../components/Dashboard/RemindersCalendar'
   export default {
     name: 'CalendarReminders',
     components: {RemindersCalendar},
