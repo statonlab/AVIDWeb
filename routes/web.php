@@ -167,6 +167,7 @@ Route::group([
     Route::delete('/plots/{id}', 'PlotController@destroy');
     Route::get('/plots-map', [PlotController::class, 'map']);
     Route::get('/plots-map/layers', [PlotController::class, 'layers']);
+    Route::get('/plots-map/plot/{plot}', [PlotController::class, 'plotData']);
 
     // Plants
     Route::get('/plots/{plot}/plants', 'PlantController@index');

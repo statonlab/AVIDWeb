@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use App\Events\PlotCreated;
 use App\Events\PlotUpdated;
+use Shapefile\Shapefile;
 use Shapefile\ShapefileAutoloader;
 use Shapefile\ShapefileException;
 use Shapefile\ShapefileReader;
@@ -236,22 +237,49 @@ class PlotController extends Controller
                 ->whereNotNull('longitude'));
             $query->orWhere(fn($q) => $q->whereNotNull('custom_latitude')
                 ->whereNotNull('custom_longitude'));
-        })->get();
+        })->get()->map(function (Plot $plot) {
+            return [
+                $plot->id,
+                $plot->latitude ?: $plot->custom_latitude,
+                $plot->longitude ?: $plot->custom_longitude,
+            ];
+        });
 
         return $this->success($plots);
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Plot $plot
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function plotData(Plot $plot): Response|JsonResponse
+    {
+        $this->authorize('view', $plot);
+
+        if ($plot->user->id === auth()->id()) {
+            $plot->setAttribute('url', '/app/sites/'.$plot->site->id);
+        } else {
+            $plot->setAttribute('url', '/app/admin/sites/'.$plot->site->id);
+        }
+
+        return $this->success($plot);
+    }
+
+    /**
      * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
-    public function layers(Request $request): Response|JsonResponse
+    public function layers(): Response|JsonResponse
     {
-        require_once(base_path('vendor/gasparesganga/php-shapefile/src/Shapefile/ShapefileAutoloader.php'));
-        ShapefileAutoloader::register();
-        $path = Storage::path("maps/NYS_WildlifeManagementUnits.shp");
+        $files = [
+            Shapefile::FILE_SHP => Storage::path("maps/NYS_WildlifeManagementUnits.shp"),
+            Shapefile::FILE_SHX => Storage::path("maps/NYS_WildlifeManagementUnits.shx"),
+            Shapefile::FILE_DBF => Storage::path("maps/NYS_WildlifeManagementUnits.dbf"),
+            Shapefile::FILE_PRJ => Storage::path("maps/NYS_WildlifeManagementUnits.prj"),
+        ];
 
-        $shapefile = new ShapefileReader($path);
+        $shapefile = new ShapefileReader($files);
+        $prj = $shapefile->getPRJ();
         $layers = [];
         try {
             // Read all the records
@@ -260,13 +288,9 @@ class PlotController extends Controller
                 if ($geometry->isDeleted()) {
                     continue;
                 }
-
                 // Print Geometry as GeoJSON
-                $geometry = json_decode($geometry->getGeoJSON(), true);
-                $layers[] = [
-                    'type' => 'Feature',
-                    'geometry' => $geometry
-                ];
+                $layer = json_decode($geometry->getGeoJSON(true, true), true);
+                $layers[] = $layer;
             }
         } catch (ShapefileException $e) {
             // Print detailed error information
@@ -278,8 +302,11 @@ class PlotController extends Controller
         }
 
         return $this->success([
-            'type' => 'FeatureCollection',
-            'features' => $layers
+            'prj' => $prj,
+            'geojson' => [
+                'type' => 'FeatureCollection',
+                'features' => $layers,
+            ],
         ]);
     }
 }
