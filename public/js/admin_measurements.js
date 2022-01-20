@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[13],{"9s+I":function(e,a,t){"use strict";t.r(a);var n={name:"AdminMeasurements",components:{MeasurementsDataView:t("a1YM").a}},s=t("KHd+"),i=Object(s.a)(n,(function(){var e=this.$createElement,a=this._self._c||e;return a("div",[a("measurements-data-view",{attrs:{"back-url-prefix":"/app/admin/sites"}})],1)}),[],!1,null,"7d8826b8",null);a.default=i.exports}}]);
-//# sourceMappingURL=admin_measurements.js.map?id=2e68345047872941fea9

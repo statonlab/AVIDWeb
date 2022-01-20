@@ -18,13 +18,17 @@ mix.webpackConfig({
     app: ['./resources/sass/app.scss'],
   },
   output: {
-    chunkFilename: '[name].js?id=[chunkhash]',
+    chunkFilename: '[name].[chunkhash].js',
   },
 })
 
-mix.js('resources/js/app.js', 'public/js')
+mix.js('resources/js/app.js', 'public/js').vue()
   .js('resources/js/auth.js', 'public/js')
   .js('resources/js/guest.js', 'public/js')
   .sass('resources/sass/app.scss', 'public/css')
-  .version()
-  .sourceMaps()
+  .setPublicPath('public')
+
+if (mix.inProduction()) {
+  mix.version()
+    .sourceMaps()
+}

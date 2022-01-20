@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[16],{I591:function(e,n,a){"use strict";a.r(n);var s={name:"CalendarReminders",components:{RemindersCalendar:a("IZMn").a}},d=a("KHd+"),r=Object(d.a)(s,(function(){var e=this.$createElement,n=this._self._c||e;return n("div",[n("div",{staticClass:"card"},[n("div",{staticClass:"card-body"},[n("reminders-calendar")],1)])])}),[],!1,null,"27d12603",null);n.default=r.exports}}]);
-//# sourceMappingURL=calendar.js.map?id=f9791440fe7871a79454
