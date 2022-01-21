@@ -125,6 +125,7 @@ export default {
       const unit = feature.getProperty('UNIT')
 
       if(this.selectedFeature && this.selectedFeature.getProperty('UNIT') === unit) {
+        this.selectedFeature = null
         this.map.data.setStyle(() => {
           return {
             color: '#000000',
