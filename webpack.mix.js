@@ -11,7 +11,7 @@ const mix = require('laravel-mix')
  |
  */
 
-mix.browserSync('avid.test')
+mix.browserSync(process.env.MIX_APP_URL || 'avid.test')
 
 mix.webpackConfig({
   entry : {

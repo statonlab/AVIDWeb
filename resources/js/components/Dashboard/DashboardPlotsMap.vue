@@ -50,8 +50,17 @@ export default {
     async loadLayers() {
       try {
         const {data} = await axios.get('/web/plots-map/layers')
-        this.map.data.addGeoJson(data.geojson)
+        this.map.data.addGeoJson(data)
         this.map.data.setMap(this.map)
+        this.map.data.addListener('click', (event) => {
+          this.showWmu(event)
+        })
+        this.map.data.setStyle(f => {
+          return {
+            strokeWeight: 1,
+            fillColor: '#000000',
+          }
+        })
       } catch (e) {
         console.error(e)
       }
@@ -93,7 +102,7 @@ export default {
       })
 
       this.map.addListener('click', () => {
-        if(this.infoWindow) {
+        if (this.infoWindow) {
           this.infoWindow.close()
         }
       })
@@ -101,6 +110,48 @@ export default {
 
     getCoords(plot) {
       return {lat: plot[1], lng: plot[2]}
+    },
+
+    async showWmu(event) {
+      const feature = event.feature
+
+      let content = `
+      <table class="table mb-0">
+        <tr>
+          <th>WMU</th>
+          <td>${feature.getProperty('UNIT')}</td>
+        </tr>
+      </table>
+      `
+      if (!this.infoWindow) {
+        this.infoWindow = new google.maps.InfoWindow({
+          content,
+        })
+      } else {
+        this.infoWindow.close()
+        this.infoWindow.setContent(content)
+      }
+
+      this.map.data.setStyle(f => {
+        let color = '#000000'
+        if (f.getProperty('UNIT') === feature.getProperty('UNIT')) {
+          color = '#ff0000'
+        }
+
+        return {
+          strokeWeight: 1,
+          fillColor: color,
+        }
+      })
+
+      console.log(event.latLng.lat(), event.latLng.lng())
+
+      this.infoWindow.open({
+        anchor: null,
+        position: event.latLng,
+        map     : this.map,
+      })
+      this.infoWindow.setPosition(event.latLng)
     },
 
     async openWindow(marker, plot) {
@@ -136,13 +187,17 @@ export default {
 
         this.infoWindow.setContent(`
         <div>
-          <table class="table mb-0">
+          <table class="table mb-0 table-sm">
             <tr>
               <th colspan="2">Plot #${data.number}</th>
             </tr>
             <tr>
               <th>Site Name</th>
               <td>${data.site.name}</td>
+            </tr>
+            <tr>
+              <th>WMU</th>
+              <td>${data.wmu || 'Unknown'}</td>
             </tr>
             <tr>
               <th>Created By</th>

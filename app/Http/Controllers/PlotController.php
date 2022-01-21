@@ -267,46 +267,11 @@ class PlotController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function layers(): Response|JsonResponse
+    public function layers(): string
     {
-        $files = [
-            Shapefile::FILE_SHP => Storage::path("maps/NYS_WildlifeManagementUnits.shp"),
-            Shapefile::FILE_SHX => Storage::path("maps/NYS_WildlifeManagementUnits.shx"),
-            Shapefile::FILE_DBF => Storage::path("maps/NYS_WildlifeManagementUnits.dbf"),
-            Shapefile::FILE_PRJ => Storage::path("maps/NYS_WildlifeManagementUnits.prj"),
-        ];
-
-        $shapefile = new ShapefileReader($files);
-        $prj = $shapefile->getPRJ();
-        $layers = [];
-        try {
-            // Read all the records
-            while ($geometry = $shapefile->fetchRecord()) {
-                // Skip the record if marked as "deleted"
-                if ($geometry->isDeleted()) {
-                    continue;
-                }
-                // Print Geometry as GeoJSON
-                $layer = json_decode($geometry->getGeoJSON(true, true), true);
-                $layers[] = $layer;
-            }
-        } catch (ShapefileException $e) {
-            // Print detailed error information
-            report($e);
-
-            return $this->error('Invalid shape file', [
-                'details' => [$e->getDetails()],
-            ]);
-        }
-
-        return $this->success([
-            'prj' => $prj,
-            'geojson' => [
-                'type' => 'FeatureCollection',
-                'features' => $layers,
-            ],
-        ]);
+        return Storage::get("maps/results.geojson");
     }
 }
