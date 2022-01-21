@@ -25,6 +25,7 @@ export default {
       map       : null,
       markers   : [],
       infoWindow: null,
+      selectedFeature: null,
     }
   },
 
@@ -102,6 +103,13 @@ export default {
       })
 
       this.map.addListener('click', () => {
+        this.map.data.setStyle(() => {
+          return {
+            color: '#000000',
+            strokeWeight: 1,
+          }
+        })
+
         if (this.infoWindow) {
           this.infoWindow.close()
         }
@@ -114,12 +122,27 @@ export default {
 
     async showWmu(event) {
       const feature = event.feature
+      const unit = feature.getProperty('UNIT')
+
+      if(this.selectedFeature && this.selectedFeature.getProperty('UNIT') === unit) {
+        this.map.data.setStyle(() => {
+          return {
+            color: '#000000',
+            strokeWeight: 1,
+          }
+        })
+        if(this.infoWindow) {
+          this.infoWindow.close()
+        }
+
+        return
+      }
 
       let content = `
       <table class="table mb-0">
         <tr>
           <th>WMU</th>
-          <td>${feature.getProperty('UNIT')}</td>
+          <td>${unit}</td>
         </tr>
       </table>
       `
@@ -134,7 +157,8 @@ export default {
 
       this.map.data.setStyle(f => {
         let color = '#000000'
-        if (f.getProperty('UNIT') === feature.getProperty('UNIT')) {
+
+        if (f.getProperty('UNIT') === unit) {
           color = '#ff0000'
         }
 
@@ -144,14 +168,13 @@ export default {
         }
       })
 
-      console.log(event.latLng.lat(), event.latLng.lng())
-
       this.infoWindow.open({
         anchor: null,
         position: event.latLng,
         map     : this.map,
       })
       this.infoWindow.setPosition(event.latLng)
+      this.selectedFeature = feature
     },
 
     async openWindow(marker, plot) {

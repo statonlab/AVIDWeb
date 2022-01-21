@@ -10,7 +10,7 @@ class WMURetriever
     /**
      * @var \App\Plot
      */
-    protected $plot;
+    protected Plot $plot;
 
     /**
      * Create the retriever.
@@ -26,6 +26,7 @@ class WMURetriever
      * Get the WMU for the plot.
      *
      * @return void
+     * @throws \Exception
      */
     public function setWMU()
     {

@@ -23,21 +23,12 @@ class AttachWMUsToPlots extends Command
     protected $description = 'Attaches a WMU to all plots';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
+     * @throws \Exception
      */
-    public function handle()
+    public function handle(): int
     {
         $count = 0;
 
@@ -49,5 +40,7 @@ class AttachWMUsToPlots extends Command
         }
 
         $this->info("Attached WMUs to $count plots.");
+
+        return Command::SUCCESS;
     }
 }
