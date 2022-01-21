@@ -41,7 +41,7 @@ class AttachWMUsToPlots extends Command
     {
         $count = 0;
 
-        foreach (Plot::cursor() as $plot) {
+        foreach (Plot::orderBy('id')->whereNull('wmu')->cursor() as $plot) {
             $retriever = new WMURetriever($plot);
             $retriever->setWMU();
 
