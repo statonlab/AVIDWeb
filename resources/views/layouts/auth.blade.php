@@ -23,5 +23,14 @@
     @yield('content')
 </main>
 <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+<script src="https://www.google.com/recaptcha/api.js?render={{ config('services.google.recaptcha_key') }}"></script>
+<script>
+  grecaptcha.ready(function () {
+    grecaptcha.execute('{{ config('services.google.recaptcha_key') }}', {action: 'contact'}).then(function (token) {
+      let recaptchaResponse = document.getElementById('recaptcha')
+      recaptchaResponse ? recaptchaResponse.value = token : null
+    })
+  })
+</script>
 </body>
 </html>
