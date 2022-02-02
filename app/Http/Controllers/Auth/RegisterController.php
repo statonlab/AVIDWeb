@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use ReCaptcha\ReCaptcha;
 
 class RegisterController extends Controller
 {
@@ -55,6 +56,18 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'recaptcha' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $recaptcha = new ReCaptcha(config('services.google.recaptcha_secret'));
+                    $response = $recaptcha->verify($value,
+                        \request()->ip());
+
+                    if (! $response->isSuccess() || $response->getScore() < 0.6) {
+                        $fail("We encountered an error while processing your request. Please try again.");
+                    }
+                },
+            ],
         ]);
     }
 

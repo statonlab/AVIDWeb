@@ -16,82 +16,90 @@
                     <div class="col-lg-4">
                         <div class="card border-0 shadow">
                             @auth()
-                            <div class="card-body">
-                                <p class="text-center font-weight-bold">Hello {{auth()->user()->name}}</p>
-                                <p>Use the button to below to access your dashboard</p>
-                                <a href="/app" class="btn btn-block btn-primary">Go to Dashboard</a>
-                            </div>
+                                <div class="card-body">
+                                    <p class="text-center font-weight-bold">Hello {{auth()->user()->name}}</p>
+                                    <p>Use the button to below to access your dashboard</p>
+                                    <a href="/app" class="btn btn-block btn-primary">Go to Dashboard</a>
+                                </div>
                             @endauth()
                             @guest()
-                            <div class="card-body">
-                                <p class="text-center font-weight-bold">Create an Account</p>
+                                <div class="card-body">
+                                    <p class="text-center font-weight-bold">Create an Account</p>
 
-                                <form action="{{ route('register') }}" method="post">
-                                    @csrf
+                                    <form action="{{ route('register') }}" method="post">
+                                        @csrf
 
-                                    <div class="form-group">
-                                        <input type="text"
-                                               class="form-control @error('name') is-invalid @enderror"
-                                               placeholder="Name"
-                                               name="name"
-                                               autocomplete="name"
-                                               required
-                                               value="{{old('name')}}">
-                                        @error('name')
-                                        <span class="invalid-feedback" role="alert">
+                                        @error('recaptcha')
+                                        <div class="alert alert-danger" role="alert">
                                             <strong>{{ $message }}</strong>
-                                        </span>
+                                        </div>
                                         @enderror
-                                    </div>
 
-                                    <div class="form-group">
-                                        <input type="email"
-                                               class="form-control @error('email') is-invalid @enderror"
-                                               placeholder="Email Address"
-                                               required
-                                               autocomplete="email"
-                                               value="{{old('email')}}"
-                                               name="email">
-                                        @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
+                                        <div class="form-group">
+                                            <input type="text"
+                                                   class="form-control @error('name') is-invalid @enderror"
+                                                   placeholder="Name"
+                                                   name="name"
+                                                   autocomplete="name"
+                                                   required
+                                                   value="{{old('name')}}">
+                                            @error('name')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
 
-                                    <div class="form-group">
-                                        <input type="password"
-                                               class="form-control @error('password') is-invalid @enderror"
-                                               placeholder="Password"
-                                               required
-                                               name="password">
-                                        @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
+                                        <div class="form-group">
+                                            <input type="email"
+                                                   class="form-control @error('email') is-invalid @enderror"
+                                                   placeholder="Email Address"
+                                                   required
+                                                   autocomplete="email"
+                                                   value="{{old('email')}}"
+                                                   name="email">
+                                            @error('email')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
 
-                                    <div class="form-group">
-                                        <input type="password"
-                                               class="form-control"
-                                               required
-                                               placeholder="Repeat Password"
-                                               name="password_confirmation">
-                                    </div>
+                                        <div class="form-group">
+                                            <input type="password"
+                                                   class="form-control @error('password') is-invalid @enderror"
+                                                   placeholder="Password"
+                                                   required
+                                                   name="password">
+                                            @error('password')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
 
-                                    <div class="form-group">
-                                        <button type="submit"
-                                                class="btn btn-primary btn-block">
-                                            Register
-                                        </button>
-                                    </div>
+                                        <div class="form-group">
+                                            <input type="password"
+                                                   class="form-control"
+                                                   required
+                                                   placeholder="Repeat Password"
+                                                   name="password_confirmation">
+                                        </div>
 
-                                    <p class="mb-0 text-center">
-                                        Already registered? <a href="/login">Login</a>
-                                    </p>
-                                </form>
-                            </div>
+                                        <input type="hidden" name="recaptcha" id="recaptcha">
+
+                                        <div class="form-group">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-block">
+                                                Register
+                                            </button>
+                                        </div>
+
+                                        <p class="mb-0 text-center">
+                                            Already registered? <a href="/login">Login</a>
+                                        </p>
+                                    </form>
+                                </div>
                             @endguest
                         </div>
                     </div>

@@ -42,6 +42,12 @@
                                 <form method="POST" action="{{ route('register') }}">
                                     @csrf
 
+                                    @error('recaptcha')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+
                                     <div class="form-group">
                                         <label for="name">{{ __('Name') }}</label>
 
@@ -110,6 +116,8 @@
                                                required
                                                autocomplete="new-password">
                                     </div>
+
+                                    <input type="hidden" name="recaptcha" id="recaptcha">
 
                                     <div class="form-group mb-0">
                                         <button type="submit" class="btn btn-primary">
