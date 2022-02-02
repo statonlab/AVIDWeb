@@ -97,6 +97,14 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function plots()
+    {
+        return $this->hasMany(Plot::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function userSites()
     {
         return $this->hasMany(UserSite::class);
