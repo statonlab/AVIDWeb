@@ -1,12 +1,15 @@
 <template>
     <div>
-        <div class="d-flex">
-            <h1 class="page-title mb-3">Users</h1>
+        <div class="d-flex mb-3">
+            <div>
+              <h1 class="page-title mb-0">Manage Users</h1>
+              <p class="mb-0 text-muted">{{ total }} users found</p>
+            </div>
             <div class="ml-auto text-muted">
                 Page {{ page }} of {{ lastPage }}
             </div>
         </div>
-        <div class="card mb-3">
+      <div class="card mb-3">
             <div class="card-header d-flex p-2">
                 <div class="flex-grow-1">
                     <input type="search" class="form-control" placeholder="Search..." v-model="search" title="Search">

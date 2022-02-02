@@ -172,3 +172,7 @@
   color: darken($primary, 20%);
   font-size: 1.5rem;
 }
+
+.btn-white {
+  @include button-variant($white, $border-color);
+}

@@ -1,61 +1,85 @@
 <template>
-    <nav aria-label="Page navigation" v-if="lastPage > 1">
-        <ul class="pagination justify-content-center mb-0">
-            <li :class="['page-item', {disabled: page === 1}]">
-                <a class="page-link"
-                   href="#"
-                   tabindex="-1"
-                   :aria-disabled="page === 1 ? 'true' : 'false'"
-                   @click.prevent="previous()">Previous</a>
-            </li>
-            <li v-for="i in lastPage" :class="['page-item', {active: page === i}]">
-                <a class="page-link" href="#" @click.prevent="change(i)">{{ i }}</a>
-            </li>
-            <li :class="['page-item', {disabled: lastPage === page}]">
-                <a class="page-link"
-                   href="#"
-                   :aria-disabled="lastPage === page ? 'true' : 'false'"
-                   @click.prevent="next()">Next</a>
-            </li>
-        </ul>
-    </nav>
+  <nav aria-label="Page navigation" v-if="hideIfEmpty ? lastPage > 1 : true" class="d-flex w-100 justify-content-between align-items-center">
+    <button class="btn btn-white"
+            :disabled="page === 1"
+            @click.prevent="previous()"
+            type="button">
+      Previous
+    </button>
+
+    <div>
+      <select class="custom-select w-auto" v-model="currentPage">
+        <option v-for="i in lastPage" :value="i">
+          Page {{ i }}
+        </option>
+      </select>
+    </div>
+
+    <button class="btn btn-white"
+            :disabled="page === lastPage"
+            @click.prevent="next()"
+            type="button">
+      Next
+    </button>
+  </nav>
 </template>
 
 <script>
-  export default {
-    name: 'Pager',
+export default {
+  name: 'Pager',
 
-    props: {
-      lastPage: {required: true, type: Number},
-      page    : {required: true, type: Number},
+  props: {
+    lastPage: {required: true, type: Number},
+    page    : {required: true, type: Number},
+    hideIfEmpty: {required: false, type: Boolean, default: true}
+  },
+
+  data() {
+    return {
+      currentPage: 1,
+    }
+  },
+
+  mounted() {
+    this.currentPage = this.page
+  },
+
+  watch: {
+    page(page) {
+      this.currentPage = page
     },
 
-    methods: {
-      previous() {
-        if (this.page === 1) {
-          return
-        }
-
-        this.$emit('change', this.page - 1)
-      },
-
-      next() {
-        if (this.lastPage === this.page) {
-          return
-        }
-
-        this.$emit('change', this.page + 1)
-      },
-
-      change(page) {
-        if (this.page === page) {
-          return
-        }
-
-        this.$emit('change', page)
-      },
+    currentPage(page) {
+      this.change(page)
     },
-  }
+  },
+
+  methods: {
+    previous() {
+      if (this.page === 1) {
+        return
+      }
+
+      this.$emit('change', this.page - 1)
+    },
+
+    next() {
+      if (this.lastPage === this.page) {
+        return
+      }
+
+      this.$emit('change', this.page + 1)
+    },
+
+    change(page) {
+      if (this.page === page) {
+        return
+      }
+
+      this.$emit('change', page)
+    },
+  },
+}
 </script>
 
 <style scoped>
