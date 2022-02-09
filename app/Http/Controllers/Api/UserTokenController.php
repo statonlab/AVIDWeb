@@ -100,10 +100,10 @@ class UserTokenController extends Controller
         $user->currentAccessToken()->delete();
         $token = $user->createToken(\Str::random())->plainTextToken;
 
-        $deleted_sites = Site::onlyTrashed()->where('deleted_at', '>=', date($request->deleted_after))->select(['sites.id'])->get();
-        $deleted_plots = Plot::onlyTrashed()->where('deleted_at', '>=', date($request->deleted_after))->select(['plots.id'])->get();
-        $deleted_plants = Plant::onlyTrashed()->where('deleted_at', '>=', date($request->deleted_after))->select(['plants.id'])->get();
-        $deleted_measurements = Measurement::onlyTrashed()->where('deleted_at', '>=', date($request->deleted_after))->select(['measurements.id'])->get();
+        $deleted_sites = Site::onlyTrashed()->where('deleted_at', '>=', date('Y-m-d', strtotime($request->deleted_after)))->select(['sites.id'])->get();
+        $deleted_plots = Plot::onlyTrashed()->where('deleted_at', '>=', date('Y-m-d', strtotime($request->deleted_after)))->select(['plots.id'])->get();
+        $deleted_plants = Plant::onlyTrashed()->where('deleted_at', '>=', date('Y-m-d', strtotime($request->deleted_after)))->select(['plants.id'])->get();
+        $deleted_measurements = Measurement::onlyTrashed()->where('deleted_at', '>=', date('Y-m-d', strtotime($request->deleted_after)))->select(['measurements.id'])->get();
         $response = [
             'user' => $user,
             'token' => $token,
