@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Site;
+use App\Plot;
+use App\Plant;
+use App\Measurement;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -96,10 +100,18 @@ class UserTokenController extends Controller
         $user->currentAccessToken()->delete();
         $token = $user->createToken(\Str::random())->plainTextToken;
 
+        $deleted_sites = Site::onlyTrashed()->where('deleted_at', '>=', date('Y-m-d', strtotime($request->deleted_after)))->select(['sites.id'])->get();
+        $deleted_plots = Plot::onlyTrashed()->where('deleted_at', '>=', date('Y-m-d', strtotime($request->deleted_after)))->select(['plots.id'])->get();
+        $deleted_plants = Plant::onlyTrashed()->where('deleted_at', '>=', date('Y-m-d', strtotime($request->deleted_after)))->select(['plants.id'])->get();
+        $deleted_measurements = Measurement::onlyTrashed()->where('deleted_at', '>=', date('Y-m-d', strtotime($request->deleted_after)))->select(['measurements.id'])->get();
         $response = [
             'user' => $user,
             'token' => $token,
-            'token_expires_at' => 90 // token expires 90 days
+            'token_expires_at' => 90, // token expires 90 days
+            'deleted' => ['sites' => $deleted_sites,
+                'plots' => $deleted_plots,
+                'plants' => $deleted_plants,
+                'measurements' => $deleted_measurements]
         ];
 
         return $this->success($response);
