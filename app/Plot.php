@@ -34,6 +34,7 @@ class Plot extends Model
         'last_measured_at',
         'wmu',
         'is_quarantined',
+        'aggregate_wmu'
     ];
 
     /**

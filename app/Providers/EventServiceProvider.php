@@ -52,6 +52,7 @@ class EventServiceProvider extends ServiceProvider
         PlotUpdated::class => [
             AttachAddressToPlotListener::class,
             AttachWMUToPlotListener::class,
+            AttachAggregateWMUToPlotListener::class,
         ],
         PlotDeleted::class => [
             DeleteAttachedPlantsListener::class,
