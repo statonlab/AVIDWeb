@@ -8,9 +8,12 @@ use App\Plot;
 use App\Plant;
 use App\User;
 use App\Species;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exports\SiteExport;
 use App\Imports\SiteImport;
+use Illuminate\Http\Response;
+use Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SiteController extends Controller
@@ -264,7 +267,7 @@ class SiteController extends Controller
             return $this->unauthorized();
         }
 
-        $site->fill(['sends_reminders' => ! $site->sends_reminders])->save();
+        $site->fill(['sends_reminders' => !$site->sends_reminders])->save();
 
         return $this->success($site);
     }
@@ -285,5 +288,75 @@ class SiteController extends Controller
         $site->fill(['user_id' => $request->user_id])->save();
 
         return $this->success($site);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return Response|JsonResponse
+     */
+    public function map(Request $request): Response|JsonResponse
+    {
+        $user = $request->user();
+
+        $sites = Site::select([
+            'sites.id',
+        ])
+            ->with([
+                'plots' => function ($query) {
+                    $query->select([
+                        'plots.id',
+                        'plots.site_id',
+                        'plots.latitude',
+                        'plots.longitude',
+                        'plots.custom_latitude',
+                        'plots.custom_longitude']);
+                    $query->oldest();
+                    $query->where(fn($q) => $q->whereNotNull('latitude')
+                        ->whereNotNull('longitude'));
+                    $query->orWhere(fn($q) => $q->whereNotNull('custom_latitude')
+                        ->whereNotNull('custom_longitude'));
+                }])
+            ->when($user->cant('viewAny', Site::class), function ($query) use ($user) {
+                $query->where('sites.user_id', '=', $user->id);
+            })->get()
+            ->map(function (Site $site) {
+                if ($site->plots[0]) {
+                    return [
+                        $site->id,
+                        $site->plots[0]->latitude ?: $site->plots[0]->custom_latitude,
+                        $site->plots[0]->longitude ?: $site->plots[0]->custom_longitude,
+                    ];
+                } else return [];
+            });
+
+        return $this->success($sites);
+    }
+
+    /**
+     * @param Site $site
+     * @return Response|JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function siteData(Site $site): Response|JsonResponse
+    {
+        $this->authorize('view', $site);
+
+        if ($site->user->id === auth()->id()) {
+            $site->setAttribute('url', '/app/sites/' . $site->id);
+        } else {
+            $site->setAttribute('url', '/app/admin/sites/' . $site->id);
+        }
+
+        return $this->success($site);
+    }
+
+    /**
+     * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function layers(): string
+    {
+        return Storage::get("maps/results.geojson");
     }
 }

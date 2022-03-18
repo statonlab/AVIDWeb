@@ -11,8 +11,19 @@ class State extends Model
         'code',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function counties()
     {
         return $this->hasMany(County::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function sites()
+    {
+        return $this->hasMany(Site::class);
     }
 }
