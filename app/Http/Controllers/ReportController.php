@@ -46,7 +46,7 @@ class ReportController extends Controller
                     ->groupBy('aggregate_wmu')
                 , 'view')
             ->groupBy('aggregate_wmu')
-            ->orderBy($request->order_by ?? 'aggregate_wmu', $request->order_dir ?? 'asc')
+            ->orderBy($request->order_by ?? 'aggregate_wmu', $request->order_dir === 'asc' ? 'asc' : 'desc')
             ->get();
 
         return $this->success([
