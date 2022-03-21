@@ -280,6 +280,7 @@ Route::group([
     Route::get('/reports/site-wmu', 'ReportController@siteByWmu');
     Route::get('/reports/site-state', 'ReportController@siteByState');
     Route::get('/reports/site-county', 'ReportController@siteByCounty');
+    Route::get('/reports/site-town', 'ReportController@siteByTown');
 
     // Data Quarantine
     Route::get('/data-quarantine/sites', 'QuarantineController@sites');

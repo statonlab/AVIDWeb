@@ -28,6 +28,12 @@
               <span>{{ 'Report by County' }}</span>
               <icon v-if="tab === 'county'" name="arrow-forward" class="ml-auto forward-icon"/>
             </a>
+            <a href="#"
+               :class="['nav-link', 'pr-0', {'active': tab === 'town'}]"
+               @click.prevent="selectTab('town')">
+              <span>{{ 'Report by Town' }}</span>
+              <icon v-if="tab === 'town'" name="arrow-forward" class="ml-auto forward-icon"/>
+            </a>
           </div>
         </div>
       </div>
@@ -35,6 +41,7 @@
     <report-by-aggregate-wmu v-if="tab === 'wmu'"/>
     <report-by-state v-if="tab === 'state'"/>
     <report-by-county v-if="tab === 'county'"/>
+    <report-by-town v-if="tab === 'town'"/>
   </div>
 </template>
 
@@ -44,6 +51,7 @@ import Icon from '../components/Icon'
 import ReportByAggregateWmu from "../components/Reports/ReportByAggregateWmu";
 import ReportByState from "../components/Reports/ReportByState";
 import ReportByCounty from "../components/Reports/ReportByCounty";
+import ReportByTown from "../components/Reports/ReportByTown";
 
 export default {
   name: 'Reports',
@@ -53,7 +61,8 @@ export default {
     Icon,
     ReportByAggregateWmu,
     ReportByState,
-    ReportByCounty
+    ReportByCounty,
+    ReportByTown
   },
 
   mounted() {
@@ -68,7 +77,7 @@ export default {
         'wmu',
         'state',
         'county',
-        'township',
+        'town',
       ],
     }
   },

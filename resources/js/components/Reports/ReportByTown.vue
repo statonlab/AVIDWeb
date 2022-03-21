@@ -2,42 +2,42 @@
   <div class="col-md-8">
     <div class="card border shadow-sm">
       <div class="card-header shadow-none bg-light rounded d-flex justify-content-between">
-        <h4 class="mt-1 ml-2 page-title">Number of Sites per County</h4>
+        <h4 class="page-title">Number of Sites per Town</h4>
         <input type="search" class="form-control" placeholder="Search..." v-model="search">
       </div>
       <inline-spinner class="ml-5 mt-5 mb-5" v-if="loading"/>
       <div class="card-body" v-if="!loading">
-        <span v-if="counties.length === 0"> No sites found</span>
-        <table class="table table-middle table-bordered mb-0" v-if="counties.length > 0">
+        <div v-if="sites.length === 0" class="ml-2 mt-2 mb-2">No sites found.</div>
+        <table class="table table-middle table-bordered mb-0" v-if="sites.length > 0">
           <thead>
           <tr>
             <th>
-              <a href="#" class="d-flex align-items-center" @click.prevent="sort('name')">
-                <span>{{ 'State' }}</span>
-                <icon :name="sortIcon('name')"
+              <a href="#" class="d-flex align-items-center" @click.prevent="sort('city')">
+                <span>{{ 'Town' }}</span>
+                <icon :name="sortIcon('city')"
                       class="ml-2"
-                      :class="{'invisible': orderBy !== 'name'}"
+                      :class="{'invisible': orderBy !== 'city'}"
                       style="width: 20px;"/>
               </a>
             </th>
             <th>
-              <a href="#" class="d-flex align-items-center" @click.prevent="sort('sites_count')">
+              <a href="#" class="d-flex align-items-center" @click.prevent="sort('count')">
                 <span>{{ 'Total' }}</span>
-                <icon :name="sortIcon('sites_count')"
+                <icon :name="sortIcon('count')"
                       class="ml-2"
-                      :class="{'invisible': orderBy !== 'sites_count'}"
+                      :class="{'invisible': orderBy !== 'count'}"
                       style="width: 20px;"/>
               </a>
             </th>
           </tr>
           </thead>
           <tbody>
-          <tr v-for="county in counties" v-if="county.sites_count > 0">
+          <tr v-for="site in sites">
             <td>
-              {{ county.name }}
+              {{ site.city }}
             </td>
             <td>
-              {{ county.sites_count }}
+              {{ site.count }}
             </td>
           </tr>
           </tbody>
@@ -59,7 +59,7 @@ import Errors from "../../forms/Errors";
 import Pager from "../Pager";
 
 export default {
-  name: 'ReportByCounty',
+  name: 'ReportByTown',
 
   components: {ApexChart, InlineSpinner, TokensField, Dropdown, Icon, Pager},
 
@@ -71,9 +71,9 @@ export default {
       lastPage: 1,
       limit: 10,
       search: '',
-      orderBy: 'name',
+      orderBy: 'city',
       orderDir: 'asc',
-      counties: null,
+      sites: null,
       _request: null,
     }
   },
@@ -98,7 +98,7 @@ export default {
       this.loading = true
 
       try {
-        const {data} = await axios.get(`/web/reports/site-county`, {
+        const {data} = await axios.get(`/web/reports/site-town`, {
           params: {
             page: this.page,
             order_by: this.orderBy,
@@ -109,7 +109,7 @@ export default {
           cancelToken: new axios.CancelToken(c => this._request = c),
         })
         this.total = data.total
-        this.counties = data.data
+        this.sites = data.data
         this.lastPage = data.last_page
       } catch (e) {
         if (!axios.isCancel()) {
@@ -122,6 +122,7 @@ export default {
           console.error(e)
         }
       }
+
       this.loading = false
     },
 
@@ -151,7 +152,8 @@ export default {
         return ''
       }
     },
-  },
+  }
+  ,
 }
 </script>
 

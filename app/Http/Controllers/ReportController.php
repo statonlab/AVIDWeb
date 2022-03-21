@@ -92,6 +92,7 @@ class ReportController extends Controller
     public function siteByCounty(Request $request)
     {
         $this->validate($request, [
+            'search' => 'nullable|max:255',
             'order_by' => [
                 'nullable',
                 'string',
@@ -106,13 +107,43 @@ class ReportController extends Controller
         $counties = County::select([
             'counties.id', 'counties.name'
         ])
+            ->where('name', 'like', "%$request->search%")
             ->has('sites')
             ->withCount(['sites'])
             ->orderBy($request->order_by ?? 'aggregate_wmu', $request->order_dir === 'asc' ? 'asc' : 'desc')
-            ->get();
+            ->paginate($request->limit ?? 20);
 
-        return $this->success([
-            'data' => $counties,
+        return $this->success($counties);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function siteByTown(Request $request)
+    {
+        $this->validate($request, [
+            'search' => 'nullable|max:255',
+            'order_by' => [
+                'nullable',
+                'string',
+                Rule::in([
+                    'city',
+                    'count',
+                ]),
+            ],
         ]);
+        $this->authorize('viewAny', Site::class);
+
+        $sites = \DB::table('sites')
+            ->selectRaw('city, COUNT(*) as count')
+            ->where('name', 'like', "%$request->search%")
+            ->groupBy('city')
+            ->orderBy($request->order_by ?? 'city', $request->order_dir === 'asc' ? 'asc' : 'desc')
+            ->paginate($request->limit ?? 20);
+
+        return $this->success($sites);
     }
 }
