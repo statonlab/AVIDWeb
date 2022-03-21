@@ -53,6 +53,7 @@ import Dropdown from "../Dropdown";
 import Icon from "../Icon";
 import User from "../../helpers/User";
 import ApexChart from "vue-apexcharts";
+import Errors from "../../forms/Errors";
 
 export default {
   name: 'ReportByState',
@@ -93,10 +94,16 @@ export default {
         this.states = data.data
       } catch (e) {
         if (!axios.isCancel()) {
-          this.$alert('Unable to load states. Please try refreshing the page or contact us.')
+          if (e.response && e.response.status === 422) {
+            const errors = new Errors(e.response.data)
+            this.$alert(errors.toArray().join(' '))
+          } else {
+            this.$alert('Unable to load sites. Please try refreshing the page or contact us.')
+          }
           console.error(e)
         }
       }
+
       this.loading = false
     },
 
@@ -121,7 +128,8 @@ export default {
         return ''
       }
     },
-  },
+  }
+  ,
 }
 </script>
 

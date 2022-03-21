@@ -124,9 +124,9 @@ export default {
 
     async showWmu(event) {
       const feature = event.feature
-      const unit = feature.getProperty('UNIT')
+      const aggregate = feature.getProperty('Aggregate')
 
-      if (this.selectedFeature && this.selectedFeature.getProperty('UNIT') === unit) {
+      if (this.selectedFeature && this.selectedFeature.getProperty('Aggregate') === aggregate) {
         this.selectedFeature = null
         this.map.data.setStyle(() => {
           return {
@@ -145,7 +145,7 @@ export default {
       <table class="table mb-0">
         <tr>
           <th>WMU</th>
-          <td>${unit}</td>
+          <td>${aggregate}</td>
         </tr>
       </table>
       `
@@ -161,7 +161,7 @@ export default {
       this.map.data.setStyle(f => {
         let color = '#000000'
 
-        if (f.getProperty('UNIT') === unit) {
+        if (f.getProperty('Aggregate') === aggregate) {
           color = '#ff0000'
         }
 

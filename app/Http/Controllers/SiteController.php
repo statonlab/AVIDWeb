@@ -357,6 +357,6 @@ class SiteController extends Controller
      */
     public function layers(): string
     {
-        return Storage::get("maps/results.geojson");
+        return Storage::get("maps/aggregate_wmus.geojson");
     }
 }

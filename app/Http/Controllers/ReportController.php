@@ -77,7 +77,7 @@ class ReportController extends Controller
         ])
             ->has('sites')
             ->withCount(['sites'])
-            ->orderBy($request->order_by ?? 'name', $request->order_dir ?? 'asc')
+            ->orderBy($request->order_by ?? 'aggregate_wmu', $request->order_dir === 'asc' ? 'asc' : 'desc')
             ->get();
 
         return $this->success([
@@ -108,7 +108,7 @@ class ReportController extends Controller
         ])
             ->has('sites')
             ->withCount(['sites'])
-            ->orderBy($request->order_by ?? 'name', $request->order_dir ?? 'asc')
+            ->orderBy($request->order_by ?? 'aggregate_wmu', $request->order_dir === 'asc' ? 'asc' : 'desc')
             ->get();
 
         return $this->success([
