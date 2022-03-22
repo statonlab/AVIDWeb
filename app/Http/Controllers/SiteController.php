@@ -132,14 +132,17 @@ class SiteController extends Controller
         $site->load(['county', 'state', 'species', 'shrubs']);
         $site->loadCount(['plants', 'plots']);
 
-        $plots_exist = Plot::withQuarantined()->where('site_id', $site->id)
-            ->where('is_quarantined', true)->exists();
+        $plots_exist = Plot::withQuarantined()
+            ->where('site_id', $site->id)
+            ->where('is_quarantined', true)
+            ->exists();
 
         $plants_exist = Plant::withQuarantined()
             ->whereHas('plot', function ($query) use ($site) {
                 $query->where('site_id', $site->id);
             })
-            ->where('is_quarantined', true)->exists();
+            ->where('is_quarantined', true)
+            ->exists();
 
         $site->has_quarantined = $plots_exist || $plants_exist;
 
@@ -243,14 +246,17 @@ class SiteController extends Controller
 
         Excel::import(new SiteImport($user, $site), $request->file('file'));
 
-        $plots_exist = Plot::withQuarantined()->where('site_id', $site->id)
-            ->where('is_quarantined', true)->exists();
+        $plots_exist = Plot::withQuarantined()
+            ->where('site_id', $site->id)
+            ->where('is_quarantined', true)
+            ->exists();
 
         $plants_exist = Plant::withQuarantined()
             ->whereHas('plot', function ($query) use ($site) {
                 $query->where('site_id', $site->id);
             })
-            ->where('is_quarantined', true)->exists();
+            ->where('is_quarantined', true)
+            ->exists();
 
         return $this->success($plots_exist || $plants_exist);
     }
@@ -267,7 +273,7 @@ class SiteController extends Controller
             return $this->unauthorized();
         }
 
-        $site->fill(['sends_reminders' => !$site->sends_reminders])->save();
+        $site->fill(['sends_reminders' => ! $site->sends_reminders])->save();
 
         return $this->success($site);
     }
@@ -290,7 +296,6 @@ class SiteController extends Controller
         return $this->success($site);
     }
 
-
     /**
      * @param Request $request
      * @return Response|JsonResponse
@@ -301,8 +306,7 @@ class SiteController extends Controller
 
         $sites = Site::select([
             'sites.id',
-        ])
-            ->with([
+        ])->with([
                 'plots' => function ($query) {
                     $query->select([
                         'plots.id',
@@ -310,24 +314,26 @@ class SiteController extends Controller
                         'plots.latitude',
                         'plots.longitude',
                         'plots.custom_latitude',
-                        'plots.custom_longitude']);
+                        'plots.custom_longitude',
+                    ]);
                     $query->oldest();
                     $query->where(fn($q) => $q->whereNotNull('latitude')
                         ->whereNotNull('longitude'));
                     $query->orWhere(fn($q) => $q->whereNotNull('custom_latitude')
                         ->whereNotNull('custom_longitude'));
-                }])
-            ->when($user->cant('viewAny', Site::class), function ($query) use ($user) {
+                },
+            ])->when($user->cant('viewAny', Site::class), function ($query) use ($user) {
                 $query->where('sites.user_id', '=', $user->id);
-            })->get()
-            ->map(function (Site $site) {
+            })->get()->map(function (Site $site) {
                 if (isset($site->plots[0])) {
                     return [
                         $site->id,
                         $site->plots[0]->latitude ?: $site->plots[0]->custom_latitude,
                         $site->plots[0]->longitude ?: $site->plots[0]->custom_longitude,
                     ];
-                } else return [];
+                } else {
+                    return [];
+                }
             });
 
         return $this->success($sites);
@@ -343,9 +349,9 @@ class SiteController extends Controller
         $this->authorize('view', $site);
 
         if ($site->user->id === auth()->id()) {
-            $site->setAttribute('url', '/app/sites/' . $site->id);
+            $site->setAttribute('url', '/app/sites/'.$site->id);
         } else {
-            $site->setAttribute('url', '/app/admin/sites/' . $site->id);
+            $site->setAttribute('url', '/app/admin/sites/'.$site->id);
         }
 
         return $this->success($site);
