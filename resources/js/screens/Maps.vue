@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div>
     <!-- Filters to be added later -->
     <!--    <div class="col-md-3 col-sm-4">-->
     <!--      <div class="card mb-3 border shadow-sm">-->

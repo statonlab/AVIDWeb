@@ -1,18 +1,16 @@
 <template>
-  <div class="col-md-8">
-    <div class="card border shadow-sm">
-      <div class="card-header shadow-none bg-light rounded">
-        <h4 class="mt-1 ml-2 page-title">All Sites</h4>
-      </div>
-      <div class="card-body">
-        <div ref="map" class="map"></div>
-      </div>
+  <div class="card border shadow-sm">
+    <div class="card-header shadow-none bg-light rounded">
+      <strong>All Sites</strong>
+    </div>
+    <div class="card-body">
+      <div ref="map" class="sites-map"></div>
     </div>
   </div>
 </template>
 
 <script>
-import Maps from "../helpers/Maps";
+import Maps from '../helpers/Maps'
 
 export default {
   name: 'SitesMap',
@@ -23,10 +21,10 @@ export default {
 
   data() {
     return {
-      plots: [],
-      map: null,
-      markers: [],
-      infoWindow: null,
+      plots          : [],
+      map            : null,
+      markers        : [],
+      infoWindow     : null,
       selectedFeature: null,
     }
   },
@@ -44,7 +42,7 @@ export default {
     async loadPlots() {
       try {
         const {data} = await axios.get(`/web/sites-map`)
-        this.plots = data
+        this.plots   = data
       } catch (e) {
         console.error(e)
       }
@@ -61,7 +59,7 @@ export default {
         this.map.data.setStyle(f => {
           return {
             strokeWeight: 1,
-            fillColor: '#000000',
+            fillColor   : '#000000',
           }
         })
       } catch (e) {
@@ -76,7 +74,7 @@ export default {
       this.markers = []
       this.plots.forEach(plot => {
         const marker = new google.maps.Marker({
-          map: this.map,
+          map     : this.map,
           position: this.getCoords(plot),
         })
 
@@ -96,18 +94,18 @@ export default {
 
       if (this.plots.length) {
         const plot = this.plots[0]
-        position = this.getCoords(plot)
+        position   = this.getCoords(plot)
       }
 
       this.map = new google.maps.Map(this.$refs.map, {
-        zoom: 6,
+        zoom  : 6,
         center: position,
       })
 
       this.map.addListener('click', () => {
         this.map.data.setStyle(() => {
           return {
-            color: '#000000',
+            color       : '#000000',
             strokeWeight: 1,
           }
         })
@@ -123,14 +121,14 @@ export default {
     },
 
     async showWmu(event) {
-      const feature = event.feature
+      const feature   = event.feature
       const aggregate = feature.getProperty('Aggregate')
 
       if (this.selectedFeature && this.selectedFeature.getProperty('Aggregate') === aggregate) {
         this.selectedFeature = null
         this.map.data.setStyle(() => {
           return {
-            color: '#000000',
+            color       : '#000000',
             strokeWeight: 1,
           }
         })
@@ -167,14 +165,14 @@ export default {
 
         return {
           strokeWeight: 1,
-          fillColor: color,
+          fillColor   : color,
         }
       })
 
       this.infoWindow.open({
-        anchor: null,
+        anchor  : null,
         position: event.latLng,
-        map: this.map,
+        map     : this.map,
       })
       this.infoWindow.setPosition(event.latLng)
       this.selectedFeature = feature
@@ -206,7 +204,7 @@ export default {
 
         this.infoWindow.open({
           anchor: marker,
-          map: this.map,
+          map   : this.map,
         })
 
         const {data} = await axios.get(`/web/sites-map/site/${id}`)
@@ -240,6 +238,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="css">
+.sites-map {
+  height: calc(95vh - 145px);
+}
 </style>
