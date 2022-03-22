@@ -321,7 +321,7 @@ class SiteController extends Controller
                 $query->where('sites.user_id', '=', $user->id);
             })->get()
             ->map(function (Site $site) {
-                if ($site->plots[0]) {
+                if (isset($site->plots[0])) {
                     return [
                         $site->id,
                         $site->plots[0]->latitude ?: $site->plots[0]->custom_latitude,

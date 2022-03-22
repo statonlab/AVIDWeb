@@ -2,7 +2,7 @@
   <div class="col-md-8">
     <div class="card border shadow-sm">
       <div class="card-header shadow-none bg-light rounded">
-        <h4 class="mt-1 ml-2 page-title">Number of Sites per WMU</h4>
+        <strong>Number of Sites per WMU</strong>
       </div>
       <inline-spinner class="ml-5 mt-5 mb-5" v-if="loading"/>
       <div class="card-body" v-if="!loading">

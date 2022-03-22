@@ -2,12 +2,12 @@
   <div class="col-md-8">
     <div class="card border shadow-sm">
       <div class="card-header shadow-none bg-light rounded">
-        <h4 class="mt-1 ml-2 page-title">Number of Sites per State</h4>
+        <strong>Number of Sites per State</strong>
       </div>
       <inline-spinner class="ml-5 mt-5 mb-5" v-if="loading"/>
       <div class="card-body" v-if="!loading">
         <span v-if="states.length === 0"> No sites found</span>
-        <table class="table table-middle table-bordered mb-0" v-if="states.length > 0">
+        <table class="table table-bordered table-middle mb-0" v-if="states.length > 0">
           <thead>
           <tr>
             <th>
@@ -20,13 +20,13 @@
               </a>
             </th>
             <th>
-              <a href="#" class="d-flex align-items-center" @click.prevent="sort('sites_count')">
-                <span>{{ 'Total' }}</span>
-                <icon :name="sortIcon('sites_count')"
-                      class="ml-2"
-                      :class="{'invisible': orderBy !== 'sites_count'}"
-                      style="width: 20px;"/>
-              </a>
+                <a href="#" class="d-flex align-items-center" @click.prevent="sort('sites_count')">
+                  <span>{{ 'Total' }}</span>
+                  <icon :name="sortIcon('sites_count')"
+                        class="ml-2"
+                        :class="{'invisible': orderBy !== 'sites_count'}"
+                        style="width: 20px;"/>
+                </a>
             </th>
           </tr>
           </thead>
@@ -47,13 +47,13 @@
 </template>
 
 <script>
-import TokensField from "../TokensField";
-import InlineSpinner from "../InlineSpinner";
-import Dropdown from "../Dropdown";
-import Icon from "../Icon";
-import User from "../../helpers/User";
-import ApexChart from "vue-apexcharts";
-import Errors from "../../forms/Errors";
+import TokensField from '../TokensField'
+import InlineSpinner from '../InlineSpinner'
+import Dropdown from '../Dropdown'
+import Icon from '../Icon'
+import User from '../../helpers/User'
+import ApexChart from 'vue-apexcharts'
+import Errors from '../../forms/Errors'
 
 export default {
   name: 'ReportByState',
@@ -67,10 +67,10 @@ export default {
   data() {
     return {
       User,
-      loading: true,
-      orderBy: 'name',
+      loading : true,
+      orderBy : 'name',
       orderDir: 'asc',
-      states: null,
+      states  : null,
       _request: null,
     }
   },
@@ -86,9 +86,9 @@ export default {
       try {
         const {data} = await axios.get(`/web/reports/site-state`, {
           params: {
-            order_by: this.orderBy,
+            order_by : this.orderBy,
             order_dir: this.orderDir,
-          }
+          },
         })
 
         this.states = data.data
@@ -111,7 +111,7 @@ export default {
       if (field === this.orderBy) {
         this.orderDir = this.orderDir === 'asc' ? 'desc' : 'asc'
       } else {
-        this.orderBy = field
+        this.orderBy  = field
         this.orderDir = 'asc'
       }
       this.loadReport()
@@ -128,8 +128,7 @@ export default {
         return ''
       }
     },
-  }
-  ,
+  },
 }
 </script>
 

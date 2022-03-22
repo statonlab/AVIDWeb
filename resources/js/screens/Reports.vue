@@ -3,7 +3,7 @@
     <div class="col-md-3 col-sm-4">
       <div class="card mb-3 border shadow-sm">
         <div class="card-header shadow-none bg-light rounded">
-          <strong class="text-medium">Options</strong>
+          <strong class="text-medium">Reports</strong>
         </div>
         <div class="card-body p-2">
           <div class="nav nav-pills flex-column"
@@ -13,26 +13,22 @@
             <a href="#"
                :class="['nav-link', 'pr-0', {'active': tab === 'wmu'}]"
                @click.prevent="selectTab('wmu')">
-              <span>{{ 'Report By Aggregate WMU' }}</span>
-              <icon v-if="tab === 'wmu'" name="arrow-forward" class="ml-auto forward-icon"/>
+              <span>Aggregate WMU</span>
             </a>
             <a href="#"
                :class="['nav-link', 'pr-0', {'active': tab === 'state'}]"
                @click.prevent="selectTab('state')">
-              <span>{{ 'Report by State' }}</span>
-              <icon v-if="tab === 'state'" name="arrow-forward" class="ml-auto forward-icon"/>
+              <span>State</span>
             </a>
             <a href="#"
                :class="['nav-link', 'pr-0', {'active': tab === 'county'}]"
                @click.prevent="selectTab('county')">
-              <span>{{ 'Report by County' }}</span>
-              <icon v-if="tab === 'county'" name="arrow-forward" class="ml-auto forward-icon"/>
+              <span>County</span>
             </a>
             <a href="#"
                :class="['nav-link', 'pr-0', {'active': tab === 'town'}]"
                @click.prevent="selectTab('town')">
-              <span>{{ 'Report by Town' }}</span>
-              <icon v-if="tab === 'town'" name="arrow-forward" class="ml-auto forward-icon"/>
+              <span>Township</span>
             </a>
           </div>
         </div>
