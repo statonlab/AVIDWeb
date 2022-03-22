@@ -137,7 +137,7 @@ class ReportController extends Controller
         ]);
         $this->authorize('viewAny', Site::class);
 
-        $sites = \DB::table('sites')
+        $sites = Site::query()
             ->selectRaw('city, COUNT(*) as count')
             ->where('name', 'like', "%$request->search%")
             ->groupBy('city')
