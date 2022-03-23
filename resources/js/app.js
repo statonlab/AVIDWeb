@@ -137,6 +137,14 @@ const routes = [
     component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/Statistics')),
   },
   {
+    path     : '/app/reports',
+    component: () => AsyncComponent(import (/* webpackChunkName: "js/reports" */'./screens/Reports')),
+  },
+  {
+    path     : '/app/maps',
+    component: () => AsyncComponent(import (/* webpackChunkName: "js/maps" */'./screens/Maps')),
+  },
+  {
     path     : '/app/incomplete-data',
     component: () => AsyncComponent(import (/* webpackChunkName: "js/statistics" */'./screens/DataQuarantine')),
   },

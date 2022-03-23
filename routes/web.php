@@ -112,6 +112,8 @@ Route::group([
     Route::get('/events', 'HomeController@data');
     Route::get('/data-entry', 'HomeController@data');
     Route::get('/statistics', 'HomeController@data');
+    Route::get('/reports', 'HomeController@data');
+    Route::get('/maps', 'HomeController@data');
     Route::get('/incomplete-data', 'HomeController@data');
     Route::get('/incomplete-data/{id}', 'HomeController@data');
 });
@@ -148,6 +150,9 @@ Route::group([
     Route::get('/sites/{site}/export', 'SiteController@export');
     Route::post('/sites/{site}/import', 'SiteController@import');
     Route::put('/sites/{site}/toggle-reminders', 'SiteController@toggleReminders');
+    Route::get('/sites-map', 'SiteController@map');
+    Route::get('/sites-map/layers', 'SiteController@layers');
+    Route::get('/sites-map/site/{site}', 'SiteController@SiteData');
 
     // UserSite Controller
     Route::get('/user-sites/users', 'UserSiteController@users');
@@ -270,6 +275,12 @@ Route::group([
     Route::get('/statistics/species', 'StatisticsController@species');
     Route::get('/statistics/{site}/chart', 'StatisticsController@siteChart');
     Route::get('/statistics/chart', 'StatisticsController@chart');
+
+    // Reports
+    Route::get('/reports/site-wmu', 'ReportController@siteByWmu');
+    Route::get('/reports/site-state', 'ReportController@siteByState');
+    Route::get('/reports/site-county', 'ReportController@siteByCounty');
+    Route::get('/reports/site-town', 'ReportController@siteByTown');
 
     // Data Quarantine
     Route::get('/data-quarantine/sites', 'QuarantineController@sites');
