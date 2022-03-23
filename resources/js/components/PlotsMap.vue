@@ -22,19 +22,21 @@ export default {
 
   mounted() {
     Maps.load(() => {
-      const pos = new google.maps.LatLng(this.plots[0].latitude, this.plots[0].longitude)
-      this.map = new google.maps.Map(this.$refs.map, {
-        zoom: 9,
-        center: pos,
-      })
+      if (this.plots[0]) {
+        const pos = new google.maps.LatLng(this.plots[0].latitude, this.plots[0].longitude)
+        this.map = new google.maps.Map(this.$refs.map, {
+          zoom: 9,
+          center: pos,
+        })
 
-      this.map.addListener('click', () => {
-        if (this.infoWindow) {
-          this.infoWindow.close()
-        }
-      })
+        this.map.addListener('click', () => {
+          if (this.infoWindow) {
+            this.infoWindow.close()
+          }
+        })
 
-      this.setMapMarkers()
+        this.setMapMarkers()
+      }
     })
   },
 
