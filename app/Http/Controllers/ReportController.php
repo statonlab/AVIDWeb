@@ -139,7 +139,7 @@ class ReportController extends Controller
 
         $sites = Site::query()
             ->selectRaw('city, COUNT(*) as count')
-            ->where('name', 'like', "%$request->search%")
+            ->where('city', 'like', "%$request->search%")
             ->groupBy('city')
             ->orderBy($request->order_by ?? 'city', $request->order_dir === 'asc' ? 'asc' : 'desc')
             ->paginate($request->limit ?? 20);
