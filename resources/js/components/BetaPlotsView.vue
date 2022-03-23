@@ -1,8 +1,10 @@
 <template>
   <div>
     <div v-if="showQuarantineError" class="alert alert-warning">
-      This site contains incomplete data. This data will not be displayed on this page or be included in statistics until the required data have been filled out on the Incomplete Data page.
-      <router-link :to="`/app/incomplete-data/${site.id}`">Incomplete Data</router-link> page.
+      This site contains incomplete data. This data will not be displayed on this page or be included in statistics
+      until the required data have been filled out on the Incomplete Data page.
+      <router-link :to="`/app/incomplete-data/${site.id}`">Incomplete Data</router-link>
+      page.
     </div>
     <div class="row">
       <div class="col-md-4 col-lg-3">
@@ -129,39 +131,44 @@
                 </div>
               </div>
               <div class="card-body">
-                <dl v-if="plot" class="mb-0">
-                  <dt>Basal Area</dt>
-                  <dd v-if="plot.basal_area !== null">{{ plot.basal_area }}</dd>
-                  <dd v-else>Not Provided</dd>
+                <div class="d-flex">
+                  <dl v-if="plot" class="mb-0 flex-fill">
+                    <dt>Basal Area</dt>
+                    <dd v-if="plot.basal_area !== null">{{ plot.basal_area }}</dd>
+                    <dd v-else>Not Provided</dd>
 
-                  <dt>Enclosed or Protected</dt>
-                  <dd v-if="plot.is_protected">Yes</dd>
-                  <dd v-else>No</dd>
+                    <dt>Enclosed or Protected</dt>
+                    <dd v-if="plot.is_protected">Yes</dd>
+                    <dd v-else>No</dd>
 
-                  <dt>Protection Period</dt>
-                  <dd v-if="plot.protection_seasons !== null">{{ plot.protection_seasons }}</dd>
-                  <dd v-else>Not Provided</dd>
+                    <dt>Protection Period</dt>
+                    <dd v-if="plot.protection_seasons !== null">{{ plot.protection_seasons }}</dd>
+                    <dd v-else>Not Provided</dd>
 
-                  <dt>Ground and Shrub Cover</dt>
-                  <dd v-if="plot.ground_cover !== null">{{ plot.ground_cover }}</dd>
-                  <dd v-else>Not Provided</dd>
+                    <dt>Ground and Shrub Cover</dt>
+                    <dd v-if="plot.ground_cover !== null">{{ plot.ground_cover }}</dd>
+                    <dd v-else>Not Provided</dd>
 
-                  <dt>Canopy</dt>
-                  <dd v-if="plot.canopy !== null">{{ plot.canopy }}</dd>
-                  <dd v-else>Not Provided</dd>
+                    <dt>Canopy</dt>
+                    <dd v-if="plot.canopy !== null">{{ plot.canopy }}</dd>
+                    <dd v-else>Not Provided</dd>
 
-                  <dt>Subcanopy</dt>
-                  <dd v-if="plot.subcanopy !== null">{{ plot.subcanopy }}</dd>
-                  <dd v-else>Not Provided</dd>
+                    <dt>Subcanopy</dt>
+                    <dd v-if="plot.subcanopy !== null">{{ plot.subcanopy }}</dd>
+                    <dd v-else>Not Provided</dd>
 
-                  <dt>Recorders</dt>
-                  <dd v-if="plot.recorders !== null">{{ plot.recorders }}</dd>
-                  <dd v-else>Not Provided</dd>
+                    <dt>Recorders</dt>
+                    <dd v-if="plot.recorders !== null">{{ plot.recorders }}</dd>
+                    <dd v-else>Not Provided</dd>
 
-                  <dt>Wildlife Management Unit</dt>
-                  <dd v-if="plot.wmu">{{ plot.wmu }}</dd>
-                  <dd v-else>Not Provided</dd>
-                </dl>
+                    <dt>Wildlife Management Unit</dt>
+                    <dd v-if="plot.wmu">{{ plot.wmu }}</dd>
+                    <dd v-else>Not Provided</dd>
+                  </dl>
+                  <div class="flex-fill" v-if="plot">
+                    <plot-map :plot="plot" style="height: 400px; width:400px;"/>
+                  </div>
+                </div>
               </div>
             </tab>
             <tab name="Site Info">
@@ -188,42 +195,48 @@
                 </div>
               </div>
               <div class="card-body">
-                <dl class="mb-0">
-                  <dt>Owner</dt>
-                  <dd class="text-muted">{{ optional(site.owner_name, 'Owner name') }}</dd>
+                <div class="d-flex">
+                  <dl class="mb-0 flex-fill">
+                    <dt>Owner</dt>
+                    <dd class="text-muted">{{ optional(site.owner_name, 'Owner name') }}</dd>
 
-                  <dt>Contact Info</dt>
-                  <dd class="text-muted">
-                    {{ optional(site.owner_contact, 'Owner contact info') }}
-                  </dd>
+                    <dt>Contact Info</dt>
+                    <dd class="text-muted">
+                      {{ optional(site.owner_contact, 'Owner contact info') }}
+                    </dd>
 
-                  <dt>Overstory Species</dt>
-                  <dd class="text-muted" v-if="site.species.length !== 0">
-                    {{ site.species.map(v => v.name).join(', ') }}
-                  </dd>
-                  <dd class="text-muted" v-else>Not provided</dd>
+                    <dt>Overstory Species</dt>
+                    <dd class="text-muted" v-if="site.species.length !== 0">
+                      {{ site.species.map(v => v.name).join(', ') }}
+                    </dd>
+                    <dd class="text-muted" v-else>Not provided</dd>
 
-                  <dt>Seedling or Shrub Species</dt>
-                  <dd class="text-muted" v-if="site.shrubs.length !== 0">
-                    {{ site.shrubs.map(v => v.name).join(', ') }}
-                  </dd>
-                  <dd class="text-muted" v-else>Not provided</dd>
+                    <dt>Seedling or Shrub Species</dt>
+                    <dd class="text-muted" v-if="site.shrubs.length !== 0">
+                      {{ site.shrubs.map(v => v.name).join(', ') }}
+                    </dd>
+                    <dd class="text-muted" v-else>Not provided</dd>
 
-                  <dt>Basal Area</dt>
-                  <dd class="text-muted">
-                    {{ optional(site.basal_area) }}
-                    <span v-show="site.basal_area">ft<sup>2</sup>/ac</span>
-                  </dd>
+                    <dt>Basal Area</dt>
+                    <dd class="text-muted">
+                      {{ optional(site.basal_area) }}
+                      <span v-show="site.basal_area">ft<sup>2</sup>/ac</span>
+                    </dd>
 
-                  <dt>Average Overstory Tree Diameter</dt>
-                  <dd class="text-muted">{{ optional(site.diameter) }} <span v-show="site.diameter">in</span>
-                  </dd>
+                    <dt>Average Overstory Tree Diameter</dt>
+                    <dd class="text-muted">{{ optional(site.diameter) }} <span v-show="site.diameter">in</span>
+                    </dd>
 
-                  <dt>Comments</dt>
-                  <dd class="text-muted">
-                    {{ optional(site.comments, 'Comments') }}
-                  </dd>
-                </dl>
+                    <dt>Comments</dt>
+                    <dd class="text-muted">
+                      {{ optional(site.comments, 'Comments') }}
+                    </dd>
+                  </dl>
+
+                  <div class="flex-fill" v-if="site">
+                    <plots-map :plots="plots" style="height: 400px; width:400px;"/>
+                  </div>
+                </div>
               </div>
             </tab>
           </tabs>
@@ -265,6 +278,8 @@ import ImportForm from '../forms/ImportForm'
 import OwnerForm from '../forms/OwnerForm'
 import InlineSpinner from './InlineSpinner'
 import User from '../helpers/User'
+import PlotMap from "./PlotMap";
+import PlotsMap from "./PlotsMap";
 
 export default {
   name: 'BetaPlotsView',
@@ -280,36 +295,38 @@ export default {
     Tabs,
     Icon,
     SiteSharingCard,
+    PlotMap,
+    PlotsMap,
   },
 
   props: {
-    site         : {required: true},
+    site: {required: true},
     siteUrlPrefix: {required: false, type: String, default: '/app/plants'},
-    editable     : {required: false, type: Boolean, default: false},
+    editable: {required: false, type: Boolean, default: false},
   },
 
   data() {
     return {
-      User         : User,
-      loading      : true,
-      plots        : [],
-      plot         : null,
-      plotId       : null,
-      page         : 1,
-      lastPage     : 1,
-      search       : '',
-      orderBy      : 'number',
-      orderDir     : 'asc',
-      request      : null,
-      plotOptions  : [],
-      showPlotForm : false,
+      User: User,
+      loading: true,
+      plots: [],
+      plot: null,
+      plotId: null,
+      page: 1,
+      lastPage: 1,
+      search: '',
+      orderBy: 'number',
+      orderDir: 'asc',
+      request: null,
+      plotOptions: [],
+      showPlotForm: false,
       showOwnerForm: false,
-      editing      : null,
-      deleting     : null,
-      importing    : false,
-      userSite     : null,
+      editing: null,
+      deleting: null,
+      importing: false,
+      userSite: null,
       sendReminders: false,
-      sharedEdit   : false,
+      sharedEdit: false,
       showQuarantineError: this.site.has_quarantined,
     }
   },
@@ -350,24 +367,24 @@ export default {
 
       try {
         const {data} = await axios.get(`/web/sites/${this.site.id}/plots`, {
-          params     : {
-            page     : this.page,
-            search   : this.search,
-            order_by : this.orderBy,
+          params: {
+            page: this.page,
+            search: this.search,
+            order_by: this.orderBy,
             order_dir: this.orderDir,
-            limit    : 250,
+            limit: 250,
           },
           cancelToken: new axios.CancelToken(c => this.request = c),
         })
 
-        this.plots    = data.data
+        this.plots = data.data
         this.lastPage = data.last_page
-        this.loading  = false
-        this.request  = null
+        this.loading = false
+        this.request = null
 
         if ((this.plotId === null || this.plot === null) && this.plots.length > 0) {
           this.plotId = this.plots[0].id
-          this.plot   = this.plots[0]
+          this.plot = this.plots[0]
         }
 
         this.setOptions()
@@ -381,9 +398,9 @@ export default {
 
     async loadUserSite() {
       try {
-        const {data}       = await axios.get(`/web/user-sites/site/${this.site.id}`)
-        this.userSite      = data
-        this.sharedEdit    = data.editable
+        const {data} = await axios.get(`/web/user-sites/site/${this.site.id}`)
+        this.userSite = data
+        this.sharedEdit = data.editable
         this.sendReminders = data.sends_reminders
       } catch (e) {
         if (e.response && e.response.status === 404) {
@@ -400,14 +417,14 @@ export default {
 
     created(plot) {
       this.plots.push(plot)
-      this.plot   = plot
+      this.plot = plot
       this.plotId = plot.id
       this.setOptions()
       this.closeForm()
     },
 
     updated(plot) {
-      this.plot  = plot
+      this.plot = plot
       this.plots = this.plots.map(p => p.id === plot.id ? plot : p)
       this.setOptions()
       this.closeForm()
@@ -424,11 +441,11 @@ export default {
 
     closeForm() {
       this.showPlotForm = false
-      this.editing      = null
+      this.editing = null
     },
 
     edit() {
-      this.editing      = this.plot
+      this.editing = this.plot
       this.showPlotForm = true
     },
 
@@ -438,8 +455,8 @@ export default {
       }
 
       this.$confirm({
-        title    : `Are you sure you want to delete Plot #${this.plot.number}?`,
-        text     : 'This action is permanent!',
+        title: `Are you sure you want to delete Plot #${this.plot.number}?`,
+        text: 'This action is permanent!',
         onConfirm: async () => {
           this.deleting = this.plot.id
           try {
@@ -467,8 +484,8 @@ export default {
       }
 
       this.$confirm({
-        title    : `Are you sure you want to delete ${this.site.name}?`,
-        text     : 'This action is permanent!',
+        title: `Are you sure you want to delete ${this.site.name}?`,
+        text: 'This action is permanent!',
         onConfirm: async () => {
           this.deleting = this.site.id
           try {
@@ -478,7 +495,7 @@ export default {
               type: 'error',
             })
             this.$router.replace({
-              path : '/app/sites',
+              path: '/app/sites',
               query: {},
             }).catch(e => {
             })
@@ -520,12 +537,12 @@ export default {
     async toggleReminders() {
       try {
         if (this.User.owns(this.site)) {
-          const {data}              = await axios.put(`/web/sites/${this.site.id}/toggle-reminders`)
+          const {data} = await axios.put(`/web/sites/${this.site.id}/toggle-reminders`)
           this.site.sends_reminders = data.sends_reminders
-          this.sendReminders        = data.sends_reminders
+          this.sendReminders = data.sends_reminders
         } else {
-          const {data}       = await axios.put(`/web/user-sites/${this.site.id}/toggle-reminders`)
-          this.userSite      = {
+          const {data} = await axios.put(`/web/user-sites/${this.site.id}/toggle-reminders`)
+          this.userSite = {
             ...this.userSite,
             sends_reminders: data.sends_reminders,
           }
