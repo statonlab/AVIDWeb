@@ -5,6 +5,7 @@ namespace Database\Factories;
 
 use App\Invitation;
 use Faker\Generator as Faker;
+use Illuminate\Support\Str;
 
 $factory->define(Invitation::class, function (Faker $faker) {
     $leader = factory(\App\User::class)->create();

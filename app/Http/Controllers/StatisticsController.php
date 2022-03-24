@@ -6,6 +6,7 @@ use App\Site;
 use App\Plot;
 use App\Species;
 use App\Measurement;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -31,10 +32,12 @@ class StatisticsController extends Controller
     ];
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\Response|JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function sites(Request $request)
+    public function sites(Request $request): \Illuminate\Http\Response|JsonResponse
     {
         $this->validate($request, [
             'data_type' => 'nullable|in:owned,admin',
@@ -70,7 +73,7 @@ class StatisticsController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return JsonResponse|\Illuminate\Http\Response
      */
     public function plots(Request $request)
     {
@@ -111,7 +114,7 @@ class StatisticsController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return JsonResponse|\Illuminate\Http\Response
      */
     public function species(Request $request)
     {
