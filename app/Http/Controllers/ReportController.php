@@ -58,7 +58,7 @@ class ReportController extends Controller
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function siteByState(Request $request)
+    public function siteByState(Request $request): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
     {
         $this->validate($request, [
             'order_by' => [
@@ -89,7 +89,7 @@ class ReportController extends Controller
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function siteByCounty(Request $request)
+    public function siteByCounty(Request $request): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
     {
         $this->validate($request, [
             'search' => 'nullable|max:255',
@@ -122,7 +122,7 @@ class ReportController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function siteByTown(Request $request)
+    public function siteByTown(Request $request): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
     {
         $this->validate($request, [
             'search' => 'nullable|max:255',

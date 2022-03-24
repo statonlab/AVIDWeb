@@ -8,83 +8,73 @@ trait Responds
 {
     /**
      * @param $data
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @param int $status
+     * @return \Illuminate\Http\JsonResponse
      */
-    protected function success($data)
+    protected function success($data, $status = 200): JsonResponse
     {
-        return JsonResponse::create($data);
+        return new JsonResponse($data, $status);
     }
 
     /**
-     * @param $message
+     * @param mixed $message
      * @param array $errors
      * @param int $status
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    protected function error($message, array $errors, $status = 422)
+    protected function error(mixed $message, array $errors, int $status = 422): JsonResponse
     {
-        return JsonResponse::create([
+        return new JsonResponse([
             'message' => $message,
             'errors' => $errors,
         ], $status);
     }
 
     /**
-     * Not found 404.
-     *
-     * @param string $message
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @param mixed $data
+     * @return \Illuminate\Http\JsonResponse
      */
-    protected function notFound($message = 'Not Found')
+    protected function created(mixed $data): JsonResponse
     {
-        return JsonResponse::create($message, 404);
-    }
-
-    /**
-     * @param string|array $data
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
-     */
-    protected function created($data)
-    {
-        return JsonResponse::create($data, 201);
+        return new JsonResponse($data, 201);
     }
 
     /**
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    protected function deleted(string $message = 'Resource Deleted')
+    protected function deleted(string $message = ''): JsonResponse
     {
-        return JsonResponse::create($message, 201);
+        return new JsonResponse($message, 201);
     }
 
     /**
      * Unauthorized request.
      *
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    protected function unauthorized($message = 'Unauthorized')
+    protected function unauthorized(string $message = 'Unauthorized'): JsonResponse
     {
-        return JsonResponse::create($message, 403);
+        return new JsonResponse($message, 403);
     }
 
     /**
      * Bad request message.
      *
      * @param string $message
-     * @return JsonResponse|\Illuminate\Http\Response
+     * @return JsonResponse
      */
     protected function badRequest($message = 'Bad Request')
     {
-        return JsonResponse::create($message, 400);
+        return new JsonResponse($message, 400);
     }
 
     /**
      * Internal server error.
      *
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     protected function serverError($message = '')
     {
@@ -92,6 +82,21 @@ trait Responds
             $message = __('server.server_error');
         }
 
-        return JsonResponse::create($message, 500);
+        return new JsonResponse($message, 500);
+    }
+
+    /**
+     * Internal server error.
+     *
+     * @param string $message
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function notFound($message = '')
+    {
+        if (empty($message)) {
+            $message = __('server.not_found');
+        }
+
+        return new JsonResponse($message, 404);
     }
 }
