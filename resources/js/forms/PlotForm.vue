@@ -59,13 +59,15 @@
                        id="longitude"
                        placeholder="E,g. -36.898723"
                        :class="['form-control', {'is-invalid': form.errors.has('longitude')}]"
-                       v-model="form.longitude">
+                       v-model="form.longitude"
+                       @click="setLongitude()">
                 <small class="form-text text-danger" v-if="form.errors.has('longitude')">
                   {{ form.errors.first('longitude') }}
                 </small>
               </div>
               <div class="form-group">
-                <small class="text-muted">When entering coordinates manually, please verify the location on the map</small>
+                <small class="text-muted">When entering coordinates manually, please verify the location on the
+                  map</small>
               </div>
             </div>
             <div class="col-7">
@@ -273,17 +275,17 @@ export default {
   data() {
     return {
       loading: false,
-      form   : new Form({
-        number            : '',
-        latitude          : null,
-        longitude         : null,
-        basal_area        : '',
-        ground_cover      : '',
-        subcanopy         : '',
-        canopy            : '',
-        is_protected      : '',
+      form: new Form({
+        number: '',
+        latitude: null,
+        longitude: null,
+        basal_area: '',
+        ground_cover: '',
+        subcanopy: '',
+        canopy: '',
+        is_protected: '',
         protection_seasons: '',
-        recorders         : '',
+        recorders: '',
       }),
       options: Options,
       showMap: false,
@@ -350,8 +352,14 @@ export default {
     },
 
     setGpsFromMap(pos) {
-      this.form.latitude  = pos.latitude
+      this.form.latitude = pos.latitude
       this.form.longitude = pos.longitude
+    },
+
+    setLongitude() {
+      if (!this.form.longitude) {
+        this.form.longitude = "-"
+      }
     },
   },
 }
