@@ -25,7 +25,7 @@ export default {
       if (this.plots[0]) {
         const pos = new google.maps.LatLng(this.plots[0].latitude, this.plots[0].longitude)
         this.map = new google.maps.Map(this.$refs.map, {
-          zoom: 9,
+          zoom: 11,
           center: pos,
         })
 

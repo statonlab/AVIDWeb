@@ -13,24 +13,25 @@ class DataEntryController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function sites(Request $request)
+    public function sites(Request $request): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
     {
-        /** @var \App\User $user */
-        $user = $request->user();
-
-        return $this->success($user->sites()
+        return $this->success(Site::where(function ($query) use ($request) {
+            $query->withShared($request->user());
+            $query->orWhere('user_id', $request->user()->id);
+        })
             ->orderBy('name', 'asc')
             ->with('plots')
             ->get());
     }
 
     /**
-     * @param \App\Site $site
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @param Site $site
+     * @param Request $request
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function plots(Site $site, Request $request)
+    public function plots(Site $site, Request $request): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
     {
         $this->authorize('view', $site);
 
@@ -52,8 +53,7 @@ class DataEntryController extends Controller
                 if ($request->search) {
                     $query->where('plants.tag', $request->search);
                 }
-                switch ($request->sort_order)
-                {
+                switch ($request->sort_order) {
                     case 'tag_asc':
                         $query->orderBy('plants.tag', 'asc');
                         break;
@@ -81,7 +81,7 @@ class DataEntryController extends Controller
             },
         ])->orderBy('plots.number', 'asc')->get();
 
-        if (! empty($request->limit)) {
+        if (!empty($request->limit)) {
             $plots->transform(function (Plot $plot) use ($request) {
                 $plot->plants->transform(function (Plant $plant) use ($request) {
                     $plant->setRelation('measurements',
