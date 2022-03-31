@@ -29,7 +29,7 @@ trait ListsSites
             $sites = $sites->orderBy($request->order_by ?? 'created_at', $request->order_dir ?? 'desc');
         }
 
-        $sites = $sites->with([
+        return $sites->with([
             'state' => function ($query) {
             },
             'county' => function ($query) {
@@ -80,7 +80,5 @@ trait ListsSites
                         break;
                 }
             });
-
-        return $sites;
     }
 }

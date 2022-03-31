@@ -40,7 +40,7 @@ class SetLastMeasuredAt extends Command
     public function handle()
     {
         $i = 0;
-        $plots = Plot::cursor();
+        $plots = Plot::lazyById();
 
         /** @var Plot $plot */
         foreach ($plots as $plot) {
