@@ -97,6 +97,11 @@ class Plot extends Model
             /** @var \App\Site $site */
             $site = $this->site()->first();
 
+            if(!$site) {
+                // Site was most likely soft deleted
+                return;
+            }
+
             if ($site->last_measured_at === null || $site->last_measured_at < $this->last_measured_at) {
                 $site->fill(['last_measured_at' => $this->last_measured_at])->save();
             }
