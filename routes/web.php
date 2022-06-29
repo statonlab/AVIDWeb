@@ -293,7 +293,6 @@ Route::group([
 
     Route::get('/impersonate/{user}', 'ImpersonateController@impersonate');
 
-    // AccountDeleteRequest Controller
     // DeleteAccountRequestController
     Route::get('/delete-account-requests', 'DeleteAccountRequestController@index');
     Route::get('/delete-account-requests/myIndex', 'DeleteAccountRequestController@myIndex');
