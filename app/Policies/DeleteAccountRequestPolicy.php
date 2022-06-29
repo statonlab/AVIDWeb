@@ -11,6 +11,16 @@ class DeleteAccountRequestPolicy
     use HandlesAuthorization;
 
     /**
+     * @param \App\User $user
+     * @param $ability
+     * @return bool
+     */
+    public function before(User $user, $ability): bool
+    {
+        return $user->isSuperUser();
+    }
+
+    /**
      * Determine whether the user can view any models.
      *
      * @param \App\User $user
@@ -30,6 +40,9 @@ class DeleteAccountRequestPolicy
      */
     public function view(User $user, DeleteAccountRequest $deleteAccountRequest): bool
     {
+        if ($user->id === (int)$deleteAccountRequest->user_id) {
+            return true;
+        }
         return $user->isAdmin();
     }
 
@@ -64,30 +77,6 @@ class DeleteAccountRequestPolicy
      * @return bool
      */
     public function delete(User $user, DeleteAccountRequest $deleteAccountRequest): bool
-    {
-        return $this->update($user, $deleteAccountRequest);
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param \App\User $user
-     * @param \App\DeleteAccountRequest $deleteAccountRequest
-     * @return bool
-     */
-    public function restore(User $user, DeleteAccountRequest $deleteAccountRequest): bool
-    {
-        return $this->update($user, $deleteAccountRequest);
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param \App\User $user
-     * @param \App\DeleteAccountRequest $deleteAccountRequest
-     * @return bool
-     */
-    public function forceDelete(User $user, DeleteAccountRequest $deleteAccountRequest): bool
     {
         return $this->update($user, $deleteAccountRequest);
     }
