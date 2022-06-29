@@ -59,11 +59,12 @@ class DeleteAccountRequestController extends Controller
                 'user_id' => $request->user()->id,
             ]);
 
-        if (DeleteAccountRequest::where('user_id', $request->user()->id)
+        if (DeleteAccountRequest::withTrashed()
+            ->where('user_id', $request->user()->id)
+            ->where('id', '!=', $deleteAccountRequest->id)
             ->where('created_at', '>', Carbon::now()->subHours(2))
-            ->withTrashed()
             ->doesntExist()) {
-            dispatch(new SendAccountRequestDeletionNotification($deleteAccountRequest));
+            $this->dispatch(new SendAccountRequestDeletionNotification($deleteAccountRequest));
         }
 
         return $this->success($deleteAccountRequest);
