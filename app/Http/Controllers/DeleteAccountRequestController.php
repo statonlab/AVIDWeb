@@ -19,16 +19,19 @@ class DeleteAccountRequestController extends Controller
      */
     public function index(): JsonResponse
     {
-        $this->authorize('viewAny', DeleteAccountRequest::class);
+        $this->authorize('accessList', DeleteAccountRequest::class);
 
         return $this->success(DeleteAccountRequest::orderByDesc('id')->get());
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function myIndex(): JsonResponse
     {
+        $this->authorize('accessList', DeleteAccountRequest::class);
+
         return $this->success(DeleteAccountRequest::where('user_id', auth()->id())
             ->orderByDesc('id')
             ->first());
