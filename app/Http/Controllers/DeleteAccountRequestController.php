@@ -29,8 +29,6 @@ class DeleteAccountRequestController extends Controller
      */
     public function myIndex(): JsonResponse
     {
-        $this->authorize('view', DeleteAccountRequest::class);
-
         return $this->success(DeleteAccountRequest::where('user_id', auth()->id())
             ->orderByDesc('id')
             ->first());
