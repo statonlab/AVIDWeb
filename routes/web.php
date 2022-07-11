@@ -292,4 +292,10 @@ Route::group([
     Route::get('/admin-exports/data', 'ExportDataController@index');
 
     Route::get('/impersonate/{user}', 'ImpersonateController@impersonate');
+
+    // DeleteAccountRequestController
+    Route::get('/delete-account-requests', 'DeleteAccountRequestController@index');
+    Route::get('/delete-account-requests/myIndex', 'DeleteAccountRequestController@myIndex');
+    Route::post('/delete-account-request', 'DeleteAccountRequestController@create');
+    Route::delete('/delete-account-request/{deleteRequest}', 'DeleteAccountRequestController@delete');
 });
