@@ -26,9 +26,9 @@ class DeleteAccountRequestPolicy
      * @param \App\User $user
      * @return bool
      */
-    public function viewAny(User $user): bool
+    public function accessList(User $user): bool
     {
-        return $user->isAdmin();
+        return !!$user;
     }
 
     /**
@@ -66,7 +66,7 @@ class DeleteAccountRequestPolicy
      */
     public function update(User $user, DeleteAccountRequest $deleteAccountRequest): bool
     {
-        return $user->isAdmin() || $user->id === (int) $deleteAccountRequest->user_id;
+        return $user->isAdmin() || $user->id === (int)$deleteAccountRequest->user_id;
     }
 
     /**
