@@ -230,6 +230,7 @@ Route::group([
     Route::get('/users', 'UserController@index');
     Route::get('/users/{user}', 'UserController@show');
     Route::patch('/user/{user}/role', 'UserController@patchRole');
+    Route::get('/users/page/export', 'UserController@export');
 
     // Roles Controller
     Route::get('/roles', 'RoleController@index');
