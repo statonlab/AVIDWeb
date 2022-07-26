@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\UpdateReminderEvents;
+use App\Jobs\CheckQueueIssues;
 use App\Jobs\SendReminders;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -22,13 +23,14 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
         $schedule->command(UpdateReminderEvents::class)->daily();
         $schedule->job(SendReminders::class)->dailyAt('4:00');
+        $schedule->job(CheckQueueIssues::class)->dailyAt('4:00');
     }
 
     /**
@@ -38,7 +40,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
