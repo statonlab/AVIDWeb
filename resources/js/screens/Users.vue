@@ -8,9 +8,6 @@
       <div class="ml-auto text-muted">
         Page {{ page }} of {{ lastPage }}
       </div>
-      <!--      <div class="flex-shrink-0 d-flex align-items-center">-->
-      <!--        <button class="btn btn-primary" @click.prevent="downloadUsers()">Download</button>-->
-      <!--      </div>-->
     </div>
     <div class="card mb-3">
       <div class="card-header d-flex p-2">
@@ -18,10 +15,6 @@
           <input type="search" class="form-control" placeholder="Search..." v-model="search" title="Search">
         </div>
         <div class="flex-shrink-0 d-flex align-items-center">
-          <a class="btn btn-outline-primary ml-1" :href="download()" target="_blank">
-            <icon name="cloud-download"/>
-            <span>Download</span>
-          </a>
           <select title="Sort Quadrant"
                   name="quadrant_filter"
                   id="quadrant-filter"
@@ -31,6 +24,10 @@
             <option value="verified">Show verified emails</option>
             <option value="unverified">Show only unverified emails</option>
           </select>
+          <a class="btn btn-outline-primary ml-1" :href="download()" target="_blank">
+            <icon name="cloud-download"/>
+            <span>Download</span>
+          </a>
         </div>
       </div>
       <div class="card-body p-0">
