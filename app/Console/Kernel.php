@@ -30,7 +30,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command(UpdateReminderEvents::class)->daily();
         $schedule->job(SendReminders::class)->dailyAt('4:00');
-        $schedule->job(CheckQueueIssues::class)->dailyAt('4:00');
     }
 
     /**
