@@ -4,7 +4,6 @@ namespace App\Console;
 
 use App\Console\Commands\UpdateReminderEvents;
 use App\Jobs\SendReminders;
-use App\Jobs\SendRemindersNew;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\SendEventNotifications;
