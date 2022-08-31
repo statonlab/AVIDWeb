@@ -26,7 +26,7 @@ class MeasurementCreatedListener implements ShouldQueue
 
         $site = $measurement->site;
 
-        if ($site->user->email_verified_at === null) {
+        if ($site->user?->email_verified_at === null) {
             return;
         }
 
