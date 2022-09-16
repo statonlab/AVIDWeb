@@ -99,7 +99,6 @@ export default {
   watch: {
     'form.plant_type_id': {
       handler() {
-        console.log('changed plant type')
         this.$emit('plantTypeChanged', this.form.plant_type_id)
       }
     },

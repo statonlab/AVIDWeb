@@ -203,7 +203,7 @@ export default class Form {
    */
   config() {
     return {
-      onUploadProgress: this.onProgressCallback
+      onUploadProgress: this.onProgressCallback,
     }
   }
 
@@ -256,7 +256,11 @@ export default class Form {
   setDefault(data) {
     for (let field in this.originalData) {
       if (!this.originalData.hasOwnProperty(field)) {
-        return
+        continue
+      }
+
+      if (!data.hasOwnProperty(field)) {
+        continue
       }
 
       if (data[field] === null) {

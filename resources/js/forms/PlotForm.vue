@@ -42,7 +42,7 @@
                 <input type="text"
                        name="latitude"
                        id="latitude"
-                       placeholder="E,g. -36.898723"
+                       placeholder="E,g. 40.690549"
                        :class="['form-control', {'is-invalid': form.errors.has('latitude')}]"
                        v-model="form.latitude">
                 <small class="form-text text-danger" v-if="form.errors.has('latitude')">
@@ -57,7 +57,7 @@
                 <input type="text"
                        name="longitude"
                        id="longitude"
-                       placeholder="E,g. -36.898723"
+                       placeholder="E,g. -74.174971"
                        :class="['form-control', {'is-invalid': form.errors.has('longitude')}]"
                        v-model="form.longitude"
                        @click="setLongitude()">

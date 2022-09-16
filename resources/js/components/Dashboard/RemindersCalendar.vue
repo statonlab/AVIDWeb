@@ -68,7 +68,7 @@
       },
 
       dateClick(info) {
-        console.log(info)
+        // console.log(info)
       },
 
       eventClick(info) {
