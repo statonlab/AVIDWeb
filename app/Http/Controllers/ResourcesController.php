@@ -16,6 +16,11 @@ class ResourcesController extends Controller
         return view('resources.data_sheets');
     }
 
+    public function smartphoneApp()
+    {
+        return view('resources.smartphone_app');
+    }
+
     /**
      * Show the Identification page.
      *

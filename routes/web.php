@@ -68,6 +68,8 @@ Route::get('/user-guides/exclosures', 'UserGuidesController@exclosures')
 // Resources
 Route::get('/resources/data-sheets', 'ResourcesController@dataSheets')
     ->name('data-sheets');
+Route::get('/resources/smartphone-app', 'ResourcesController@smartphoneApp')
+    ->name('smartphone-app');
 Route::get('/resources/identification', 'ResourcesController@identification')
     ->name('identification');
 Route::get('/resources/manual', 'ResourcesController@manual')->name('manual');

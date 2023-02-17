@@ -18,7 +18,7 @@
                                         <li>Compass</li>
                                         <li>2 yardsticks, or a stick or string cut to 6 feet in length</li>
                                         <li>Permanent marker</li>
-                                        <li>Smart phone with app, or data sheets with pen or pencil and clipboard</li>
+                                        <li>Smart phone with Avid Deer app (available on <a href="https://apps.apple.com/us/app/avid-deer/id1578311148">iOS</a> or <a href="https://play.google.com/store/apps/details?id=com.aviddeer&hl=en_US&gl=US">Android</a>, or data sheets with pen or pencil and clipboard</li>
                                         <li>PVC (2-ft x 1-inch), fiberglass, heavy duty plastic (<a href="https://www.forestry-suppliers.com/">www.forestry-suppliers.com</a> or <a href="https://www.berntsen.com/Surveying/Survey-Stakes)">https://www.berntsen.com/Surveying/Survey-Stakes</a>), or wood stakes for marking plot center</li>
                                         <li>Hammer or mallet for pounding stakes into ground</li>
                                         <li>Brightly colored paint, brightly colored duct tape, or surveyors flagging for marking center and edge stakes</li>

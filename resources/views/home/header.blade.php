@@ -9,7 +9,13 @@
                         <div class="pr-lg-5 mb-4 mb-lg-0">
                             <h3 class="text-uppercase text-white">Welcome to AVID</h3>
                             <p class="mb-0 lead text-white text-justify">
-                                AVID is a project to Assess Vegetation for Impacts from Deer. Plants are monitored each year to evaluate the impact of deer browsing. AVID is a method for volunteers, foresters, landowners and others to measure the effect of deer browse on New York forests. Volunteers are encouraged to use AVID to document this aspect of New York forest health. Participants will learn about forest and woodland ecology, how to identify spring wildflowers and trees, and develop an eye for recognizing signs of deer impacts.
+                                AVID is a project to Assess Vegetation for Impacts from Deer. Plants are monitored each
+                                year to evaluate the impact of deer browsing. AVID is a method for volunteers,
+                                foresters, landowners and others to measure the effect of deer browse on New York
+                                forests. Volunteers are encouraged to use AVID to document this aspect of New York
+                                forest health. Participants will learn about forest and woodland ecology, how to
+                                identify spring wildflowers and trees, and develop an eye for recognizing signs of deer
+                                impacts.
                             </p>
                         </div>
                     </div>
@@ -101,6 +107,14 @@
                                     </form>
                                 </div>
                             @endguest
+                        </div>
+                        <div class="card border-0 shadow mt-3">
+                            <div class="card-body">
+                                <p class="text-center font-weight-bold">Phone app now available!</p>
+                                <p>Search for "Avid Deer" in your phone's app store, or use the links below</p>
+                                <a href="https://apps.apple.com/us/app/avid-deer/id1578311148" class="btn btn-block btn-primary">iOS App Store</a>
+                                <a href="https://play.google.com/store/apps/details?id=com.aviddeer&hl=en_US&gl=US" class="btn btn-block btn-primary">Google Play Store</a>
+                            </div>
                         </div>
                     </div>
                 </div>
