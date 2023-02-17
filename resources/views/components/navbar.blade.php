@@ -59,6 +59,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="resourcesDropdown">
                         <a class="dropdown-item" href="/resources/data-sheets">Data Sheets</a>
+                        <a class="dropdown-item" href="/resources/smartphone-app">Smartphone App</a>
                         <a class="dropdown-item" href="/resources/identification">Identification</a>
                         <a class="dropdown-item" href="/resources/references">References</a>
                         <a class="dropdown-item" href="/resources/manual">Manual</a>
