@@ -32,7 +32,7 @@
                 </p>
                 <ul class="mb-2">
                     <li>Visit the
-                        <a href="/resources/manual">Resources</a> tab at the top of the page and download the AVID manual. The manual can be printed and you can read it at your leisure or take it into the field with you. Data sheets are included at the end of the manual.
+                        <a href="/resources/manual">Resources</a> tab at the top of the page and download the AVID manual. The manual can be printed and you can read it at your leisure or take it into the field with you. Data sheets are included at the end of the manual. You can also collect data via our <a href="/resources/smartphone-app">smartphone app.</a>
                     </li>
                     <li>Read through the <a href="/site-preparation">Site Preparation</a> and
                         <a href="/user-guides/getting-started">User Guides</a> tabs here at the web site. All of the information in the manual is also present here. You can then print the data sheets you will need by clicking on the
