@@ -18,6 +18,7 @@ class ResourcesController extends Controller
 
     public function smartphoneApp()
     {
+        info('returning smartphone app view');
         return view('resources.smartphone_app');
     }
 

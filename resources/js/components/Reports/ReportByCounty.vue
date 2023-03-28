@@ -1,10 +1,16 @@
 <template>
   <div class="col-md-8">
     <div class="card border shadow-sm">
-      <div class="card-header shadow-none bg-light rounded d-flex justify-content-between">
-        <h4 class="mt-1 ml-2 page-title">Number of Sites per County</h4>
-        <input type="search" class="form-control" placeholder="Search..." v-model="search">
-      </div>
+        <div class="card-header shadow-none bg-light rounded d-flex justify-content-between">
+            <h4 class="flex-grow-1 mt-1 ml-2 page-title">Number of Sites per County</h4>
+            <input type="search" class="form-control" placeholder="Search..." v-model="search">
+            <a class="flex-shrink-0 ml-1 btn btn-primary"
+               :href="`/web/reports/export/site-county`"
+               target="_blank">
+                <icon name="cloud-download"/>
+                <span>Export Data</span>
+            </a>
+        </div>
       <inline-spinner class="ml-5 mt-5 mb-5" v-if="loading"/>
       <div class="card-body" v-if="!loading">
         <span v-if="counties.length === 0"> No sites found</span>
@@ -13,7 +19,7 @@
           <tr>
             <th>
               <a href="#" class="d-flex align-items-center" @click.prevent="sort('name')">
-                <span>{{ 'State' }}</span>
+                <span>{{ 'County' }}</span>
                 <icon :name="sortIcon('name')"
                       class="ml-2"
                       :class="{'invisible': orderBy !== 'name'}"

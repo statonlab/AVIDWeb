@@ -1,9 +1,15 @@
 <template>
   <div class="col-md-8">
     <div class="card border shadow-sm">
-      <div class="card-header shadow-none bg-light rounded">
-        <strong>Number of Sites per State</strong>
-      </div>
+        <div class="card-header shadow-none bg-light rounded d-flex align-items-center">
+            <strong class="flex-grow-1">Number of Sites per State</strong>
+            <a class="flex-shrink-0 btn btn-primary"
+               :href="`/web/reports/export/site-wmu`"
+               target="_blank">
+                <icon name="cloud-download"/>
+                <span>Export Data</span>
+            </a>
+        </div>
       <inline-spinner class="ml-5 mt-5 mb-5" v-if="loading"/>
       <div class="card-body" v-if="!loading">
         <span v-if="states.length === 0"> No sites found</span>
