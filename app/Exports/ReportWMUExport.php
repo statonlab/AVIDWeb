@@ -27,7 +27,7 @@ class ReportWMUExport implements FromCollection, WithHeadings
     {
         return [
             'Aggregate WMU',
-            'Total',
+            'Site Count',
         ];
     }
 

@@ -4,7 +4,7 @@
         <div class="card-header shadow-none bg-light rounded d-flex align-items-center">
             <strong class="flex-grow-1">Number of Sites per State</strong>
             <a class="flex-shrink-0 btn btn-primary"
-               :href="`/web/reports/export/site-wmu`"
+               :href="`/web/reports/export/site-state`"
                target="_blank">
                 <icon name="cloud-download"/>
                 <span>Export Data</span>

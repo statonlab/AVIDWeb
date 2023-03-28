@@ -4,8 +4,9 @@ namespace App\Exports;
 
 use App\Http\Controllers\Traits\ReportQueries;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ReportStateExport implements FromCollection
+class ReportStateExport implements FromCollection, WithHeadings
 {
     use ReportQueries;
 

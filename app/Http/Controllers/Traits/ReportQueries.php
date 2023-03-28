@@ -29,7 +29,7 @@ trait ReportQueries
 
     public function querySiteByCounty($order_by = 'name', $order_dir = 'asc', $search = null)
     {
-        $counties = County::select(['counties.id', 'counties.name']);
+        $counties = County::with('state')->select(['counties.id', 'counties.name', 'counties.state_id']);
         if ($search) {
             $counties->where('name', 'like', "%$search%");
         }
