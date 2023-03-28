@@ -1,10 +1,10 @@
 {
-    "/js/app.js": "/js/app.js?id=7684ea67a29ccc8210da4c4766fff099",
+    "/js/app.js": "/js/app.js?id=7ccc3fc24fb76a6540bce3952e4a8724",
     "/js/auth.js": "/js/auth.js?id=6c9f2374f8a16355fb985d44638ff814",
     "/js/guest.js": "/js/guest.js?id=885f9e5409f8ffdcdad2dca4df0f78a5",
     "/app.js": "/app.js?id=3b39ff86bd194713ec4dfd9815e8095b",
     "/js/dashboard.38b4663185c481ac.js": "/js/dashboard.38b4663185c481ac.js?id=77c4427ec01ebedb3253fd1858153e46",
-    "/js/sites.f9ea9b6dd9c563f9.js": "/js/sites.f9ea9b6dd9c563f9.js?id=532d42cee2112a2256afd6495c6b0376",
+    "/js/sites.1602905c7d2060b1.js": "/js/sites.1602905c7d2060b1.js?id=1cf8fc4460686694636e53a4039adc28",
     "/js/plots.d81d9440fd352adc.js": "/js/plots.d81d9440fd352adc.js?id=dbf0d88698c8655b62798d647eb61d87",
     "/js/group_plots.841cf53bcafe7d50.js": "/js/group_plots.841cf53bcafe7d50.js?id=794aa954123ddc3375960cf97a5687f1",
     "/js/measurements.1de36bed2e99a4f7.js": "/js/measurements.1de36bed2e99a4f7.js?id=e0e069b0cc00229dfbb617cd210d1fc9",
@@ -15,8 +15,8 @@
     "/js/user.638a2920145a7dee.js": "/js/user.638a2920145a7dee.js?id=ad3dea36bda24ac6535596413bedf9c8",
     "/js/roles.c2a63bad75604f59.js": "/js/roles.c2a63bad75604f59.js?id=a41735f3c62b68b7773cbf21273412cd",
     "/js/groups.a7b1beb3590f45c0.js": "/js/groups.a7b1beb3590f45c0.js?id=01ed14e1fb9b39b9127d040c0a8710cb",
-    "/js/group.bb953cb2188b6344.js": "/js/group.bb953cb2188b6344.js?id=767b1bbe2486d376b03bb2cf4764da1b",
-    "/js/admin_sites.3aca01af0f418d03.js": "/js/admin_sites.3aca01af0f418d03.js?id=008a99d2a85a39e199a2b66544f575a2",
+    "/js/group.00dde3a64069990b.js": "/js/group.00dde3a64069990b.js?id=21eeba16dce9597e299164cef769b632",
+    "/js/admin_sites.d08c0b09eb96a41f.js": "/js/admin_sites.d08c0b09eb96a41f.js?id=9c429fd57303d97d92ea4845ffea8bed",
     "/js/admin_plots.f1b839f84580a895.js": "/js/admin_plots.f1b839f84580a895.js?id=e17faa50650cf590f00dfa35160b3552",
     "/js/admin_measurements.df3136967e08a279.js": "/js/admin_measurements.df3136967e08a279.js?id=ac8902a36a16877246685ca459a1274f",
     "/js/reminders.ebd5c71adda8b50e.js": "/js/reminders.ebd5c71adda8b50e.js?id=8d6a8386626d2246815904d365d5df47",
@@ -24,7 +24,7 @@
     "/js/events.b8925f6acdf83d09.js": "/js/events.b8925f6acdf83d09.js?id=9b1ca21b7055b72ac1c374f169e61cbc",
     "/js/data_entry.f912efccf4090502.js": "/js/data_entry.f912efccf4090502.js?id=2a66e2e341b0c58bb351b62aa6266ed5",
     "/js/statistics.b1495a1b1ba21748.js": "/js/statistics.b1495a1b1ba21748.js?id=da665333c28e60ef2a515277eec63179",
-    "/js/reports.9cf3ce03c0ad741b.js": "/js/reports.9cf3ce03c0ad741b.js?id=f38ca7d33182c81607985704a3c5c109",
+    "/js/reports.4b80d33ddecf1ca1.js": "/js/reports.4b80d33ddecf1ca1.js?id=d4e60df72b7cbda932b31be0711aa21b",
     "/js/maps.524b60df9a5ce7d3.js": "/js/maps.524b60df9a5ce7d3.js?id=510e3385336a0f27b340277aafbcda22",
     "/css/app.css": "/css/app.css?id=7068b715f93b75267630bb4ba2cd3af3"
 }
