@@ -54,7 +54,7 @@ class DataExport implements FromQuery, WithHeadings, WithMapping
     {
         $rows = collect([]);
 
-        return Measurement::with([
+        return Measurement::whereHas('site')->whereHas('plot')->whereHas('plant')->with([
             'site',
             'site.state',
             'site.county',
@@ -119,13 +119,13 @@ class DataExport implements FromQuery, WithHeadings, WithMapping
             $quadrant = $measurement->plant->quadrant;
         }
 
-        return  [
+        return [
             $measurement->site->name,
             $measurement->user->name,
             $measurement->site->owner_name,
             $measurement->site->owner_contact,
-            $measurement->site->state->name,
-            $measurement->site->county->name,
+            $measurement->site->state?->name,
+            $measurement->site->county?->name,
             $measurement->site->city,
             $measurement->site->basal_area,
             $measurement->site->diameter,
