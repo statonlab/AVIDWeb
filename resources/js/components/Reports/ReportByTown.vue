@@ -1,10 +1,16 @@
 <template>
   <div class="col-md-8">
     <div class="card border shadow-sm">
-      <div class="card-header shadow-none bg-light rounded d-flex justify-content-between">
-        <h4 class="page-title">Number of Sites per Town</h4>
-        <input type="search" class="form-control" placeholder="Search..." v-model="search">
-      </div>
+        <div class="card-header shadow-none bg-light rounded d-flex justify-content-between">
+            <h4 class="flex-grow-1 mt-1 ml-2 page-title">Number of Sites per Town</h4>
+            <input type="search" class="form-control" placeholder="Search..." v-model="search">
+            <a class="flex-shrink-0 ml-1 btn btn-primary"
+               :href="`/web/reports/export/site-town`"
+               target="_blank">
+                <icon name="cloud-download"/>
+                <span>Export Data</span>
+            </a>
+        </div>
       <inline-spinner class="ml-5 mt-5 mb-5" v-if="loading"/>
       <div class="card-body" v-if="!loading">
         <div v-if="sites.length === 0" class="ml-2 mt-2 mb-2">No sites found.</div>

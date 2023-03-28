@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PlotController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -280,10 +281,14 @@ Route::group([
     Route::get('/statistics/chart', 'StatisticsController@chart');
 
     // Reports
-    Route::get('/reports/site-wmu', 'ReportController@siteByWmu');
-    Route::get('/reports/site-state', 'ReportController@siteByState');
-    Route::get('/reports/site-county', 'ReportController@siteByCounty');
-    Route::get('/reports/site-town', 'ReportController@siteByTown');
+    Route::get('/reports/site-wmu', [ReportController::class, 'siteByWmu']);
+    Route::get('/reports/site-state', [ReportController::class, 'siteByState']);
+    Route::get('/reports/site-county', [ReportController::class, 'siteByCounty']);
+    Route::get('/reports/site-town', [ReportController::class, 'siteByTown']);
+    Route::get('/reports/export/site-wmu', [ReportController::class, 'exportWmu']);
+    Route::get('/reports/export/site-state', [ReportController::class, 'exportState']);
+    Route::get('/reports/export/site-county', [ReportController::class, 'exportCounty']);
+    Route::get('/reports/export/site-town', [ReportController::class, 'exportTown']);
 
     // Data Quarantine
     Route::get('/data-quarantine/sites', 'QuarantineController@sites');

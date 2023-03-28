@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\County;
-use App\Plot;
+use App\Exports\ReportCountyExport;
+use App\Exports\ReportStateExport;
+use App\Exports\ReportTownExport;
+use App\Exports\ReportWMUExport;
+use App\Http\Controllers\Traits\ReportQueries;
 use App\Site;
 use App\State;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
+    use ReportQueries;
+
     protected static array $aggregate_wmus = [
         'Adirondacks', 'Catskills', 'Central Appalachian Plateau', 'Central Finger Lakes', 'Central NY',
         'Closed', 'Del-Otsego', 'Del-Sullivan', 'E Appalachian Plateau', 'E Lake Plains', 'Mid Lake Plains',
@@ -37,17 +44,7 @@ class ReportController extends Controller
             ],
         ]);
         $this->authorize('viewAny', Site::class);
-
-        $sites = \DB::query()->select(\DB::raw('count(*) as total, aggregate_wmu'))
-            ->fromSub(
-                \App\Plot::query()
-                    ->select(['site_id', 'aggregate_wmu'])
-                    ->groupBy('site_id')
-                    ->groupBy('aggregate_wmu')
-                , 'view')
-            ->groupBy('aggregate_wmu')
-            ->orderBy($request->order_by ?? 'aggregate_wmu', $request->order_dir === 'asc' ? 'asc' : 'desc')
-            ->get();
+        $sites = $this->querySiteByWmu($request->order_by ?? 'aggregate_wmu', $request->order_dir ?? 'desc')->get();
 
         return $this->success([
             'data' => $sites
@@ -71,14 +68,7 @@ class ReportController extends Controller
             ],
         ]);
         $this->authorize('viewAny', Site::class);
-
-        $states = State::select([
-            'states.id', 'states.name'
-        ])
-            ->has('sites')
-            ->withCount(['sites'])
-            ->orderBy($request->order_by ?? 'aggregate_wmu', $request->order_dir === 'asc' ? 'asc' : 'desc')
-            ->get();
+        $states = $this->querySiteByState($request->order_by ?? 'name', $request->order_dir ?? 'desc')->get();
 
         return $this->success([
             'data' => $states
@@ -104,13 +94,7 @@ class ReportController extends Controller
         ]);
         $this->authorize('viewAny', Site::class);
 
-        $counties = County::select([
-            'counties.id', 'counties.name'
-        ])
-            ->where('name', 'like', "%$request->search%")
-            ->has('sites')
-            ->withCount(['sites'])
-            ->orderBy($request->order_by ?? 'aggregate_wmu', $request->order_dir === 'asc' ? 'asc' : 'desc')
+        $counties = $this->querySiteByCounty($request->order_by ?? 'name', $request->order_dir ?? 'desc', $request->search ?? null)
             ->paginate($request->limit ?? 20);
 
         return $this->success($counties);
@@ -137,13 +121,37 @@ class ReportController extends Controller
         ]);
         $this->authorize('viewAny', Site::class);
 
-        $sites = Site::query()
-            ->selectRaw('city, COUNT(*) as count')
-            ->where('city', 'like', "%$request->search%")
-            ->groupBy('city')
-            ->orderBy($request->order_by ?? 'city', $request->order_dir === 'asc' ? 'asc' : 'desc')
+        $sites = $this->querySiteByTown($request->order_by ?? 'city', $request->order_dir ?? 'desc', $request->search ?? null)
             ->paginate($request->limit ?? 20);
 
         return $this->success($sites);
+    }
+
+    public function exportWmu(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        $this->authorize('viewAny', Site::class);
+
+        return Excel::download(new ReportWMUExport(), 'reportWMU.xlsx');
+    }
+
+    public function exportState(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        $this->authorize('viewAny', Site::class);
+
+        return Excel::download(new ReportStateExport(), 'reportState.xlsx');
+    }
+
+    public function exportCounty(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        $this->authorize('viewAny', Site::class);
+
+        return Excel::download(new ReportCountyExport(), 'reportCounty.xlsx');
+    }
+
+    public function exportTown(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        $this->authorize('viewAny', Site::class);
+
+        return Excel::download(new ReportTownExport(), 'reportTown.xlsx');
     }
 }
