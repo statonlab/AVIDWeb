@@ -4,9 +4,11 @@ namespace App\Exports;
 
 use App\Measurement;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class DataExport implements FromCollection, WithHeadings
+class DataExport implements FromQuery, WithHeadings, WithMapping
 {
     /**
      * @return array
@@ -46,13 +48,13 @@ class DataExport implements FromCollection, WithHeadings
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Relations\Relation|\Illuminate\Database\Query\Builder
      */
-    public function collection()
+    public function query()
     {
         $rows = collect([]);
 
-        $measurements = Measurement::with([
+        return Measurement::with([
             'site',
             'site.state',
             'site.county',
@@ -64,94 +66,88 @@ class DataExport implements FromCollection, WithHeadings
             'plant.species',
             'user',
         ]);
+    }
 
-        foreach ($measurements->cursor() as $measurement) {
-            if (!isset($measurement->site)) {
-                continue;
-            }
+    public function map($row): array
+    {
+        $measurement = $row;
+        $species = $measurement->site->species->map(function ($s) {
+            return $s->name;
+        });
 
-            $species = $measurement->site->species->map(function ($s) {
-                return $s->name;
-            });
+        $shrubs = $measurement->site->species->map(function ($s) {
+            return $s->name;
+        });
 
-            $shrubs = $measurement->site->species->map(function ($s) {
-                return $s->name;
-            });
+        $number = '';
+        $latitude = '';
+        $longitude = '';
+        $ground_cover = '';
+        $is_protected = '';
+        $protection_seasons = '';
+        $recorders = '';
+        $basal_area = '';
 
-            $number = '';
-            $latitude = '';
-            $longitude = '';
-            $ground_cover = '';
-            $is_protected = '';
-            $protection_seasons = '';
-            $recorders = '';
-            $basal_area = '';
+        if (isset($measurement->plot)) {
+            $plot = $measurement->plot;
 
-            if (isset($measurement->plot)) {
-                $plot = $measurement->plot;
-
-                $number = $plot->number;
-                $latitude = $plot->latitude;
-                $longitude = $plot->longitude;
-                $ground_cover = $plot->ground_cover;
-                $is_protected = $plot->is_protected;
-                $protection_seasons = $plot->protection_seasons;
-                $recorders = $plot->recorders;
-                $basal_area = $plot->basal_area;
-            }
-
-            $type = '';
-            $tag = '';
-            $quadrant = '';
-            $p_species = '';
-
-            if (isset($measurement->plant)) {
-                if (isset($measurement->plant->type)) {
-                    $type = $measurement->plant->type->name;
-                }
-
-                if (isset($measurement->plant->species)) {
-                    $p_species = $measurement->plant->species->name;
-                }
-
-                $tag = $measurement->plant->tag;
-                $quadrant = $measurement->plant->quadrant;
-            }
-
-            $row = [
-                $measurement->site->name,
-                $measurement->user->name,
-                $measurement->site->owner_name,
-                $measurement->site->owner_contact,
-                $measurement->site->state->name,
-                $measurement->site->county->name,
-                $measurement->site->city,
-                $measurement->site->basal_area,
-                $measurement->site->diameter,
-                $species,
-                $shrubs,
-                $number,
-                $latitude,
-                $longitude,
-                $ground_cover,
-                $is_protected,
-                $protection_seasons,
-                $recorders,
-                $basal_area,
-                $type,
-                $tag,
-                $quadrant,
-                $p_species,
-                $measurement->date,
-                $measurement->is_alive,
-                $measurement->is_located,
-                $measurement->height,
-                $measurement->site->comments,
-            ];
-
-            $rows->push($row);
+            $number = $plot->number;
+            $latitude = $plot->latitude;
+            $longitude = $plot->longitude;
+            $ground_cover = $plot->ground_cover;
+            $is_protected = $plot->is_protected;
+            $protection_seasons = $plot->protection_seasons;
+            $recorders = $plot->recorders;
+            $basal_area = $plot->basal_area;
         }
 
-        return $rows;
+        $type = '';
+        $tag = '';
+        $quadrant = '';
+        $p_species = '';
+
+        if (isset($measurement->plant)) {
+            if (isset($measurement->plant->type)) {
+                $type = $measurement->plant->type->name;
+            }
+
+            if (isset($measurement->plant->species)) {
+                $p_species = $measurement->plant->species->name;
+            }
+
+            $tag = $measurement->plant->tag;
+            $quadrant = $measurement->plant->quadrant;
+        }
+
+        return  [
+            $measurement->site->name,
+            $measurement->user->name,
+            $measurement->site->owner_name,
+            $measurement->site->owner_contact,
+            $measurement->site->state->name,
+            $measurement->site->county->name,
+            $measurement->site->city,
+            $measurement->site->basal_area,
+            $measurement->site->diameter,
+            $species,
+            $shrubs,
+            $number,
+            $latitude,
+            $longitude,
+            $ground_cover,
+            $is_protected,
+            $protection_seasons,
+            $recorders,
+            $basal_area,
+            $type,
+            $tag,
+            $quadrant,
+            $p_species,
+            $measurement->date,
+            $measurement->is_alive,
+            $measurement->is_located,
+            $measurement->height,
+            $measurement->site->comments,
+        ];
     }
 }
