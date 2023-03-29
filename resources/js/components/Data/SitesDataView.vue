@@ -46,6 +46,7 @@
           </div>
           <div class="flex-shrink-0">
             <button class="d-flex align-items-center ml-2 btn btn-primary"
+                    v-if="User.can('view sites')"
                     @click.prevent="download">
               <icon name="cloud-download"/>
               <span>Export Data</span>
