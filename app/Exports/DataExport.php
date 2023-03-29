@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 use App\Measurement;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -48,9 +48,9 @@ class DataExport implements FromQuery, WithHeadings, WithMapping
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Relations\Relation|\Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query()
+    public function query(): Builder
     {
         $rows = collect([]);
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PendingFileController;
 use App\Http\Controllers\PlotController;
 use Illuminate\Support\Facades\Route;
 
@@ -292,13 +293,18 @@ Route::group([
     Route::post('/data-quarantine/import/plant/{id}', 'QuarantineController@importPlant');
 
     Route::get('/admin-exports/plots', 'ExportPlotsController@index');
-    Route::get('/admin-exports/data', 'ExportDataController@index');
+    Route::post('/admin-exports/data', 'ExportDataController@index');
+
+    Route::get('/pending-files/{file}/download', [PendingFileController::class, 'download']);
+    Route::get('/pending-files/{file}', [PendingFileController::class, 'show']);
 
     Route::get('/impersonate/{user}', 'ImpersonateController@impersonate');
 
     // DeleteAccountRequestController
     Route::get('/delete-account-requests', 'DeleteAccountRequestController@index');
-    Route::get('/delete-account-requests/myIndex', 'DeleteAccountRequestController@myIndex');
+    Route::get('/delete-account-requests/myIndex',
+        'DeleteAccountRequestController@myIndex');
     Route::post('/delete-account-request', 'DeleteAccountRequestController@create');
-    Route::delete('/delete-account-request/{deleteRequest}', 'DeleteAccountRequestController@delete');
+    Route::delete('/delete-account-request/{deleteRequest}',
+        'DeleteAccountRequestController@delete');
 });

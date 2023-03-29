@@ -4,6 +4,7 @@ namespace App;
 
 use App\ModelTraits\Permissions\HasRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -140,6 +141,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reminders()
     {
         return $this->hasMany(Reminder::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pendingFiles(): HasMany
+    {
+        return $this->hasMany(PendingFile::class);
     }
 
     /**
