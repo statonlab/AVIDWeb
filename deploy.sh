@@ -9,6 +9,6 @@ npm run production \
   && git merge master \
   && git push \
   && git checkout master \
-  && curl "https://forge.laravel.com/servers/369492/sites/1026800/deploy/http?token=1WDJChriPvKWxriAhhwg3OU1hFIs5w47UhKg2GG7" \
+  && curl "https://forge.laravel.com/servers/369492/sites/1026800/deploy/http?token=yt6qINP32K4mmIIdwXzS7Iel1hAy4sAZMyAyQiOz" \
   && git push \
   && echo "Deployed successfully"
