@@ -2,20 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CreateDataExportJob;
+use App\PendingFile;
 use App\Site;
 use App\Exports\DataExport;
+use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ExportDataController extends Controller
 {
     /**
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $this->authorize('viewAny', Site::class);
 
-        return Excel::download(new DataExport(), 'data.xlsx');
+        $file = PendingFile::create([
+            'user_id' => auth()->id(),
+            'name' => 'data.xlsx',
+            'progress' => 0
+        ]);
+
+        $this->dispatch(new CreateDataExportJob($file));
+
+        return $this->success($file);
     }
 }

@@ -13,7 +13,9 @@ import ErrorPage from './components/ErrorPage'
 import PageLoader from './components/PageLoader'
 import VueNotification from 'vue-notification'
 import Alert from './plugins/Alert/Alert'
+import Download from './plugins/Download/Download'
 
+Vue.use(Download)
 Vue.use(Alert)
 Vue.use(VueNotification)
 Vue.use(VueRouter)
@@ -31,9 +33,9 @@ const AsyncComponent = (component) => ({
   // A component to use while the async component is loading
   loading: PageLoader,
   // A component to use if the load fails
-  error  : ErrorPage,
+  error: ErrorPage,
   // Delay before showing the loading component. Default: 200ms.
-  delay  : 200,
+  delay: 200,
   // The error component will be displayed if a timeout is
   // provided and exceeded. Default: Infinity.
   timeout: 3000,
@@ -185,7 +187,7 @@ Vue.directive('tooltip', function (el, binding) {
 
   if (modifiers) {
     const options = {
-      title  : binding.value,
+      title: binding.value,
       ...(placement ? {placement} : {}),
       trigger: 'hover',
     }
