@@ -28,7 +28,5 @@ mix.js('resources/js/app.js', 'public/js').vue()
   .sass('resources/sass/app.scss', 'public/css')
   .setPublicPath('public')
 
-if (mix.inProduction()) {
-  mix.version()
-    .sourceMaps()
-}
+mix.version()
+  .sourceMaps()

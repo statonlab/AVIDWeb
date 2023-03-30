@@ -37,6 +37,12 @@
           <div class="flex-shrink-0" v-if="file.progress < 100">
             <inline-spinner class="text-primary"/>
           </div>
+          <div v-else-if="file.progress >= 100 && file.error" class="text-danger">
+            Error
+          </div>
+        </div>
+        <div v-if="file.error" class="text-danger text-small">
+          An error occurred while creating the file. Please contact us to resolve this issue.
         </div>
       </div>
       <div class="d-flex justify-content-end py-2 px-3 bg-lighter">
@@ -44,7 +50,7 @@
            @click="downloadClicked"
            :href="url"
            ref="downloadLink"
-           :class="{'disabled': file.progress < 100}">
+           :class="{'disabled': file.progress < 100 && !file.error}">
           Download
         </a>
       </div>
@@ -98,7 +104,7 @@ export default {
         clearInterval(this.$options._interval)
       }
 
-      this.$options._interval = setInterval(() => this.loadFile(), 200)
+      this.$options._interval = setInterval(() => this.loadFile(), 500)
     },
 
     async loadFile() {
@@ -109,7 +115,9 @@ export default {
           clearInterval(this.$options._interval)
 
           this.$nextTick(() => {
-            setTimeout(() => this.$refs.downloadLink.click(), 100)
+            if (!this.file.error) {
+              setTimeout(() => this.$refs.downloadLink.click(), 100)
+            }
           })
         }
       } catch (e) {
