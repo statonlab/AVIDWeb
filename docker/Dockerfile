@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 RUN apt-get update -y \
 	&& apt -y upgrade \
-	&& apt-get install -y build-essential libssl-dev libffi-dev python3 python3-pip python3-dev libgeos-dev
+	&& apt-get install -y build-essential libssl-dev libffi-dev python3 python3-pip python3-dev
 
 RUN mkdir /app
 WORKDIR /app
