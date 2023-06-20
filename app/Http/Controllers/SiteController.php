@@ -224,7 +224,12 @@ class SiteController extends Controller
     {
         $this->authorize('view', $site);
 
-        return Excel::download(new SiteExport($site), "$site->name.xlsx");
+        $name = $site->name;
+
+        $name = str_replace('/', '-', $name);
+        $name = str_replace('\\', '-', $name);
+
+        return Excel::download(new SiteExport($site), "$name.xlsx");
     }
 
     /**
