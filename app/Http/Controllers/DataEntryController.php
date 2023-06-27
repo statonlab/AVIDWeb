@@ -20,7 +20,9 @@ class DataEntryController extends Controller
             $query->orWhere('user_id', $request->user()->id);
         })
             ->orderBy('name', 'asc')
-            ->with('plots')
+            ->with('plots', function ($query) {
+                $query->orderBy('number', 'asc');
+            })
             ->get());
     }
 
