@@ -172,6 +172,7 @@
     <plant-form
         v-if="editingPlant"
         :plant="plant"
+        :plot="plant.plot"
         @close="editingPlant = false"
         @update="plantUpdated($event)"/>
   </div>
