@@ -17,7 +17,7 @@
                 </dropdown>
             </div>
             <div class="flex-shrink-0">
-                <button class="btn btn-primary" type="button" @click.prevent="showPlotForm = true">
+                <button class="btn btn-primary" type="button" @click.prevent="addPlot()">
                     <icon name="add"/>
                     <span>Plot</span>
                 </button>
@@ -112,7 +112,7 @@
                                     <div class="th" :class="{'border-top-0': measurement_index > 0}">
                                         <div v-if="measurement_index === 0">
                                             <plant-entry-button :plant="plant"
-                                                                @editPlant="editPlant(plant)"
+                                                                @editPlant="editPlant(plant,plot)"
                                                                 @movePlant="movePlant(plant,plot)"
                                                                 @deletePlant="deletePlant(plant)"/>
                                             <p class="mb-0 text-muted">{{ plant.species.name }}</p>
@@ -150,7 +150,7 @@
                                     </div>
                                     <div class="th">
                                         <plant-entry-button :plant="plant"
-                                                            @editPlant="editPlant(plant)"
+                                                            @editPlant="editPlant(plant,plot)"
                                                             @movePlant="movePlant(plant,plot)"
                                                             @deletePlant="deletePlant(plant)"/>
                                         <p class="mb-0 text-muted">{{ plant.species.name }}</p>
@@ -375,12 +375,14 @@ export default {
         },
 
         addPlant(plot) {
+            this.plant = null
             this.plantPlot = plot
             this.showPlantForm = true
         },
 
-        editPlant(plant) {
+        editPlant(plant, plot) {
             this.plant = plant
+            this.plantPlot = plot
             this.showPlantForm = true
         },
 
@@ -388,6 +390,11 @@ export default {
             this.plant = plant
             this.plantPlot = plot
             this.showMovePlantForm = true
+        },
+
+        addPlot() {
+            this.plot = null
+            this.showPlotForm = true
         },
 
         editPlot(plot) {
@@ -526,6 +533,7 @@ export default {
                 type: 'success',
                 text: 'Plant created successfully',
             })
+            this.plant = null
         },
 
         measurementCreated() {
@@ -542,6 +550,7 @@ export default {
         plotCreated() {
             this.loadPlots()
             this.showPlotForm = false
+            this.plot = null
         },
 
         beforeUnload(e) {
