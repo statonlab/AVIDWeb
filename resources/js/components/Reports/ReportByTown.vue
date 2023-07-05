@@ -26,6 +26,9 @@
                       style="width: 20px;"/>
               </a>
             </th>
+              <th>
+                  <span>{{ 'State' }}</span>
+              </th>
             <th>
               <a href="#" class="d-flex align-items-center" @click.prevent="sort('count')">
                 <span>{{ 'Total' }}</span>
@@ -41,6 +44,9 @@
           <tr v-for="site in sites">
             <td>
               {{ site.city }}
+            </td>
+            <td>
+              {{ site.state.name }}
             </td>
             <td>
               {{ site.count }}

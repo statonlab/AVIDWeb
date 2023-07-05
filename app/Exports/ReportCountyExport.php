@@ -28,6 +28,7 @@ class ReportCountyExport implements FromCollection, WithHeadings
     {
         return [
             'County',
+            'State',
             'Site Count',
         ];
     }
@@ -44,6 +45,7 @@ class ReportCountyExport implements FromCollection, WithHeadings
             if (isset($county)) {
                 $row = [
                     $county->name,
+                    $county->state->name,
                     $county->sites_count
                 ];
                 $rows->push($row);

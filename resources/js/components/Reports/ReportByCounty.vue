@@ -18,7 +18,7 @@
           <thead>
           <tr>
             <th>
-              <a href="#" class="d-flex align-items-center" @click.prevent="sort('name')">
+              <a href="#" @click.prevent="sort('name')">
                 <span>{{ 'County' }}</span>
                 <icon :name="sortIcon('name')"
                       class="ml-2"
@@ -26,8 +26,11 @@
                       style="width: 20px;"/>
               </a>
             </th>
+              <th>
+                <span>{{ 'State' }}</span>
+              </th>
             <th>
-              <a href="#" class="d-flex align-items-center" @click.prevent="sort('sites_count')">
+              <a href="#" @click.prevent="sort('sites_count')">
                 <span>{{ 'Total' }}</span>
                 <icon :name="sortIcon('sites_count')"
                       class="ml-2"
@@ -41,6 +44,9 @@
           <tr v-for="county in counties" v-if="county.sites_count > 0">
             <td>
               {{ county.name }}
+            </td>
+            <td>
+              {{ county.state.name }}
             </td>
             <td>
               {{ county.sites_count }}
