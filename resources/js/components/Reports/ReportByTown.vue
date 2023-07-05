@@ -46,7 +46,7 @@
               {{ site.city }}
             </td>
             <td>
-              {{ site.state.name }}
+              {{ site.state ? site.state.name : '' }}
             </td>
             <td>
               {{ site.count }}
