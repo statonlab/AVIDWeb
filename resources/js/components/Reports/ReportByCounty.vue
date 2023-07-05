@@ -46,7 +46,7 @@
               {{ county.name }}
             </td>
             <td>
-              {{ county.state.name ?? '' }}
+              {{ county.state ? county.state.name : '' }}
             </td>
             <td>
               {{ county.sites_count }}
