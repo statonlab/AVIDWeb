@@ -18,7 +18,7 @@
           <thead>
           <tr>
             <th>
-              <a href="#" @click.prevent="sort('name')">
+              <a href="#" class="d-flex align-items-center" @click.prevent="sort('name')">
                 <span>{{ 'County' }}</span>
                 <icon :name="sortIcon('name')"
                       class="ml-2"
@@ -27,10 +27,10 @@
               </a>
             </th>
               <th>
-                <span>{{ 'State' }}</span>
+                <span class="d-flex align-items-center">{{ 'State' }}</span>
               </th>
             <th>
-              <a href="#" @click.prevent="sort('sites_count')">
+              <a href="#" class="d-flex align-items-center" @click.prevent="sort('sites_count')">
                 <span>{{ 'Total' }}</span>
                 <icon :name="sortIcon('sites_count')"
                       class="ml-2"
