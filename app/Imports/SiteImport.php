@@ -10,12 +10,14 @@ use App\PlantType;
 use App\Species;
 use App\Measurement;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Row;
 use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
+class SiteImport implements OnEachRow, WithHeadingRow, WithValidation, SkipsEmptyRows
 {
     /** @var Site $site */
     protected $site;
@@ -99,14 +101,18 @@ class SiteImport implements OnEachRow, WithHeadingRow, WithValidation
             $plant = $plant->first();
         }
 
-        $date = null;
+        $date = intval($row['date_mm_dd_yyyy']);
+        $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($date);
+        $date = Carbon::instance($date);
 
-        if (! is_int($row['date_mm_dd_yyyy'])) {
-            $date = new Carbon(str_replace('-', '/', $row['date_mm_dd_yyyy']));
-        } else {
-            /** @see http://www.cpearson.com/excel/datetime.htm#SerialDates */
-            $date = (new Carbon('Dec 31 1899'))->addDays($row['date_mm_dd_yyyy'] - 1);
-        }
+//      $date = null;
+//      previous date logic, preserved for posterity (and in case it solved a problem i didn't notice)
+//      if (! is_int($row['date_mm_dd_yyyy'])) {
+//          $date = new Carbon(str_replace('-', '/', $row['date_mm_dd_yyyy']));
+//      } else {
+//          /** @see http://www.cpearson.com/excel/datetime.htm#SerialDates */
+//          $date = (new Carbon('Dec 31 1899'))->addDays($row['date_mm_dd_yyyy'] - 1);
+//      }
 
         $exists = Measurement::withQuarantined()
             ->where('plant_id', $plant->id)
