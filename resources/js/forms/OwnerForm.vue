@@ -131,6 +131,7 @@ export default {
           params     : {
             search : this.userSearch.length >= 2 ? this.userSearch : null,
             site_id: this.site.id,
+            transferring_ownership: true,
           },
           cancelToken: new axios.CancelToken(c => this._request = c),
         })

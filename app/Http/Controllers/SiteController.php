@@ -8,11 +8,13 @@ use App\Plot;
 use App\Plant;
 use App\User;
 use App\Species;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exports\SiteExport;
 use App\Imports\SiteImport;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -287,14 +289,19 @@ class SiteController extends Controller
      * @param \App\Site $site
      * @param \App\User $user
      * @param \Illuminate\Http\Request $request
+     * @throws AuthorizationException
+     * @throws ValidationException
      */
-    public function changeOwner(Site $site, Request $request)
+    public function changeOwner(Site $site, Request $request): JsonResponse
     {
         $this->authorize('changeOwner', Site::class);
 
         $this->validate($request, [
             'user_id' => 'required|exists:users,id',
         ]);
+
+        // if site is already shared, remove the entry from user_sites table
+        (new UserSiteController)->delete($site, User::find($request->user_id));
 
         $site->fill(['user_id' => $request->user_id])->save();
 

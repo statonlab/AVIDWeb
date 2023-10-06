@@ -26,7 +26,7 @@ class UserSiteController extends Controller
 
         if ($user_site) {
             $user_site->fill([
-                'editable' => ! $user_site->editable,
+                'editable' => !$user_site->editable,
             ])->save();
         }
 
@@ -94,6 +94,9 @@ class UserSiteController extends Controller
         if ($request->site_id) {
             $users->whereDoesntHave('userSites', function ($query) use ($request) {
                 $query->where('user_sites.site_id', $request->site_id);
+                if ($request->transferring_ownership) {
+                    $query->where('user_sites.is_shared', false);
+                }
             })->whereDoesntHave('siteInvitations', function ($query) use ($request) {
                 $query->where('site_invitations.site_id', $request->site_id);
                 $query->where('site_invitations.status', 'pending');
@@ -136,7 +139,7 @@ class UserSiteController extends Controller
             'userSites' => function ($query) use ($request) {
                 $query->where('site_id', $request->site_id);
             }
-          ])->orderBy('name', 'asc')
+        ])->orderBy('name', 'asc')
             ->whereHas('userSites', function ($query) use ($request) {
                 $query->where('site_id', $request->site_id)->where('is_shared', true);
             })
@@ -167,15 +170,15 @@ class UserSiteController extends Controller
         $user_site = UserSite::where('site_id', $site->id)->where('user_id', $user->id)->first();
 
         if ($user_site === null) {
-          $user_site = UserSite::create([
-              'user_id' => $user->id,
-              'site_id' => $site->id,
-              'editable' => false,
-              'sends_reminders' => true,
-              'is_shared' => false,
-          ]);
+            $user_site = UserSite::create([
+                'user_id' => $user->id,
+                'site_id' => $site->id,
+                'editable' => false,
+                'sends_reminders' => true,
+                'is_shared' => false,
+            ]);
 
-          return $this->success($user_site);
+            return $this->success($user_site);
         }
 
         $user_site->fill(['sends_reminders' => !$user_site->sends_reminders])->save();
