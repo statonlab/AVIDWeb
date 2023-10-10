@@ -28,12 +28,14 @@ class DeleteAccountRequestController extends Controller
      * @return JsonResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function myIndex(): JsonResponse
+    public function myIndex(Request $request): JsonResponse
     {
-        $this->authorize('accessList', DeleteAccountRequest::class);
-
-//        return $this->success(DeleteAccountRequest::where('user_id', $request->user()->id)->first());
-        return $this->success(DeleteAccountRequest::where('user_id', auth()->id())->first());
+        if ($request->user()){
+            return $this->success(DeleteAccountRequest::where('user_id', auth()->id())->first());
+        }
+        else {
+            return $this->success('');
+        }
     }
 
     /**
