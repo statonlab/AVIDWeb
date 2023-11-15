@@ -28,9 +28,21 @@ class SendReminders implements ShouldQueue
             ->whereDoesntHave('reminder', function ($query) {
                 $query->whereDate('sent_at', now());
             })
-            ->whereHas('site', function ($query) {
-                $query->whereYear('last_measured_at', '<', now()->year);
-                $query->orWhere('last_measured_at', '<', now()->subDays(31));
+            ->andWhereHas('site', function ($query) {
+                /**
+                 * possible cases:
+                 * site collected this year, but not 11 months ago -> no reminders
+                 * site collected this year, but 11 months ago -> send reminder
+                 * site collected last year or earlier, but it hasn't been 11 months -> no reminders
+                 * site collected last year or earlier, and it has been 11 months -> send reminders
+                 * the logic to solve this is:
+                 *
+                 * we can ignore year, the entire dependency is on if it's been 11 months.
+                 * if last_measured_at is before 11 months ago, send reminders
+                 * if last_measured_at is after 11 months ago, don't send reminders
+                 */
+//                $query->whereYear('last_measured_at', '<', now()->year);
+                $query->where('last_measured_at', '<', now()->subMonths(11));
             })
             ->with(['reminder'])
             ->cursor();
