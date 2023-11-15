@@ -35,11 +35,12 @@ class SendReminders implements ShouldQueue
                  * site collected this year, but 11 months ago -> send reminder
                  * site collected last year or earlier, but it hasn't been 11 months -> no reminders
                  * site collected last year or earlier, and it has been 11 months -> send reminders
-                 * the logic to solve this is:
-                 *
-                 * we can ignore year, the entire dependency is on if it's been 11 months.
-                 * if last_measured_at is before 11 months ago, send reminders
-                 * if last_measured_at is after 11 months ago, don't send reminders
+                 * what if the site is initially collected in june 2022, so future reminders are set for june 2022.
+                 * then the site is collected in may 2023, so with the new logic no reminders are sent.
+                 * then the next reminder will still trigger in june 2024.
+                 * BUT, if someone collects in say October 2023,
+                 * 2024 reminders will not send!
+                 * i've decided to ignore this for now, and just send reminders if it's been 11 months
                  */
 //                $query->whereYear('last_measured_at', '<', now()->year);
                 $query->where('last_measured_at', '<', now()->subMonths(11));
