@@ -28,7 +28,7 @@ class SendReminders implements ShouldQueue
             ->whereDoesntHave('reminder', function ($query) {
                 $query->whereDate('sent_at', now());
             })
-            ->andWhereHas('site', function ($query) {
+            ->whereHas('site', function ($query) {
                 /**
                  * possible cases:
                  * site collected this year, but not 11 months ago -> no reminders
