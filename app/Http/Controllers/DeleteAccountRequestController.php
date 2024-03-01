@@ -66,7 +66,7 @@ class DeleteAccountRequestController extends Controller
             ->where('id', '!=', $deleteAccountRequest->id)
             ->where('created_at', '>', Carbon::now()->subHours(2))
             ->doesntExist()) {
-            $this->dispatch(new SendAccountRequestDeletionNotification($deleteAccountRequest));
+            $this->dispatch_sync(new SendAccountRequestDeletionNotification($deleteAccountRequest));
         }
 
         return $this->success($deleteAccountRequest);

@@ -24,7 +24,7 @@ class ExportDataController extends Controller
             'progress' => 0
         ]);
 
-        $this->dispatch(new CreateDataExportJob($file));
+        $this->dispatch_sync(new CreateDataExportJob($file));
 
         return $this->success($file);
     }

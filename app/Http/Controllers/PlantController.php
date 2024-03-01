@@ -324,7 +324,7 @@ class PlantController extends Controller
             'site_id' => $request->site_id,
         ]);
 
-        dispatch(fn() => \Artisan::call(SetLastMeasuredAt::class));
+        dispatch_sync(fn() => \Artisan::call(SetLastMeasuredAt::class));
 
         return $this->created($plant);
     }

@@ -25,7 +25,7 @@ class SiteUpdatedListener implements ShouldQueue
                 ->delete();
 
             foreach (Reminder::where('site_id', $site->id)->cursor() as $reminder) {
-                dispatch_now(new GenerateReminderEvents($reminder));
+                dispatch_sync(new GenerateReminderEvents($reminder));
             }
         }
     }
