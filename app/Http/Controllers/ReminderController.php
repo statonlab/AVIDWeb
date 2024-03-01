@@ -46,7 +46,7 @@ class ReminderController extends Controller
             'site_id' => $request->site_id,
         ]);
 
-        $this->dispatch(new GenerateReminderEvents($reminder));
+        $this->dispatch_sync(new GenerateReminderEvents($reminder));
 
         $reminder->load(['site']);
 
@@ -93,7 +93,7 @@ class ReminderController extends Controller
 
         $reminder->load(['site']);
 
-        $this->dispatch(new GenerateReminderEvents($reminder));
+        $this->dispatch_sync(new GenerateReminderEvents($reminder));
 
         return $this->created($reminder);
     }

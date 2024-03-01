@@ -38,6 +38,6 @@ class SendRemindersCommand extends Command
      */
     public function handle()
     {
-        dispatch_now(new SendReminders());
+        dispatch_sync(new SendReminders());
     }
 }
